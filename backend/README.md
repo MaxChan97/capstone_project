@@ -8,6 +8,6 @@ To install dependencies
 
 2. Input values eg.
 
-PORT=3000
+PORT=3000\
 ATLAS_URI=mongodb+srv://admin:IS4103password!@cluster0.rhxp0.mongodb.net/test?retryWrites=true&w=majority
 
