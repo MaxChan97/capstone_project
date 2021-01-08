@@ -1,8 +1,13 @@
-### `npm install`
+# Backend Server
 
-To install dependencies
+## Setup
 
-## Credentials
+```bash
+npm install
+npm run dev
+```
+
+## To connect to MongoDB Atlas
 
 1. Create .env file
 
