@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router";
+import { useHistory, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,12 +10,13 @@ import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSelector, useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
   image: {
     backgroundImage: `url(https://picsum.photos/2000/2000)`,
-    backgroundColor: "#7AA18A",
+    backgroundColor: "#04005E",
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -40,13 +41,14 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: "10%",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-    background: "#7AA28A",
+    marginTop: "6%",
+    marginBottom: "2.1%",
+    background: "#04005E",
     "&:hover": {
-      backgroundColor: "#7AA28A",
+      backgroundColor: "#440BD4",
     },
   },
   smalllinks: {
@@ -61,8 +63,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   loginLink: {
-    color: "#67776D",
+    color: "#04005E",
     fontSize: "14px",
+    "&:hover": {
+      color: "#440BD4",
+    },
+  },
+  register: {
+    color: "#04005E",
+    fontSize: "60px",
   },
 }));
 
@@ -70,6 +79,12 @@ export default function Register() {
   const classes = useStyles();
 
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => state.currentUser);
+  if (currentUser !== null) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Grid
@@ -103,13 +118,13 @@ export default function Register() {
         elevation={6}
         square
       >
-        <div className={classes.paper}>
+        <div style={{ marginTop: "18%" }} className={classes.paper}>
           <h1
             style={{
               position: "relative",
               top: "30px",
             }}
-            className="login"
+            className={classes.register}
           >
             Register
           </h1>
@@ -147,7 +162,7 @@ export default function Register() {
             <Grid container justify="center">
               <Grid item>
                 <Link className={classes.loginLink} to="/">
-                  {"Already have an account? Log in"}
+                  {"Already have an account? Login"}
                 </Link>
               </Grid>
             </Grid>

@@ -1,5 +1,5 @@
-import React from "react";
-import { useHistory } from "react-router";
+import React, { useState } from "react";
+import { useHistory, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSelector, useDispatch } from "react-redux";
+import { logIn } from "../redux/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     backgroundImage: `url(https://picsum.photos/2000/2000)`,
-    backgroundColor: "#7AA18A",
+    backgroundColor: "#04005E",
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -35,39 +37,45 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: "8%",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    background: "#7AA28A",
+    background: "#04005E",
     "&:hover": {
-      backgroundColor: "#7AA28A",
+      backgroundColor: "#440BD4",
     },
   },
   smalllinks: {
     color: "#67776D",
   },
   input: {
-    borderColor: "#828282",
+    borderColor: "#04005E",
     borderWidth: 1,
     "&:hover": {
-      borderColor: "#828282",
+      borderColor: "#440BD4",
       borderWidth: 2,
     },
   },
   login: {
-    color: "#67776D",
-    fontSize: "50px",
+    color: "#04005E",
+    fontSize: "60px",
   },
   forgetPassword: {
-    color: "#67776D",
+    color: "#04005E",
     position: "relative",
     fontSize: "14px",
+    "&:hover": {
+      color: "#440BD4",
+    },
   },
   createAccount: {
-    color: "#67776D",
+    color: "#04005E",
     position: "relative",
     fontSize: "14px",
+    "&:hover": {
+      color: "#440BD4",
+    },
   },
 }));
 
@@ -75,13 +83,31 @@ export default function Login() {
   const classes = useStyles();
 
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleLogin(e) {
+    // Enter login logic here
+    e.preventDefault();
+    dispatch(logIn(email));
+    history.push("/");
+  }
+
+  const currentUser = useSelector((state) => state.currentUser);
+  if (currentUser !== null) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid
-        style={{ background: "#F5F8F6" }}
+        style={{
+          background: "#F5F8F6",
+        }}
         item
         xs={12}
         sm={8}
@@ -90,9 +116,14 @@ export default function Login() {
         elevation={6}
         square
       >
-        <div className={classes.paper}>
-          <h1 className={classes.login}>Log in</h1>
-          <form className={classes.form}>
+        <div style={{ marginTop: "18%" }} className={classes.paper}>
+          <h1 className={classes.login}>Login</h1>
+          <form
+            className={classes.form}
+            onSubmit={(e) => {
+              handleLogin(e);
+            }}
+          >
             <TextField
               variant="outlined"
               margin="normal"
@@ -103,6 +134,10 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
             <TextField
               variant="outlined"
@@ -114,6 +149,10 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
