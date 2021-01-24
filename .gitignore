@@ -22,3 +22,19 @@
 **/npm-debug.log*
 **/yarn-debug.log*
 **/yarn-error.log*
+/backend/penmeetspaper/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-war/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-ejb/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-war/dist/
+/backend/penmeetspaper/penmeetspaper-ejb/dist/
+/backend/penmeetspaper/dist/
+
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+**/build/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
