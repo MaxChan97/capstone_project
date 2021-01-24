@@ -7,6 +7,7 @@ package session;
 
 import entity.Person;
 import exception.NoResultException;
+import exception.NotValidException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,18 +20,24 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PersonSessionBean implements PersonSessionBeanLocal {
-  
+
   @PersistenceContext
   private EntityManager em;
-  
+
   @Override
-  public void createPerson(Person p) {
-    System.out.println(p.getUsername());
-    em.persist(p);
+  public void createPerson(Person person) throws NotValidException {
+    if (person.getUsername() == null) {
+      throw new NotValidException(PersonSessionBeanLocal.MISSING_USERNAME);
+    }
+    if (person == null) {
+      throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
+    }
+    
+    em.persist(person);
   } //end createPerson
-  
+
   @Override
-  public List<Person> searchPerson(String username) {
+  public List<Person> searchPersonByUsername(String username) {
     Query q;
     if (username != null) {
       q = em.createQuery("SELECT p FROM Person p WHERE "
@@ -40,17 +47,50 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
       q = em.createQuery("SELECT p FROM Person p");
     }
     return q.getResultList();
-  } //end searchPerson
-  
+  } //end searchPersonByUsername
+
   @Override
-  public Person getPerson(Long pId) throws NoResultException {
+  public Person getPersonById(Long pId) throws NoResultException, NotValidException {
+    if (pId == null) {
+      throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
+    }
+    
     Person person = em.find(Person.class, pId);
 
-    if (person != null) {
-      return person;
-    } else {
-      throw new NoResultException("Not found");
+    if (person == null) {
+      throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
     }
-  } //end getPerson
+    
+    return person;
+  } //end getPersonById
+
+  @Override
+  public void updatePerson(Person person) throws NoResultException, NotValidException {
+    if (person == null) {
+      throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
+    }
+    
+    Person oldPerson = em.find(Person.class, person.getId());
+    if (oldPerson != null) {
+      oldPerson.setUsername(person.getUsername());
+      oldPerson.setPassword(person.getPassword());
+    } else {
+      throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+    }
+  } //end updatePerson
+
+  @Override
+  public void deletePerson(Long pId) throws NoResultException, NotValidException {
+    if (pId == null) {
+      throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
+    }
+    
+    Person p = em.find(Person.class, pId);
+    if (p == null) {
+      throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+    }
+    em.remove(p);
+  } //end deletePerson
+
 
 }

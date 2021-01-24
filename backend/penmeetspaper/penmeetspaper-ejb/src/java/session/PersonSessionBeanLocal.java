@@ -7,6 +7,7 @@ package session;
 
 import entity.Person;
 import exception.NoResultException;
+import exception.NotValidException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,10 +18,21 @@ import javax.ejb.Local;
 @Local
 public interface PersonSessionBeanLocal {
 
-  public Person getPerson(Long pId) throws NoResultException;
+  public final static String PERSON_ALREADY_CREATED = "Person has already been created";
+  public final static String CANNOT_FIND_PERSON = "Cannot find person";
+  public final static String MISSING_USERNAME = "Missing person username";
+  public final static String MISSING_PASSWORD = "Missing person password";
+  public final static String MISSING_PERSON_ID = "Missing person id";
+  public final static String MISSING_PERSON = "Missing person parameter";
 
-  public void createPerson(Person p);
+  public void createPerson(Person person) throws NotValidException;
 
-  public List<Person> searchPerson(String username);
-  
+  public List<Person> searchPersonByUsername(String username);
+
+  public Person getPersonById(Long pId) throws NoResultException, NotValidException;
+
+  public void updatePerson(Person person) throws NoResultException, NotValidException;
+
+  public void deletePerson(Long id) throws NoResultException, NotValidException;
+
 }
