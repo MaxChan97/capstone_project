@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { logOut } from "../redux/actions/index";
+import { useSelector } from "react-redux";
 
-export default function LandingPage() {
-  const dispatch = useDispatch();
-
+export default function CommunityPage() {
   const currentUser = useSelector((state) => state.currentUser);
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -20,15 +17,7 @@ export default function LandingPage() {
           alignItems: "center",
         }}
       >
-        <h1>Landing Page</h1>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(logOut());
-          }}
-        >
-          Log Out
-        </button>
+        <h1>Community Page</h1>
       </div>
     </div>
   );
