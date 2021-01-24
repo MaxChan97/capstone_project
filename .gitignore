@@ -22,6 +22,25 @@
 **/npm-debug.log*
 **/yarn-debug.log*
 **/yarn-error.log*
+<<<<<<< HEAD
+/backend/penmeetspaper/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-war/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-ejb/nbproject/private/
+/backend/penmeetspaper/penmeetspaper-war/dist/
+/backend/penmeetspaper/penmeetspaper-ejb/dist/
+/backend/penmeetspaper/dist/
+
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+**/build/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
+=======
 
 # eslintcache
 .eslintcache
+>>>>>>> 1922a254385b2a68264292279090dc11d24f2270

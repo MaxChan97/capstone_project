@@ -1,0 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package session;
+
+import entity.Person;
+import exception.NoResultException;
+import exception.NotValidException;
+import javax.ejb.Local;
+
+/**
+ *
+ * @author carlc
+ */
+@Local
+public interface AccountSessionBeanLocal {
+
+  public final static String MISSING_USERNAME = "Missing person username";
+  public final static String MISSING_PASSWORD = "Missing person password";
+  public final static String INVALID_CREDENTIALS = "Invalid credentials";
+
+
+  public Person login(String username, String password) throws NoResultException, NotValidException;
+
+}
