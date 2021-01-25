@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -36,17 +39,50 @@ public class Person implements Serializable {
   @Column(nullable = false)
   private String password;
 
+  // unidirectional
   @OneToMany
   @JoinColumn(name = "person_id")
   private List<Stream> pastStreams = new ArrayList<>();
 
+  // birectional
   @OneToOne
   @JoinColumn(name = "streamStreaming")
   private Stream streamStreaming;
 
+  // birectional
   @ManyToOne
   @JoinColumn(name = "streamViewing")
   private Stream streamViewing;
+
+  // birectional
+  @OneToMany(mappedBy = "owner")
+  private List<Folder> folders = new ArrayList<>();
+
+  // birectional
+  @ManyToMany
+  @JoinTable(name = "person_likedFiles",
+          joinColumns = {
+            @JoinColumn(name = "person_id")},
+          inverseJoinColumns = {
+            @JoinColumn(name = "likedFiles_id")})
+  private List<File> likedFiles = new ArrayList<>();
+
+  // birectional
+  @ManyToMany
+  @JoinTable(name = "followers_following",
+          joinColumns = {
+            @JoinColumn(name = "following_id")},
+          inverseJoinColumns = {
+            @JoinColumn(name = "followers_id")})
+  private List<Person> followers = new ArrayList<>();
+
+  // birectional
+  @ManyToMany(mappedBy = "followers")
+  private List<Person> following = new ArrayList<>();
+
+  private TopicEnum interestedTopics;
+
+  private TopicEnum teachingTopics;
 
   public String getUsername() {
     return username;
@@ -70,6 +106,62 @@ public class Person implements Serializable {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public List<Stream> getPastStreams() {
+    return pastStreams;
+  }
+
+  public void setPastStreams(List<Stream> pastStreams) {
+    this.pastStreams = pastStreams;
+  }
+
+  public Stream getStreamStreaming() {
+    return streamStreaming;
+  }
+
+  public void setStreamStreaming(Stream streamStreaming) {
+    this.streamStreaming = streamStreaming;
+  }
+
+  public Stream getStreamViewing() {
+    return streamViewing;
+  }
+
+  public void setStreamViewing(Stream streamViewing) {
+    this.streamViewing = streamViewing;
+  }
+
+  public List<Folder> getFolders() {
+    return folders;
+  }
+
+  public void setFolders(List<Folder> folders) {
+    this.folders = folders;
+  }
+
+  public List<File> getLikedFiles() {
+    return likedFiles;
+  }
+
+  public void setLikedFiles(List<File> likedFiles) {
+    this.likedFiles = likedFiles;
+  }
+
+  public TopicEnum getInterestedTopics() {
+    return interestedTopics;
+  }
+
+  public void setInterestedTopics(TopicEnum interestedTopics) {
+    this.interestedTopics = interestedTopics;
+  }
+
+  public TopicEnum getTeachingTopics() {
+    return teachingTopics;
+  }
+
+  public void setTeachingTopics(TopicEnum teachingTopics) {
+    this.teachingTopics = teachingTopics;
   }
 
   @Override

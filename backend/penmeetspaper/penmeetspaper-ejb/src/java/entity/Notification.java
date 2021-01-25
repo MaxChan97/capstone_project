@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,24 +20,22 @@ import javax.persistence.TemporalType;
  * @author carlc
  */
 @Entity
-public class LiveMessage implements Serializable {
+public class Notification implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  
   @Column(nullable = false)
   private String body;
-
+  
+  private String redirectTo;
+  
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
-  private Date date;
-
-  // unidirectional 
-  @ManyToOne
-  private Person sender;
-
+  private Date dateCreated;
+  
   public Long getId() {
     return id;
   }
@@ -55,20 +52,20 @@ public class LiveMessage implements Serializable {
     this.body = body;
   }
 
-  public Date getDate() {
-    return date;
+  public String getRedirectTo() {
+    return redirectTo;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setRedirectTo(String redirectTo) {
+    this.redirectTo = redirectTo;
   }
 
-  public Person getSender() {
-    return sender;
+  public Date getDateCreated() {
+    return dateCreated;
   }
 
-  public void setSender(Person sender) {
-    this.sender = sender;
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
   }
 
   @Override
@@ -81,10 +78,10 @@ public class LiveMessage implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof LiveMessage)) {
+    if (!(object instanceof Notification)) {
       return false;
     }
-    LiveMessage other = (LiveMessage) object;
+    Notification other = (Notification) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -93,7 +90,7 @@ public class LiveMessage implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.LiveMessage[ id=" + id + " ]";
+    return "entity.Notification[ id=" + id + " ]";
   }
-
+  
 }

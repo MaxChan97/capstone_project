@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,23 +20,28 @@ import javax.persistence.TemporalType;
  * @author carlc
  */
 @Entity
-public class LiveMessage implements Serializable {
+public class Education implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  
+  
   @Column(nullable = false)
-  private String body;
+  private String schoolName;
 
-  @Column(nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date date;
+  @Temporal(TemporalType.DATE)
+  private Date startDate;
 
-  // unidirectional 
-  @ManyToOne
-  private Person sender;
+  @Temporal(TemporalType.DATE)
+  private Date endDate;
+
+  private String degree;
+
+  private String fieldOfStudy;
+
+  private String grade;
 
   public Long getId() {
     return id;
@@ -47,28 +51,52 @@ public class LiveMessage implements Serializable {
     this.id = id;
   }
 
-  public String getBody() {
-    return body;
+  public String getSchoolName() {
+    return schoolName;
   }
 
-  public void setBody(String body) {
-    this.body = body;
+  public void setSchoolName(String schoolName) {
+    this.schoolName = schoolName;
   }
 
-  public Date getDate() {
-    return date;
+  public Date getStartDate() {
+    return startDate;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
   }
 
-  public Person getSender() {
-    return sender;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setSender(Person sender) {
-    this.sender = sender;
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+
+  public String getDegree() {
+    return degree;
+  }
+
+  public void setDegree(String degree) {
+    this.degree = degree;
+  }
+
+  public String getFieldOfStudy() {
+    return fieldOfStudy;
+  }
+
+  public void setFieldOfStudy(String fieldOfStudy) {
+    this.fieldOfStudy = fieldOfStudy;
+  }
+
+  public String getGrade() {
+    return grade;
+  }
+
+  public void setGrade(String grade) {
+    this.grade = grade;
   }
 
   @Override
@@ -81,10 +109,10 @@ public class LiveMessage implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof LiveMessage)) {
+    if (!(object instanceof Education)) {
       return false;
     }
-    LiveMessage other = (LiveMessage) object;
+    Education other = (Education) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -93,7 +121,7 @@ public class LiveMessage implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.LiveMessage[ id=" + id + " ]";
+    return "entity.Education[ id=" + id + " ]";
   }
 
 }

@@ -6,16 +6,12 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,36 +20,30 @@ import javax.persistence.TemporalType;
  * @author carlc
  */
 @Entity
-public class Stream implements Serializable {
+public class Experience implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  
+  
   @Column(nullable = false)
   private String title;
+  
+  private String employmentType;
+  
+  private String company;
+  
+  private String location;
+  
+  private String description;
+  
+  @Temporal(TemporalType.DATE)
+  private Date startDate;
 
-  @Column(nullable = false)
-  private boolean isPaid;
-
-  @Column(nullable = false)
-  private int viewerCount;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date date;
-
-  // unidirectional
-  @OneToOne
-  private LiveChat liveChat;
-
-  // birectional
-  @OneToOne(mappedBy = "streamStreaming")
-  private Person streamer;
-
-  // bidirectional
-  @OneToMany(mappedBy = "streamViewing")
-  private List<Person> viewers = new ArrayList<>();
+  @Temporal(TemporalType.DATE)
+  private Date endDate;
 
   public Long getId() {
     return id;
@@ -71,52 +61,52 @@ public class Stream implements Serializable {
     this.title = title;
   }
 
-  public boolean isIsPaid() {
-    return isPaid;
+  public String getEmploymentType() {
+    return employmentType;
   }
 
-  public void setIsPaid(boolean isPaid) {
-    this.isPaid = isPaid;
+  public void setEmploymentType(String employmentType) {
+    this.employmentType = employmentType;
   }
 
-  public int getViewerCount() {
-    return viewerCount;
+  public String getCompany() {
+    return company;
   }
 
-  public void setViewerCount(int viewerCount) {
-    this.viewerCount = viewerCount;
+  public void setCompany(String company) {
+    this.company = company;
   }
 
-  public Date getDate() {
-    return date;
+  public String getLocation() {
+    return location;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setLocation(String location) {
+    this.location = location;
   }
 
-  public LiveChat getLiveChat() {
-    return liveChat;
+  public String getDescription() {
+    return description;
   }
 
-  public void setLiveChat(LiveChat liveChat) {
-    this.liveChat = liveChat;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
-  public Person getStreamer() {
-    return streamer;
+  public Date getStartDate() {
+    return startDate;
   }
 
-  public void setStreamer(Person streamer) {
-    this.streamer = streamer;
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
   }
 
-  public List<Person> getViewers() {
-    return viewers;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setViewers(List<Person> viewers) {
-    this.viewers = viewers;
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 
   @Override
@@ -129,10 +119,10 @@ public class Stream implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Stream)) {
+    if (!(object instanceof Experience)) {
       return false;
     }
-    Stream other = (Stream) object;
+    Experience other = (Experience) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -141,7 +131,7 @@ public class Stream implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.Stream[ id=" + id + " ]";
+    return "entity.Experience[ id=" + id + " ]";
   }
-
+  
 }
