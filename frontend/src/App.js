@@ -14,7 +14,7 @@ import CategoriesPage from "./screens/CategoriesPage";
 import FeedPage from "./screens/FeedPage";
 import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePostCard";
-
+import AboutMe from "./components/AboutMe";
 function App() {
   let location = useLocation();
 
@@ -42,6 +42,7 @@ function App() {
           <Route exact path="/feed" component={FeedPage} />
           <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/postCard" component={ProfilePostCard} />
+          <Route exact path="/aboutMe" component={AboutMe} />
         </div>
       </Switch>
     </div>
