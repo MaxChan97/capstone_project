@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
   image: {
     backgroundImage: `url(https://picsum.photos/2000/2000)`,
-    backgroundColor: "#04005E",
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"

@@ -48,28 +48,30 @@ function Navbar() {
           <div>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link" data-widget="pushmenu" href="">
+                <a
+                  className="nav-link"
+                  data-widget="pushmenu"
+                  style={{ cursor: "pointer" }}
+                >
                   <i style={{ fontSize: "18px" }} className="fa fa-bars" />
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <form>
-              <Paper component="form" className={classes.root}>
-                <IconButton className={classes.iconButton} aria-label="search">
-                  <img src={searchLogo} />
-                </IconButton>
-                <InputBase
-                  value={searchString}
-                  className={classes.input}
-                  placeholder="Search"
-                  onChange={(e) => {
-                    setSearchString(e.target.value);
-                  }}
-                />
-              </Paper>
-            </form>
+            <Paper component="form" className={classes.root}>
+              <IconButton className={classes.iconButton} aria-label="search">
+                <img src={searchLogo} alt="searchLogo" />
+              </IconButton>
+              <InputBase
+                value={searchString}
+                className={classes.input}
+                placeholder="Search"
+                onChange={(e) => {
+                  setSearchString(e.target.value);
+                }}
+              />
+            </Paper>
           </div>
           <div
             style={{
@@ -80,19 +82,19 @@ function Navbar() {
             }}
           >
             <Link to="/">
-              <img src={liveLogo} />
+              <img src={liveLogo} alt="liveLogo" />
             </Link>
             <Link to="/">
-              <img src={uploadLogo} />
+              <img src={uploadLogo} alt="uploadLogo" />
             </Link>
             <Link to="/">
-              <img src={chatLogo} />
+              <img src={chatLogo} alt="chatLogo" />
             </Link>
             <Link to="/">
-              <img src={notificationLogo} />
+              <img src={notificationLogo} alt="notificationLogo" />
             </Link>
             <Link to="/">
-              <img src={defaultDP} />
+              <img src={defaultDP} alt="defaultDP" />
             </Link>
           </div>
         </div>
