@@ -48,12 +48,11 @@ public class Community implements Serializable {
     @Enumerated(EnumType.STRING)
     private List<EducationLevelEnum> educationLevelEnums = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "posts")
+    @OneToMany(mappedBy = "postCommunity")
     private List<Post> posts = new ArrayList<>();
 
+    // Unidirectional
     @OneToMany
-    @JoinColumn(name = "communityPageViews")
     private List<CommunityPageView> communityPageViews = new ArrayList<>();
 
     public Long getId() {
