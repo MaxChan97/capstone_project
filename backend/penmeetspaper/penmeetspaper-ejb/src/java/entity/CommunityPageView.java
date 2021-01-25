@@ -49,11 +49,12 @@ public class CommunityPageView implements Serializable {
         this.views = views;
     }
 
-    public Date getDate() {
+    public Date getViewDate() {
         return viewDate;
     }
 
-    public void setDate(Date date) {
+    public void setViewDate(Date viewDate) {
+        this.viewDate = viewDate;
     }
 
     @Override
