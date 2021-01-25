@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.viewEntities.CommunityPageView;
 import enumeration.EducationLevelEnum;
 import enumeration.TopicEnum;
 import java.io.Serializable;
