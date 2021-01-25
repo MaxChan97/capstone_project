@@ -7,54 +7,46 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author carlc
  */
 @Entity
-public class Person implements Serializable {
+public class Stream implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @Column(nullable = false, unique = true)
-  private String username;
-
-  @Column(nullable = false)
-  private String password;
-
-  @OneToMany
-  @JoinColumn(name = "person_id")
-  private List<Stream> pastStreams = new ArrayList<>();
-
+  
+  private String title;
+  
+  private boolean isPaid;
+  
+  private int viewerCount;
+  
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date date;
+  
   @OneToOne
-  @JoinColumn(name = "streamStreaming")
-  private Stream streamStreaming;
+  private LiveChat liveChat;
+  
+  @OneToOne(mappedBy = "streamStreaming")
+  private Person streamer;
 
-  @ManyToOne
-  @JoinColumn(name = "streamViewing")
-  private Stream streamViewing;
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
+  @OneToMany(mappedBy = "streamViewing")
+  private List<Person> viewers = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -62,14 +54,6 @@ public class Person implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   @Override
@@ -82,10 +66,10 @@ public class Person implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Person)) {
+    if (!(object instanceof Stream)) {
       return false;
     }
-    Person other = (Person) object;
+    Stream other = (Stream) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -94,7 +78,7 @@ public class Person implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.Person[ id=" + id + " ]";
+    return "entity.Stream[ id=" + id + " ]";
   }
-
+  
 }

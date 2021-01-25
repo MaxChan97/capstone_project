@@ -8,53 +8,28 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
  * @author carlc
  */
 @Entity
-public class Person implements Serializable {
+public class LiveChat implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @Column(nullable = false, unique = true)
-  private String username;
-
-  @Column(nullable = false)
-  private String password;
-
+  
   @OneToMany
-  @JoinColumn(name = "person_id")
-  private List<Stream> pastStreams = new ArrayList<>();
-
-  @OneToOne
-  @JoinColumn(name = "streamStreaming")
-  private Stream streamStreaming;
-
-  @ManyToOne
-  @JoinColumn(name = "streamViewing")
-  private Stream streamViewing;
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
+  @JoinColumn(name = "liveChat_id")
+  private List<LiveMessage> liveMessages = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -64,14 +39,14 @@ public class Person implements Serializable {
     this.id = id;
   }
 
-  public String getPassword() {
-    return password;
+  public List<LiveMessage> getLiveMessages() {
+    return liveMessages;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setLiveMessages(List<LiveMessage> liveMessages) {
+    this.liveMessages = liveMessages;
   }
-
+  
   @Override
   public int hashCode() {
     int hash = 0;
@@ -82,10 +57,10 @@ public class Person implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Person)) {
+    if (!(object instanceof LiveChat)) {
       return false;
     }
-    Person other = (Person) object;
+    LiveChat other = (LiveChat) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -94,7 +69,7 @@ public class Person implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.Person[ id=" + id + " ]";
+    return "entity.LiveChat[ id=" + id + " ]";
   }
-
+  
 }

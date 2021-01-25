@@ -22,7 +22,6 @@
 **/npm-debug.log*
 **/yarn-debug.log*
 **/yarn-error.log*
-<<<<<<< HEAD
 /backend/penmeetspaper/nbproject/private/
 /backend/penmeetspaper/penmeetspaper-war/nbproject/private/
 /backend/penmeetspaper/penmeetspaper-ejb/nbproject/private/
@@ -39,8 +38,6 @@
 **/dist/
 **/nbdist/
 **/.nb-gradle/
-=======
 
 # eslintcache
 .eslintcache
->>>>>>> 1922a254385b2a68264292279090dc11d24f2270
