@@ -31,7 +31,7 @@ public class CommunityPageView implements Serializable {
     private int views;
 
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date viewDate;
 
     public Long getId() {
         return id;
@@ -50,11 +50,10 @@ public class CommunityPageView implements Serializable {
     }
 
     public Date getDate() {
-        return date;
+        return viewDate;
     }
 
     public void setDate(Date date) {
-        this.date = date;
     }
 
     @Override
