@@ -22,9 +22,9 @@ function Sidebar() {
             data-accordion="false"
           >
             <li className="nav-item">
-              {location.pathname === "/live" ? (
+              {location.pathname === "/" ? (
                 <Link
-                  to="/live"
+                  to="/"
                   className="nav-link"
                   style={{ backgroundColor: "#EAECEF" }}
                 >
@@ -35,12 +35,12 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={liveLogo} className="nav-icon" />
+                    <img src={liveLogo} className="nav-icon" alt="liveLogo" />
                     <p className="ml-2">Live</p>
                   </div>
                 </Link>
               ) : (
-                <Link to="/live" className="nav-link">
+                <Link to="/" className="nav-link">
                   <div
                     style={{
                       display: "flex",
@@ -48,7 +48,7 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={liveLogo} className="nav-icon" />
+                    <img src={liveLogo} className="nav-icon" alt="liveLogo" />
                     <p className="ml-2">Live</p>
                   </div>
                 </Link>
@@ -68,7 +68,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={followingLogo} className="nav-icon" />
+                    <img
+                      src={followingLogo}
+                      className="nav-icon"
+                      alt="followingLogo"
+                    />
                     <p className="ml-2">Following</p>
                   </div>
                 </Link>
@@ -81,7 +85,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={followingLogo} className="nav-icon" />
+                    <img
+                      src={followingLogo}
+                      className="nav-icon"
+                      alt="followingLogo"
+                    />
                     <p className="ml-2">Following</p>
                   </div>
                 </Link>
@@ -101,7 +109,7 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={likedLogo} className="nav-icon" />
+                    <img src={likedLogo} className="nav-icon" alt="likedLogo" />
                     <p className="ml-2">Liked</p>
                   </div>
                 </Link>
@@ -114,7 +122,7 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={likedLogo} className="nav-icon" />
+                    <img src={likedLogo} className="nav-icon" alt="likedLogo" />
                     <p className="ml-2">Liked</p>
                   </div>
                 </Link>
@@ -134,7 +142,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={libraryLogo} className="nav-icon" />
+                    <img
+                      src={libraryLogo}
+                      className="nav-icon"
+                      alt="libraryLogo"
+                    />
                     <p className="ml-2">Library</p>
                   </div>
                 </Link>
@@ -147,7 +159,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={libraryLogo} className="nav-icon" />
+                    <img
+                      src={libraryLogo}
+                      className="nav-icon"
+                      alt="libraryLogo"
+                    />
                     <p className="ml-2">Library</p>
                   </div>
                 </Link>
@@ -167,7 +183,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={communityLogo} className="nav-icon" />
+                    <img
+                      src={communityLogo}
+                      className="nav-icon"
+                      alt="communityLogo"
+                    />
                     <p className="ml-2">Community</p>
                   </div>
                 </Link>
@@ -180,7 +200,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={communityLogo} className="nav-icon" />
+                    <img
+                      src={communityLogo}
+                      className="nav-icon"
+                      alt="communityLogo"
+                    />
                     <p className="ml-2">Community</p>
                   </div>
                 </Link>
@@ -200,7 +224,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={categoriesLogo} className="nav-icon" />
+                    <img
+                      src={categoriesLogo}
+                      className="nav-icon"
+                      alt="categoriesLogo"
+                    />
                     <p className="ml-2">Categories</p>
                   </div>
                 </Link>
@@ -213,7 +241,11 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={categoriesLogo} className="nav-icon" />
+                    <img
+                      src={categoriesLogo}
+                      className="nav-icon"
+                      alt="categoriesLogo"
+                    />
                     <p className="ml-2">Categories</p>
                   </div>
                 </Link>
@@ -233,7 +265,7 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={feedLogo} className="nav-icon" />
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
                     <p className="ml-2">Feed</p>
                   </div>
                 </Link>
@@ -246,7 +278,7 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={feedLogo} className="nav-icon" />
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
                     <p className="ml-2">Feed</p>
                   </div>
                 </Link>

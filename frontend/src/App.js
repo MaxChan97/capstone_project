@@ -5,11 +5,10 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import LandingPage from "./screens/LandingPage";
 import LivePage from "./screens/LivePage";
 import FollowingPage from "./screens/FollowingPage";
 import LikedPage from "./screens/LikedPage";
-import LibraryPage from "./screens/LandingPage";
+import LibraryPage from "./screens/LibraryPage";
 import CommunityPage from "./screens/CommunityPage";
 import CategoriesPage from "./screens/CategoriesPage";
 import FeedPage from "./screens/FeedPage";
@@ -32,8 +31,7 @@ function App() {
           ) : (
             ""
           )}
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/live" component={LivePage} />
+          <Route exact path="/" component={LivePage} />
           <Route exact path="/following" component={FollowingPage} />
           <Route exact path="/liked" component={LikedPage} />
           <Route exact path="/library" component={LibraryPage} />
