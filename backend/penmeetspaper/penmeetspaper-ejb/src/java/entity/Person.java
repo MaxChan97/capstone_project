@@ -72,6 +72,30 @@ public class Person implements Serializable {
     this.password = password;
   }
 
+    public List<Stream> getPastStreams() {
+        return pastStreams;
+    }
+
+    public void setPastStreams(List<Stream> pastStreams) {
+        this.pastStreams = pastStreams;
+    }
+
+    public Stream getStreamStreaming() {
+        return streamStreaming;
+    }
+
+    public void setStreamStreaming(Stream streamStreaming) {
+        this.streamStreaming = streamStreaming;
+    }
+
+    public Stream getStreamViewing() {
+        return streamViewing;
+    }
+
+    public void setStreamViewing(Stream streamViewing) {
+        this.streamViewing = streamViewing;
+    }
+
   @Override
   public int hashCode() {
     int hash = 0;
