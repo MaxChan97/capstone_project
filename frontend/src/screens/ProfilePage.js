@@ -3,6 +3,7 @@ import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import TopBar from "../components/ProfilePage/TopBar";
 import ProfilePostCard from "../components/ProfilePostCard";
+import AboutMe from "../components/AboutMe";
 
 export default function ProfilePage() {
   const [tabValue, setTabValue] = useState(0);
@@ -17,6 +18,13 @@ export default function ProfilePage() {
         <div style={{ marginTop: "20px" }}>
           <ProfilePostCard />
           <ProfilePostCard />
+        </div>
+      ); 
+    }
+    if (tabValue === 5) {
+      return (
+        <div style={{ marginTop: "20px" }}>
+          <AboutMe></AboutMe>
         </div>
       );
     }
