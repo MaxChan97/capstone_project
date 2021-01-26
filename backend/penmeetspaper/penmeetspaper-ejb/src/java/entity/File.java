@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.EducationLevelEnum;
 import enumeration.FileTypeEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -54,12 +56,12 @@ public class File implements Serializable {
   @ManyToMany(mappedBy = "likedFiles")
   private List<Person> likes = new ArrayList<>();
 
-//  // unidirectional
-//  @OneToMany
-//  @JoinColumn(name = "file_id")
-//  private List<Comment> comments = new ArrayList<>();
+  // unidirectional
+  @OneToMany
+  @JoinColumn(name = "file_id")
+  private List<Comment> comments = new ArrayList<>();
   
-//  private List<EducationLevelEnum> relatedEducationLevel = new ArrayList<>();
+  private List<EducationLevelEnum> relatedEducationLevel = new ArrayList<>();
   
   private List<FileTypeEnum> fileType = new ArrayList<>();
 
@@ -127,12 +129,28 @@ public class File implements Serializable {
     this.likes = likes;
   }
 
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
   public List<FileTypeEnum> getFileType() {
     return fileType;
   }
 
   public void setFileType(List<FileTypeEnum> fileType) {
     this.fileType = fileType;
+  }
+
+  public List<EducationLevelEnum> getRelatedEducationLevel() {
+    return relatedEducationLevel;
+  }
+
+  public void setRelatedEducationLevel(List<EducationLevelEnum> relatedEducationLevel) {
+    this.relatedEducationLevel = relatedEducationLevel;
   }
 
   @Override

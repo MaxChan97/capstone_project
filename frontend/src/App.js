@@ -12,6 +12,8 @@ import LibraryPage from "./screens/LibraryPage";
 import CommunityPage from "./screens/CommunityPage";
 import CategoriesPage from "./screens/CategoriesPage";
 import FeedPage from "./screens/FeedPage";
+import ProfilePage from "./screens/ProfilePage";
+import ProfilePostCard from "./components/ProfilePostCard";
 
 function App() {
   let location = useLocation();
@@ -38,6 +40,8 @@ function App() {
           <Route exact path="/community" component={CommunityPage} />
           <Route exact path="/categories" component={CategoriesPage} />
           <Route exact path="/feed" component={FeedPage} />
+          <Route exact path="/profile" component={ProfilePage} />
+          <Route exact path="/postCard" component={ProfilePostCard} />
         </div>
       </Switch>
     </div>

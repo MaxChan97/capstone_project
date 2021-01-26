@@ -93,7 +93,7 @@ function Navbar() {
             <Link to="/">
               <img src={notificationLogo} alt="notificationLogo" />
             </Link>
-            <Link to="/">
+            <Link to="/profile">
               <img src={defaultDP} alt="defaultDP" />
             </Link>
           </div>

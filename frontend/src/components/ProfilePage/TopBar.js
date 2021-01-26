@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+import ProfileGroup from "./ProfileGroup";
+import SocialButtonGroup from "./SocialButtonGroup";
+import { withStyles } from "@material-ui/core/styles";
+import { Tabs, Tab } from "@material-ui/core";
+
+const StyledTabs = withStyles({
+  indicator: {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    "& > span": {
+      maxWidth: 40,
+      width: "100%",
+      backgroundColor: "#635ee7",
+    },
+  },
+})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+
+const StyledTab = withStyles((theme) => ({
+  root: {
+    textTransform: "none",
+    color: "#4A5056",
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    "&:focus": {
+      opacity: 1,
+      color: "#3B21CB",
+      outline: "none",
+    },
+  },
+}))((props) => <Tab disableRipple {...props} />);
+
+export default function TopBar() {
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleTabValueChange = (event, newValue) => {
+    console.log(newValue);
+    setTabValue(newValue);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
+      ></div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingTop: "2.5%",
+          backgroundColor: "#FDFDFD",
+        }}
+      >
+        <ProfileGroup />
+        <SocialButtonGroup />
+      </div>
+      <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
+        <StyledTabs value={tabValue} onChange={handleTabValueChange}>
+          <StyledTab label="Videos" />
+          <StyledTab label="Playlists" />
+          <StyledTab label="Resources" />
+          <StyledTab label="Feed" />
+          <StyledTab label="Schedule" />
+          <StyledTab label="About" />
+        </StyledTabs>
+      </div>
+    </div>
+  );
+}
