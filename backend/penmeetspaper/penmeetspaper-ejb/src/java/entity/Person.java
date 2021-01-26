@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -72,6 +73,9 @@ public class Person implements Serializable {
 
   @OneToMany(mappedBy = "subscription_publisher")
   private List<Subscription> publications = new ArrayList<>();
+
+  @ManyToMany(mappedBy = "chatParticipants")
+  private List<Chat> chat = new ArrayList<>();
 
   public String getUsername() {
     return username;
@@ -167,6 +171,14 @@ public class Person implements Serializable {
 
   public void setPublications(List<Subscription> publications) {
     this.publications = publications;
+  }
+
+  public List<Chat> getChat() {
+    return chat;
+  }
+
+  public void setChat(List<Chat> chat) {
+    this.chat = chat;
   }
 
   @Override
