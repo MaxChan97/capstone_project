@@ -29,131 +29,133 @@ import javax.persistence.OneToMany;
 @Entity
 public class Community implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+  @Column(nullable = false, unique = true)
+  private String name;
 
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "owner")
-    private Person owner;
+  @ManyToOne
+  @JoinColumn(name = "owner")
+  private Person owner;
 
-    @Enumerated(EnumType.STRING)
-    private List<TopicEnum> topicEnums = new ArrayList<>();
+  @Enumerated(EnumType.STRING)
+  private List<TopicEnum> topicEnums = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private List<EducationLevelEnum> educationLevelEnums = new ArrayList<>();
+  @Enumerated(EnumType.STRING)
+  private List<EducationLevelEnum> educationLevelEnums = new ArrayList<>();
 
-    @OneToMany(mappedBy = "postCommunity")
-    private List<Post> posts = new ArrayList<>();
+  @OneToMany(mappedBy = "postCommunity")
+  private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "personEngagement_community")
-    private List<PersonEngagement> personEngagements = new ArrayList<>();
+  @OneToMany(mappedBy = "personEngagement_community")
+  private List<PersonEngagement> personEngagements = new ArrayList<>();
 
-    // Unidirectional
-    @OneToMany
-    private List<CommunityPageView> communityPageViews = new ArrayList<>();
+  // Unidirectional
+  @OneToMany
+  @JoinColumn(name = "communityPageViews_id")
+  private List<CommunityPageView> communityPageViews = new ArrayList<>();
 
-    public Long getId() {
-        return id;
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public List<PersonEngagement> getPersonEngagements() {
+    return personEngagements;
+  }
+
+  public void setPersonEngagements(List<PersonEngagement> personEngagements) {
+    this.personEngagements = personEngagements;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Person getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Person owner) {
+    this.owner = owner;
+  }
+
+  public List<TopicEnum> getTopicEnums() {
+    return topicEnums;
+  }
+
+  public void setTopicEnums(List<TopicEnum> topicEnums) {
+    this.topicEnums = topicEnums;
+  }
+
+  public List<EducationLevelEnum> getEducationLevelEnums() {
+    return educationLevelEnums;
+  }
+
+  public void setEducationLevelEnums(List<EducationLevelEnum> educationLevelEnums) {
+    this.educationLevelEnums = educationLevelEnums;
+  }
+
+  public List<Post> getPosts() {
+    return posts;
+  }
+
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
+  }
+
+  public List<CommunityPageView> getCommunityPageViews() {
+    return communityPageViews;
+  }
+
+  public void setCommunityPageViews(List<CommunityPageView> communityPageViews) {
+    this.communityPageViews = communityPageViews;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof Community)) {
+      return false;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    Community other = (Community) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public List<PersonEngagement> getPersonEngagements() {
-        return personEngagements;
-    }
-
-    public void setPersonEngagements(List<PersonEngagement> personEngagements) {
-        this.personEngagements = personEngagements;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Person getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Person owner) {
-        this.owner = owner;
-    }
-
-    public List<TopicEnum> getTopicEnums() {
-        return topicEnums;
-    }
-
-    public void setTopicEnums(List<TopicEnum> topicEnums) {
-        this.topicEnums = topicEnums;
-    }
-
-    public List<EducationLevelEnum> getEducationLevelEnums() {
-        return educationLevelEnums;
-    }
-
-    public void setEducationLevelEnums(List<EducationLevelEnum> educationLevelEnums) {
-        this.educationLevelEnums = educationLevelEnums;
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public List<CommunityPageView> getCommunityPageViews() {
-        return communityPageViews;
-    }
-
-    public void setCommunityPageViews(List<CommunityPageView> communityPageViews) {
-        this.communityPageViews = communityPageViews;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Community)) {
-            return false;
-        }
-        Community other = (Community) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Community[ id=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "entity.Community[ id=" + id + " ]";
+  }
 
 }
