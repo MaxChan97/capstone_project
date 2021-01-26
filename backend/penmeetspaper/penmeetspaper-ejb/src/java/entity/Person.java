@@ -67,6 +67,12 @@ public class Person implements Serializable {
   @JoinColumn(name = "pricingPlans_id")
   private List<PricingPlan> pricingPlans = new ArrayList<>();
 
+  @OneToMany(mappedBy = "subscription_subscriber")
+  private List<Subscription> subscriptions = new ArrayList<>();
+
+  @OneToMany(mappedBy = "subscription_publisher")
+  private List<Subscription> publications = new ArrayList<>();
+
   public String getUsername() {
     return username;
   }
@@ -145,6 +151,22 @@ public class Person implements Serializable {
 
   public void setPricingPlans(List<PricingPlan> pricingPlans) {
     this.pricingPlans = pricingPlans;
+  }
+
+  public List<Subscription> getSubscriptions() {
+    return subscriptions;
+  }
+
+  public void setSubscriptions(List<Subscription> subscriptions) {
+    this.subscriptions = subscriptions;
+  }
+
+  public List<Subscription> getPublications() {
+    return publications;
+  }
+
+  public void setPublications(List<Subscription> publications) {
+    this.publications = publications;
   }
 
   @Override
