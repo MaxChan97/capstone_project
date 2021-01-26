@@ -53,7 +53,7 @@ public class Community implements Serializable {
   @OneToMany(mappedBy = "postCommunity")
   private List<Post> posts = new ArrayList<>();
 
-  @OneToMany(mappedBy = "personEngagement_community")
+  @OneToMany(mappedBy = "community")
   private List<PersonEngagement> personEngagements = new ArrayList<>();
 
   // Unidirectional
