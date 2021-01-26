@@ -32,11 +32,8 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function TopBar() {
-  const [tabValue, setTabValue] = useState(0);
-
+export default function TopBar({ tabValue, setTabValue }) {
   const handleTabValueChange = (event, newValue) => {
-    console.log(newValue);
     setTabValue(newValue);
   };
 

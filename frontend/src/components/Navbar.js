@@ -35,71 +35,72 @@ function Navbar() {
   const [searchString, setSearchString] = useState("");
 
   return (
-    <div className="Navbar">
-      <nav className="main-header navbar navbar-expand bg-white navbar-light border-bottom">
-        <div
-          style={{
-            flex: "1",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-widget="pushmenu"
-                  style={{ cursor: "pointer" }}
-                >
-                  <i style={{ fontSize: "18px" }} className="fa fa-bars" />
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <Paper component="form" className={classes.root}>
-              <IconButton className={classes.iconButton} aria-label="search">
-                <img src={searchLogo} alt="searchLogo" />
-              </IconButton>
-              <InputBase
-                value={searchString}
-                className={classes.input}
-                placeholder="Search"
-                onChange={(e) => {
-                  setSearchString(e.target.value);
-                }}
-              />
-            </Paper>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-around",
-              width: "21%",
-            }}
+    <nav
+      style={{
+        flex: "1",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+      className="main-header navbar navbar-expand bg-white navbar-light border-bottom"
+    >
+      <div>
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a
+              className="nav-link"
+              data-widget="pushmenu"
+              style={{ cursor: "pointer" }}
+            >
+              <i style={{ fontSize: "18px" }} className="fa fa-bars" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <Paper component="form" className={classes.root}>
+          <IconButton
+            style={{ outline: "none" }}
+            className={classes.iconButton}
+            aria-label="search"
           >
-            <Link to="/">
-              <img src={liveLogo} alt="liveLogo" />
-            </Link>
-            <Link to="/">
-              <img src={uploadLogo} alt="uploadLogo" />
-            </Link>
-            <Link to="/">
-              <img src={chatLogo} alt="chatLogo" />
-            </Link>
-            <Link to="/">
-              <img src={notificationLogo} alt="notificationLogo" />
-            </Link>
-            <Link to="/profile">
-              <img src={defaultDP} alt="defaultDP" />
-            </Link>
-          </div>
-        </div>
-      </nav>
-    </div>
+            <img src={searchLogo} alt="searchLogo" />
+          </IconButton>
+          <InputBase
+            value={searchString}
+            className={classes.input}
+            placeholder="Search"
+            onChange={(e) => {
+              setSearchString(e.target.value);
+            }}
+          />
+        </Paper>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+          width: "21%",
+        }}
+      >
+        <Link to="/">
+          <img src={liveLogo} alt="liveLogo" />
+        </Link>
+        <Link to="/">
+          <img src={uploadLogo} alt="uploadLogo" />
+        </Link>
+        <Link to="/">
+          <img src={chatLogo} alt="chatLogo" />
+        </Link>
+        <Link to="/">
+          <img src={notificationLogo} alt="notificationLogo" />
+        </Link>
+        <Link to="/profile">
+          <img src={defaultDP} alt="defaultDP" />
+        </Link>
+      </div>
+    </nav>
   );
 }
 export default Navbar;

@@ -5,6 +5,8 @@
  */
 package entity;
 
+import entity.viewEntities.ProfilePageView;
+import entity.walletEntities.Wallet;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -83,6 +85,49 @@ public class Person implements Serializable {
   private TopicEnum interestedTopics;
 
   private TopicEnum teachingTopics;
+  @OneToMany(mappedBy = "personReviews")
+  private List<Review> reviews = new ArrayList<>();
+
+  // Unidirectional
+  @OneToMany
+  @JoinColumn(name = "profilePageView_id")
+  private List<ProfilePageView> profilePageView = new ArrayList<>();
+
+  // Unidirectional
+  @OneToOne
+  private Wallet wallet;
+
+  // Unidirectional
+  @OneToMany
+  @JoinColumn(name = "pricingPlans_id")
+  private List<PricingPlan> pricingPlans = new ArrayList<>();
+
+  @OneToMany(mappedBy = "subscription_subscriber")
+  private List<Subscription> subscriptions = new ArrayList<>();
+
+  @OneToMany(mappedBy = "subscription_publisher")
+  private List<Subscription> publications = new ArrayList<>();
+
+  @ManyToMany(mappedBy = "chatParticipants")
+  private List<Chat> chat = new ArrayList<>();
+
+  @OneToMany(mappedBy = "messagesSent")
+  private List<Message> messagesSent = new ArrayList<>();
+
+  @OneToMany(mappedBy = "messagesRecieved")
+  private List<Message> messagesRecieved = new ArrayList<>();
+
+  @OneToMany(mappedBy = "owner")
+  private List<Community> ownedCommunities = new ArrayList<>();
+
+  @OneToMany(mappedBy = "personEngagement_person")
+  private List<PersonEngagement> communityEngagements = new ArrayList<>();
+
+  @ManyToMany(mappedBy = "likes_post")
+  private List<Post> likedPost = new ArrayList<>();
+
+  @OneToMany(mappedBy = "person_posts")
+  private List<Post> posts = new ArrayList<>();
 
   public String getUsername() {
     return username;
@@ -162,6 +207,110 @@ public class Person implements Serializable {
 
   public void setTeachingTopics(TopicEnum teachingTopics) {
     this.teachingTopics = teachingTopics;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
+
+  public List<ProfilePageView> getProfilePageView() {
+    return profilePageView;
+  }
+
+  public void setProfilePageView(List<ProfilePageView> profilePageView) {
+    this.profilePageView = profilePageView;
+  }
+
+  public Wallet getWallet() {
+    return wallet;
+  }
+
+  public void setWallet(Wallet wallet) {
+    this.wallet = wallet;
+  }
+
+  public List<PricingPlan> getPricingPlans() {
+    return pricingPlans;
+  }
+
+  public void setPricingPlans(List<PricingPlan> pricingPlans) {
+    this.pricingPlans = pricingPlans;
+  }
+
+  public List<Subscription> getSubscriptions() {
+    return subscriptions;
+  }
+
+  public void setSubscriptions(List<Subscription> subscriptions) {
+    this.subscriptions = subscriptions;
+  }
+
+  public List<Subscription> getPublications() {
+    return publications;
+  }
+
+  public void setPublications(List<Subscription> publications) {
+    this.publications = publications;
+  }
+
+  public List<Chat> getChat() {
+    return chat;
+  }
+
+  public void setChat(List<Chat> chat) {
+    this.chat = chat;
+  }
+
+  public List<Message> getMessagesSent() {
+    return messagesSent;
+  }
+
+  public void setMessagesSent(List<Message> messagesSent) {
+    this.messagesSent = messagesSent;
+  }
+
+  public List<Message> getMessagesRecieved() {
+    return messagesRecieved;
+  }
+
+  public void setMessagesRecieved(List<Message> messagesRecieved) {
+    this.messagesRecieved = messagesRecieved;
+  }
+
+  public List<Community> getOwnedCommunities() {
+    return ownedCommunities;
+  }
+
+  public void setOwnedCommunities(List<Community> ownedCommunities) {
+    this.ownedCommunities = ownedCommunities;
+  }
+
+  public List<PersonEngagement> getCommunityEngagements() {
+    return communityEngagements;
+  }
+
+  public void setCommunityEngagements(List<PersonEngagement> communityEngagements) {
+    this.communityEngagements = communityEngagements;
+  }
+
+  public List<Post> getLikedPost() {
+    return likedPost;
+  }
+
+  public void setLikedPost(List<Post> likedPost) {
+    this.likedPost = likedPost;
+  }
+
+  public List<Post> getPosts() {
+    return posts;
+  }
+
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
   }
 
   @Override
