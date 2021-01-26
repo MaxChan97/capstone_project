@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -29,11 +32,16 @@ public class Review implements Serializable {
     @Column(nullable = false)
     private int numStars;
 
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "personReviews")
     private Person reviewer;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date reviewDate;
 
     public Long getId() {
         return id;
@@ -65,6 +73,14 @@ public class Review implements Serializable {
 
     public void setReviewer(Person reviewer) {
         this.reviewer = reviewer;
+    }
+
+    public Date getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
     }
 
     @Override
