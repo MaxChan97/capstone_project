@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,8 +63,10 @@ public class File implements Serializable {
   @JoinColumn(name = "file_id")
   private List<Comment> comments = new ArrayList<>();
   
+  @Enumerated(EnumType.ORDINAL)
   private List<EducationLevelEnum> relatedEducationLevel = new ArrayList<>();
   
+  @Enumerated(EnumType.ORDINAL)
   private List<FileTypeEnum> fileType = new ArrayList<>();
 
   public Long getId() {

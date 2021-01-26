@@ -26,7 +26,7 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
   @Override
   public Person login(String email, String password) throws NoResultException, NotValidException {
     if (email == null) {
-      throw new NotValidException(AccountSessionBeanLocal.MISSING_USERNAME);
+      throw new NotValidException(AccountSessionBeanLocal.MISSING_EMAIL);
     }
 
     if (password == null) {

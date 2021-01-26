@@ -17,7 +17,7 @@ import javax.ejb.Local;
 @Local
 public interface AccountSessionBeanLocal {
 
-  public final static String MISSING_USERNAME = "Missing person username";
+  public final static String MISSING_EMAIL = "Missing person email";
   public final static String MISSING_PASSWORD = "Missing person password";
   public final static String INVALID_CREDENTIALS = "Invalid credentials";
 
