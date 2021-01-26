@@ -40,6 +40,9 @@ public class Person implements Serializable {
 
   @Column(nullable = false)
   private String password;
+  
+  @Column(nullable = false, unique = true)
+  private String email;
 
   // unidirectional
   @OneToMany
@@ -151,6 +154,30 @@ public class Person implements Serializable {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public List<Person> getFollowers() {
+    return followers;
+  }
+
+  public void setFollowers(List<Person> followers) {
+    this.followers = followers;
+  }
+
+  public List<Person> getFollowing() {
+    return following;
+  }
+
+  public void setFollowing(List<Person> following) {
+    this.following = following;
   }
 
   public List<Stream> getPastStreams() {
