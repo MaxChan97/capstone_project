@@ -38,7 +38,7 @@ public class Post implements Serializable {
   private Person author;
 
   @ManyToMany
-  @JoinColumn(name = "likes")
+  @JoinColumn(name = "likes_post")
   private List<Person> likes = new ArrayList<>();
 
   @ManyToOne
