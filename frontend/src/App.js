@@ -14,7 +14,7 @@ import CategoriesPage from "./screens/CategoriesPage";
 import FeedPage from "./screens/FeedPage";
 import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePostCard";
-
+import AboutMe from "./components/AboutMe";
 function App() {
   let location = useLocation();
 
@@ -23,26 +23,26 @@ function App() {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
-        <div className="layout-navbar-fixed">
-          <div className="wrapper">
-            {location.pathname !== "/login" &&
-            location.pathname !== "/register" ? (
-              <div>
-                <Navbar />
-                <Sidebar />
-              </div>
-            ) : (
-              ""
-            )}
-            <Route exact path="/" component={LivePage} />
-            <Route exact path="/following" component={FollowingPage} />
-            <Route exact path="/liked" component={LikedPage} />
-            <Route exact path="/library" component={LibraryPage} />
-            <Route exact path="/community" component={CommunityPage} />
-            <Route exact path="/categories" component={CategoriesPage} />
-            <Route exact path="/feed" component={FeedPage} />
-            <Route exact path="/profile" component={ProfilePage} />
-          </div>
+        <div className="wrapper">
+          {location.pathname !== "/login" &&
+          location.pathname !== "/register" ? (
+            <div>
+              <Navbar />
+              <Sidebar />
+            </div>
+          ) : (
+            ""
+          )}
+          <Route exact path="/" component={LivePage} />
+          <Route exact path="/following" component={FollowingPage} />
+          <Route exact path="/liked" component={LikedPage} />
+          <Route exact path="/library" component={LibraryPage} />
+          <Route exact path="/community" component={CommunityPage} />
+          <Route exact path="/categories" component={CategoriesPage} />
+          <Route exact path="/feed" component={FeedPage} />
+          <Route exact path="/profile" component={ProfilePage} />
+          <Route exact path="/postCard" component={ProfislePostCard} />
+          <Route exact path="/aboutMe" component={AboutMe} />
         </div>
       </Switch>
     </div>
