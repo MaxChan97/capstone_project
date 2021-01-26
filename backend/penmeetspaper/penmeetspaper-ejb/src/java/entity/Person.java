@@ -77,6 +77,12 @@ public class Person implements Serializable {
   @ManyToMany(mappedBy = "chatParticipants")
   private List<Chat> chat = new ArrayList<>();
 
+  @OneToMany(mappedBy = "messagesSent")
+  private List<Message> messagesSent = new ArrayList<>();
+
+  @OneToMany(mappedBy = "messagesRecieved")
+  private List<Message> messagesRecieved = new ArrayList<>();
+
   public String getUsername() {
     return username;
   }
@@ -179,6 +185,22 @@ public class Person implements Serializable {
 
   public void setChat(List<Chat> chat) {
     this.chat = chat;
+  }
+
+  public List<Message> getMessagesSent() {
+    return messagesSent;
+  }
+
+  public void setMessagesSent(List<Message> messagesSent) {
+    this.messagesSent = messagesSent;
+  }
+
+  public List<Message> getMessagesRecieved() {
+    return messagesRecieved;
+  }
+
+  public void setMessagesRecieved(List<Message> messagesRecieved) {
+    this.messagesRecieved = messagesRecieved;
   }
 
   @Override
