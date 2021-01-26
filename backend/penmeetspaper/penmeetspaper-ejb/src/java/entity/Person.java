@@ -48,6 +48,9 @@ public class Person implements Serializable {
   @JoinColumn(name = "streamViewing")
   private Stream streamViewing;
 
+  @OneToMany(mappedBy = "personReviews")
+  private List<Review> reviews = new ArrayList<>();
+
   public String getUsername() {
     return username;
   }
@@ -72,29 +75,41 @@ public class Person implements Serializable {
     this.password = password;
   }
 
-    public List<Stream> getPastStreams() {
-        return pastStreams;
-    }
+  public List<Stream> getPastStreams() {
+    return pastStreams;
+  }
 
-    public void setPastStreams(List<Stream> pastStreams) {
-        this.pastStreams = pastStreams;
-    }
+  public void setPastStreams(List<Stream> pastStreams) {
+    this.pastStreams = pastStreams;
+  }
 
-    public Stream getStreamStreaming() {
-        return streamStreaming;
-    }
+  public Stream getStreamStreaming() {
+    return streamStreaming;
+  }
 
-    public void setStreamStreaming(Stream streamStreaming) {
-        this.streamStreaming = streamStreaming;
-    }
+  public void setStreamStreaming(Stream streamStreaming) {
+    this.streamStreaming = streamStreaming;
+  }
 
-    public Stream getStreamViewing() {
-        return streamViewing;
-    }
+  public Stream getStreamViewing() {
+    return streamViewing;
+  }
 
-    public void setStreamViewing(Stream streamViewing) {
-        this.streamViewing = streamViewing;
-    }
+  public void setStreamViewing(Stream streamViewing) {
+    this.streamViewing = streamViewing;
+  }
+
+  public List<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(List<Review> reviews) {
+    this.reviews = reviews;
+  }
+
+  public void addReviews(Review review) {
+    this.reviews.add(review);
+  }
 
   @Override
   public int hashCode() {
