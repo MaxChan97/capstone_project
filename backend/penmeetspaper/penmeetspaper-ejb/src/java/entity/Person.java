@@ -83,6 +83,9 @@ public class Person implements Serializable {
   @OneToMany(mappedBy = "messagesRecieved")
   private List<Message> messagesRecieved = new ArrayList<>();
 
+  @OneToMany(mappedBy = "owner")
+  private List<Community> ownedCommunities = new ArrayList<>();
+
   public String getUsername() {
     return username;
   }
@@ -201,6 +204,14 @@ public class Person implements Serializable {
 
   public void setMessagesRecieved(List<Message> messagesRecieved) {
     this.messagesRecieved = messagesRecieved;
+  }
+
+  public List<Community> getOwnedCommunities() {
+    return ownedCommunities;
+  }
+
+  public void setOwnedCommunities(List<Community> ownedCommunities) {
+    this.ownedCommunities = ownedCommunities;
   }
 
   @Override
