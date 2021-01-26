@@ -42,7 +42,7 @@ public class Person implements Serializable {
 
   @Column(nullable = false)
   private String password;
-  
+
   @Column(nullable = false, unique = true)
   private String email;
 
@@ -92,8 +92,8 @@ public class Person implements Serializable {
 
   @Enumerated(EnumType.STRING)
   private TopicEnum teachingTopics;
-  
-  @OneToMany(mappedBy = "personReviews")
+
+  @OneToMany(mappedBy = "reviewer")
   private List<Review> reviews = new ArrayList<>();
 
   // Unidirectional
@@ -110,31 +110,31 @@ public class Person implements Serializable {
   @JoinColumn(name = "pricingPlans_id")
   private List<PricingPlan> pricingPlans = new ArrayList<>();
 
-  @OneToMany(mappedBy = "subscription_subscriber")
+  @OneToMany(mappedBy = "subscriber")
   private List<Subscription> subscriptions = new ArrayList<>();
 
-  @OneToMany(mappedBy = "subscription_publisher")
+  @OneToMany(mappedBy = "publisher")
   private List<Subscription> publications = new ArrayList<>();
 
   @ManyToMany(mappedBy = "chatParticipants")
   private List<Chat> chat = new ArrayList<>();
 
-  @OneToMany(mappedBy = "messagesSent")
+  @OneToMany(mappedBy = "sender")
   private List<Message> messagesSent = new ArrayList<>();
 
-  @OneToMany(mappedBy = "messagesRecieved")
+  @OneToMany(mappedBy = "recipient")
   private List<Message> messagesRecieved = new ArrayList<>();
 
   @OneToMany(mappedBy = "owner")
   private List<Community> ownedCommunities = new ArrayList<>();
 
-  @OneToMany(mappedBy = "personEngagement_person")
+  @OneToMany(mappedBy = "community")
   private List<PersonEngagement> communityEngagements = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "likes_post")
+  @ManyToMany(mappedBy = "likes")
   private List<Post> likedPost = new ArrayList<>();
 
-  @OneToMany(mappedBy = "person_posts")
+  @OneToMany(mappedBy = "author")
   private List<Post> posts = new ArrayList<>();
 
   public String getUsername() {

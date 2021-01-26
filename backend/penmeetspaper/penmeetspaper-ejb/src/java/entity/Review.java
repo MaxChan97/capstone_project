@@ -24,88 +24,88 @@ import javax.persistence.TemporalType;
 @Entity
 public class Review implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private int numStars;
+  @Column(nullable = false)
+  private int numStars;
 
-    @Column(nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "personReviews")
-    private Person reviewer;
+  @ManyToOne
+  @JoinColumn(name = "person_Reviews")
+  private Person reviewer;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date reviewDate;
+  @Column(nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date reviewDate;
 
-    public Long getId() {
-        return id;
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public int getNumStars() {
+    return numStars;
+  }
+
+  public void setNumStars(int numStars) {
+    this.numStars = numStars;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Person getReviewer() {
+    return reviewer;
+  }
+
+  public void setReviewer(Person reviewer) {
+    this.reviewer = reviewer;
+  }
+
+  public Date getReviewDate() {
+    return reviewDate;
+  }
+
+  public void setReviewDate(Date reviewDate) {
+    this.reviewDate = reviewDate;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof Review)) {
+      return false;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    Review other = (Review) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public int getNumStars() {
-        return numStars;
-    }
-
-    public void setNumStars(int numStars) {
-        this.numStars = numStars;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Person getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(Person reviewer) {
-        this.reviewer = reviewer;
-    }
-
-    public Date getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(Date reviewDate) {
-        this.reviewDate = reviewDate;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Review)) {
-            return false;
-        }
-        Review other = (Review) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Review[ id=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "entity.Review[ id=" + id + " ]";
+  }
 
 }
