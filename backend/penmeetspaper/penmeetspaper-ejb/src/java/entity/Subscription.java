@@ -38,8 +38,8 @@ public class Subscription implements Serializable {
   private Person publisher;
 
   @ManyToOne
-  @JoinColumn(name = "pricingPlan_Subscription")
-  private PricingPlan pricingPlan;
+  @JoinColumn(name = "pricingPlan_id")
+  private PricingPlan subscribedPricingPlan;
 
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
@@ -73,14 +73,6 @@ public class Subscription implements Serializable {
     this.publisher = publisher;
   }
 
-  public PricingPlan getPricingPlan() {
-    return pricingPlan;
-  }
-
-  public void setPricingPlan(PricingPlan pricingPlan) {
-    this.pricingPlan = pricingPlan;
-  }
-
   public Date getStartDate() {
     return startDate;
   }
@@ -95,6 +87,14 @@ public class Subscription implements Serializable {
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+
+  public PricingPlan getSubscribedPricingPlan() {
+    return subscribedPricingPlan;
+  }
+
+  public void setSubscribedPricingPlan(PricingPlan subscribedPricingPlan) {
+    this.subscribedPricingPlan = subscribedPricingPlan;
   }
 
   @Override
