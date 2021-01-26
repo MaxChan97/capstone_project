@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.viewEntities.ProfilePageView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,9 @@ public class Person implements Serializable {
 
   @OneToMany(mappedBy = "personReviews")
   private List<Review> reviews = new ArrayList<>();
+
+  @OneToMany
+  private List<ProfilePageView> profilePageView = new ArrayList<>();
 
   public String getUsername() {
     return username;
@@ -107,8 +111,12 @@ public class Person implements Serializable {
     this.reviews = reviews;
   }
 
-  public void addReviews(Review review) {
-    this.reviews.add(review);
+  public List<ProfilePageView> getProfilePageView() {
+    return profilePageView;
+  }
+
+  public void setProfilePageView(List<ProfilePageView> profilePageView) {
+    this.profilePageView = profilePageView;
   }
 
   @Override
