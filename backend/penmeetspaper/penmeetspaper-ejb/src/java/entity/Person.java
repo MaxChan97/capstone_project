@@ -89,7 +89,7 @@ public class Person implements Serializable {
   @OneToMany(mappedBy = "personEngagement_person")
   private List<PersonEngagement> communityEngagements = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "likes")
+  @ManyToMany(mappedBy = "likes_post")
   private List<Post> likedPost = new ArrayList<>();
 
   @OneToMany(mappedBy = "person_posts")
