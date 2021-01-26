@@ -55,11 +55,17 @@ public class Person implements Serializable {
 
   // Unidirectional
   @OneToMany
+  @JoinColumn(name = "profilePageView_id")
   private List<ProfilePageView> profilePageView = new ArrayList<>();
 
   // Unidirectional
   @OneToOne
   private Wallet wallet;
+
+  // Unidirectional
+  @OneToMany
+  @JoinColumn(name = "pricingPlans_id")
+  private List<PricingPlan> pricingPlans = new ArrayList<>();
 
   public String getUsername() {
     return username;
@@ -131,6 +137,14 @@ public class Person implements Serializable {
 
   public void setWallet(Wallet wallet) {
     this.wallet = wallet;
+  }
+
+  public List<PricingPlan> getPricingPlans() {
+    return pricingPlans;
+  }
+
+  public void setPricingPlans(List<PricingPlan> pricingPlans) {
+    this.pricingPlans = pricingPlans;
   }
 
   @Override
