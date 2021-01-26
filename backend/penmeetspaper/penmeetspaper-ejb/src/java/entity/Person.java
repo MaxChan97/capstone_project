@@ -53,9 +53,11 @@ public class Person implements Serializable {
   @OneToMany(mappedBy = "personReviews")
   private List<Review> reviews = new ArrayList<>();
 
+  // Unidirectional
   @OneToMany
   private List<ProfilePageView> profilePageView = new ArrayList<>();
 
+  // Unidirectional
   @OneToOne
   private Wallet wallet;
 
