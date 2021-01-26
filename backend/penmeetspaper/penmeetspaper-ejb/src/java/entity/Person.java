@@ -89,6 +89,12 @@ public class Person implements Serializable {
   @OneToMany(mappedBy = "personEngagement_person")
   private List<PersonEngagement> communityEngagements = new ArrayList<>();
 
+  @ManyToMany(mappedBy = "likes")
+  private List<Post> likedPost = new ArrayList<>();
+
+  @OneToMany(mappedBy = "person_posts")
+  private List<Post> posts = new ArrayList<>();
+
   public String getUsername() {
     return username;
   }
@@ -223,6 +229,22 @@ public class Person implements Serializable {
 
   public void setCommunityEngagements(List<PersonEngagement> communityEngagements) {
     this.communityEngagements = communityEngagements;
+  }
+
+  public List<Post> getLikedPost() {
+    return likedPost;
+  }
+
+  public void setLikedPost(List<Post> likedPost) {
+    this.likedPost = likedPost;
+  }
+
+  public List<Post> getPosts() {
+    return posts;
+  }
+
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
   }
 
   @Override
