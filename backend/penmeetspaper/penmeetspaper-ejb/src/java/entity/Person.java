@@ -6,6 +6,7 @@
 package entity;
 
 import entity.viewEntities.ProfilePageView;
+import entity.walletEntities.Wallet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,9 @@ public class Person implements Serializable {
 
   @OneToMany
   private List<ProfilePageView> profilePageView = new ArrayList<>();
+
+  @OneToOne
+  private Wallet wallet;
 
   public String getUsername() {
     return username;
@@ -117,6 +121,14 @@ public class Person implements Serializable {
 
   public void setProfilePageView(List<ProfilePageView> profilePageView) {
     this.profilePageView = profilePageView;
+  }
+
+  public Wallet getWallet() {
+    return wallet;
+  }
+
+  public void setWallet(Wallet wallet) {
+    this.wallet = wallet;
   }
 
   @Override
