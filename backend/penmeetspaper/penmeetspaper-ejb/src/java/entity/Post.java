@@ -47,7 +47,7 @@ public class Post implements Serializable {
 
   // unidirectional
   @OneToMany
-  @JoinColumn(name = "postComments")
+  @JoinColumn(name = "comment_id")
   private List<Comment> comments = new ArrayList<>();
 
   public Long getId() {
