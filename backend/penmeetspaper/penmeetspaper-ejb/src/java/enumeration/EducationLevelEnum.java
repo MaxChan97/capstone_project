@@ -9,11 +9,12 @@ package enumeration;
  *
  * @author Shawn
  */
+// NOT NEEDED
 public enum EducationLevelEnum {
-    PRIMARY,
-    SECONDARY,
-    TERTIARY,
-    UNIVERSITY,
-    PROFESSIONAL,
-    OTHERS
+  PRIMARY,
+  SECONDARY,
+  TERTIARY,
+  UNIVERSITY,
+  PROFESSIONAL,
+  OTHERS
 }
