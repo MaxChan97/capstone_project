@@ -10,11 +10,11 @@ package enumeration;
  * @author Shawn
  */
 public enum ReportTypeEnum {
-  UserReport,
-  CommunityReport,
-  VideoReport,
-  PostReport,
-  CommentReport,
-  ReplyReport,
-  StreamReport
+  USER_REPORT,
+  COMMUNITY_REPORT,
+  VIDEO_REPORT,
+  POST_REPORT,
+  COMMENT_REPORT,
+  REPLY_REPORT,
+  STREAM_REPORT
 }
