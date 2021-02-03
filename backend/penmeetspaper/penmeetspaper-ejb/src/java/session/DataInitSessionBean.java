@@ -39,12 +39,12 @@ public class DataInitSessionBean {
     }
 
     private void initData() {
-        Person masterAdmin = new Person();
-        masterAdmin.setUsername("masterAdmin");
-        masterAdmin.setEmail("admin@bab.com");
-        masterAdmin.setPassword("yolo");
+        Person temp = new Person();
+        temp.setUsername("user1");
+        temp.setEmail("user1@bab.com");
+        temp.setPassword("password");
         try {
-            personSB.createPerson(masterAdmin);
+            personSB.createPerson(temp);
         } catch (NotValidException ex) {
             ex.printStackTrace();
         }
