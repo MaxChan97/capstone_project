@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import defaultDP from "../assets/Default Dp logo.svg";
+import defaultDP from "../../assets/Default Dp logo.svg";
 import { Link } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
@@ -98,7 +98,7 @@ export default function ProfilePostCard() {
 
               <p>
                 <a href="#" class="link-black text-sm">
-                  <i class="far fa-thumbs-up mr-1"></i> 700
+                  <i class="fas fa-thumbs-up mr-1"></i> 700
                 </a>
 
                 <span>
@@ -107,7 +107,7 @@ export default function ProfilePostCard() {
                     class="link-black text-sm"
                     style={{ marginLeft: 10 }}
                   >
-                    <i class="far fa-comments mr-1"></i> 1000
+                    <i class="fas fa-comments mr-1"></i> 1000
                   </a>
                 </span>
               </p>

@@ -13,8 +13,8 @@ import CommunityPage from "./screens/CommunityPage";
 import CategoriesPage from "./screens/CategoriesPage";
 import FeedPage from "./screens/FeedPage";
 import ProfilePage from "./screens/ProfilePage";
-import ProfilePostCard from "./components/ProfilePostCard";
-import AboutMe from "./components/AboutMe";
+import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
+import AboutMe from "./components/ProfilePage/AboutMe";
 function App() {
   let location = useLocation();
 
