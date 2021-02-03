@@ -10,14 +10,5 @@ package enumeration;
  * @author carlc
  */
 public enum FileTypeEnum {
-   PNG, 
-   JPG, 
-   JPEG, 
-   MP4, 
-   MP3, 
-   DOC, 
-   PPT,  
-   XLS, 
-   PDF, 
-   GIF
+
 }
