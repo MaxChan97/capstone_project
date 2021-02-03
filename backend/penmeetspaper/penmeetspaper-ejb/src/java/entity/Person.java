@@ -5,6 +5,8 @@
  */
 package entity;
 
+import entity.messagingEntities.Chat;
+import entity.messagingEntities.Message;
 import entity.viewEntities.ProfilePageView;
 import entity.walletEntities.Wallet;
 import enumeration.TopicEnum;
