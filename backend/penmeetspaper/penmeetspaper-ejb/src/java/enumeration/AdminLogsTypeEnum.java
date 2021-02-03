@@ -10,17 +10,17 @@ package enumeration;
  * @author Shawn
  */
 public enum AdminLogsTypeEnum {
-  ResolveReport,
-  VoidReport,
-  BanUser,
-  UnbanUser,
-  DeletePost,
-  DeleteComment,
-  DeleteReply,
-  DeleteVideo,
-  DeleteCommunity,
-  SendSystemWideNotification,
-  SendPrivateNotification,
-  AddAdvertisement,
-  DeleteAdvertisement
+  RESOLVE_REPORT,
+  VOID_REPORT,
+  BAN_USER,
+  UNBAN_USER,
+  DELETE_POST,
+  DELETE_COMMENT,
+  DELETE_REPLY,
+  DELETE_VIDEO,
+  DELETE_COMMUNITY,
+  SEND_SYSTEMWIDE_NOTIFICATION,
+  SEND_PRIVATE_NOTIFICATION,
+  ADD_ADVERTISEMENT,
+  DELETE_ADVERTISMENT,
 }
