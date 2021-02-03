@@ -3,8 +3,6 @@ import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
-import TagFacesIcon from '@material-ui/icons/TagFaces';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
 
 //chip is the topic tag
 
-export default function CategoriesPage() {
+export default function AboutMe() {
     const classes = useStyles();
     const [chipData, setChipData] = React.useState([
-        { key: 0, label: 'Angular' },
-        { key: 1, label: 'jQuery' },
-        { key: 2, label: 'Polymer' },
-        { key: 3, label: 'React' },
-        { key: 4, label: 'Vue.js' },
+        { key: 0, label: 'Stocks' },
+        { key: 1, label: 'Insurance' },
+        { key: 2, label: 'CPF' },
+        { key: 3, label: 'Savings' },
+        { key: 4, label: 'React' },
     ]);
 
     const currentUser = useSelector((state) => state.currentUser);
@@ -40,11 +38,9 @@ export default function CategoriesPage() {
 
     return (
         <div className="content-wrapper">
-            <div class="col-md-7" style={{ textAlign: "left" }}>
+            <div class="col-md-8" style={{ textAlign: "left" }}>
                 <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">About Me</h3>
-                    </div>
+                  
 
                     <div class="card-body">
 
@@ -61,47 +57,23 @@ export default function CategoriesPage() {
 
                         <hr></hr>
 
-                        <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
-                        <p>
-                            National University of Singapore <br></br>
-                            Bachelor of Computing, Information Systems
-                        </p>
-                        <p class="text-muted">2016-2020</p>
+                        <strong><i class="far fa-file-alt mr-1"></i> Interests</strong>
 
-                        <hr></hr>
-
-                        <strong><i class="fas fa-pencil-alt mr-1"></i> Experience</strong>
-
-                        <p>
-                            Software Engineer <br></br>
-                            Google
-                        </p>
-                        <p class="text-muted">2020 - Present</p>
-
-                        <hr></hr>
-
-                        <strong><i class="far fa-file-alt mr-1"></i> Topics</strong>
-
-                        <Paper component="ul" className={classes.root}>
+                        <div component="ul" className={classes.root}>
                             {chipData.map((data) => {
-                                let icon;
-
-                                if (data.label === 'React') {
-                                    icon = <TagFacesIcon />;
-                                }
 
                                 return (
                                     <li key={data.key}>
                                         <Chip
-                                            icon={icon}
+                                           
                                             label={data.label}
                                             className={classes.chip}
                                         />
                                     </li>
                                 );
                             })}
-                        </Paper>
+                        </div>
                     </div>
 
                 </div>
