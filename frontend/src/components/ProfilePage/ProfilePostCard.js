@@ -12,7 +12,7 @@ const options = ["Edit Post", "Delete Post"];
 
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard() {
+export default function ProfilePostCard({key, data }) {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

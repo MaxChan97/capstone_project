@@ -5,6 +5,7 @@ import TopBar from "../components/ProfilePage/TopBar";
 import CreatePostCard from "../components/ProfilePage/CreatePostCard";
 import ProfilePostCard from "../components/ProfilePage/ProfilePostCard";
 import AboutMe from "../components/ProfilePage/AboutMe";
+import PostList from "../components/ProfilePage/PostList";
 
 export default function ProfilePage() {
   const [tabValue, setTabValue] = useState(0);
@@ -19,7 +20,7 @@ export default function ProfilePage() {
         <div style={{ marginTop: "20px" }}>
           <CreatePostCard></CreatePostCard>
           <ProfilePostCard />
-
+          <PostList></PostList>
         </div>
       ); 
     }
