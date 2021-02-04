@@ -5,7 +5,7 @@
  */
 package entity.messagingEntities;
 
-import entity.Person;
+import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;

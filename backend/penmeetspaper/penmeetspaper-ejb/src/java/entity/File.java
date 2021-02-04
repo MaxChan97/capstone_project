@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import enumeration.EducationLevelEnum;
 import enumeration.FileTypeEnum;
 import java.io.Serializable;

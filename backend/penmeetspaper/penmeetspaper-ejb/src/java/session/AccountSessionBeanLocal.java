@@ -5,7 +5,7 @@
  */
 package session;
 
-import entity.Person;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;

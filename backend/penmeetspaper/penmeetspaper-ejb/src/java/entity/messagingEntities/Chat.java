@@ -5,7 +5,7 @@
  */
 package entity.messagingEntities;
 
-import entity.Person;
+import entity.personEntities.Person;
 import entity.messagingEntities.Message;
 import java.io.Serializable;
 import java.util.ArrayList;

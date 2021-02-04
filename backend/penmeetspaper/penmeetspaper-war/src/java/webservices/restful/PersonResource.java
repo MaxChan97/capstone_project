@@ -5,7 +5,7 @@
  */
 package webservices.restful;
 
-import entity.Person;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;

@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import entity.messagingEntities.LiveChat;
 import java.io.Serializable;
 import java.util.ArrayList;

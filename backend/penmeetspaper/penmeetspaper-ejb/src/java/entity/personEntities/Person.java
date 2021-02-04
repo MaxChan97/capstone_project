@@ -3,8 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.personEntities;
 
+import entity.Community;
+import entity.File;
+import entity.Folder;
+import entity.PersonEngagement;
+import entity.Post;
+import entity.PricingPlan;
+import entity.Review;
+import entity.Stream;
+import entity.Subscription;
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
 import entity.viewEntities.ProfilePageView;

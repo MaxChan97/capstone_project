@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import entity.viewEntities.CommunityPageView;
 import enumeration.EducationLevelEnum;
 import enumeration.TopicEnum;
