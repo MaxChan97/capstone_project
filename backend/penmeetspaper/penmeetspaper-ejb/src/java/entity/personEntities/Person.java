@@ -10,7 +10,6 @@ import entity.File;
 import entity.Folder;
 import entity.PersonEngagement;
 import entity.Post;
-import entity.PricingPlan;
 import entity.Review;
 import entity.Stream;
 import entity.Subscription;
@@ -115,11 +114,6 @@ public class Person implements Serializable {
     // Unidirectional
     @OneToOne
     private Wallet wallet;
-
-    // Unidirectional
-    @OneToMany
-    @JoinColumn(name = "pricingPlans_id")
-    private List<PricingPlan> pricingPlans = new ArrayList<>();
 
     @OneToMany(mappedBy = "subscriber")
     private List<Subscription> subscriptions = new ArrayList<>();
@@ -278,14 +272,6 @@ public class Person implements Serializable {
 
     public void setWallet(Wallet wallet) {
         this.wallet = wallet;
-    }
-
-    public List<PricingPlan> getPricingPlans() {
-        return pricingPlans;
-    }
-
-    public void setPricingPlans(List<PricingPlan> pricingPlans) {
-        this.pricingPlans = pricingPlans;
     }
 
     public List<Subscription> getSubscriptions() {
