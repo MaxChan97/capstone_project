@@ -12,7 +12,6 @@ import entity.Subscription;
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
 import entity.viewEntities.ProfilePageView;
-import entity.walletEntities.Wallet;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -90,10 +89,6 @@ public class Person implements Serializable {
     @OneToMany
     @JoinColumn(name = "profilePageView_id")
     private List<ProfilePageView> profilePageView = new ArrayList<>();
-
-    // Unidirectional
-    @OneToOne
-    private Wallet wallet;
 
     @OneToMany(mappedBy = "subscriber")
     private List<Subscription> subscriptions = new ArrayList<>();
@@ -217,14 +212,6 @@ public class Person implements Serializable {
 
     public void setProfilePageView(List<ProfilePageView> profilePageView) {
         this.profilePageView = profilePageView;
-    }
-
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
     }
 
     public List<Subscription> getSubscriptions() {
