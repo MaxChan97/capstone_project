@@ -8,7 +8,6 @@ package entity.personEntities;
 import entity.Community;
 import entity.PersonEngagement;
 import entity.Post;
-import entity.Review;
 import entity.streamingEntities.Stream;
 import entity.Subscription;
 import entity.messagingEntities.Chat;
@@ -87,9 +86,6 @@ public class Person implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private TopicEnum teachingTopics;
-
-    @OneToMany(mappedBy = "reviewer")
-    private List<Review> reviews = new ArrayList<>();
 
     // Unidirectional
     @OneToMany
@@ -217,14 +213,6 @@ public class Person implements Serializable {
 
     public void setTeachingTopics(TopicEnum teachingTopics) {
         this.teachingTopics = teachingTopics;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
     }
 
     public List<ProfilePageView> getProfilePageView() {
