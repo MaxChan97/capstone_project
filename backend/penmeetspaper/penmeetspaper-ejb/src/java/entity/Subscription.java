@@ -46,6 +46,15 @@ public class Subscription implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
+    @Column(nullable = false)
+    private boolean isNotificationOn;
+
+    @Column(nullable = false)
+    private double pricingPlan;
+
+    @Column(nullable = false)
+    private boolean isTerminated;
+
     public Long getId() {
         return id;
     }
@@ -84,6 +93,30 @@ public class Subscription implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isIsNotificationOn() {
+        return isNotificationOn;
+    }
+
+    public void setIsNotificationOn(boolean isNotificationOn) {
+        this.isNotificationOn = isNotificationOn;
+    }
+
+    public double getPricingPlan() {
+        return pricingPlan;
+    }
+
+    public void setPricingPlan(double pricingPlan) {
+        this.pricingPlan = pricingPlan;
+    }
+
+    public boolean isIsTerminated() {
+        return isTerminated;
+    }
+
+    public void setIsTerminated(boolean isTerminated) {
+        this.isTerminated = isTerminated;
     }
 
     @Override
