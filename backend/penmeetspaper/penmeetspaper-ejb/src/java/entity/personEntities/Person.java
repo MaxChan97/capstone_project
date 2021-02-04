@@ -6,7 +6,6 @@
 package entity.personEntities;
 
 import entity.Community;
-import entity.Folder;
 import entity.PersonEngagement;
 import entity.Post;
 import entity.Review;
@@ -69,10 +68,6 @@ public class Person implements Serializable {
     @ManyToOne
     @JoinColumn(name = "streamViewing")
     private Stream streamViewing;
-
-    // birectional
-    @OneToMany(mappedBy = "owner")
-    private List<Folder> folders = new ArrayList<>();
 
     // birectional
     @ManyToMany
@@ -206,14 +201,6 @@ public class Person implements Serializable {
 
     public void setStreamViewing(Stream streamViewing) {
         this.streamViewing = streamViewing;
-    }
-
-    public List<Folder> getFolders() {
-        return folders;
-    }
-
-    public void setFolders(List<Folder> folders) {
-        this.folders = folders;
     }
 
     public TopicEnum getInterestedTopics() {
