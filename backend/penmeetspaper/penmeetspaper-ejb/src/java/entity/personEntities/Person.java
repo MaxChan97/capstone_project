@@ -11,7 +11,7 @@ import entity.Folder;
 import entity.PersonEngagement;
 import entity.Post;
 import entity.Review;
-import entity.Stream;
+import entity.streamingEntities.Stream;
 import entity.Subscription;
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
