@@ -6,7 +6,6 @@
 package entity.personEntities;
 
 import entity.Community;
-import entity.PersonEngagement;
 import entity.Post;
 import entity.streamingEntities.Stream;
 import entity.Subscription;
@@ -113,9 +112,6 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "owner")
     private List<Community> ownedCommunities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "person")
-    private List<PersonEngagement> communityEngagements = new ArrayList<>();
 
     @ManyToMany(mappedBy = "likes")
     private List<Post> likedPost = new ArrayList<>();
@@ -277,14 +273,6 @@ public class Person implements Serializable {
 
     public void setOwnedCommunities(List<Community> ownedCommunities) {
         this.ownedCommunities = ownedCommunities;
-    }
-
-    public List<PersonEngagement> getCommunityEngagements() {
-        return communityEngagements;
-    }
-
-    public void setCommunityEngagements(List<PersonEngagement> communityEngagements) {
-        this.communityEngagements = communityEngagements;
     }
 
     public List<Post> getLikedPost() {

@@ -53,9 +53,6 @@ public class Community implements Serializable {
     @OneToMany(mappedBy = "postCommunity")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "community")
-    private List<PersonEngagement> personEngagements = new ArrayList<>();
-
     // Unidirectional
     @OneToMany
     @JoinColumn(name = "communityPageViews_id")
@@ -67,14 +64,6 @@ public class Community implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<PersonEngagement> getPersonEngagements() {
-        return personEngagements;
-    }
-
-    public void setPersonEngagements(List<PersonEngagement> personEngagements) {
-        this.personEngagements = personEngagements;
     }
 
     public String getName() {
