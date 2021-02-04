@@ -6,7 +6,6 @@
 package entity.personEntities;
 
 import entity.Community;
-import entity.File;
 import entity.Folder;
 import entity.PersonEngagement;
 import entity.Post;
@@ -74,15 +73,6 @@ public class Person implements Serializable {
     // birectional
     @OneToMany(mappedBy = "owner")
     private List<Folder> folders = new ArrayList<>();
-
-    // birectional
-    @ManyToMany
-    @JoinTable(name = "person_likedFiles",
-            joinColumns = {
-                @JoinColumn(name = "person_id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "likedFiles_id")})
-    private List<File> likedFiles = new ArrayList<>();
 
     // birectional
     @ManyToMany
@@ -224,14 +214,6 @@ public class Person implements Serializable {
 
     public void setFolders(List<Folder> folders) {
         this.folders = folders;
-    }
-
-    public List<File> getLikedFiles() {
-        return likedFiles;
-    }
-
-    public void setLikedFiles(List<File> likedFiles) {
-        this.likedFiles = likedFiles;
     }
 
     public TopicEnum getInterestedTopics() {

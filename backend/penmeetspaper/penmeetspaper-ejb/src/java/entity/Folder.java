@@ -25,103 +25,91 @@ import javax.persistence.OneToMany;
 @Entity
 public class Folder implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String name;
+    @Column(nullable = false)
+    private String name;
 
-  // birectional
-  @ManyToOne
-  @JoinColumn(name = "owner")
-  private Person owner;
+    // birectional
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private Person owner;
 
-  // birectional
-  @ManyToOne
-  @JoinColumn(name = "parentFolder_id")
-  private Folder parentFolder;
+    // birectional
+    @ManyToOne
+    @JoinColumn(name = "parentFolder_id")
+    private Folder parentFolder;
 
-  // birectional
-  @OneToMany(mappedBy = "parentFolder")
-  private List<Folder> childrenFolder = new ArrayList<>();
+    // birectional
+    @OneToMany(mappedBy = "parentFolder")
+    private List<Folder> childrenFolder = new ArrayList<>();
 
-  // birectional
-  @OneToMany(mappedBy = "folder")
-  private List<File> files = new ArrayList<>();
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Person getOwner() {
-    return owner;
-  }
-
-  public void setOwner(Person owner) {
-    this.owner = owner;
-  }
-
-  public Folder getParentFolder() {
-    return parentFolder;
-  }
-
-  public void setParentFolder(Folder parentFolder) {
-    this.parentFolder = parentFolder;
-  }
-
-  public List<Folder> getChildrenFolder() {
-    return childrenFolder;
-  }
-
-  public void setChildrenFolder(List<Folder> childrenFolder) {
-    this.childrenFolder = childrenFolder;
-  }
-
-  public List<File> getFiles() {
-    return files;
-  }
-
-  public void setFiles(List<File> files) {
-    this.files = files;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Folder)) {
-      return false;
+    public Long getId() {
+        return id;
     }
-    Folder other = (Folder) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
-  }
 
-  @Override
-  public String toString() {
-    return "entity.Folder[ id=" + id + " ]";
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
+    }
+
+    public Folder getParentFolder() {
+        return parentFolder;
+    }
+
+    public void setParentFolder(Folder parentFolder) {
+        this.parentFolder = parentFolder;
+    }
+
+    public List<Folder> getChildrenFolder() {
+        return childrenFolder;
+    }
+
+    public void setChildrenFolder(List<Folder> childrenFolder) {
+        this.childrenFolder = childrenFolder;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Folder)) {
+            return false;
+        }
+        Folder other = (Folder) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.Folder[ id=" + id + " ]";
+    }
 
 }
