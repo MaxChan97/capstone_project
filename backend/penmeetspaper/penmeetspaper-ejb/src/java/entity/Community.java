@@ -7,7 +7,6 @@ package entity;
 
 import entity.personEntities.Person;
 import entity.viewEntities.CommunityPageView;
-import enumeration.EducationLevelEnum;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,9 +49,6 @@ public class Community implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private List<TopicEnum> topicEnums = new ArrayList<>();
-
-    @Enumerated(EnumType.STRING)
-    private List<EducationLevelEnum> educationLevelEnums = new ArrayList<>();
 
     @OneToMany(mappedBy = "postCommunity")
     private List<Post> posts = new ArrayList<>();
@@ -111,14 +107,6 @@ public class Community implements Serializable {
 
     public void setTopicEnums(List<TopicEnum> topicEnums) {
         this.topicEnums = topicEnums;
-    }
-
-    public List<EducationLevelEnum> getEducationLevelEnums() {
-        return educationLevelEnums;
-    }
-
-    public void setEducationLevelEnums(List<EducationLevelEnum> educationLevelEnums) {
-        this.educationLevelEnums = educationLevelEnums;
     }
 
     public List<Post> getPosts() {
