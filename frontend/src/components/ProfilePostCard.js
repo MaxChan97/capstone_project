@@ -48,6 +48,7 @@ export default function ProfilePostCard() {
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <IconButton
+                    style={{ outline: "none" }}
                     aria-label="more"
                     aria-controls="long-menu"
                     aria-haspopup="true"
@@ -69,11 +70,7 @@ export default function ProfilePostCard() {
                     }}
                   >
                     {options.map((option) => (
-                      <MenuItem
-                        key={option}
-                        selected={option === "Edit Post"}
-                        onClick={handleClose}
-                      >
+                      <MenuItem key={option} onClick={handleClose}>
                         {option}
                       </MenuItem>
                     ))}
