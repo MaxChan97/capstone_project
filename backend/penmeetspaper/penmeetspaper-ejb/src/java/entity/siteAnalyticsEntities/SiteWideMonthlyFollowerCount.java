@@ -3,58 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.siteAnalyticsEntities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author carlc
+ * @author User
  */
 @Entity
-public class Person implements Serializable {
+public class SiteWideMonthlyFollowerCount implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String username;
-
   @Column(nullable = false)
-  private String password;
+  private int siteWideSubscriberCount;
 
-  @OneToMany
-  @JoinColumn(name = "person_id")
-  private List<Stream> pastStreams = new ArrayList<>();
-
-  @OneToOne
-  @JoinColumn(name = "streamStreaming")
-  private Stream streamStreaming;
-
-  @ManyToOne
-  @JoinColumn(name = "streamViewing")
-  private Stream streamViewing;
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
+  @Temporal(TemporalType.DATE)
+  private Date monthOf;
 
   public Long getId() {
     return id;
@@ -64,12 +41,20 @@ public class Person implements Serializable {
     this.id = id;
   }
 
-  public String getPassword() {
-    return password;
+  public int getSiteWideSubscriberCount() {
+    return siteWideSubscriberCount;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setSiteWideSubscriberCount(int siteWideSubscriberCount) {
+    this.siteWideSubscriberCount = siteWideSubscriberCount;
+  }
+
+  public Date getMonthOf() {
+    return monthOf;
+  }
+
+  public void setMonthOf(Date monthOf) {
+    this.monthOf = monthOf;
   }
 
   @Override
@@ -82,10 +67,10 @@ public class Person implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Person)) {
+    if (!(object instanceof SiteWideMonthlyFollowerCount)) {
       return false;
     }
-    Person other = (Person) object;
+    SiteWideMonthlyFollowerCount other = (SiteWideMonthlyFollowerCount) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -94,7 +79,7 @@ public class Person implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.Person[ id=" + id + " ]";
+    return "entity.siteAnalyticsEntities.SiteWideMonthlyFollowerCount[ id=" + id + " ]";
   }
 
 }

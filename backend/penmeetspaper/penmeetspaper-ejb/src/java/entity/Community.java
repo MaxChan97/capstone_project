@@ -5,8 +5,8 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import entity.viewEntities.CommunityPageView;
-import enumeration.EducationLevelEnum;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +37,10 @@ public class Community implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false)
+    private String communityProfilePicture;
+
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne
@@ -46,14 +50,12 @@ public class Community implements Serializable {
     @Enumerated(EnumType.STRING)
     private List<TopicEnum> topicEnums = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private List<EducationLevelEnum> educationLevelEnums = new ArrayList<>();
-
     @OneToMany(mappedBy = "postCommunity")
     private List<Post> posts = new ArrayList<>();
 
     // Unidirectional
     @OneToMany
+    @JoinColumn(name = "communityPageViews_id")
     private List<CommunityPageView> communityPageViews = new ArrayList<>();
 
     public Long getId() {
@@ -96,14 +98,6 @@ public class Community implements Serializable {
         this.topicEnums = topicEnums;
     }
 
-    public List<EducationLevelEnum> getEducationLevelEnums() {
-        return educationLevelEnums;
-    }
-
-    public void setEducationLevelEnums(List<EducationLevelEnum> educationLevelEnums) {
-        this.educationLevelEnums = educationLevelEnums;
-    }
-
     public List<Post> getPosts() {
         return posts;
     }
@@ -118,6 +112,14 @@ public class Community implements Serializable {
 
     public void setCommunityPageViews(List<CommunityPageView> communityPageViews) {
         this.communityPageViews = communityPageViews;
+    }
+
+    public String getCommunityProfilePicture() {
+        return communityProfilePicture;
+    }
+
+    public void setCommunityProfilePicture(String communityProfilePicture) {
+        this.communityProfilePicture = communityProfilePicture;
     }
 
     @Override

@@ -5,7 +5,7 @@
  */
 package session;
 
-import entity.Person;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Stateless;
@@ -24,9 +24,9 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
   private EntityManager em;
 
   @Override
-  public Person login(String username, String password) throws NoResultException, NotValidException {
-    if (username == null) {
-      throw new NotValidException(AccountSessionBeanLocal.MISSING_USERNAME);
+  public Person login(String email, String password) throws NoResultException, NotValidException {
+    if (email == null) {
+      throw new NotValidException(AccountSessionBeanLocal.MISSING_EMAIL);
     }
 
     if (password == null) {
@@ -34,8 +34,8 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
     }
 
     Query q;
-    q = em.createQuery("SELECT p from Person p WHERE p.username = :username AND p.password = :password");
-    q.setParameter("username", username);
+    q = em.createQuery("SELECT p from Person p WHERE p.email = :email AND p.password = :password");
+    q.setParameter("email", email);
     q.setParameter("password", password);
 
     try {

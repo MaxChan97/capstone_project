@@ -5,28 +5,19 @@
  */
 package entity;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class Media implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,18 +25,10 @@ public class Reply implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String body;
+    private boolean isVideo;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    @Column(nullable = false)
+    private byte payload;
 
     public Long getId() {
         return id;
@@ -55,32 +38,20 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public boolean isIsVideo() {
+        return isVideo;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setIsVideo(boolean isVideo) {
+        this.isVideo = isVideo;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public byte getPayload() {
+        return payload;
     }
 
-    public Person getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Person author) {
-        this.author = author;
-    }
-
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setPayload(byte payload) {
+        this.payload = payload;
     }
 
     @Override
@@ -93,10 +64,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof Media)) {
             return false;
         }
-        Reply other = (Reply) object;
+        Media other = (Media) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +76,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.Media[ id=" + id + " ]";
     }
 
 }

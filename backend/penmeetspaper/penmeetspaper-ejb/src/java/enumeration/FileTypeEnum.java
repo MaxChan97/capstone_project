@@ -7,9 +7,8 @@ package enumeration;
 
 /**
  *
- * @author Shawn
+ * @author carlc
  */
-public enum AdminDutyEnum {
-    REPORT,
-    VERIFICATION
+public enum FileTypeEnum {
+
 }

@@ -9,11 +9,8 @@ package enumeration;
  *
  * @author Shawn
  */
-public enum EducationLevelEnum {
-    PRIMARY,
-    SECONDARY,
-    TERTIARY,
-    UNIVERSITY,
-    PROFESSIONAL,
-    OTHERS
+public enum ReportStateEnum {
+  PENDING,
+  RESOLVED,
+  VOID
 }

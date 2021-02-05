@@ -5,7 +5,7 @@
  */
 package webservices.restful;
 
-import entity.Person;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.EJB;
@@ -33,9 +33,9 @@ public class AccountResource {
   @GET
   @Path("login/query")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
+  public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
     try {
-      Person p = accountSessionLocal.login(username, password);
+      Person p = accountSessionLocal.login(email, password);
       return Response.status(200).entity(
               p
       ).type(MediaType.APPLICATION_JSON).build();

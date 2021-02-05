@@ -5,9 +5,11 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,15 +31,18 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String body;
 
-    // TODO: add multiplicity 
+    @ManyToOne
+    @JoinColumn(name = "person_posts")
     private Person author;
 
     @ManyToMany
-    @JoinColumn(name = "likes")
+    @JoinColumn(name = "likes_post")
     private List<Person> likes = new ArrayList<>();
 
     @ManyToOne
@@ -46,7 +51,7 @@ public class Post implements Serializable {
 
     // unidirectional
     @OneToMany
-    @JoinColumn(name = "postComments")
+    @JoinColumn(name = "comment_id")
     private List<Comment> comments = new ArrayList<>();
 
     public Long getId() {

@@ -3,30 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.messagingEntities;
 
-import entity.personEntities.Person;
+import enumeration.FileTypeEnum;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class File implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,18 +28,16 @@ public class Reply implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String body;
+    private String name;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
+    @Column(nullable = false)
+    private boolean isVideo;
 
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    @Column(nullable = false)
+    private byte payload;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    @Enumerated(EnumType.STRING)
+    private FileTypeEnum fileType;
 
     public Long getId() {
         return id;
@@ -55,32 +47,36 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getName() {
+        return name;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public boolean isIsVideo() {
+        return isVideo;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setIsVideo(boolean isVideo) {
+        this.isVideo = isVideo;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public byte getPayload() {
+        return payload;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
+    public void setPayload(byte payload) {
+        this.payload = payload;
     }
 
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public FileTypeEnum getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(FileTypeEnum fileType) {
+        this.fileType = fileType;
     }
 
     @Override
@@ -93,10 +89,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof File)) {
             return false;
         }
-        Reply other = (Reply) object;
+        File other = (File) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +101,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.messagingEntities.File[ id=" + id + " ]";
     }
 
 }

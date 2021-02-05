@@ -3,50 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.siteAnalyticsEntities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author carlc
+ * @author Shawn
  */
 @Entity
-public class Stream implements Serializable {
+public class siteMonthlyRevenue implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
-  private String title;
-  
-  private boolean isPaid;
-  
-  private int viewerCount;
-  
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date date;
-  
-  @OneToOne
-  private LiveChat liveChat;
-  
-  @OneToOne(mappedBy = "streamStreaming")
-  private Person streamer;
 
-  @OneToMany(mappedBy = "streamViewing")
-  private List<Person> viewers = new ArrayList<>();
+  @Column(nullable = false)
+  private double revenue;
+
+  @Temporal(TemporalType.DATE)
+  private Date monthOf;
 
   public Long getId() {
     return id;
@@ -54,6 +39,22 @@ public class Stream implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public double getRevenue() {
+    return revenue;
+  }
+
+  public void setRevenue(double revenue) {
+    this.revenue = revenue;
+  }
+
+  public Date getMonthOf() {
+    return monthOf;
+  }
+
+  public void setMonthOf(Date monthOf) {
+    this.monthOf = monthOf;
   }
 
   @Override
@@ -66,10 +67,10 @@ public class Stream implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Stream)) {
+    if (!(object instanceof siteMonthlyRevenue)) {
       return false;
     }
-    Stream other = (Stream) object;
+    siteMonthlyRevenue other = (siteMonthlyRevenue) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -78,7 +79,7 @@ public class Stream implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.Stream[ id=" + id + " ]";
+    return "entity.siteAnalyticsEntities.siteMonthlyRevenue[ id=" + id + " ]";
   }
-  
+
 }

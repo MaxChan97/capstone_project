@@ -3,21 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.personEntities;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,7 +20,7 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class MonthlyFollowerCount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,18 +28,10 @@ public class Reply implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String body;
+    private int followerCount;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    @Temporal(TemporalType.DATE)
+    private Date monthOf;
 
     public Long getId() {
         return id;
@@ -55,32 +41,20 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public int getFollowerCount() {
+        return followerCount;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public Date getMonthOf() {
+        return monthOf;
     }
 
-    public Person getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Person author) {
-        this.author = author;
-    }
-
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setMonthOf(Date monthOf) {
+        this.monthOf = monthOf;
     }
 
     @Override
@@ -93,10 +67,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof MonthlyFollowerCount)) {
             return false;
         }
-        Reply other = (Reply) object;
+        MonthlyFollowerCount other = (MonthlyFollowerCount) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +79,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.personEntities.MonthlyFollowerCount[ id=" + id + " ]";
     }
 
 }

@@ -3,33 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.streamingEntities;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author carlc
  */
 @Entity
-public class LiveChat implements Serializable {
+public class LiveMessage implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
-  @OneToMany
-  @JoinColumn(name = "liveChat_id")
-  private List<LiveMessage> liveMessages = new ArrayList<>();
+
+  @Column(nullable = false)
+  private String body;
+
+  @Column(nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date date;
+
+  // unidirectional 
+  @ManyToOne
+  private Person sender;
 
   public Long getId() {
     return id;
@@ -39,14 +48,30 @@ public class LiveChat implements Serializable {
     this.id = id;
   }
 
-  public List<LiveMessage> getLiveMessages() {
-    return liveMessages;
+  public String getBody() {
+    return body;
   }
 
-  public void setLiveMessages(List<LiveMessage> liveMessages) {
-    this.liveMessages = liveMessages;
+  public void setBody(String body) {
+    this.body = body;
   }
-  
+
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  public Person getSender() {
+    return sender;
+  }
+
+  public void setSender(Person sender) {
+    this.sender = sender;
+  }
+
   @Override
   public int hashCode() {
     int hash = 0;
@@ -57,10 +82,10 @@ public class LiveChat implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof LiveChat)) {
+    if (!(object instanceof LiveMessage)) {
       return false;
     }
-    LiveChat other = (LiveChat) object;
+    LiveMessage other = (LiveMessage) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -69,7 +94,7 @@ public class LiveChat implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.LiveChat[ id=" + id + " ]";
+    return "entity.LiveMessage[ id=" + id + " ]";
   }
-  
+
 }

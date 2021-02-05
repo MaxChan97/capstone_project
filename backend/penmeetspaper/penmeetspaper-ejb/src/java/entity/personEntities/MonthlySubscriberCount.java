@@ -3,34 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.adminEntities;
+package entity.personEntities;
 
-import enumeration.AdminDutyEnum;
 import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
- * @author Shawn
+ * @author User
  */
 @Entity
-public class AdminDuties implements Serializable {
+public class MonthlySubscriberCount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private AdminDutyEnum dutyType;
+    @Column(nullable = false)
+    private int subscriberCount;
 
-    private String messageBody;
-
-    private String title;
-
-    private boolean isResolved;
+    @Temporal(TemporalType.DATE)
+    private Date monthOf;
 
     public Long getId() {
         return id;
@@ -40,36 +41,20 @@ public class AdminDuties implements Serializable {
         this.id = id;
     }
 
-    public AdminDutyEnum getDutyType() {
-        return dutyType;
+    public int getSubscriberCount() {
+        return subscriberCount;
     }
 
-    public void setDutyType(AdminDutyEnum dutyType) {
-        this.dutyType = dutyType;
+    public void setSubscriberCount(int subscriberCount) {
+        this.subscriberCount = subscriberCount;
     }
 
-    public String getMessageBody() {
-        return messageBody;
+    public Date getMonthOf() {
+        return monthOf;
     }
 
-    public void setMessageBody(String messageBody) {
-        this.messageBody = messageBody;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isIsResolved() {
-        return isResolved;
-    }
-
-    public void setIsResolved(boolean isResolved) {
-        this.isResolved = isResolved;
+    public void setMonthOf(Date monthOf) {
+        this.monthOf = monthOf;
     }
 
     @Override
@@ -82,10 +67,10 @@ public class AdminDuties implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AdminDuties)) {
+        if (!(object instanceof MonthlySubscriberCount)) {
             return false;
         }
-        AdminDuties other = (AdminDuties) object;
+        MonthlySubscriberCount other = (MonthlySubscriberCount) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -94,7 +79,7 @@ public class AdminDuties implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.adminEntities.AdminDuties[ id=" + id + " ]";
+        return "entity.personEntities.MonthlySubscriberCount[ id=" + id + " ]";
     }
 
 }

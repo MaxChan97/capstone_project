@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.advertisementEntities;
 
-import entity.personEntities.Person;
+import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,9 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,26 +23,26 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class Advertisement implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private String body;
+    private String title;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
+    @Column(nullable = false)
+    private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    @Column(nullable = false)
+    private String image;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date datePosted;
+
+    private List<TopicEnum> topics = new ArrayList();
 
     public Long getId() {
         return id;
@@ -55,24 +52,28 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getTitle() {
+        return title;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public String getDescription() {
+        return description;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Date getDatePosted() {
@@ -81,6 +82,14 @@ public class Reply implements Serializable {
 
     public void setDatePosted(Date datePosted) {
         this.datePosted = datePosted;
+    }
+
+    public List<TopicEnum> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(List<TopicEnum> topics) {
+        this.topics = topics;
     }
 
     @Override
@@ -93,10 +102,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof Advertisement)) {
             return false;
         }
-        Reply other = (Reply) object;
+        Advertisement other = (Advertisement) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +114,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.advertisementEntities.Advertisement[ id=" + id + " ]";
     }
 
 }

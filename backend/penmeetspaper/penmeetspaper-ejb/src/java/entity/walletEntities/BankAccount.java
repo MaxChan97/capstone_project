@@ -3,49 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.walletEntities;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class BankAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // All variables here should be hashed.
     @Column(nullable = false)
-    private String body;
+    private String accountNumber;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
+    @Column(nullable = false)
+    private String bankName;
 
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    @Column(nullable = false)
+    private String displayName;
 
     public Long getId() {
         return id;
@@ -55,32 +42,28 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public String getBankName() {
+        return bankName;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -93,10 +76,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof BankAccount)) {
             return false;
         }
-        Reply other = (Reply) object;
+        BankAccount other = (BankAccount) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +88,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.walletEntities.BankAccount[ id=" + id + " ]";
     }
 
 }

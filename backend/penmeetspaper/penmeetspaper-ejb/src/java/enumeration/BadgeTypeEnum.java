@@ -9,18 +9,9 @@ package enumeration;
  *
  * @author Shawn
  */
-public enum TopicEnum {
-  BUSINESS,
-  FINANCE,
-  MARKETING,
-  TRADING,
-  CRYPTOCURRENCY,
-  FOREX,
-  FUTURES,
-  HOUSING,
-  BTO,
-  COE,
-  CARS,
-  INSURANCE,
-  OTHERS
+public enum BadgeTypeEnum {
+    CONTRIBUTION,
+    STREAM,
+    OVERALL
+
 }

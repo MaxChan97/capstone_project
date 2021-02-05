@@ -9,18 +9,12 @@ package enumeration;
  *
  * @author Shawn
  */
-public enum TopicEnum {
-  BUSINESS,
-  FINANCE,
-  MARKETING,
-  TRADING,
-  CRYPTOCURRENCY,
-  FOREX,
-  FUTURES,
-  HOUSING,
-  BTO,
-  COE,
-  CARS,
-  INSURANCE,
-  OTHERS
+public enum ReportTypeEnum {
+  USER_REPORT,
+  COMMUNITY_REPORT,
+  VIDEO_REPORT,
+  POST_REPORT,
+  COMMENT_REPORT,
+  REPLY_REPORT,
+  STREAM_REPORT
 }

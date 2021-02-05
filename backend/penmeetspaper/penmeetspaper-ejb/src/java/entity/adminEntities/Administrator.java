@@ -3,21 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.adminEntities;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,26 +20,27 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class Administrator implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
-    private String body;
+    private String password;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    private Date createdDate;
+
+    @Column(nullable = false)
+    private boolean isDeactivated;
 
     public Long getId() {
         return id;
@@ -55,32 +50,44 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getUsername() {
+        return username;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public String getPassword() {
+        return password;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public String getEmail() {
+        return email;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public boolean isIsDeactivated() {
+        return isDeactivated;
+    }
+
+    public void setIsDeactivated(boolean isDeactivated) {
+        this.isDeactivated = isDeactivated;
     }
 
     @Override
@@ -93,10 +100,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof Administrator)) {
             return false;
         }
-        Reply other = (Reply) object;
+        Administrator other = (Administrator) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +112,6 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.adminEntities.Administrator[ id=" + id + " ]";
     }
-
 }

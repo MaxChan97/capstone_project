@@ -3,40 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.messagingEntities;
 
+import entity.personEntities.Person;
+import entity.messagingEntities.Message;
 import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
- * @author carlc
+ * @author Shawn
  */
 @Entity
-public class LiveMessage implements Serializable {
+public class Chat implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String body;
+  @ManyToMany
+  private List<Person> chatParticipants = new ArrayList<>();
 
-  @Column(nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date date;
-
-  @ManyToOne
-  private Person sender;
+  @OneToMany(mappedBy = "chatGroup")
+  private List<Message> chatMessages = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -46,28 +43,24 @@ public class LiveMessage implements Serializable {
     this.id = id;
   }
 
-  public String getBody() {
-    return body;
+  public List<Person> getChatParticipants() {
+    return chatParticipants;
   }
 
-  public void setBody(String body) {
-    this.body = body;
+  public void setChatParticipants(List<Person> chatParticipants) {
+    this.chatParticipants = chatParticipants;
   }
 
-  public Date getDate() {
-    return date;
+  public List<Message> getChatMessages() {
+    return chatMessages;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setChatMessages(List<Message> chatMessages) {
+    this.chatMessages = chatMessages;
   }
 
-  public Person getSender() {
-    return sender;
-  }
-
-  public void setSender(Person sender) {
-    this.sender = sender;
+  public void addChatMessage(Message chatMessage) {
+    this.chatMessages.add(chatMessage);
   }
 
   @Override
@@ -80,10 +73,10 @@ public class LiveMessage implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof LiveMessage)) {
+    if (!(object instanceof Chat)) {
       return false;
     }
-    LiveMessage other = (LiveMessage) object;
+    Chat other = (Chat) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -92,7 +85,7 @@ public class LiveMessage implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.LiveMessage[ id=" + id + " ]";
+    return "entity.Chat[ id=" + id + " ]";
   }
 
 }

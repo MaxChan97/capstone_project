@@ -3,20 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.messagingEntities;
 
 import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,26 +23,30 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String body;
-
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "messagesSent")
+    private Person sender;
 
     @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    @JoinColumn(name = "messagesRecieved")
+    private Person recipient;
 
+    private String body;
+
+    @ManyToOne
+    @JoinColumn(name = "chatMessages")
+    private Chat chatGroup;
+
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    private Date dateTime;
 
     public Long getId() {
         return id;
@@ -55,32 +56,44 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
+    public Person getSender() {
+        return sender;
+    }
+
+    public void setSender(Person sender) {
+        this.sender = sender;
+    }
+
+    public Person getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Person recipient) {
+        this.recipient = recipient;
+    }
+
     public String getBody() {
         return body;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public Chat getChatGroup() {
+        return chatGroup;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setChatGroup(Chat chatGroup) {
+        this.chatGroup = chatGroup;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -93,10 +106,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof Message)) {
             return false;
         }
-        Reply other = (Reply) object;
+        Message other = (Message) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +118,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.Message[ id=" + id + " ]";
     }
 
 }

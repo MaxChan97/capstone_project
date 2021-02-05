@@ -5,19 +5,13 @@
  */
 package entity;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,7 +20,7 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class Follow implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,18 +28,10 @@ public class Reply implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String body;
-
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    private boolean isNotificationOn;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    private Date followDate;
 
     public Long getId() {
         return id;
@@ -55,32 +41,20 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public boolean isIsNotificationOn() {
+        return isNotificationOn;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setIsNotificationOn(boolean isNotificationOn) {
+        this.isNotificationOn = isNotificationOn;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public Date getFollowDate() {
+        return followDate;
     }
 
-    public Person getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Person author) {
-        this.author = author;
-    }
-
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setFollowDate(Date followDate) {
+        this.followDate = followDate;
     }
 
     @Override
@@ -93,10 +67,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof Follow)) {
             return false;
         }
-        Reply other = (Reply) object;
+        Follow other = (Follow) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +79,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.Follow[ id=" + id + " ]";
     }
 
 }

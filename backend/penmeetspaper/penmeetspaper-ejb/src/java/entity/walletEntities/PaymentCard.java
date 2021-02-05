@@ -3,49 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entity.walletEntities;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class PaymentCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // All variables here should be hashed.
     @Column(nullable = false)
-    private String body;
+    private String cardNo;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
+    @Column(nullable = false)
+    private String expiry;
 
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    @Column(nullable = false)
+    private String cvv;
 
     public Long getId() {
         return id;
@@ -55,32 +42,28 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public String getCardNo() {
+        return cardNo;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public String getExpiry() {
+        return expiry;
     }
 
-    public Person getAuthor() {
-        return author;
+    public void setExpiry(String expiry) {
+        this.expiry = expiry;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public String getCvv() {
+        return cvv;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 
     @Override
@@ -93,10 +76,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof PaymentCard)) {
             return false;
         }
-        Reply other = (Reply) object;
+        PaymentCard other = (PaymentCard) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,7 +88,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.walletEntities.PaymentCard[ id=" + id + " ]";
     }
 
 }
