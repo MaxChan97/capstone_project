@@ -8,7 +8,7 @@ package entity.personEntities;
 import entity.Community;
 import entity.Post;
 import entity.streamingEntities.Stream;
-import entity.Subscription;
+import entity.personToPersonEntities.Subscription;
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
 import entity.viewEntities.ProfilePageView;
