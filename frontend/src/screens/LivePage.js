@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../redux/actions/index";
+import Webcam from "react-webcam";
 
 export default function LivePage() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function LivePage() {
           alignItems: "center",
         }}
       >
+        <Webcam />
         <h1>Live Page</h1>
         <button
           onClick={(e) => {
