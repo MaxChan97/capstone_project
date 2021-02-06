@@ -44,6 +44,5 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
     } catch (Exception e) {
       throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);
     }
-
-  }
+  }  
 }

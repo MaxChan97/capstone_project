@@ -25,7 +25,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
   private EntityManager em;
 
   @Override
-  public void createPerson(Person person) throws NotValidException {
+  public Person createPerson(Person person) throws NotValidException {
     if (person.getUsername() == null) {
       throw new NotValidException(PersonSessionBeanLocal.MISSING_USERNAME);
     }
@@ -33,7 +33,22 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
       throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
     }
     
+    Query q;
+    q = em.createQuery("SELECT p from Person p WHERE p.email =:email");
+    q.setParameter("email", person.getEmail());
+    if (q.getResultList().size() > 0) {
+        throw new NotValidException(PersonSessionBeanLocal.EMAIL_TAKEN);
+    }
+    
+    q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
+    q.setParameter("username", person.getUsername());
+    if (q.getResultList().size() > 0) {
+        throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
+    }
+    
     em.persist(person);
+    
+    return person;
   } //end createPerson
 
   @Override

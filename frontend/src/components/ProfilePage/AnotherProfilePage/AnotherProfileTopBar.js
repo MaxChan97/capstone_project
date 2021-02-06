@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProfileGroup from "./ProfileGroup";
+import ProfileGroup from "../ProfileGroup";
 import SocialButtonGroup from "./SocialButtonGroup";
 import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
@@ -23,7 +23,7 @@ const StyledTab = withStyles((theme) => ({
     color: "#4A5056",
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
     "&:focus": {
       opacity: 1,
       color: "#3B21CB",
@@ -32,7 +32,12 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function TopBar({ tabValue, setTabValue }) {
+export default function AnotherProfileTopBar({
+  tabValue,
+  setTabValue,
+  username,
+  numFollowers,
+}) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -51,16 +56,13 @@ export default function TopBar({ tabValue, setTabValue }) {
           backgroundColor: "#FDFDFD",
         }}
       >
-        <ProfileGroup />
+        <ProfileGroup username={username} numFollowers={numFollowers} />
         <SocialButtonGroup />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
           <StyledTab label="Videos" />
-          <StyledTab label="Playlists" />
-          <StyledTab label="Resources" />
           <StyledTab label="Feed" />
-          <StyledTab label="Schedule" />
           <StyledTab label="About" />
         </StyledTabs>
       </div>

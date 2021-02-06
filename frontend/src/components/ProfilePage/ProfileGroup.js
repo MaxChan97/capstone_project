@@ -1,7 +1,7 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function ProfileGroup() {
+export default function ProfileGroup({ username, numFollowers }) {
   return (
     <div
       style={{
@@ -30,10 +30,10 @@ export default function ProfileGroup() {
             fontSize: "30px",
           }}
         >
-          Teacher A
+          {username}
         </p>
         <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
-          1,053 followers
+          {numFollowers} followers
         </p>
       </div>
     </div>

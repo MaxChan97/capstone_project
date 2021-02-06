@@ -8,6 +8,8 @@ import uploadLogo from "../assets/Upload logo.svg";
 import chatLogo from "../assets/Chat logo.svg";
 import notificationLogo from "../assets/Notification Logo.svg";
 import defaultDP from "../assets/Default Dp logo.svg";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   const classes = useStyles();
   const [searchString, setSearchString] = useState("");
+  const currentUser = useSelector((state) => state.currentUser);
+  if (currentUser === null) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <nav
@@ -96,7 +102,7 @@ function Navbar() {
         <Link to="/">
           <img src={notificationLogo} alt="notificationLogo" />
         </Link>
-        <Link to="/profile">
+        <Link to={"/profile/" + currentUser.id}>
           <img src={defaultDP} alt="defaultDP" />
         </Link>
       </div>

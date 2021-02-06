@@ -20,8 +20,8 @@ public interface AccountSessionBeanLocal {
   public final static String MISSING_EMAIL = "Missing person email";
   public final static String MISSING_PASSWORD = "Missing person password";
   public final static String INVALID_CREDENTIALS = "Invalid credentials";
-
-
-  public Person login(String username, String password) throws NoResultException, NotValidException;
+  
+  
+  public Person login(String email, String password) throws NoResultException, NotValidException;
 
 }

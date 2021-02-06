@@ -6,6 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 
 import { BrowserRouter } from "react-router-dom";
 
+// react-alert imports
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
 // Redux Imports
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
@@ -28,11 +32,11 @@ window.$ = window.jQuery = jquery;
 //import syntax
 require("admin-lte/dist/js/adminlte.min");
 
+// Redux stuff
 const persistConfig = {
   key: "reducer",
   storage: storage,
 };
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const persistedReducer = persistReducer(persistConfig, allReducers);
 const store = createStore(
@@ -41,12 +45,24 @@ const store = createStore(
 );
 const persistor = persistStore(store);
 
+// react-alert stuff
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.BOTTOM_RIGHT,
+  timeout: 5000,
+  offset: "10px",
+  // you can also just use 'scale'
+  transition: transitions.SCALE,
+};
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <React.StrictMode>
-          <App />
+          <AlertProvider template={AlertTemplate} {...options}>
+            <App />
+          </AlertProvider>
         </React.StrictMode>
       </BrowserRouter>
     </PersistGate>
