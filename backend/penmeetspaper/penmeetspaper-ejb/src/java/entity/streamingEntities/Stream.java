@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -54,13 +55,24 @@ public class Stream implements Serializable {
     @OneToOne
     private LiveChat liveChat;
 
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "livePoll_id")
+    private List<LivePoll> polls = new ArrayList<>();
+
     // birectional
     @OneToOne(mappedBy = "streamStreaming")
     private Person streamer;
 
-    // bidirectional
-    @OneToMany(mappedBy = "streamViewing")
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "viewers_id")
     private List<Person> viewers = new ArrayList<>();
+
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "kickedUsers_id")
+    private List<Person> kickedUsers = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -140,6 +152,22 @@ public class Stream implements Serializable {
 
     public void setViewers(List<Person> viewers) {
         this.viewers = viewers;
+    }
+
+    public List<LivePoll> getPolls() {
+        return polls;
+    }
+
+    public void setPolls(List<LivePoll> polls) {
+        this.polls = polls;
+    }
+
+    public List<Person> getKickedUsers() {
+        return kickedUsers;
+    }
+
+    public void setKickedUsers(List<Person> kickedUsers) {
+        this.kickedUsers = kickedUsers;
     }
 
     @Override
