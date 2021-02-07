@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -53,6 +54,18 @@ public class Post implements Serializable {
     @OneToMany
     @JoinColumn(name = "comment_id")
     private List<Comment> comments = new ArrayList<>();
+
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "media_id")
+    private List<Media> media = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private Poll poll;
+
+    @ManyToMany
+    private List<Trend> trends = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -108,6 +121,30 @@ public class Post implements Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
+    }
+
+    public List<Trend> getTrends() {
+        return trends;
+    }
+
+    public void setTrends(List<Trend> trends) {
+        this.trends = trends;
     }
 
     @Override
