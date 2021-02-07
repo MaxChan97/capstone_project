@@ -15,6 +15,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -38,6 +41,14 @@ public class AdminLog implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
+
+    // unidirectional | nullable
+    @OneToOne
+    private Report report;
+
+    @ManyToOne
+    @JoinColumn(name = "report_administrator")
+    private Administrator admin;
 
     public Long getId() {
         return id;
@@ -69,6 +80,22 @@ public class AdminLog implements Serializable {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public Report getReport() {
+        return report;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
+    public Administrator getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Administrator admin) {
+        this.admin = admin;
     }
 
     @Override
