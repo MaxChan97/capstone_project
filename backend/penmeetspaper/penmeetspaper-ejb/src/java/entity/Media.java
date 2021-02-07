@@ -5,9 +5,12 @@
  */
 package entity;
 
+import enumeration.MediaTypeEnum;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +32,9 @@ public class Media implements Serializable {
 
     @Column(nullable = false)
     private byte payload;
+
+    @Enumerated(EnumType.STRING)
+    private MediaTypeEnum mediaType;
 
     public Long getId() {
         return id;
@@ -52,6 +58,14 @@ public class Media implements Serializable {
 
     public void setPayload(byte payload) {
         this.payload = payload;
+    }
+
+    public MediaTypeEnum getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(MediaTypeEnum mediaType) {
+        this.mediaType = mediaType;
     }
 
     @Override
