@@ -6,11 +6,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapKeyColumn;
 
 /**
  *
@@ -42,6 +46,17 @@ public class Trend implements Serializable {
     public void setHashTag(String hashTag) {
         this.hashTag = hashTag;
     }
+
+    public Map<Date, Integer> getDateCount() {
+        return dateCount;
+    }
+
+    public void setDateCount(Map<Date, Integer> dateCount) {
+        this.dateCount = dateCount;
+    }
+
+    @MapKeyColumn(name = "date")
+    private Map<Date, Integer> dateCount = new HashMap<Date, Integer>();
 
     @Override
     public int hashCode() {
