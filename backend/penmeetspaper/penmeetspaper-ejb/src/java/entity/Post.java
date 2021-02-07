@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.messagingEntities.File;
 import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,6 +67,10 @@ public class Post implements Serializable {
 
     @ManyToMany
     private List<Trend> trends = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private File file;
 
     public Long getId() {
         return id;
@@ -145,6 +150,14 @@ public class Post implements Serializable {
 
     public void setTrends(List<Trend> trends) {
         this.trends = trends;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     @Override
