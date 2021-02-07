@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author User
+ * @author Shawn
  */
 @Entity
 public class MonthlySubscriberCount implements Serializable {
