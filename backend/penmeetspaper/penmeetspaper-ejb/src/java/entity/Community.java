@@ -20,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -63,6 +64,10 @@ public class Community implements Serializable {
     @OneToMany
     @JoinColumn(name = "ban_id")
     private List<Ban> ban = new ArrayList<>();
+
+    @ManyToMany
+    @JoinColumn(name = "community_members")
+    private List<Person> members = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -134,6 +139,14 @@ public class Community implements Serializable {
 
     public void setBan(List<Ban> ban) {
         this.ban = ban;
+    }
+
+    public List<Person> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Person> members) {
+        this.members = members;
     }
 
     @Override
