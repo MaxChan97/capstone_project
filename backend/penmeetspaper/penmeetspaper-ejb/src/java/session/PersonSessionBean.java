@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -75,6 +76,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     if (person == null) {
       throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
     }
+    
+    em.detach(person);
+    person.setPosts(null);
     
     return person;
   } //end getPersonById

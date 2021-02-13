@@ -48,4 +48,29 @@ export default {
       type: "GET",
     });
   },
+
+  createPostForPerson(id, postBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/person/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        postBody: postBody,
+      }),
+    });
+  },
+
+  getPersonsPost(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/person/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

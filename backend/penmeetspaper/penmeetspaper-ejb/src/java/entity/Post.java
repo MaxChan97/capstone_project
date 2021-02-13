@@ -8,6 +8,7 @@ package entity;
 import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -31,28 +33,31 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String body;
 
-    @ManyToOne
-    @JoinColumn(name = "person_posts")
-    private Person author;
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date datePosted;
 
     @ManyToMany
     @JoinColumn(name = "likes_post")
     private List<Person> likes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "postCommunity")
-    private Community postCommunity;
+    @JoinColumn(name = "person_posts")
+    private Person author;
 
     // unidirectional
     @OneToMany
     @JoinColumn(name = "comment_id")
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "postCommunity")
+    private Community postCommunity;
 
     public Long getId() {
         return id;
@@ -133,6 +138,20 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "entity.Post[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the datePosted
+     */
+    public Date getDatePosted() {
+        return datePosted;
+    }
+
+    /**
+     * @param datePosted the datePosted to set
+     */
+    public void setDatePosted(Date datePosted) {
+        this.datePosted = datePosted;
     }
 
 }

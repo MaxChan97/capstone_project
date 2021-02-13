@@ -7,8 +7,11 @@ import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import Api from "../../../helpers/Api";
+import { useAlert } from "react-alert";
 
-export default function CreatePostCard() {
+export default function CreatePostCard({ personId, refresh, setRefresh }) {
+  const alert = useAlert();
   const useStyles = makeStyles((theme) => ({
     root: {
       "& .MuiTextField-root": {
@@ -36,6 +39,15 @@ export default function CreatePostCard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    Api.createPostForPerson(personId, post)
+      .done(() => {
+        alert.show("Post successfully created!");
+        setPost("");
+        setRefresh(!refresh);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("Something went wrong, please try again!");
+      });
   };
 
   const [post, setPost] = React.useState("");
@@ -118,6 +130,7 @@ export default function CreatePostCard() {
                       }}
                       variant="contained"
                       color="primary"
+                      type="submit"
                     >
                       Share
                     </ColorButton>

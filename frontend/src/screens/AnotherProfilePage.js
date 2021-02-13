@@ -18,13 +18,12 @@ export default function AnotherProfilePage({ personId }) {
     if (personId) {
       loadData(personId);
     }
-  }, []);
+  }, [personId]);
 
   function loadData(personId) {
     Api.getPersonById(personId)
       .done((anotherPerson) => {
         setAnotherPerson(anotherPerson);
-        console.log(anotherPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -33,12 +32,16 @@ export default function AnotherProfilePage({ personId }) {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 1) {
-      return (
-        <div style={{ marginTop: "20px" }}>
-          <ProfilePostCard />
-          <PostList />
-        </div>
-      );
+      if (anotherPerson != {} && anotherPerson.posts != null) {
+        return (
+          <div style={{ marginTop: "20px" }}>
+            <ProfilePostCard />
+            <PostList datalist={anotherPerson.posts} />
+          </div>
+        );
+      } else {
+        return "";
+      }
     }
     if (tabValue === 2) {
       return (

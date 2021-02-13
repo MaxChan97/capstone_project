@@ -1,39 +1,60 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ProfilePostCard from './ProfilePostCard'
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
+import ProfilePostCard from "./ProfilePostCard";
+import Api from "../../helpers/Api";
+import { useAlert } from "react-alert";
 
 //INCOMPLETE
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxWidth: '36ch',
-        backgroundColor: theme.palette.background.paper,
-    },
-    inline: {
-        display: 'inline',
-    },
+  root: {
+    width: "100%",
+    maxWidth: "36ch",
+    backgroundColor: theme.palette.background.paper,
+  },
+  inline: {
+    display: "inline",
+  },
 }));
 
-export default function PostList({dataList}) {
-    const classes = useStyles();
+export default function PostList({ personId, refresh }) {
+  const classes = useStyles();
+  const alert = useAlert();
 
-    return dataList && dataList.length > 0 ? (
-        <List className={classes.root}>
+  const [dataList, setDataList] = useState([]);
 
-            {dataList.map((data) => (
-                <div>
-                    <ListItem alignItems="flex-start">
-                        <ProfilePostCard key={data[0]} data={data} />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                </div>
-            ))}
-        </List>
-    ) : (
-            <p>No posts yet</p>
-        );
+  useEffect(() => {
+    if (personId) {
+      loadData(personId);
+    }
+  }, [personId, refresh]);
+
+  function loadData(personId) {
+    Api.getPersonsPost(personId)
+      .done((postList) => {
+        postList.reverse();
+        setDataList(postList);
+      })
+      .fail(() => {
+        alert.show("Unable to load posts!");
+      });
+  }
+
+  return dataList && dataList.length > 0 ? (
+    <List className={classes.root}>
+      {dataList.map((data) => (
+        <div>
+          <ListItem alignItems="flex-start">
+            <ProfilePostCard key={data.id} data={data} />
+          </ListItem>
+          <Divider variant="inset" component="li" />
+        </div>
+      ))}
+    </List>
+  ) : (
+    <p>No posts yet</p>
+  );
 }
