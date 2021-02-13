@@ -5,6 +5,7 @@
  */
 package entity.personToPersonEntities;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -32,6 +35,14 @@ public class Follow implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date followDate;
+
+    @ManyToOne
+    @JoinColumn(name = "Follow_follower")
+    private Person follower;
+
+    @ManyToOne
+    @JoinColumn(name = "Follow_publisher")
+    private Person publisher;
 
     public Long getId() {
         return id;
@@ -55,6 +66,22 @@ public class Follow implements Serializable {
 
     public void setFollowDate(Date followDate) {
         this.followDate = followDate;
+    }
+
+    public Person getFollower() {
+        return follower;
+    }
+
+    public void setFollower(Person follower) {
+        this.follower = follower;
+    }
+
+    public Person getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Person publisher) {
+        this.publisher = publisher;
     }
 
     @Override

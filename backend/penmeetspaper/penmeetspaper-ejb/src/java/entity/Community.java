@@ -6,6 +6,7 @@
 package entity;
 
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Ban;
 import entity.viewEntities.CommunityPageView;
 import enumeration.TopicEnum;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -57,6 +59,15 @@ public class Community implements Serializable {
     @OneToMany
     @JoinColumn(name = "communityPageViews_id")
     private List<CommunityPageView> communityPageViews = new ArrayList<>();
+
+    // Unidirectional
+    @OneToMany
+    @JoinColumn(name = "ban_id")
+    private List<Ban> ban = new ArrayList<>();
+
+    @ManyToMany
+    @JoinColumn(name = "community_members")
+    private List<Person> members = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -120,6 +131,22 @@ public class Community implements Serializable {
 
     public void setCommunityProfilePicture(String communityProfilePicture) {
         this.communityProfilePicture = communityProfilePicture;
+    }
+
+    public List<Ban> getBan() {
+        return ban;
+    }
+
+    public void setBan(List<Ban> ban) {
+        this.ban = ban;
+    }
+
+    public List<Person> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Person> members) {
+        this.members = members;
     }
 
     @Override

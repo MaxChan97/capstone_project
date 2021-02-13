@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -48,6 +53,22 @@ public class Video implements Serializable {
     private int views;
 
     private List<String> hashTags = new ArrayList();
+
+    @ManyToOne
+    @JoinColumn(name = "video_person")
+    private Person creator;
+
+    @ManyToMany
+    @JoinColumn(name = "videolikes_person")
+    private List<Person> likes = new ArrayList();
+
+    @ManyToMany
+    private List<Trend> trends = new ArrayList();
+
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "comment_id")
+    private List<Comment> comments = new ArrayList();
 
     public Long getId() {
         return id;
@@ -111,6 +132,38 @@ public class Video implements Serializable {
 
     public void setHashTags(List<String> hashTags) {
         this.hashTags = hashTags;
+    }
+
+    public Person getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Person creator) {
+        this.creator = creator;
+    }
+
+    public List<Person> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Person> likes) {
+        this.likes = likes;
+    }
+
+    public List<Trend> getTrends() {
+        return trends;
+    }
+
+    public void setTrends(List<Trend> trends) {
+        this.trends = trends;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

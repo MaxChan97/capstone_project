@@ -5,6 +5,7 @@
  */
 package entity;
 
+import entity.messagingEntities.File;
 import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -58,6 +60,21 @@ public class Post implements Serializable {
     @ManyToOne
     @JoinColumn(name = "postCommunity")
     private Community postCommunity;
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "media_id")
+    private List<Media> media = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private Poll poll;
+
+    @ManyToMany
+    private List<Trend> trends = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private File file;
 
     public Long getId() {
         return id;
@@ -113,6 +130,38 @@ public class Post implements Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
+    }
+
+    public List<Trend> getTrends() {
+        return trends;
+    }
+
+    public void setTrends(List<Trend> trends) {
+        this.trends = trends;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     @Override

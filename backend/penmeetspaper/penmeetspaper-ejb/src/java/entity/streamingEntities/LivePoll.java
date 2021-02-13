@@ -5,12 +5,20 @@
  */
 package entity.streamingEntities;
 
+import entity.PersonAnswer;
+import entity.personEntities.Person;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
 
 /**
  *
@@ -30,32 +38,19 @@ public class LivePoll implements Serializable {
     @Column(nullable = false)
     private boolean isActive;
 
+    @ManyToMany
+    @MapKeyColumn(name = "option")
+    private Map<String, PersonAnswer> options = new HashMap();
+
+    @ManyToMany
+    private Set<Person> pollers = new HashSet<Person>();
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LivePoll)) {
-            return false;
-        }
-        LivePoll other = (LivePoll) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -79,4 +74,39 @@ public class LivePoll implements Serializable {
         this.isActive = isActive;
     }
 
+    public Map<String, PersonAnswer> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Map<String, PersonAnswer> options) {
+        this.options = options;
+    }
+
+    public Set<Person> getPollers() {
+        return pollers;
+    }
+
+    public void setPollers(Set<Person> pollers) {
+        this.pollers = pollers;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof LivePoll)) {
+            return false;
+        }
+        LivePoll other = (LivePoll) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
 }
