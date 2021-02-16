@@ -12,7 +12,7 @@ const options = ["Edit Post", "Delete Post"];
 
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard({key, data }) {
+export default function ProfilePostCard({ key, data }) {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -41,10 +41,12 @@ export default function ProfilePostCard({key, data }) {
                 <div class="user-block">
                   <img src={defaultDP} alt="User profile picture" />
                   <span class="username">
-                    <Link to="/">Teacher A</Link>
+                    <Link to={"/profile/" + data.author.id}>
+                      {data.author.username}
+                    </Link>
                   </span>
 
-                  <span class="description">1 week ago</span>
+                  <span class="description">{data.datePosted}</span>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <IconButton
@@ -77,22 +79,7 @@ export default function ProfilePostCard({key, data }) {
                   </Menu>
                 </div>
               </div>
-              <p>
-                Lorem ipsum represents a long-held tradition for designers,
-                typographers and the like. Some people hate it and argue for its
-                demise, but others ignore the hate as they create awesome tools
-                to help create filler text for everyone from bacon lovers to
-                Charlie Sheen fans.
-              </p>
-
-              <p>
-                Lorem ipsum represents a long-held tradition for designers,
-                typographers and the like. Some people hate it and argue for its
-                demise, but others ignore the hate as they create awesome tools
-                to help create filler text for everyone from bacon lovers to
-                Charlie Sheen fans.
-              </p>
-
+              <p>{data.body}</p>
               <p>
                 <a href="#" class="link-black text-sm">
                   <i class="fas fa-thumbs-up mr-1"></i> 700

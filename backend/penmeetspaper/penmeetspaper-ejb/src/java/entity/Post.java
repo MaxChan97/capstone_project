@@ -5,9 +5,11 @@
  */
 package entity;
 
+import entity.messagingEntities.File;
 import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -31,28 +35,46 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String body;
 
-    @ManyToOne
-    @JoinColumn(name = "person_posts")
-    private Person author;
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date datePosted;
 
     @ManyToMany
     @JoinColumn(name = "likes_post")
     private List<Person> likes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "postCommunity")
-    private Community postCommunity;
+    @JoinColumn(name = "person_posts")
+    private Person author;
 
     // unidirectional
     @OneToMany
     @JoinColumn(name = "comment_id")
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "postCommunity")
+    private Community postCommunity;
+    // unidirectional
+    @OneToMany
+    @JoinColumn(name = "media_id")
+    private List<Media> media = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private Poll poll;
+
+    @ManyToMany
+    private List<Trend> trends = new ArrayList<>();
+
+    // unidirectional | nullable
+    @OneToOne
+    private File file;
 
     public Long getId() {
         return id;
@@ -110,6 +132,38 @@ public class Post implements Serializable {
         this.comments = comments;
     }
 
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
+    }
+
+    public List<Trend> getTrends() {
+        return trends;
+    }
+
+    public void setTrends(List<Trend> trends) {
+        this.trends = trends;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -133,6 +187,20 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "entity.Post[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the datePosted
+     */
+    public Date getDatePosted() {
+        return datePosted;
+    }
+
+    /**
+     * @param datePosted the datePosted to set
+     */
+    public void setDatePosted(Date datePosted) {
+        this.datePosted = datePosted;
     }
 
 }

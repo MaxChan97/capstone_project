@@ -24,6 +24,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.PersonSessionBeanLocal;
+import java.io.StringReader;
+import javax.json.JsonReader;
 
 /**
  * REST Web Service
@@ -33,92 +35,102 @@ import session.PersonSessionBeanLocal;
 @Path("person")
 public class PersonResource {
 
-  @EJB
-  private PersonSessionBeanLocal personSessionLocal;
+    @EJB
+    private PersonSessionBeanLocal personSessionLocal;
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<Person> getAllPerson() {
-    return personSessionLocal.searchPersonByUsername(null);
-  } //end getAllPerson
-  
-  @GET
-  @Path("/query")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response searchPersonByUsername(@QueryParam("username") String username) {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Person> getAllPerson() {
+        return personSessionLocal.searchPersonByUsername(null);
+    } //end getAllPerson
 
-    if (username != null) {
-      List<Person> results = personSessionLocal.searchPersonByUsername(username);
-      GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
-      };
+    @GET
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchPersonByUsername(@QueryParam("username") String username) {
 
-      return Response.status(200).entity(
-              entity
-      ).build();
-    } else {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", "No query conditions")
-              .build();
+        if (username != null) {
+            List<Person> results = personSessionLocal.searchPersonByUsername(username);
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
 
-      return Response.status(400).entity(exception).build();
-    }
-  } //end searchPersonByUsername
-  
-  @GET
-  @Path("/{id}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPersonById(@PathParam("id") String id) {
-    try {
-      Person p = personSessionLocal.getPersonById(Long.valueOf(id));
-      return Response.status(200).entity(
-              p
-      ).type(MediaType.APPLICATION_JSON).build();
-    } catch (NoResultException | NotValidException e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+            return Response.status(200).entity(
+                    entity
+            ).build();
+        } else {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "No query conditions")
+                    .build();
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
-    }
-  } //end getPersonById
-  
-  @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response createPerson(Person p) {
-    try {
-    personSessionLocal.createPerson(p);
-      return Response.status(200).entity(
-              p
-      ).type(MediaType.APPLICATION_JSON).build();
+            return Response.status(400).entity(exception).build();
+        }
+    } //end searchPersonByUsername
 
-    } catch (NotValidException e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonById(@PathParam("id") String id) {
+        try {
+            Person p = personSessionLocal.getPersonById(Long.valueOf(id));
+            return Response.status(200).entity(
+                    p
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
-    }
-  } //end createPerson
-  
-  @PUT
-  @Path("/{id}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response updatePerson(@PathParam("id") String id, Person p) {
-    p.setId(Long.valueOf(id));
-    try {
-      personSessionLocal.updatePerson(p);
-      return Response.status(204).build();
-    } catch (NoResultException | NotValidException e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getPersonById
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
-    }
-  } //end updatePerson
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPerson(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = reader.readObject();
+        String email = jsonObject.getString("email");
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
+        Person p = new Person();
+        p.setEmail(email);
+        p.setUsername(username);
+        // Might want to hash password, see how
+        p.setPassword(password);
+        try {
+            Person addedPerson = personSessionLocal.createPerson(p);
+            return Response.status(200).entity(
+                    addedPerson
+            ).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end createPerson
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePerson(@PathParam("id") String id, Person p) {
+        p.setId(Long.valueOf(id));
+        try {
+            personSessionLocal.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end updatePerson
 }

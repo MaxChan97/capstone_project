@@ -24,8 +24,11 @@ public interface PersonSessionBeanLocal {
   public final static String MISSING_PASSWORD = "Missing person password";
   public final static String MISSING_PERSON_ID = "Missing person id";
   public final static String MISSING_PERSON = "Missing person parameter";
+  public final static String EMAIL_TAKEN = "Email taken";
+  public final static String USERNAME_TAKEN = "Username taken";
+  
 
-  public void createPerson(Person person) throws NotValidException;
+  public Person createPerson(Person person) throws NotValidException;
 
   public List<Person> searchPersonByUsername(String username);
 

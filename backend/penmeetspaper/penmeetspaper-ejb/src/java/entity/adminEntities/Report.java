@@ -5,6 +5,7 @@
  */
 package entity.adminEntities;
 
+import entity.personEntities.Person;
 import enumeration.ReportStateEnum;
 import enumeration.ReportTypeEnum;
 import java.io.Serializable;
@@ -16,6 +17,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -45,6 +48,10 @@ public class Report implements Serializable {
 
     @Column(nullable = false)
     private String reportContentId;
+
+    @ManyToOne
+    @JoinColumn(name = "person_report")
+    private Person reporter;
 
     public Long getId() {
         return id;
@@ -92,6 +99,14 @@ public class Report implements Serializable {
 
     public void setReportContentId(String reportContentId) {
         this.reportContentId = reportContentId;
+    }
+
+    public Person getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(Person reporter) {
+        this.reporter = reporter;
     }
 
     @Override

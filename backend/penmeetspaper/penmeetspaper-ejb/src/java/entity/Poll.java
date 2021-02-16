@@ -5,12 +5,19 @@
  */
 package entity;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
 
 /**
  *
@@ -53,6 +60,29 @@ public class Poll implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Map<String, PersonAnswer> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Map<String, PersonAnswer> options) {
+        this.options = options;
+    }
+
+    public Set<Person> getPollers() {
+        return pollers;
+    }
+
+    public void setPollers(Set<Person> pollers) {
+        this.pollers = pollers;
+    }
+
+    @ManyToMany
+    @MapKeyColumn(name = "option")
+    private Map<String, PersonAnswer> options = new HashMap();
+
+    @ManyToMany
+    private Set<Person> pollers = new HashSet<Person>();
 
     @Override
     public int hashCode() {

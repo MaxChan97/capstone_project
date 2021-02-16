@@ -12,18 +12,16 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { logIn } from "../redux/actions/index";
+import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
   image: {
-    backgroundImage: `url(https://picsum.photos/2000/2000)`,
     backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
+    backgroundColor: "#04005E",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -79,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+  const alert = useAlert();
   const classes = useStyles();
 
   const history = useHistory();
@@ -90,8 +89,19 @@ export default function Login() {
   function handleLogin(e) {
     // Enter login logic here
     e.preventDefault();
-    dispatch(logIn(email));
-    history.push("/");
+    Api.login(email, password)
+      .done((loggedInPerson) => {
+        alert.show("Welcome " + loggedInPerson.username + "!");
+        setEmail("");
+        setPassword("");
+        dispatch(logIn(loggedInPerson));
+        history.push("/");
+      })
+      .fail((xhr, status, error) => {
+        if (xhr.responseJSON.error === "Invalid credentials") {
+          alert.show("Invalid credentials, please try again");
+        }
+      });
   }
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -163,6 +173,7 @@ export default function Login() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              style={{ outline: "none" }}
             >
               LOGIN
             </Button>

@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -40,10 +41,11 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
 
     try {
       Person p = (Person) q.getSingleResult();
+      em.detach(p);
+      p.setPosts(null);
       return p;
     } catch (Exception e) {
       throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);
     }
-
-  }
+  }  
 }

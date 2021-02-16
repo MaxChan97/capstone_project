@@ -41,7 +41,7 @@ function App() {
             <Route exact path="/community" component={CommunityPage} />
             <Route exact path="/categories" component={CategoriesPage} />
             <Route exact path="/feed" component={FeedPage} />
-            <Route exact path="/profile" component={ProfilePage} />
+            <Route exact path="/profile/:personId" component={ProfilePage} />
             <Route exact path="/postCard" component={ProfilePostCard} />
             <Route exact path="/aboutMe" component={AboutMe} />
           </div>

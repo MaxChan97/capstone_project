@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -11,16 +11,15 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
+import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
+import { logIn } from "../redux/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
   image: {
-    backgroundImage: `url(https://picsum.photos/2000/2000)`,
     backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
+    backgroundColor: "#04005E",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -75,10 +74,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Register() {
+  const alert = useAlert();
   const classes = useStyles();
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const history = useHistory();
   const dispatch = useDispatch();
+
+  function handleRegister(e) {
+    e.preventDefault();
+    Api.createPerson(email, username, password)
+      .done((createdPerson) => {
+        alert.show("Registered Successfully!");
+        alert.show("Welcome " + createdPerson.username + "!");
+        setEmail("");
+        setUsername("");
+        setPassword("");
+        dispatch(logIn(createdPerson));
+        history.push("/");
+      })
+      .fail((xhr, status, error) => {
+        if (xhr.responseJSON.error === "Email taken") {
+          setEmail("");
+          alert.show("This email is already in use");
+        }
+        if (xhr.responseJSON.error === "Username taken") {
+          setUsername("");
+          alert.show("This username is already in use");
+        }
+      });
+  }
 
   const currentUser = useSelector((state) => state.currentUser);
   if (currentUser !== null) {
@@ -127,7 +155,12 @@ export default function Register() {
           >
             Register
           </h1>
-          <form className={classes.form}>
+          <form
+            className={classes.form}
+            onSubmit={(e) => {
+              handleRegister(e);
+            }}
+          >
             <TextField
               variant="outlined"
               margin="normal"
@@ -138,6 +171,23 @@ export default function Register() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
             />
             <TextField
               variant="outlined"
@@ -148,6 +198,10 @@ export default function Register() {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <Button
               type="submit"
@@ -155,6 +209,7 @@ export default function Register() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              style={{ outline: "none" }}
             >
               REGISTER
             </Button>
