@@ -1,0 +1,11 @@
+.menu-item {
+  margin: 5px 10px;
+  user-select: none;
+  cursor: pointer;
+  border: none;
+}
+
+.scroll-menu-arrow {
+  padding: 20px;
+  cursor: pointer;
+}

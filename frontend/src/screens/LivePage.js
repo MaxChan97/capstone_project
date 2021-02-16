@@ -21,7 +21,7 @@ export default function LivePage() {
           alignItems: "center",
         }}
       >
-        <Webcam />
+        {/* <Webcam /> */}
         <h1>Live Page</h1>
         <button
           onClick={(e) => {
