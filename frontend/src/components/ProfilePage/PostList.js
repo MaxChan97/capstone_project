@@ -12,7 +12,7 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "36ch",
+    maxWidth: "102ch",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {

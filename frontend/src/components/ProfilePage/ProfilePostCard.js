@@ -30,11 +30,15 @@ export default function ProfilePostCard({ key, data }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        textAlign: "left",
+        textAlign: "left", 
+        width: "max-content",
       }}
     >
       <div class="col-md-9">
-        <div class="card">
+        <div class="card" style={{
+        minWidth: "95ch",
+        maxWidth: "95ch",
+      }}>
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
