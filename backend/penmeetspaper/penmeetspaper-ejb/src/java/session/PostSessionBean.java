@@ -10,6 +10,7 @@ import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,7 +37,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
-    }
+    } // end createPostForPerson
 
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
@@ -47,7 +48,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             p.getAuthor().setPosts(null);
         }
         return posts;
-    }
+    } // end getPersonsPost
 
     @Override
     public List<Person> searchPostByTitle(String title) {
@@ -61,4 +62,23 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
         return q.getResultList();
     } //end searchPostByTitle
+
+    @Override
+    public void updatePost(Post post, Long personId) throws NoResultException, NotValidException {
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        Post oldPost = em.find(Post.class, post.getId());
+        if (oldPost == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+        if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
+            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+
+        oldPost.setTitle(post.getTitle());
+        oldPost.setBody(post.getBody());
+
+    } // end updatePost
 }
