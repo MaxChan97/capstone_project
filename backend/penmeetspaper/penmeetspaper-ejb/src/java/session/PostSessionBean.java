@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -24,19 +25,19 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
     private PersonSessionBeanLocal personSessionLocal;
-    
+
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
         Person poster = em.find(Person.class, personId);
         post.setAuthor(poster);
-        
+
         em.persist(post);
         poster.getPosts().add(post);
     }
-    
+
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
         Person person = em.find(Person.class, personId);
@@ -47,4 +48,17 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
         return posts;
     }
+
+    @Override
+    public List<Person> searchPostByTitle(String title) {
+        Query q;
+        if (title != null) {
+            q = em.createQuery("SELECT p FROM Post p WHERE "
+                    + "LOWER(p.title) LIKE :title");
+            q.setParameter("title", "%" + title.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT p FROM Post p");
+        }
+        return q.getResultList();
+    } //end searchPostByTitle
 }

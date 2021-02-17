@@ -6,6 +6,7 @@
 package session;
 
 import entity.Post;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -17,9 +18,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface PostSessionBeanLocal {
-    
+
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException;
-    
+
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException;
-    
+
+    public List<Person> searchPostByTitle(String title);
+
 }
