@@ -6,7 +6,9 @@
 package session;
 
 import entity.Community;
+import exception.NoResultException;
 import exception.NotValidException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -20,7 +22,12 @@ public interface CommunitySessionBeanLocal {
     public final static String MISSING_COMMUNITY = "Missing Community parameter";
     public final static String MISSING_NAME = "Missing community name";
     public final static String INVALID_OWNER = "Owner is invalid";
+    public final static String CANNOT_FIND_COMMUNITY = "Could not find community";
 
     public Community createCommunity(Community community) throws NotValidException;
+
+    public List<Community> searchCommunityByName(String name);
+
+    public void updateCommunity(Community community) throws NoResultException, NotValidException;
 
 }
