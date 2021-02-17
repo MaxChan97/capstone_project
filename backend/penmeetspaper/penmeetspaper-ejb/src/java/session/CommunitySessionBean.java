@@ -93,6 +93,5 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         oldCommunity.setCommunityProfilePicture(community.getCommunityProfilePicture());
     } // end of updateCommunity
 
-    // Edit Community
     // Delete Community
 }
