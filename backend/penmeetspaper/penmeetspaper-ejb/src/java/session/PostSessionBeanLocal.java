@@ -22,6 +22,8 @@ public interface PostSessionBeanLocal {
     public final static String MISSING_POST = "Missing post parameter";
     public final static String CANNOT_FIND_POST = "Could not find post";
     public final static String INVALID_CREDENTIALS = "Incorrect credentials";
+    public final static String MISSING_POST_ID = "Missing post ID";
+    public final static String MISSING_PERSON_ID = "Missing person ID";
 
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException;
 
@@ -30,5 +32,7 @@ public interface PostSessionBeanLocal {
     public List<Person> searchPostByTitle(String title);
 
     public void updatePost(Post post, Long personId) throws NoResultException, NotValidException;
+
+    public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException;
 
 }

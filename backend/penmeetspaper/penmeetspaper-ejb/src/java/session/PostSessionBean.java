@@ -23,18 +23,18 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PostSessionBean implements PostSessionBeanLocal {
-
+    
     @PersistenceContext
     private EntityManager em;
-
+    
     @EJB
     private PersonSessionBeanLocal personSessionLocal;
-
+    
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
         Person poster = em.find(Person.class, personId);
         post.setAuthor(poster);
-
+        
         em.persist(post);
         poster.getPosts().add(post);
     } // end createPostForPerson
@@ -68,7 +68,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
-
+        
         Post oldPost = em.find(Post.class, post.getId());
         if (oldPost == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
@@ -76,9 +76,30 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
-
+        
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
-
+        
     } // end updatePost
+    
+    public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        if (postId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
+        }
+        
+        if (personId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
+        }
+        
+        Post post = em.find(Post.class, postId);
+        if (post == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+        
+        if (!Objects.equals(post.getAuthor().getId(), personId)) {
+            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+        
+        em.remove(post);
+    }
 }
