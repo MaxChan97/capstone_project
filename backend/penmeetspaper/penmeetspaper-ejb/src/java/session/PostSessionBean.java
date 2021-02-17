@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Community;
 import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
@@ -23,21 +24,54 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PostSessionBean implements PostSessionBeanLocal {
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
     private PersonSessionBeanLocal personSessionLocal;
-    
+
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
+
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
         Person poster = em.find(Person.class, personId);
+        if (poster == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
         post.setAuthor(poster);
-        
+
         em.persist(post);
         poster.getPosts().add(post);
     } // end createPostForPerson
+
+    @Override
+    public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException {
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        Person person = em.find(Person.class, personId);
+        Community community = em.find(Community.class, communityId);
+
+        if (person == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        if (community == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+
+        post.setAuthor(person);
+        post.setPostCommunity(community);
+
+        em.persist(post);
+        person.getPosts().add(post);
+        community.getPosts().add(post);
+    }
 
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
@@ -68,7 +102,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
-        
+
         Post oldPost = em.find(Post.class, post.getId());
         if (oldPost == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
@@ -76,30 +110,31 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
-        
+
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
-        
+
     } // end updatePost
-    
+
+    @Override
     public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException {
         if (postId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
         }
-        
+
         if (personId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
         }
-        
+
         Post post = em.find(Post.class, postId);
         if (post == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
         }
-        
+
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
-        
+
         em.remove(post);
     }
 }

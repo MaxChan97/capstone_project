@@ -24,6 +24,8 @@ public interface PostSessionBeanLocal {
     public final static String INVALID_CREDENTIALS = "Incorrect credentials";
     public final static String MISSING_POST_ID = "Missing post ID";
     public final static String MISSING_PERSON_ID = "Missing person ID";
+    public final static String CANNOT_FIND_PERSON = "Could not find person";
+    public final static String CANNOT_FIND_COMMUNITY = "Could not find community";
 
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException;
 
@@ -34,5 +36,7 @@ public interface PostSessionBeanLocal {
     public void updatePost(Post post, Long personId) throws NoResultException, NotValidException;
 
     public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException;
+
+    public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException;
 
 }
