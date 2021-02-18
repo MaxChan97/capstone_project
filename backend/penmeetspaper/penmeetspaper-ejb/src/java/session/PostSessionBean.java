@@ -117,7 +117,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end updatePost
 
     @Override
-    public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException {
+    public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException {
         if (postId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
         }
@@ -127,13 +127,23 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
 
         Post post = em.find(Post.class, postId);
+        Person person = em.find(Person.class, personId);
+
         if (post == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+
+        if (person == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
         }
 
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
+
+        // unlinking
+        person.getPosts().remove(post);
+        post.setAuthor(null);
 
         em.remove(post);
     }

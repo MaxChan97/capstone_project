@@ -35,7 +35,7 @@ public interface PostSessionBeanLocal {
 
     public void updatePost(Post post, Long personId) throws NoResultException, NotValidException;
 
-    public void deletePost(Long postId, Long personId) throws NoResultException, NotValidException;
+    public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException;
 
     public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException;
 
