@@ -41,10 +41,6 @@ public class Message implements Serializable {
 
     private String body;
 
-    @ManyToOne
-    @JoinColumn(name = "chatMessages")
-    private Chat chatGroup;
-
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
@@ -83,14 +79,6 @@ public class Message implements Serializable {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Chat getChatGroup() {
-        return chatGroup;
-    }
-
-    public void setChatGroup(Chat chatGroup) {
-        this.chatGroup = chatGroup;
     }
 
     public Date getDateTime() {
