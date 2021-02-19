@@ -73,4 +73,20 @@ export default {
       type: "GET",
     });
   },
+
+  editPersonProfileInformation(id, username, description, topicInterests) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        username: username,
+        description: description,
+        topicInterests: topicInterests,
+      }),
+    });
+  },
 };

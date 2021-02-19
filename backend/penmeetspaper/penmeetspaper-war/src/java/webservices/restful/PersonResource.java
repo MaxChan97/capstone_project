@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.personEntities.Person;
+import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -25,6 +26,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.PersonSessionBeanLocal;
 import java.io.StringReader;
+import java.util.ArrayList;
+import javax.json.JsonArray;
 import javax.json.JsonReader;
 
 /**
@@ -115,7 +118,7 @@ public class PersonResource {
         }
     } //end createPerson
 
-    @PUT
+    /*@PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -132,5 +135,56 @@ public class PersonResource {
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
-    } //end updatePerson
+    } //end updatePerson*/
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonProfileInformation(@PathParam("id") String id, @QueryParam("type") String editType, String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = reader.readObject();
+        if (editType.equals("information")) {
+            String username = jsonObject.getString("username");
+            String description = jsonObject.getString("description");
+            JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+
+            List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+            for (int i = 0; i < topicInterests.size(); i++) {
+                String topicInterest = topicInterestsJsonArray.getString(i);
+                if ("REAL_ESTATE".equals(topicInterest)) {
+                    topicInterests.add(TopicEnum.REAL_ESTATE);
+                } else if ("STOCKS".equals(topicInterest)) {
+                    topicInterests.add(TopicEnum.STOCKS);
+                } else if ("FUTURES".equals(topicInterest)) {
+                    topicInterests.add(TopicEnum.FUTURES);
+                } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
+                    topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                }
+            }
+
+            try {
+                Person p = personSessionLocal.getPersonById(Long.valueOf(id));
+                p.setUsername(username);
+                p.setDescription(description);
+                p.setTopicInterests(topicInterests);
+
+                personSessionLocal.updatePerson(p);
+                return Response.status(204).build();
+            } catch (NoResultException | NotValidException e) {
+                JsonObject exception = Json.createObjectBuilder()
+                        .add("error", e.getMessage())
+                        .build();
+
+                return Response.status(404).entity(exception)
+                        .type(MediaType.APPLICATION_JSON).build();
+            }
+        }
+        else if (editType.equals("profilePicture")) {
+            return Response.status(422).build();
+        } else {
+            // editType.equals(profileBanner)
+            return Response.status(422).build();
+        }
+    }
 }

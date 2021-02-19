@@ -10,17 +10,8 @@ package enumeration;
  * @author Shawn
  */
 public enum TopicEnum {
-  BUSINESS,
-  FINANCE,
-  MARKETING,
-  TRADING,
-  CRYPTOCURRENCY,
-  FOREX,
+  REAL_ESTATE,
+  STOCKS,
   FUTURES,
-  HOUSING,
-  BTO,
-  COE,
-  CARS,
-  INSURANCE,
-  OTHERS
+  CRYPTOCURRENCY
 }

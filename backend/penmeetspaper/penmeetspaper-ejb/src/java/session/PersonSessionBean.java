@@ -94,6 +94,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         if (oldPerson != null) {
             oldPerson.setUsername(person.getUsername());
             oldPerson.setPassword(person.getPassword());
+            oldPerson.setDescription(person.getDescription());
+            oldPerson.setTopicInterests(person.getTopicInterests());
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
