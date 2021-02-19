@@ -7,13 +7,11 @@ import ProfilePostCard from "./ProfilePostCard";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 
-//INCOMPLETE
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "102ch",
-    backgroundColor: theme.palette.background.paper,
+    maxWidth: "82ch",
   },
   inline: {
     display: "inline",
@@ -50,11 +48,10 @@ export default function PostList({ personId, refresh }) {
           <ListItem alignItems="flex-start">
             <ProfilePostCard key={data.id} data={data} />
           </ListItem>
-          <Divider variant="inset" component="li" />
         </div>
       ))}
     </List>
   ) : (
-    <p>No posts yet</p>
-  );
+      <p>No posts yet</p>
+    );
 }

@@ -16,7 +16,6 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
     root: {
       "& .MuiTextField-root": {
         margin: theme.spacing(1),
-        width: "50ch",
       },
     },
   }));
@@ -67,7 +66,10 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
         autoComplete="off"
       >
         <div class="col-md-9">
-          <div class="card">
+          <div class="card" style={{
+            minWidth: "82ch",
+            maxWidth: "82ch",
+          }}>
             <div class="card-body">
               <div class="post">
                 <div class="user-block">

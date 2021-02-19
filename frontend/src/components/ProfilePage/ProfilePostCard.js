@@ -7,6 +7,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import MakeCommentCard from "./MakeCommentCard";
+import CommentCard from "./CommentCard";
 
 const options = ["Edit Post", "Delete Post"];
 
@@ -30,15 +32,15 @@ export default function ProfilePostCard({ key, data }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        textAlign: "left", 
+        textAlign: "left",
         width: "max-content",
       }}
     >
       <div class="col-md-9">
         <div class="card" style={{
-        minWidth: "95ch",
-        maxWidth: "95ch",
-      }}>
+          minWidth: "80ch",
+          maxWidth: "80ch",
+        }}>
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -101,7 +103,10 @@ export default function ProfilePostCard({ key, data }) {
               </p>
             </div>
           </div>
+          <MakeCommentCard></MakeCommentCard>
+          <CommentCard></CommentCard>
         </div>
+
       </div>
     </div>
   );
