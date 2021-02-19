@@ -75,6 +75,9 @@ public class Person implements Serializable {
 
     @Column
     private String profilePicture;
+    
+    @Column
+    private String profileBanner;
 
     @Column(nullable = false)
     private boolean hasExplicitLanguage;
@@ -563,6 +566,20 @@ public class Person implements Serializable {
     @Override
     public String toString() {
         return "entity.Person[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the profileBanner
+     */
+    public String getProfileBanner() {
+        return profileBanner;
+    }
+
+    /**
+     * @param profileBanner the profileBanner to set
+     */
+    public void setProfileBanner(String profileBanner) {
+        this.profileBanner = profileBanner;
     }
 
 }
