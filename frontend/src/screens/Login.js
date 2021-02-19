@@ -94,7 +94,7 @@ export default function Login() {
         alert.show("Welcome " + loggedInPerson.username + "!");
         setEmail("");
         setPassword("");
-        dispatch(logIn(loggedInPerson));
+        dispatch(logIn(loggedInPerson.id));
         history.push("/");
       })
       .fail((xhr, status, error) => {

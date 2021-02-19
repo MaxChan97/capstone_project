@@ -14,7 +14,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      {personId == currentUser.id ? (
+      {personId == currentUser ? (
         <OwnProfilePage personId={personId} />
       ) : (
         <AnotherProfilePage personId={personId} />

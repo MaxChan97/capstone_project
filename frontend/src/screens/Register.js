@@ -93,7 +93,7 @@ export default function Register() {
         setEmail("");
         setUsername("");
         setPassword("");
-        dispatch(logIn(createdPerson));
+        dispatch(logIn(createdPerson.id));
         history.push("/");
       })
       .fail((xhr, status, error) => {
