@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 import Divider from "@material-ui/core/Divider";
+import Box from '@material-ui/core/Box';
 
 export default function MakeCommentCard({ personId, refresh, setRefresh }) {
     const alert = useAlert();
@@ -64,8 +65,11 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                 textAlign: "left",
             }}
         >
-            <Divider variant="fullWidth" component="li" />
-
+            <Divider variant="middle" component="li" />
+            <Box fontWeight="fontWeightBold" fontSize={12} m={1} style={{ marginLeft: "30px"}}>
+                1000 Comments
+            </Box>
+            <Divider variant="middle" component="li" />
             <form
                 onSubmit={handleSubmit}
                 className={classes.root}
@@ -134,7 +138,7 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                     </div>
                 </div>
             </form>
-            <Divider variant="fullWidth" component="li" />
+            <Divider variant="middle" component="li" />
         </div>
     );
 }

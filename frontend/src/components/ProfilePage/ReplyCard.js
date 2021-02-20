@@ -45,7 +45,7 @@ export default function ReplyCard({ key, data }) {
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img src={defaultDP} alt="User profile picture" />
-                <span class="username">username</span>
+                <span class="username"><Link>username</Link></span>
                 <span class="description">time</span>
                 {/* CAN UNCOMMENT WHEN GOT ACTUAL DATA
                   <span class="username">
