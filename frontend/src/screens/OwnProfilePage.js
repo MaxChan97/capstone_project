@@ -6,6 +6,7 @@ import CreatePostCard from "../components/ProfilePage/OwnProfilePage/CreatePostC
 import ProfilePostCard from "../components/ProfilePage/ProfilePostCard";
 import AboutMe from "../components/ProfilePage/AboutMe";
 import PostList from "../components/ProfilePage/PostList";
+import PostsSortdropdown from "../components/ProfilePage/PostsSortDropdown";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 
@@ -37,11 +38,17 @@ export default function OwnProfilePage({ personId }) {
       if (currentPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <CreatePostCard
-              personId={personId}
-              refresh={refresh}
-              setRefresh={setRefresh}
-            />
+            <div style={{ display: "flex", alignItems: "normal" }}>
+              <CreatePostCard
+                personId={personId}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
+              <div style={{ textAlign: "right", marginLeft:"30px"}}>
+                <PostsSortdropdown></PostsSortdropdown>
+              </div>
+
+            </div>
             <PostList personId={personId} refresh={refresh} />
           </div>
         );
@@ -72,8 +79,8 @@ export default function OwnProfilePage({ personId }) {
           {handleTabView(tabValue)}
         </div>
       ) : (
-        ""
-      )}
+          ""
+        )}
     </div>
   );
 }
