@@ -36,4 +36,8 @@ public interface CommentSessionBeanLocal {
 
     public void deleteComment(Long commentId, Long personId) throws NoResultException, NotValidException;
 
+    public void likeComment(Long commentId, Long personId) throws NoResultException, NotValidException;
+
+    public void unlikeComment(Long commentId, Long personId) throws NoResultException, NotValidException;
+
 }

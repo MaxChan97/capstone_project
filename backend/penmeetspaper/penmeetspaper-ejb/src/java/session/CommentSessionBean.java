@@ -99,8 +99,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
     }
 
     @Override
-    public void updateComment(Comment comment, Long personId) throws NoResultException,
-            NotValidException {
+    public void updateComment(Comment comment, Long personId) throws NoResultException, NotValidException {
 
         if (comment == null) {
             throw new NotValidException(CommentSessionBeanLocal.MISSING_COMMENT);
@@ -114,8 +113,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
     }
 
     @Override
-    public void deleteComment(Long commentId, Long personId) throws NoResultException,
-            NotValidException {
+    public void deleteComment(Long commentId, Long personId) throws NoResultException, NotValidException {
 
         Comment commentToDelete = emGetComment(commentId);
 
@@ -123,5 +121,29 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
         commentToDelete.setBody("Commment Deleted");
         commentToDelete.setAuthor(null);
+    }
+
+    @Override
+    public void likeComment(Long commentId, Long personId) throws NoResultException, NotValidException {
+        Comment comment = emGetComment(commentId);
+        Person person = emGetPerson(personId);
+
+        if (comment.getLikes().contains(person)) {
+            return;
+        }
+
+        comment.getLikes().add(person);
+    }
+
+    @Override
+    public void unlikeComment(Long commentId, Long personId) throws NoResultException, NotValidException {
+        Comment comment = emGetComment(commentId);
+        Person person = emGetPerson(personId);
+
+        if (!comment.getLikes().contains(person)) {
+            return;
+        }
+
+        comment.getLikes().remove(person);
     }
 }
