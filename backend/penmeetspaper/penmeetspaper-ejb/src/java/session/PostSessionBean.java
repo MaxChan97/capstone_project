@@ -28,6 +28,53 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
+    @EJB
+    private PersonSessionBeanLocal personSessionLocal;
+
+    // Helper methods to check and retrieve entities
+    private Post emGetPost(Long postId) throws NoResultException, NotValidException {
+        if (postId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
+        }
+
+        Post post = em.find(Post.class, postId);
+
+        if (post == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+
+        return post;
+    }
+
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
+    }
+
+    private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
+        if (communityId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_COMMUNITY_ID);
+        }
+
+        Community community = em.find(Community.class, communityId);
+
+        if (community == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+
+        return community;
+    }
+
+    // Main logic
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
 
@@ -35,10 +82,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
 
-        Person poster = em.find(Person.class, personId);
-        if (poster == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
+        Person poster = emGetPerson(personId);
+
         post.setAuthor(poster);
 
         em.persist(post);
@@ -46,21 +91,14 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end createPostForPerson
 
     @Override
-    public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException {
+    public void createPostForCommunity(Post post, Long personId, Long communityId)
+            throws NoResultException, NotValidException {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
 
-        Person person = em.find(Person.class, personId);
-        Community community = em.find(Community.class, communityId);
-
-        if (person == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
-
-        if (community == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
-        }
+        Person person = emGetPerson(personId);
+        Community community = emGetCommunity(communityId);
 
         post.setAuthor(person);
         post.setPostCommunity(community);
@@ -72,7 +110,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
-        Person person = em.find(Person.class, personId);
+        Person person = emGetPerson(personId);
+
         List<Post> posts = person.getPosts();
         for (Post p : posts) {
             em.detach(p.getAuthor());
@@ -86,14 +125,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public List<Person> searchPostByTitle(String title) {
         Query q;
         if (title != null) {
-            q = em.createQuery("SELECT p FROM Post p WHERE "
-                    + "LOWER(p.title) LIKE :title");
+            q = em.createQuery("SELECT p FROM Post p WHERE " + "LOWER(p.title) LIKE :title");
             q.setParameter("title", "%" + title.toLowerCase() + "%");
         } else {
             q = em.createQuery("SELECT p FROM Post p");
         }
         return q.getResultList();
-    } //end searchPostByTitle
+    } // end searchPostByTitle
 
     @Override
     public void updatePost(Post post, Long personId) throws NoResultException, NotValidException {
@@ -101,10 +139,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
 
-        Post oldPost = em.find(Post.class, post.getId());
-        if (oldPost == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
-        }
+        Post oldPost = emGetPost(post.getId());
+
         if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
@@ -116,24 +152,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @Override
     public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException {
-        if (postId == null) {
-            throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
-        }
-
-        if (personId == null) {
-            throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
-        }
-
-        Post post = em.find(Post.class, postId);
-        Person person = em.find(Person.class, personId);
-
-        if (post == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
-        }
-
-        if (person == null) {
-            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
 
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
@@ -145,4 +165,31 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.remove(post);
     }
+
+    @Override
+    public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
+
+        if (post.getLikes().contains(person) && person.getLikedPosts().contains(post)) {
+            return;
+        }
+
+        post.getLikes().add(person);
+        person.getLikedPosts().add(post);
+    }
+
+    @Override
+    public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
+
+        if (!post.getLikes().contains(person) && !person.getLikedPosts().contains(post)) {
+            return;
+        }
+
+        post.getLikes().remove(person);
+        person.getLikedPosts().remove(post);
+    }
+
 }

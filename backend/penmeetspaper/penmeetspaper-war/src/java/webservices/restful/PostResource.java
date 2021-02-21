@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import entity.Comment;
 import entity.Post;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -26,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import session.CommentSessionBeanLocal;
 import session.PostSessionBeanLocal;
 
 /**
@@ -37,6 +39,8 @@ public class PostResource {
 
     @EJB
     private PostSessionBeanLocal postSBLocal;
+    @EJB
+    private CommentSessionBeanLocal commentSBLocal;
 
     @POST
     @Path("/person/{id}")
@@ -59,7 +63,7 @@ public class PostResource {
                     .add("error", e.getMessage())
                     .build();
 
-            return Response.status(404).entity(exception)
+            return Response.status(400).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
@@ -79,7 +83,7 @@ public class PostResource {
                     .add("error", e.getMessage())
                     .build();
 
-            return Response.status(404).entity(exception)
+            return Response.status(400).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
@@ -101,7 +105,7 @@ public class PostResource {
                     .add("error", e.getMessage())
                     .build();
 
-            return Response.status(404).entity(exception)
+            return Response.status(400).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
 
@@ -119,7 +123,65 @@ public class PostResource {
                     .add("error", e.getMessage())
                     .build();
 
-            return Response.status(404).entity(exception)
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @POST
+    @Path("/{postId}/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createCommentForPost(@PathParam("postId") Long postId, @PathParam("personId") Long personId, String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = reader.readObject();
+        String commentBody = jsonObject.getString("commentBody");
+        Comment comment = new Comment();
+        comment.setBody(commentBody);
+        comment.setDatePosted(new Date());
+        try {
+            commentSBLocal.createCommentForPost(personId, postId, comment);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @PUT
+    @Path("/{postId}/person/{personId}/like")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response likePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
+        try {
+            postSBLocal.likePost(postId, personId);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @PUT
+    @Path("/{postId}/person/{personId}/unlike")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unlikePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
+        try {
+            postSBLocal.unlikePost(postId, personId);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
