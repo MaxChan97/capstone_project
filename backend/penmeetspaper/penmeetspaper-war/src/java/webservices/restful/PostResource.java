@@ -46,9 +46,11 @@ public class PostResource {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject jsonObject = reader.readObject();
         String postBody = jsonObject.getString("postBody");
+        
         Post p = new Post();
         p.setBody(postBody);
         p.setDatePosted(new Date());
+        
         try {
             postSBLocal.createPostForPerson(personId, p);
             return Response.status(204).build();

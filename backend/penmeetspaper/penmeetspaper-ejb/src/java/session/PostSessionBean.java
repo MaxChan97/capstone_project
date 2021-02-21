@@ -28,9 +28,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-    @EJB
-    private PersonSessionBeanLocal personSessionLocal;
-
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
 
@@ -80,6 +77,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         for (Post p : posts) {
             em.detach(p.getAuthor());
             p.getAuthor().setPosts(null);
+            p.getAuthor().setChats(null);
         }
         return posts;
     } // end getPersonsPost
