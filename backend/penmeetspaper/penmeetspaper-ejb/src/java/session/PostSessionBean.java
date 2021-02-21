@@ -165,6 +165,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.remove(post);
     }
 
+    @Override
     public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
@@ -177,6 +178,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         person.getLikedPosts().add(post);
     }
 
+    @Override
     public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);

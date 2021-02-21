@@ -40,4 +40,8 @@ public interface PostSessionBeanLocal {
 
     public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException;
 
+    public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException;
+
+    public void likePost(Long postId, Long personId) throws NoResultException, NotValidException;
+
 }
