@@ -75,21 +75,18 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                 <div class="user-block">
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img src={defaultDP} alt="User profile picture" />
-
-                    <span class="username" style={{ marginLeft: 20 }}>
-                      <div>
-                        <TextField
-                          id="standard-textarea"
-                          placeholder="What's new?"
-                          multiline
-                          InputProps={{ disableUnderline: true }}
-                          value={post}
-                          onChange={handlePost}
-                        />
-                      </div>
-                    </span>
+                    <TextField
+                      id="standard-textarea"
+                      placeholder="What's new?"
+                      multiline
+                      fullWidth
+                      InputProps={{ disableUnderline: true }}
+                      value={post}
+                      onChange={handlePost}
+                    />
                   </div>
                 </div>
+
                 <div style={{ alignItems: "baseline" }}>
                   <div style={{ textAlign: "left" }}>
                     <span>

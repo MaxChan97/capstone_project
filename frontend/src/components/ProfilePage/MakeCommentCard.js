@@ -66,7 +66,7 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
             }}
         >
             <Divider variant="middle" component="li" />
-            <Box fontWeight="fontWeightBold" fontSize={12} m={1} style={{ marginLeft: "30px"}}>
+            <Box fontWeight="fontWeightBold" fontSize={12} m={1} style={{ marginLeft: "30px" }}>
                 1000 Comments
             </Box>
             <Divider variant="middle" component="li" />
@@ -88,19 +88,14 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                             <div class="user-block">
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <img src={defaultDP} alt="User profile picture" />
-
-                                    <span class="username" style={{ marginLeft: 20 }}>
-                                        <div>
-                                            <TextField
-                                                id="standard-textarea"
-                                                placeholder="Write a comment"
-                                                multiline
-                                                size="small"
-                                                value={comment}
-                                                onChange={handleComment}
-                                            />
-                                        </div>
-                                    </span>
+                                    <TextField
+                                        id="standard-textarea"
+                                        placeholder="Write a comment"
+                                        multiline
+                                        fullWidth
+                                        value={comment}
+                                        onChange={handleComment}
+                                    />
                                 </div>
                             </div>
                             <div style={{ alignItems: "baseline" }}>
