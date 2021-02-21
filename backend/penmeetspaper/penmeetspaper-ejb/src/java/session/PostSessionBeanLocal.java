@@ -19,14 +19,16 @@ import javax.ejb.Local;
 @Local
 public interface PostSessionBeanLocal {
 
-    public final static String MISSING_POST = "Missing post parameter";
-    public final static String CANNOT_FIND_POST = "Could not find post";
     public final static String INVALID_CREDENTIALS = "Incorrect credentials";
+    public final static String MISSING_POST = "Missing post parameter";
+
     public final static String MISSING_POST_ID = "Missing post ID";
     public final static String MISSING_PERSON_ID = "Missing person ID";
     public final static String MISSING_COMMUNITY_ID = "Missing Community ID";
+
     public final static String CANNOT_FIND_PERSON = "Could not find person";
     public final static String CANNOT_FIND_COMMUNITY = "Could not find community";
+    public final static String CANNOT_FIND_POST = "Could not find post";
 
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException;
 
