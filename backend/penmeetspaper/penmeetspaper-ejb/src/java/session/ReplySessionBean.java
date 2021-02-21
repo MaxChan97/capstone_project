@@ -6,7 +6,6 @@
 package session;
 
 import entity.Comment;
-import entity.Post;
 import entity.Reply;
 import entity.personEntities.Person;
 import exception.NoResultException;
