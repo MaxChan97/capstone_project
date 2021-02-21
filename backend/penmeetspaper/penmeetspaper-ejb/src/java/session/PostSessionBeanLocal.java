@@ -19,7 +19,7 @@ import javax.ejb.Local;
 @Local
 public interface PostSessionBeanLocal {
 
-    public final static String INVALID_CREDENTIALS = "Incorrect credentials";
+    public final static String INVALID_CREDENTIALS = "Incorrect credentials to modify Post";
     public final static String MISSING_POST = "Missing post parameter";
 
     public final static String MISSING_POST_ID = "Missing post ID";

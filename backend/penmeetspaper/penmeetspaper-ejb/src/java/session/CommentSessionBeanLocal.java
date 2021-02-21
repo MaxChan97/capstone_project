@@ -18,7 +18,7 @@ import javax.ejb.Local;
 public interface CommentSessionBeanLocal {
 
     public final static String MISSING_COMMENT = "Missing comment parameter";
-    public final static String INVALID_CREDENTIALS = "Incorrect credentials";
+    public final static String INVALID_CREDENTIALS = "Incorrect credentials to modify Comment";
 
     public final static String MISSING_PERSON_ID = "Missing person id";
     public final static String MISSING_POST_ID = "Missing post id";
