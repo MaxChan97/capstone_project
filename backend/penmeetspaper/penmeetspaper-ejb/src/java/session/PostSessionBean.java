@@ -169,7 +169,24 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
+        if (post.getLikes().contains(person) && person.getLikedPosts().contains(post)) {
+            return;
+        }
+
         post.getLikes().add(person);
         person.getLikedPosts().add(post);
     }
+
+    public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
+
+        if (!post.getLikes().contains(person) && !person.getLikedPosts().contains(post)) {
+            return;
+        }
+
+        post.getLikes().remove(person);
+        person.getLikedPosts().remove(post);
+    }
+
 }
