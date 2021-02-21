@@ -10,6 +10,7 @@ import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -53,9 +54,36 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         return person;
     }
 
+    private Comment emGetComment(Long commentId) throws NoResultException, NotValidException {
+        if (commentId == null) {
+            throw new NotValidException(CommentSessionBeanLocal.MISSING_COMMENT_ID);
+        }
+
+        Comment comment = em.find(Comment.class, commentId);
+
+        if (comment == null) {
+            throw new NoResultException(CommentSessionBeanLocal.CANNOT_FIND_COMMENT);
+        }
+
+        return comment;
+    }
+
+    private void checkCredentials(Comment comment, Long personId) throws NotValidException {
+        if (!Objects.equals(comment.getAuthor().getId(), personId)) {
+            throw new NotValidException(CommentSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+    }
+
+    // Main Logic -------------------------------------------------------------------
+    @Override
+    public Comment getComment(Long commentId) throws NoResultException, NotValidException {
+        return emGetComment(commentId);
+    }
+
     @Override
     public void createCommentForPost(Long personId, Long postId, Comment comment) throws NoResultException,
             NotValidException {
+
         if (comment == null) {
             throw new NotValidException(CommentSessionBeanLocal.MISSING_COMMENT);
         }
@@ -68,5 +96,32 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         em.persist(comment);
 
         post.getComments().add(comment);
+    }
+
+    @Override
+    public void updateComment(Comment comment, Long personId) throws NoResultException,
+            NotValidException {
+
+        if (comment == null) {
+            throw new NotValidException(CommentSessionBeanLocal.MISSING_COMMENT);
+        }
+
+        Comment oldComment = emGetComment(comment.getId());
+
+        checkCredentials(oldComment, personId);
+
+        oldComment.setBody(comment.getBody());
+    }
+
+    @Override
+    public void deleteComment(Long commentId, Long personId) throws NoResultException,
+            NotValidException {
+
+        Comment commentToDelete = emGetComment(commentId);
+
+        checkCredentials(commentToDelete, personId);
+
+        commentToDelete.setBody("Commment Deleted");
+        commentToDelete.setAuthor(null);
     }
 }
