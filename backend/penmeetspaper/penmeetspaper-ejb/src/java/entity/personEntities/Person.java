@@ -75,7 +75,7 @@ public class Person implements Serializable {
 
     @Column
     private String profilePicture;
-    
+
     @Column
     private String profileBanner;
 
@@ -134,12 +134,6 @@ public class Person implements Serializable {
 
     @ManyToMany(mappedBy = "chatParticipants")
     private List<Chat> chats = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sender")
-    private List<Message> messagesSent = new ArrayList<>();
-
-    @OneToMany(mappedBy = "recipient")
-    private List<Message> messagesRecieved = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner")
     private List<Community> ownedCommunities = new ArrayList<>();
@@ -397,22 +391,6 @@ public class Person implements Serializable {
 
     public void setChats(List<Chat> chats) {
         this.chats = chats;
-    }
-
-    public List<Message> getMessagesSent() {
-        return messagesSent;
-    }
-
-    public void setMessagesSent(List<Message> messagesSent) {
-        this.messagesSent = messagesSent;
-    }
-
-    public List<Message> getMessagesRecieved() {
-        return messagesRecieved;
-    }
-
-    public void setMessagesRecieved(List<Message> messagesRecieved) {
-        this.messagesRecieved = messagesRecieved;
     }
 
     public List<Community> getOwnedCommunities() {

@@ -31,12 +31,14 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    // unidirectional
     @ManyToOne
-    @JoinColumn(name = "messagesSent")
+    @JoinColumn(name = "messagesSent_person")
     private Person sender;
 
+    // unidirectional
     @ManyToOne
-    @JoinColumn(name = "messagesRecieved")
+    @JoinColumn(name = "messagesRecieved_person")
     private Person recipient;
 
     private String body;
