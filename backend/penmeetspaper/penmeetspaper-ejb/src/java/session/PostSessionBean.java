@@ -74,7 +74,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
         return community;
     }
 
-    // Main logic
+    private void checkPostCredentials(Post post, Long personId) throws NotValidException {
+        if (!Objects.equals(post.getAuthor().getId(), personId)) {
+            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+    }
+
+    // Main logic ---------------------------------------------------------------------
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
 
@@ -141,9 +147,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         Post oldPost = emGetPost(post.getId());
 
-        if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
-            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
-        }
+        checkPostCredentials(oldPost, personId);
 
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
@@ -155,9 +159,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (!Objects.equals(post.getAuthor().getId(), personId)) {
-            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
-        }
+        checkPostCredentials(post, personId);
 
         // unlinking
         person.getPosts().remove(post);
