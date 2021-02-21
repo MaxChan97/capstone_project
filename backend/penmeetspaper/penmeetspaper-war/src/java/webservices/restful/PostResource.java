@@ -50,11 +50,11 @@ public class PostResource {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject jsonObject = reader.readObject();
         String postBody = jsonObject.getString("postBody");
-        
+
         Post p = new Post();
         p.setBody(postBody);
         p.setDatePosted(new Date());
-        
+
         try {
             postSBLocal.createPostForPerson(personId, p);
             return Response.status(204).build();
@@ -92,7 +92,12 @@ public class PostResource {
     @Path("/person/{personId}/edit/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId, Post p) {
+    public Response editPersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId, String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = reader.readObject();
+        String postBody = jsonObject.getString("postBody");
+        Post p = new Post();
+        p.setBody(postBody);
         p.setId(postId);
 
         try {
