@@ -42,13 +42,18 @@ public class PostResource {
     @EJB
     private CommentSessionBeanLocal commentSBLocal;
 
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
+    }
+
     @POST
     @Path("/person/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPostForPerson(@PathParam("id") Long personId, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+        JsonObject jsonObject = createJsonObject(jsonString);
+
         String postBody = jsonObject.getString("postBody");
 
         Post p = new Post();
@@ -73,11 +78,13 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsPost(@PathParam("id") Long personId) {
         try {
+
             List<Post> results = postSBLocal.getPersonsPost(personId);
             GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
             };
 
             return Response.status(200).entity(entity).build();
+
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", e.getMessage())
@@ -93,9 +100,11 @@ public class PostResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editPersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+
         String postBody = jsonObject.getString("postBody");
+
         Post p = new Post();
         p.setBody(postBody);
         p.setId(postId);
@@ -121,8 +130,10 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
         try {
+
             postSBLocal.deletePostForPerson(postId, personId);
             return Response.status(204).build();
+
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", e.getMessage())
@@ -138,15 +149,18 @@ public class PostResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCommentForPost(@PathParam("postId") Long postId, @PathParam("personId") Long personId, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+
         String commentBody = jsonObject.getString("commentBody");
         Comment comment = new Comment();
         comment.setBody(commentBody);
         comment.setDatePosted(new Date());
         try {
+
             commentSBLocal.createCommentForPost(personId, postId, comment);
             return Response.status(204).build();
+
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", e.getMessage())
@@ -162,8 +176,10 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response likePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
         try {
+
             postSBLocal.likePost(postId, personId);
             return Response.status(204).build();
+
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", e.getMessage())
@@ -179,8 +195,10 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response unlikePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
         try {
+
             postSBLocal.unlikePost(postId, personId);
             return Response.status(204).build();
+
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", e.getMessage())
