@@ -26,81 +26,80 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PostSessionBean implements PostSessionBeanLocal {
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
-    private PersonSessionBeanLocal personSessionLocal;
+    private PersonSessionBeanLocal personSB;
 
     // Helper methods to check and retrieve entities
     private Post emGetPost(Long postId) throws NoResultException, NotValidException {
         if (postId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
         }
-        
+
         Post post = em.find(Post.class, postId);
-        
+
         if (post == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
         }
-        
+
         return post;
     }
-    
+
     private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
         if (personId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
         }
-        
+
         Person person = em.find(Person.class, personId);
-        
+
         if (person == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
         }
-        
+
         return person;
     }
-    
+
     private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
         if (communityId == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_COMMUNITY_ID);
         }
-        
+
         Community community = em.find(Community.class, communityId);
-        
+
         if (community == null) {
             throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
         }
-        
+
         return community;
     }
-    
+
     private void checkPostCredentials(Post post, Long personId) throws NotValidException {
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
     }
-    
-    private void detachLikes(List<Person> likes) {
+
+    private void detachLikes(List<Person> likes) throws NoResultException, NotValidException {
         for (Person person : likes) {
-            em.detach(person);
-            person.setPosts(null);
+            person = personSB.getPersonById(person.getId());
         }
     }
 
     // Main logic ---------------------------------------------------------------------
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
-        
+
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
-        
+
         Person poster = emGetPerson(personId);
-        
+
         post.setAuthor(poster);
-        
+
         em.persist(post);
         poster.getPosts().add(post);
     } // end createPostForPerson
@@ -111,22 +110,22 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
-        
+
         Person person = emGetPerson(personId);
         Community community = emGetCommunity(communityId);
-        
+
         post.setAuthor(person);
         post.setPostCommunity(community);
-        
+
         em.persist(post);
         person.getPosts().add(post);
         community.getPosts().add(post);
     }
-    
+
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
         Person person = emGetPerson(personId);
-        
+
         List<Post> posts = person.getPosts();
         for (Post p : posts) {
             p = getPostById(p.getId());
@@ -151,87 +150,92 @@ public class PostSessionBean implements PostSessionBeanLocal {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
-        
+
         Post oldPost = emGetPost(post.getId());
-        
+
         checkPostCredentials(oldPost, personId);
-        
+
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
-        
+
     } // end updatePost
 
     @Override
     public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
-        
+
         checkPostCredentials(post, personId);
 
         // unlinking
         person.getPosts().remove(post);
         post.setAuthor(null);
-        
+
         em.remove(post);
     }
-    
+
     @Override
     public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
-        
+
         if (post.getLikes().contains(person)) {
             return;
         }
-        
+
         post.getLikes().add(person);
     }
-    
+
     @Override
     public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
-        
+
         if (!post.getLikes().contains(person)) {
             return;
         }
-        
+
         post.getLikes().remove(person);
     }
-    
+
     @Override
     public Post getPostById(Long postId) throws NoResultException, NotValidException {
         Post p = emGetPost(postId);
         em.detach(p.getAuthor());
-        p.getAuthor().setPosts(null);
-        p.getAuthor().setChats(null);
-        
+
+        Person postAuthor = p.getAuthor();
+        p.setAuthor(personSB.getPersonById(postAuthor.getId()));
+
         List<Comment> comments = p.getComments();
-        
+
         detachLikes(p.getLikes());
-        
+
         for (Comment c : comments) {
             if (c.getAuthor() != null) {
-                em.detach(c.getAuthor());
-                c.getAuthor().setPosts(null);
+
+                Person commentAuthor = c.getAuthor();
+                c.setAuthor(personSB.getPersonById(commentAuthor.getId()));
+
             }
-            
+
             detachLikes(c.getLikes());
-            
+
             List<Reply> replies = c.getReplies();
-            
+
             for (Reply r : replies) {
                 if (r.getAuthor() != null) {
-                    em.detach(r.getAuthor());
-                    r.getAuthor().setPosts(null);
+
+                    Person replyAuthor = r.getAuthor();
+                    r.setAuthor(personSB.getPersonById(replyAuthor.getId()));
+
                 }
-                
+
                 detachLikes(r.getLikes());
             }
-            
+
         }
-        
+
         return p;
     }
-    
+
 }
