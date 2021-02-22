@@ -25,6 +25,20 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
+    }
+
     @Override
     public Person createPerson(Person person) throws NotValidException {
         if (person == null) {
@@ -68,15 +82,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @Override
     public Person getPersonById(Long pId) throws NoResultException, NotValidException {
-        if (pId == null) {
-            throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
-        }
-
-        Person person = em.find(Person.class, pId);
-
-        if (person == null) {
-            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
+        Person person = emGetPerson(pId);
 
         em.detach(person);
         person.setPosts(null);
@@ -96,6 +102,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             oldPerson.setPassword(person.getPassword());
             oldPerson.setDescription(person.getDescription());
             oldPerson.setTopicInterests(person.getTopicInterests());
+            oldPerson.setChatIsPaid(person.isChatIsPaid());
+            oldPerson.setHasExplicitLanguage(person.isHasExplicitLanguage());
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
@@ -103,15 +111,15 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @Override
     public void deletePerson(Long pId) throws NoResultException, NotValidException {
-        if (pId == null) {
-            throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
-        }
-
-        Person p = em.find(Person.class, pId);
-        if (p == null) {
-            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
+        Person p = emGetPerson(pId);
         em.remove(p);
     } //end deletePerson
 
+    public void updatePricingPlan(Person person) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(person.getId());
+
+        // NEED TO ADD MORE SHIT
+        oldPerson.setPricingPlan(person.getPricingPlan());
+
+    } // end updatePricingPlan
 }

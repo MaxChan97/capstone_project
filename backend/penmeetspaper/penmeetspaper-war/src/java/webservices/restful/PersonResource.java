@@ -221,4 +221,32 @@ public class PersonResource {
 
     }
 
+    @PUT
+    @Path("{id}/pricingPlan")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
+
+        try {
+            Person person = personSessionLocal.getPersonById(id);
+            person.setPricingPlan(pricingPlan);
+
+            personSessionLocal.updatePricingPlan(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+
+    }
+
 }
