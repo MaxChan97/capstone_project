@@ -228,7 +228,12 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
         }
 
     }
