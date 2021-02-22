@@ -6,6 +6,7 @@
 package session;
 
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Follow;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -38,5 +39,9 @@ public interface PersonSessionBeanLocal {
     public void deletePerson(Long id) throws NoResultException, NotValidException;
 
     public void updatePricingPlan(Person person) throws NoResultException, NotValidException;
+
+    public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException;
+
+    public List<Follow> getFollowers(Long personId) throws NoResultException, NotValidException;
 
 }

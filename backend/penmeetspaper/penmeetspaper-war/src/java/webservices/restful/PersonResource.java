@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Follow;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -39,7 +40,7 @@ import javax.json.JsonReader;
 public class PersonResource {
 
     @EJB
-    private PersonSessionBeanLocal personSessionLocal;
+    private PersonSessionBeanLocal personSB;
 
     private JsonObject createJsonObject(String jsonString) {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -59,7 +60,7 @@ public class PersonResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Person> getAllPerson() {
-        return personSessionLocal.searchPersonByUsername(null);
+        return personSB.searchPersonByUsername(null);
     } //end getAllPerson
 
     @GET
@@ -68,7 +69,7 @@ public class PersonResource {
     public Response searchPersonByUsername(@QueryParam("username") String username) {
 
         if (username != null) {
-            List<Person> results = personSessionLocal.searchPersonByUsername(username);
+            List<Person> results = personSB.searchPersonByUsername(username);
             GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
             };
 
@@ -89,7 +90,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonById(@PathParam("id") String id) {
         try {
-            Person p = personSessionLocal.getPersonById(Long.valueOf(id));
+            Person p = personSB.getPersonById(Long.valueOf(id));
             return Response.status(200).entity(
                     p
             ).type(MediaType.APPLICATION_JSON).build();
@@ -113,7 +114,7 @@ public class PersonResource {
         // Might want to hash password, see how
         p.setPassword(password);
         try {
-            Person addedPerson = personSessionLocal.createPerson(p);
+            Person addedPerson = personSB.createPerson(p);
             return Response.status(200).entity(
                     addedPerson
             ).type(MediaType.APPLICATION_JSON).build();
@@ -167,12 +168,12 @@ public class PersonResource {
             }
 
             try {
-                Person p = personSessionLocal.getPersonById(Long.valueOf(id));
+                Person p = personSB.getPersonById(Long.valueOf(id));
                 p.setUsername(username);
                 p.setDescription(description);
                 p.setTopicInterests(topicInterests);
 
-                personSessionLocal.updatePerson(p);
+                personSB.updatePerson(p);
                 return Response.status(204).build();
             } catch (NoResultException | NotValidException e) {
                 return buildError(e, 400);
@@ -186,7 +187,7 @@ public class PersonResource {
     }
 
     @PUT
-    @Path("{id}/settings")
+    @Path("/{id}/settings")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editPersonSettings(@PathParam("id") Long id, String jsonString) {
@@ -196,11 +197,11 @@ public class PersonResource {
         Boolean subscriberOnly = jsonObject.getBoolean("subscriberOnly");
 
         try {
-            Person person = personSessionLocal.getPersonById(id);
+            Person person = personSB.getPersonById(id);
             person.setHasExplicitLanguage(explicit);
             person.setChatIsPaid(subscriberOnly);
 
-            personSessionLocal.updatePerson(person);
+            personSB.updatePerson(person);
 
             return Response.status(204).build();
 
@@ -211,7 +212,7 @@ public class PersonResource {
     }
 
     @PUT
-    @Path("{id}/pricingPlan")
+    @Path("/{id}/pricingPlan")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
@@ -220,10 +221,10 @@ public class PersonResource {
         Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
 
         try {
-            Person person = personSessionLocal.getPersonById(id);
+            Person person = personSB.getPersonById(id);
             person.setPricingPlan(pricingPlan);
 
-            personSessionLocal.updatePricingPlan(person);
+            personSB.updatePricingPlan(person);
 
             return Response.status(204).build();
 
@@ -236,6 +237,42 @@ public class PersonResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
 
+    }
+
+    @GET
+    @Path("/{id}/followers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowers(@PathParam("id") Long id) {
+        try {
+            List<Follow> results = personSB.getFollowers(id);
+            GenericEntity<List<Follow>> entity = new GenericEntity<List<Follow>>(results) {
+            };
+
+            return Response.status(200).entity(
+                    entity
+            ).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}/following")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowing(@PathParam("id") Long id) {
+        try {
+            List<Follow> results = personSB.getFollowing(id);
+            GenericEntity<List<Follow>> entity = new GenericEntity<List<Follow>>(results) {
+            };
+
+            return Response.status(200).entity(
+                    entity
+            ).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     }
 
 }

@@ -5,8 +5,8 @@
  */
 package session;
 
-import entity.Post;
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Follow;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -81,6 +81,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     } //end searchPersonByUsername
 
     @Override
+    // Detach methods will be here
     public Person getPersonById(Long pId) throws NoResultException, NotValidException {
         Person person = emGetPerson(pId);
 
@@ -122,4 +123,43 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         oldPerson.setPricingPlan(person.getPricingPlan());
 
     } // end updatePricingPlan
+
+    // Get the people this person is following
+    public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+
+        List<Follow> following = person.getFollowing();
+
+        for (Follow f : following) {
+            em.detach(f);
+            // Remove the follower (redundant)
+            f.setFollower(null);
+
+            // detaching the person entity
+            Person publisher = f.getPublisher();
+            f.setPublisher(getPersonById(publisher.getId()));
+        }
+
+        return following;
+
+    }
+
+    // Get the people following this person
+    public List<Follow> getFollowers(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+
+        List<Follow> followers = person.getFollowers();
+
+        for (Follow f : followers) {
+            em.detach(f);
+            // Remove the publisher (redundant)
+            f.setPublisher(null);
+
+            // detaching the person entity
+            Person follower = f.getFollower();
+            f.setFollower(getPersonById(follower.getId()));
+        }
+
+        return followers;
+    }
 }
