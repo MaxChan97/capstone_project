@@ -52,7 +52,7 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
             throw new NoResultException(FollowerSessionBeanLocal.CANNOT_FIND_FOLLOW);
         }
 
-        if (followList.size() > 0) {
+        if (followList.size() > 1) {
             throw new NotValidException(FollowerSessionBeanLocal.MULTIPLE_FOLLOW_FOUND);
         }
 
