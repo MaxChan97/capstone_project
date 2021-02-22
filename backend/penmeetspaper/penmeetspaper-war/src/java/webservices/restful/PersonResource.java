@@ -114,6 +114,7 @@ public class PersonResource {
         p.setUsername(username);
         // Might want to hash password, see how
         p.setPassword(password);
+        p.setDescription("");
         try {
             Person addedPerson = personSB.createPerson(p);
             return Response.status(200).entity(

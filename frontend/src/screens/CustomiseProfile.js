@@ -50,6 +50,7 @@ export default function CustomiseProfile() {
     };
 
     const [topicInterests, setTopicInterests] = useState();
+    console.log(topicInterests);
     const handleTopicInterestsChange = (selectedOptions) => {
         let tempSelectedOptions = [];
         for (var i = 0; i < selectedOptions.length; i++) {
@@ -74,6 +75,7 @@ export default function CustomiseProfile() {
     useEffect(() => {
         if (currentUser) {
           loadData(currentUser);
+          console.log(topicInterests);
         }
     }, [currentUser, refresh]);
 
@@ -132,7 +134,6 @@ export default function CustomiseProfile() {
           });
 
     };
-
     return (
         <div className="content-wrapper">
             <div class="col-md-9" style={{ textAlign: "left" }}>
@@ -159,6 +160,7 @@ export default function CustomiseProfile() {
                                                 width: "200px",
                                                 outline: "none",
                                                 marginRight: "3%",
+                                                fontWeight: "600",
                                             }}
                                             variant="contained"
                                             color="primary"
@@ -193,6 +195,7 @@ export default function CustomiseProfile() {
                                 width: "100px",
                                 outline: "none",
                                 marginRight: "3%",
+                                fontWeight: "600",
                             }}
                             variant="contained"
                             color="primary"
@@ -234,25 +237,36 @@ export default function CustomiseProfile() {
                                 {topicInterests !== undefined ? (<Select
                                     value={topicInterests.map(x => MakeOption(x))}
                                     isMulti
-                                    name="colors"
+                                    name="topics"
                                     options={topics}
                                     onChange={(selectedOptions) => handleTopicInterestsChange(selectedOptions)}
-
                                     className="basic-multi-select"
                                     classNamePrefix="select"
-                                />) : (<Select
+                                />) : 
+                                (<Select
                                     isMulti
-                                    name="colors"
+                                    name="topics"
                                     options={topics}
+                                    onChange={(selectedOptions) => handleTopicInterestsChange(selectedOptions)}
                                     className="basic-multi-select"
                                     classNamePrefix="select"
                                 />)}
                                 
                             </div>
                             <div className="form-group">
-                                <button className="btn btn-primary float-right" type="submit">
-                                    Submit
-                                </button>
+                                <ColorButton
+                                    style={{
+                                        height: "35px",
+                                        width: "100px",
+                                        outline: "none",
+                                        float: 'right',
+                                        fontWeight: "600",
+                                    }}
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit">
+                                    Save
+                                </ColorButton>
                             </div>
                             </div>
                         </form>
