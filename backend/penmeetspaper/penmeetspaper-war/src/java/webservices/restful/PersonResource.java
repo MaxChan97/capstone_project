@@ -150,7 +150,7 @@ public class PersonResource {
             JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
 
             List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
-            for (int i = 0; i < topicInterests.size(); i++) {
+            for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
                 String topicInterest = topicInterestsJsonArray.getString(i);
                 if ("REAL_ESTATE".equals(topicInterest)) {
                     topicInterests.add(TopicEnum.REAL_ESTATE);
