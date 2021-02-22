@@ -89,4 +89,18 @@ export default {
       }),
     });
   },
+
+  saveFileUrl(url) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/file",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        url: url,
+      }),
+    });
+  },
 };

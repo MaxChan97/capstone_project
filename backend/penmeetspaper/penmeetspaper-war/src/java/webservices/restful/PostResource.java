@@ -9,6 +9,9 @@ import entity.Comment;
 import entity.Post;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
@@ -208,4 +211,5 @@ public class PostResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
+
 }
