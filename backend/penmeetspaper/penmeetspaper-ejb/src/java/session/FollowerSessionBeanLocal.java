@@ -5,6 +5,8 @@
  */
 package session;
 
+import exception.NoResultException;
+import exception.NotValidException;
 import javax.ejb.Local;
 
 /**
@@ -21,4 +23,8 @@ public interface FollowerSessionBeanLocal {
 
     public final static String CANNOT_FIND_PERSON = "Could not find person";
     public final static String CANNOT_FIND_FOLLOW = "Could not find follow Entity that you were looking for";
+
+    public void followPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException;
+
+    public void unfollowPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException;
 }
