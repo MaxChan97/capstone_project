@@ -116,6 +116,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         oldCommunity.setCommunityProfilePicture(community.getCommunityProfilePicture());
     } // end of updateCommunity
 
+    @Override
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
 
