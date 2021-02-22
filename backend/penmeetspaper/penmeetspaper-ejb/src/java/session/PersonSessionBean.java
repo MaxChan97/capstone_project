@@ -7,6 +7,7 @@ package session;
 
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
+import entity.personToPersonEntities.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -89,6 +90,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setPosts(null);
         person.setFollowers(null);
         person.setFollowing(null);
+        person.setSubscriptions(null);
+        person.setPublications(null);
 
         return person;
     } //end getPersonById
@@ -154,7 +157,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         for (Follow f : followers) {
             em.detach(f);
-            // Remove the publisher (redundant)
+            // Remove the publisher which is personId (redundant)
             f.setPublisher(null);
 
             // detaching the person entity
@@ -163,5 +166,42 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
 
         return followers;
+    }
+
+    @Override
+    // Get the people that this person is subscribed to
+    public List<Subscription> getSubscription(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+
+        List<Subscription> subscriptions = person.getSubscriptions();
+
+        for (Subscription s : subscriptions) {
+            em.detach(s);
+            // Remove the subscriber which is personId (redundant)
+            s.setSubscriber(null);
+
+            Person publisher = s.getPublisher();
+            s.setPublisher(getPersonById(publisher.getId()));
+        }
+
+        return subscriptions;
+    }
+
+    @Override
+    public List<Subscription> getPublications(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+
+        List<Subscription> publications = person.getPublications();
+
+        for (Subscription s : publications) {
+            em.detach(s);
+            // Remove the publisher which is personId (redundant)
+            s.setPublisher(null);
+
+            Person subscriber = s.getSubscriber();
+            s.setSubscriber(getPersonById(subscriber.getId()));
+        }
+
+        return publications;
     }
 }

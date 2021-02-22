@@ -7,6 +7,7 @@ package webservices.restful;
 
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
+import entity.personToPersonEntities.Subscription;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -264,6 +265,42 @@ public class PersonResource {
         try {
             List<Follow> results = personSB.getFollowing(id);
             GenericEntity<List<Follow>> entity = new GenericEntity<List<Follow>>(results) {
+            };
+
+            return Response.status(200).entity(
+                    entity
+            ).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}/subscriptions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSubscriptions(@PathParam("id") Long id) {
+        try {
+            List<Subscription> results = personSB.getSubscription(id);
+            GenericEntity<List<Subscription>> entity = new GenericEntity<List<Subscription>>(results) {
+            };
+
+            return Response.status(200).entity(
+                    entity
+            ).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}/subscribers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSubscribers(@PathParam("id") Long id) {
+        try {
+            List<Subscription> results = personSB.getPublications(id);
+            GenericEntity<List<Subscription>> entity = new GenericEntity<List<Subscription>>(results) {
             };
 
             return Response.status(200).entity(

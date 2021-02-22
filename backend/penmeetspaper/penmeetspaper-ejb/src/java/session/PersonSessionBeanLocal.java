@@ -7,6 +7,7 @@ package session;
 
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
+import entity.personToPersonEntities.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -43,5 +44,9 @@ public interface PersonSessionBeanLocal {
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException;
 
     public List<Follow> getFollowers(Long personId) throws NoResultException, NotValidException;
+
+    public List<Subscription> getSubscription(Long personId) throws NoResultException, NotValidException;
+
+    public List<Subscription> getPublications(Long personId) throws NoResultException, NotValidException;
 
 }
