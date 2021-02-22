@@ -58,13 +58,13 @@ public class CommentResource {
     @Path("/{commentId}/person/{personId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId, String jsonString) {
+    public Response editComment(@PathParam("commentId") Long commentId, @PathParam("personId") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String commentBody = jsonObject.getString("commentBody");
 
         try {
-            Comment comment = commentSBLocal.getComment(id);
+            Comment comment = commentSBLocal.getComment(commentId);
             comment.setBody(commentBody);
             commentSBLocal.updateComment(comment, personId);
 
@@ -78,9 +78,9 @@ public class CommentResource {
     @DELETE
     @Path("/{commentId}/person/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
+    public Response deleteComment(@PathParam("commentId") Long commentId, @PathParam("personId") Long personId) {
         try {
-            commentSBLocal.deleteComment(id, personId);
+            commentSBLocal.deleteComment(commentId, personId);
 
             return Response.status(204).build();
 
@@ -93,7 +93,7 @@ public class CommentResource {
     @Path("/{commentId}/person/{personId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response replyToComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId, String jsonString) {
+    public Response replyToComment(@PathParam("commentId") Long commentId, @PathParam("personId") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String replyBody = jsonObject.getString("replyBody");
@@ -102,7 +102,7 @@ public class CommentResource {
             reply.setBody(replyBody);
             reply.setDatePosted(new Date());
 
-            replySBLocal.createReplyForComment(personId, personId, reply);
+            replySBLocal.createReplyForComment(personId, commentId, reply);
 
             return Response.status(204).build();
 
@@ -114,10 +114,10 @@ public class CommentResource {
     @PUT
     @Path("/{commentId}/person/{personId}/like")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response likeComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
+    public Response likeComment(@PathParam("commentId") Long commentId, @PathParam("personId") Long personId) {
         try {
 
-            commentSBLocal.likeComment(personId, personId);
+            commentSBLocal.likeComment(commentId, personId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -128,10 +128,10 @@ public class CommentResource {
     @PUT
     @Path("/{commentId}/person/{personId}/unlike")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response unlikeComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
+    public Response unlikeComment(@PathParam("commentId") Long commentId, @PathParam("personId") Long personId) {
         try {
 
-            commentSBLocal.unlikeComment(personId, personId);
+            commentSBLocal.unlikeComment(commentId, personId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
