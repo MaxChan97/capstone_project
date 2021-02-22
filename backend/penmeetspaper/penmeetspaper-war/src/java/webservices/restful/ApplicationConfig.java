@@ -32,6 +32,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         resources.add(webservices.restful.FollowResource.class);
         resources.add(webservices.restful.PersonResource.class);
         resources.add(webservices.restful.PostResource.class);
+        resources.add(webservices.restful.ReplyResource.class);
         resources.add(webservices.restful.SubscriptionResource.class);
     }
 
