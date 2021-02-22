@@ -46,4 +46,6 @@ public interface PostSessionBeanLocal {
 
     public void likePost(Long postId, Long personId) throws NoResultException, NotValidException;
 
+    public Post getPostById(Long postId) throws NoResultException, NotValidException;
+
 }

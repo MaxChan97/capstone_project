@@ -194,4 +194,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
         person.getLikedPosts().remove(post);
     }
 
+    @Override
+    public Post getPostById(Long postId) throws NoResultException, NotValidException {
+        return emGetPost(postId);
+    }
+
 }

@@ -208,4 +208,26 @@ public class PostResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
+
+    @GET
+    @Path("/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPost(@PathParam("postId") Long postId) {
+        try {
+
+            Post post = postSBLocal.getPostById(postId);
+
+            return Response.status(204).entity(
+                    post
+            ).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }
