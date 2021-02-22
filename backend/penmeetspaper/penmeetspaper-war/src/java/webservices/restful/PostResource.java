@@ -50,6 +50,15 @@ public class PostResource {
         return reader.readObject();
     }
 
+    private Response buildError(Exception e, int statusCode) {
+        JsonObject exception = Json.createObjectBuilder()
+                .add("error", e.getMessage())
+                .build();
+
+        return Response.status(statusCode).entity(exception)
+                .type(MediaType.APPLICATION_JSON).build();
+    }
+
     @POST
     @Path("/person/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,14 +76,9 @@ public class PostResource {
             postSBLocal.createPostForPerson(personId, p);
             return Response.status(204).build();
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end createPostForPerson
 
     @GET
     @Path("/person/{id}")
@@ -89,14 +93,9 @@ public class PostResource {
             return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end getPersonsPost
 
     @PUT
     @Path("/person/{personId}/edit/{postId}")
@@ -118,15 +117,10 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
 
-    }
+    } // end editPersonsPost
 
     @DELETE
     @Path("/person/{personId}/{postId}")
@@ -138,14 +132,9 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end deletePersonsPost  
 
     @POST
     @Path("/{postId}/person/{personId}")
@@ -165,14 +154,9 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end createCommentForPost
 
     @PUT
     @Path("/{postId}/person/{personId}/like")
@@ -184,14 +168,9 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end likePost
 
     @PUT
     @Path("/{postId}/person/{personId}/unlike")
@@ -203,13 +182,24 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
-    }
+    } // end unlikePost
 
+    @GET
+    @Path("/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPost(@PathParam("postId") Long postId) {
+        try {
+
+            Post post = postSBLocal.getPostById(postId);
+
+            return Response.status(200).entity(
+                    post
+            ).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPost
 }
