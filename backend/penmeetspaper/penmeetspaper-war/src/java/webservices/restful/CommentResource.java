@@ -36,9 +36,9 @@ import session.ReplySessionBeanLocal;
 public class CommentResource {
 
     @EJB
-    private CommentSessionBeanLocal commentSessionLocal;
+    private CommentSessionBeanLocal commentSBLocal;
     @EJB
-    private ReplySessionBeanLocal replySessionLocal;
+    private ReplySessionBeanLocal replySBLocal;
 
     private JsonObject createJsonObject(String jsonString) {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -64,9 +64,9 @@ public class CommentResource {
         String commentBody = jsonObject.getString("commentBody");
 
         try {
-            Comment comment = commentSessionLocal.getComment(id);
+            Comment comment = commentSBLocal.getComment(id);
             comment.setBody(commentBody);
-            commentSessionLocal.updateComment(comment, personId);
+            commentSBLocal.updateComment(comment, personId);
 
             return Response.status(204).build();
 
@@ -80,7 +80,7 @@ public class CommentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
         try {
-            commentSessionLocal.deleteComment(id, personId);
+            commentSBLocal.deleteComment(id, personId);
 
             return Response.status(204).build();
 
@@ -102,7 +102,7 @@ public class CommentResource {
             reply.setBody(replyBody);
             reply.setDatePosted(new Date());
 
-            replySessionLocal.createReplyForComment(personId, personId, reply);
+            replySBLocal.createReplyForComment(personId, personId, reply);
 
             return Response.status(204).build();
 
@@ -110,4 +110,32 @@ public class CommentResource {
             return buildError(e, 400);
         }
     } // end replyToComment
+
+    @PUT
+    @Path("/{commentId}/person/{personId}/like")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response likeComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
+        try {
+
+            commentSBLocal.likeComment(personId, personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{commentId}/person/{personId}/unlike")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unlikeComment(@PathParam("commentId") Long id, @PathParam("personId") Long personId) {
+        try {
+
+            commentSBLocal.unlikeComment(personId, personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }
