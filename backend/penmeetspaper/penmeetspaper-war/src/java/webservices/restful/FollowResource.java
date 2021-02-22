@@ -39,7 +39,7 @@ public class FollowResource {
     }
 
     @POST
-    @Path("/{followerId}/{publisherId}")
+    @Path("/follower/{followerId}/publisher/{publisherId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response followPerson(@PathParam("followerId") Long followerId, @PathParam("publisherId") Long publisherId) {
         try {
@@ -53,7 +53,7 @@ public class FollowResource {
     }
 
     @DELETE
-    @Path("/{followerId}/{publisherId}")
+    @Path("/follower/{followerId}/publisher/{publisherId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response unfollowPerson(@PathParam("followerId") Long followerId, @PathParam("publisherId") Long publisherId) {
         try {

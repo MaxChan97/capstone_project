@@ -87,6 +87,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         em.detach(person);
         person.setPosts(null);
+        person.setFollowers(null);
+        person.setFollowing(null);
 
         return person;
     } //end getPersonById
