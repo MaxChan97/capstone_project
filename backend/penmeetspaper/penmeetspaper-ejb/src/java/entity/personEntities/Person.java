@@ -141,9 +141,6 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "members")
     private List<Community> followingCommunities = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "likes")
-    private List<Post> likedPosts = new ArrayList<>();
-
     @OneToMany(mappedBy = "author")
     private List<Post> posts = new ArrayList<>();
 
@@ -407,14 +404,6 @@ public class Person implements Serializable {
 
     public void setFollowingCommunities(List<Community> followingCommunities) {
         this.followingCommunities = followingCommunities;
-    }
-
-    public List<Post> getLikedPosts() {
-        return likedPosts;
-    }
-
-    public void setLikedPosts(List<Post> likedPosts) {
-        this.likedPosts = likedPosts;
     }
 
     public List<Post> getPosts() {

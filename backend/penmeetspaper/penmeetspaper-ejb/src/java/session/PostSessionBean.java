@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Comment;
 import entity.Community;
 import entity.Post;
 import entity.personEntities.Person;
@@ -173,12 +174,11 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (post.getLikes().contains(person) && person.getLikedPosts().contains(post)) {
+        if (post.getLikes().contains(person)) {
             return;
         }
 
         post.getLikes().add(person);
-        person.getLikedPosts().add(post);
     }
 
     @Override
@@ -186,12 +186,11 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (!post.getLikes().contains(person) && !person.getLikedPosts().contains(post)) {
+        if (!post.getLikes().contains(person)) {
             return;
         }
 
         post.getLikes().remove(person);
-        person.getLikedPosts().remove(post);
     }
 
     @Override
@@ -199,6 +198,19 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post p = emGetPost(postId);
         em.detach(p);
         p.getAuthor().setPosts(null);
+
+        List<Comment> comments = p.getComments();
+
+        List<Person> likes = p.getLikes();
+
+        for (Comment c : comments) {
+            c.getAuthor().setPosts(null);
+        }
+
+        for (Person person : likes) {
+
+            person.setPosts(null);
+        }
         return p;
     }
 

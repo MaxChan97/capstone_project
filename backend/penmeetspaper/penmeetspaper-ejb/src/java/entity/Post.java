@@ -44,7 +44,8 @@ public class Post implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date datePosted;
 
-    @ManyToMany
+    // unidirectional
+    @OneToMany
     @JoinColumn(name = "likes_post")
     private List<Person> likes = new ArrayList<>();
 
