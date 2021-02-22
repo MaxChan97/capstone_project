@@ -6,10 +6,12 @@
 package session;
 
 import entity.Community;
+import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +26,27 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private PersonSessionBeanLocal personSB;
+
+    @EJB
+    private PostSessionBeanLocal postSB;
+
+    private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
+        if (communityId == null) {
+            throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
+        }
+
+        Community community = em.find(Community.class, communityId);
+
+        if (community == null) {
+            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+
+        return community;
+
+    }
 
     @Override
     public Community createCommunity(Community community) throws NotValidException {
@@ -93,5 +116,28 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         oldCommunity.setCommunityProfilePicture(community.getCommunityProfilePicture());
     } // end of updateCommunity
 
+    public Community getCommunityById(Long communityId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+
+        em.detach(community.getOwner());
+        Person owner = community.getOwner();
+        community.setOwner(personSB.getPersonById(owner.getId()));
+
+        List<Post> posts = community.getPosts();
+
+        for (Post p : posts) {
+
+            p = postSB.getPostById(p.getId());
+        }
+
+        List<Person> members = community.getMembers();
+
+        for (Person p : members) {
+            p = personSB.getPersonById(p.getId());
+        }
+
+        return community;
+
+    }
     // Delete Community
 }
