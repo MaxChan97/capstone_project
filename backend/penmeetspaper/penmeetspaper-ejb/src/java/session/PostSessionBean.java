@@ -196,7 +196,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @Override
     public Post getPostById(Long postId) throws NoResultException, NotValidException {
-        return emGetPost(postId);
+        Post p = emGetPost(postId);
+        em.detach(p);
+        p.getAuthor().setPosts(null);
+        return p;
     }
 
 }
