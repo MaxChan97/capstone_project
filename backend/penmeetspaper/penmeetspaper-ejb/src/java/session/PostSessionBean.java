@@ -102,6 +102,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
+
     } // end createPostForPerson
 
     @Override
@@ -120,7 +121,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.persist(post);
         person.getPosts().add(post);
         community.getPosts().add(post);
-    }
+
+    } // end createPostForCommunity
 
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
@@ -131,6 +133,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             p = getPostById(p.getId());
         }
         return posts;
+
     } // end getPersonsPost
 
     @Override
@@ -143,6 +146,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             q = em.createQuery("SELECT p FROM Post p");
         }
         return q.getResultList();
+
     } // end searchPostByTitle
 
     @Override
@@ -184,7 +188,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
 
         post.getLikes().add(person);
-    }
+
+    } // end likePost
 
     @Override
     public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
@@ -196,7 +201,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
 
         post.getLikes().remove(person);
-    }
+
+    } // end unlikePost
 
     @Override
     public Post getPostById(Long postId) throws NoResultException, NotValidException {
@@ -236,6 +242,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
 
         return p;
-    }
+    } // end getPostById
 
 }
