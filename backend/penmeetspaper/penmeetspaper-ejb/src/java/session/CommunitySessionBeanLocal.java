@@ -30,4 +30,6 @@ public interface CommunitySessionBeanLocal {
 
     public void updateCommunity(Community community) throws NoResultException, NotValidException;
 
+    public Community getCommunityById(Long communityId) throws NoResultException, NotValidException;
+
 }
