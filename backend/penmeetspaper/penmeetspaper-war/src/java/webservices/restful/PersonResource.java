@@ -46,6 +46,15 @@ public class PersonResource {
         return reader.readObject();
     }
 
+    private Response buildError(Exception e, int statusCode) {
+        JsonObject exception = Json.createObjectBuilder()
+                .add("error", e.getMessage())
+                .build();
+
+        return Response.status(statusCode).entity(exception)
+                .type(MediaType.APPLICATION_JSON).build();
+    }
+
     // Main Business logic -------------------------------------
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -85,12 +94,7 @@ public class PersonResource {
                     p
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
     } //end getPersonById
 
@@ -115,12 +119,7 @@ public class PersonResource {
             ).type(MediaType.APPLICATION_JSON).build();
 
         } catch (NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
     } //end createPerson
 
@@ -176,12 +175,7 @@ public class PersonResource {
                 personSessionLocal.updatePerson(p);
                 return Response.status(204).build();
             } catch (NoResultException | NotValidException e) {
-                JsonObject exception = Json.createObjectBuilder()
-                        .add("error", e.getMessage())
-                        .build();
-
-                return Response.status(404).entity(exception)
-                        .type(MediaType.APPLICATION_JSON).build();
+                return buildError(e, 400);
             }
         } else if (editType.equals("profilePicture")) {
             return Response.status(422).build();
@@ -211,12 +205,7 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
 
     }
@@ -239,12 +228,7 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
 
     }

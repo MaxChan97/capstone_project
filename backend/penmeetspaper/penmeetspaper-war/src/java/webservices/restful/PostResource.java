@@ -131,7 +131,7 @@ public class PostResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } // end deletePersonsPost
+    } // end deletePersonsPost  
 
     @POST
     @Path("/{postId}/person/{personId}")
