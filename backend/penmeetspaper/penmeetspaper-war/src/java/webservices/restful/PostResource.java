@@ -47,6 +47,15 @@ public class PostResource {
         return reader.readObject();
     }
 
+    private Response buildError(Exception e, int statusCode) {
+        JsonObject exception = Json.createObjectBuilder()
+                .add("error", e.getMessage())
+                .build();
+
+        return Response.status(statusCode).entity(exception)
+                .type(MediaType.APPLICATION_JSON).build();
+    }
+
     @POST
     @Path("/person/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -181,12 +190,7 @@ public class PostResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
     }
 
@@ -222,12 +226,7 @@ public class PostResource {
             ).type(MediaType.APPLICATION_JSON).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return buildError(e, 400);
         }
     }
 }
