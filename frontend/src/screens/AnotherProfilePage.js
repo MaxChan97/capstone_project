@@ -13,6 +13,7 @@ export default function AnotherProfilePage({ personId }) {
 
   const [anotherPerson, setAnotherPerson] = useState({});
   const [tabValue, setTabValue] = useState(0);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     if (personId) {
@@ -32,11 +33,10 @@ export default function AnotherProfilePage({ personId }) {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 1) {
-      if (anotherPerson != {} && anotherPerson.posts != null) {
+      if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <ProfilePostCard />
-            <PostList datalist={anotherPerson.posts} />
+            <PostList personId={personId} refresh={refresh} />
           </div>
         );
       } else {
