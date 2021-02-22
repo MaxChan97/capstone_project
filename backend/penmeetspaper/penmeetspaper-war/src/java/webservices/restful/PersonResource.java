@@ -41,6 +41,12 @@ public class PersonResource {
     @EJB
     private PersonSessionBeanLocal personSessionLocal;
 
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
+    }
+
+    // Main Business logic -------------------------------------
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Person> getAllPerson() {
@@ -92,8 +98,8 @@ public class PersonResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPerson(String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+        JsonObject jsonObject = createJsonObject(jsonString);
+
         String email = jsonObject.getString("email");
         String username = jsonObject.getString("username");
         String password = jsonObject.getString("password");
@@ -136,14 +142,12 @@ public class PersonResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end updatePerson*/
-
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editPersonProfileInformation(@PathParam("id") String id, @QueryParam("type") String editType, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+        JsonObject jsonObject = createJsonObject(jsonString);
         if (editType.equals("information")) {
             String username = jsonObject.getString("username");
             String description = jsonObject.getString("description");
@@ -179,12 +183,42 @@ public class PersonResource {
                 return Response.status(404).entity(exception)
                         .type(MediaType.APPLICATION_JSON).build();
             }
-        }
-        else if (editType.equals("profilePicture")) {
+        } else if (editType.equals("profilePicture")) {
             return Response.status(422).build();
         } else {
             // editType.equals(profileBanner)
             return Response.status(422).build();
         }
     }
+
+    @PUT
+    @Path("{id}/settings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonSettings(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Boolean explicit = jsonObject.getBoolean("explicit");
+        Boolean subscriberOnly = jsonObject.getBoolean("subscriberOnly");
+
+        try {
+            Person person = personSessionLocal.getPersonById(id);
+            person.setHasExplicitLanguage(explicit);
+            person.setChatIsPaid(subscriberOnly);
+
+            personSessionLocal.updatePerson(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+
+    }
+
 }
