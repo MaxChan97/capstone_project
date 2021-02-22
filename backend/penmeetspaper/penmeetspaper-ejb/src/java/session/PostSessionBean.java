@@ -8,6 +8,7 @@ package session;
 import entity.Comment;
 import entity.Community;
 import entity.Post;
+import entity.Reply;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -78,6 +79,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
     private void checkPostCredentials(Post post, Long personId) throws NotValidException {
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+    }
+
+    private void detachLikes(List<Person> likes) {
+        for (Person person : likes) {
+            em.detach(person);
+            person.setPosts(null);
         }
     }
 
@@ -196,21 +204,34 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @Override
     public Post getPostById(Long postId) throws NoResultException, NotValidException {
         Post p = emGetPost(postId);
-        em.detach(p);
+        em.detach(p.getAuthor());
         p.getAuthor().setPosts(null);
 
         List<Comment> comments = p.getComments();
 
-        List<Person> likes = p.getLikes();
+        detachLikes(p.getLikes());
 
         for (Comment c : comments) {
-            c.getAuthor().setPosts(null);
+            if (c.getAuthor() != null) {
+                em.detach(c.getAuthor());
+                c.getAuthor().setPosts(null);
+            }
+
+            detachLikes(c.getLikes());
+
+            List<Reply> replies = c.getReplies();
+
+            for (Reply r : replies) {
+                if (r.getAuthor() != null) {
+                    em.detach(r.getAuthor());
+                    r.getAuthor().setPosts(null);
+                }
+
+                detachLikes(r.getLikes());
+            }
+
         }
 
-        for (Person person : likes) {
-
-            person.setPosts(null);
-        }
         return p;
     }
 
