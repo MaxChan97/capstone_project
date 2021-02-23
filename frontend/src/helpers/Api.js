@@ -134,7 +134,10 @@ export default {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      commentBody: commentBody,
+      type: "POST",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
     });
   },
 
