@@ -33,6 +33,14 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     @EJB
     private PostSessionBeanLocal postSB;
 
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        return personSB.getPersonById(p.getId());
+    }
+
+    private Post getDetachedPost(Post p) throws NoResultException, NotValidException {
+        return postSB.getPostById(p.getId());
+    }
+
     private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
         if (communityId == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
@@ -122,19 +130,20 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         em.detach(community.getOwner());
         Person owner = community.getOwner();
-        community.setOwner(personSB.getPersonById(owner.getId()));
+        community.setOwner(getDetachedPerson(owner));
 
         List<Post> posts = community.getPosts();
 
         for (Post p : posts) {
 
-            p = postSB.getPostById(p.getId());
+            p = getDetachedPost(p);
+
         }
 
         List<Person> members = community.getMembers();
 
         for (Person p : members) {
-            p = personSB.getPersonById(p.getId());
+            p = getDetachedPerson(p);
         }
 
         return community;
