@@ -172,15 +172,9 @@ export default {
     });
   },
 
-  likeProfilePostComment(postId, personId) {
+  likeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/post/" +
-        postId +
-        "/person/" +
-        personId +
-        "/unlike",
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId + "/like",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -199,6 +193,20 @@ export default {
       type: "POST",
       data: JSON.stringify({
         url: url,
+      }),
+    });
+  },
+
+  createReplyForProfileComment(commentId, personId, replyBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        replyBody: replyBody,
       }),
     });
   },
