@@ -36,4 +36,8 @@ public interface CommunitySessionBeanLocal {
 
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException;
 
+    public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
+
+    public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
+
 }

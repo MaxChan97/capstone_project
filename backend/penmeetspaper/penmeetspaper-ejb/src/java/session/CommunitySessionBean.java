@@ -160,6 +160,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     }
 
+    @Override
     public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
         Person person = emGetPerson(personId);
@@ -177,6 +178,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     }
 
+    @Override
     public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
         Person person = emGetPerson(personId);
