@@ -49,7 +49,7 @@ export default function OwnProfilePage({ personId }) {
               </div>
 
             </div>
-            <PostList personId={personId} refresh={refresh} />
+            <PostList personId={personId} refresh={refresh} setRefresh={setRefresh} />
           </div>
         );
       } else {

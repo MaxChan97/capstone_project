@@ -18,17 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ReplyList({ personId, refresh }) {
+export default function ReplyList({repliesData, refresh, setRefresh }) {
   const classes = useStyles();
   const alert = useAlert();
 
-  const [dataList, setDataList] = useState([]);
-
-  useEffect(() => {
-    if (personId) {
-      loadData(personId);
-    }
-  }, [personId, refresh]);
 
   function loadData(personId) {
     //REPLACE WITH API
@@ -44,17 +37,18 @@ export default function ReplyList({ personId, refresh }) {
     */
   }
 
-  return dataList && dataList.length > 0 ? (
+  return repliesData? (
     <List className={classes.root}>
-      {dataList.map((data) => (
+      {repliesData.map((data) => (
         <div>
           <ListItem alignItems="flex-start">
-            <ReplyCard key={data.id} data={data} />
+            <ReplyCard key={data.id} data={data} refresh={refresh}
+                setRefresh={setRefresh} />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-      <p>No Comments yet</p>
+      <p></p>
     );
 }

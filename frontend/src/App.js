@@ -18,7 +18,7 @@ import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./components/ProfilePage/UserSettings";
 import CustomiseProfile from "./screens/CustomiseProfile";
 import Subscribers from "./screens/SubscribersPage";
-
+import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 
 function App() {
   let location = useLocation();
@@ -52,6 +52,7 @@ function App() {
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/customiseProfile" component={CustomiseProfile} />
             <Route exact path="/subscribers" component={Subscribers} />
+            <Route exact path="/post/:postId" component={ProfilePostWithComments} />
           </div>
         </div>
       </Switch>

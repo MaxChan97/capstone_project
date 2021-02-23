@@ -13,7 +13,7 @@ const options = ["Edit Reply", "Delete Reply"];
 
 const ITEM_HEIGHT = 30;
 
-export default function ReplyCard({ key, data }) {
+export default function ReplyCard({ data, refresh, setRefresh}) {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -45,9 +45,8 @@ export default function ReplyCard({ key, data }) {
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img src={defaultDP} alt="User profile picture" />
-                <span class="username"><Link>username</Link></span>
-                <span class="description">time</span>
-                {/* CAN UNCOMMENT WHEN GOT ACTUAL DATA
+               
+               
                   <span class="username">
                       
                     <Link to={"/profile/" + data.author.id}>
@@ -57,7 +56,7 @@ export default function ReplyCard({ key, data }) {
                   </span>
 
                   <span class="description">{data.datePosted}</span>
-                   */}
+         
               </div>
               <div style={{ textAlign: "right" }}>
                 <IconButton
@@ -90,13 +89,11 @@ export default function ReplyCard({ key, data }) {
                 </Menu>
               </div>
             </div>
-            {/*
+         
               <p style={{ marginLeft: 10 }}>{data.body}</p>
-            */}
-            <p style={{ marginLeft: 10 }}>reply body </p>
             <p style={{ marginLeft: 10, }}>
               <a href="#" class="link-black text-sm">
-                <i class="fas fa-thumbs-up mr-1"></i> 700
+                <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </a>
             </p>
           </div>
