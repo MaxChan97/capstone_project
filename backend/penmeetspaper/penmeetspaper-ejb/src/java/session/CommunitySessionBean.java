@@ -43,7 +43,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
         if (communityId == null) {
-            throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
+            throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY_ID);
         }
 
         Community community = em.find(Community.class, communityId);
@@ -53,7 +53,20 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         }
 
         return community;
+    }
 
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(CommunitySessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
     }
 
     @Override
@@ -113,11 +126,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
         }
 
-        Community oldCommunity = em.find(Community.class, community.getId());
-
-        if (oldCommunity == null) {
-            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_COMMUNITY);
-        }
+        Community oldCommunity = emGetCommunity(community.getId());
 
         oldCommunity.setDescription(community.getDescription());
         oldCommunity.setTopicEnums(community.getTopicEnums());
@@ -130,6 +139,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         em.detach(community.getOwner());
         Person owner = community.getOwner();
+
         community.setOwner(getDetachedPerson(owner));
 
         List<Post> posts = community.getPosts();
@@ -148,6 +158,39 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         return community;
 
+    }
+
+    public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        List<Person> members = community.getMembers();
+        List<Community> followingCommunity = person.getFollowingCommunities();
+
+        if (members.contains(person) && followingCommunity.contains(community)) {
+            // Person already following the community
+            return;
+        }
+
+        members.add(person);
+        followingCommunity.add(community);
+
+    }
+
+    public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        List<Person> members = community.getMembers();
+        List<Community> followingCommunity = person.getFollowingCommunities();
+
+        if (!members.contains(person) && !followingCommunity.contains(community)) {
+            // Person already following the community
+            return;
+        }
+
+        members.remove(person);
+        followingCommunity.remove(community);
     }
     // Delete Community
 }
