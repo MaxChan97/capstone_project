@@ -146,6 +146,8 @@ export default function CustomiseProfile() {
         setUsername(currentPerson.username);
         setAbout(currentPerson.description);
         setTopicInterests(currentPerson.topicInterests);
+        setProfilePictureUrl(currentPerson.profilePicure);
+        setProfileBannerUrl(currentPerson.profileBanner);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
