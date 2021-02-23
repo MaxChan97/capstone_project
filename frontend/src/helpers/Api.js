@@ -86,7 +86,14 @@ export default {
     });
   },
 
-  editPersonProfileInformation(id, username, description, topicInterests) {
+  editPersonProfileInformation(
+    id,
+    username,
+    description,
+    topicInterests,
+    profilePictureUrl,
+    profileBannerUrl
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
       headers: {
@@ -98,6 +105,8 @@ export default {
         username: username,
         description: description,
         topicInterests: topicInterests,
+        profilePictureUrl: profilePictureUrl,
+        profileBannerUrl: profileBannerUrl,
       }),
     });
   },

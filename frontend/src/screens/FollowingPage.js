@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 
 export default function FollowingPage() {
