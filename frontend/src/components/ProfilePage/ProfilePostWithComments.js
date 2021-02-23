@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
@@ -9,16 +9,20 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MakeCommentCard from "./MakeCommentCard";
 import CommentList from "./CommentList";
+import { useParams } from "react-router";
 import Api from "../../helpers/Api";
 
 const options = ["Edit Post", "Delete Post"];
 
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
+export default function ProfilePostWithComments() {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const { postId } = useParams();
+
+  const [refresh, setRefresh] = useState(true);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,8 +31,32 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [data, setData] = useState();
   const [liked, setLiked] = useState(false);
-  const currentUser = useSelector((state) => state.currentUser); 
+
+  useEffect(() => {
+    if (postId) {
+      loadData(postId);
+      /*
+      data.likes.includes(currentUser) ?(
+        setLiked(true)
+      ): (setLiked(false))
+      */
+    }
+  }, [postId,refresh]);
+
+  function loadData(postId) {
+    Api.getPost(postId)
+      .done((post) => {
+        setData(post);
+      })
+      .fail(() => {
+        alert.show("Unable to load post!");
+      });
+  }
+
+  const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
     Api.likeProfilePost(data.id, currentUser)
@@ -42,7 +70,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
     setLiked(false);
   };
 
-  return (
+  return data?(
+    <div className="content-wrapper">
     <div
       style={{
         display: "flex",
@@ -60,13 +89,10 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
                 <div class="user-block">
-                  <img src={defaultDP} alt="User profile picture" />
-                  <span class="username">
-                    <Link to={"/profile/" + data.author.id}>
+                  <img src={defaultDP} alt="User profile picture" />   
+                  <Link to={"/profile/" + data.author.id} style={{ marginLeft: 10}}>
                       {data.author.username}
-                    </Link>
-                  </span>
-
+                  </Link>
                   <span class="description">{data.datePosted}</span>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -102,7 +128,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
               </div>
               <p>{data.body}</p>
               <p>
-              {liked == true  ? (
+                {liked == true  ? (
                   <Link onClick={handleUnlike}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
@@ -111,21 +137,19 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 )}
-
-                <span>
-                  <Link to={"/post/" + data.id}
-                    style={{ marginLeft: 10, color: "black"}}
-                  >
-                    <i class="fas fa-comments mr-1"></i> {data.comments.length}
-                  </Link>
-                </span>
               </p>
             </div>
           </div>
-          
+          <MakeCommentCard data={data} refresh={refresh}
+                setRefresh={setRefresh}></MakeCommentCard>
+          <CommentList comments={data.comments} refresh={refresh}
+                setRefresh={setRefresh}></CommentList>
         </div>
 
       </div>
     </div>
+    </div>
+  ) : (
+    <p>No posts yet</p>
   );
 }

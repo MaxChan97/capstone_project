@@ -12,7 +12,7 @@ import { useAlert } from "react-alert";
 import Divider from "@material-ui/core/Divider";
 import Box from '@material-ui/core/Box';
 
-export default function MakeCommentCard({ personId, refresh, setRefresh }) {
+export default function MakeCommentCard({data, refresh, setRefresh}) {
     const alert = useAlert();
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -39,11 +39,17 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
         setComment(event.target.value);
     };
 
+    const handleCancel = (event) => {
+        setComment("");
+    };
+
+    const currentUser = useSelector((state) => state.currentUser);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         //replace with actual api when done
-        /*
-        Api.createCommentForPerson(personId, comment)
+    
+        Api.createCommentForProfilePosts(data.id,currentUser,comment)
           .done(() => {
             alert.show("Comment successfully created!");
             setComment("");
@@ -52,7 +58,7 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
           .fail((xhr, status, error) => {
             alert.show("Something went wrong, please try again!");
           });
-          */
+
     };
 
     const [comment, setComment] = React.useState("");
@@ -65,11 +71,11 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                 textAlign: "left",
             }}
         >
-            <Divider variant="middle" component="li" />
-            <Box fontWeight="fontWeightBold" fontSize={12} m={1} style={{ marginLeft: "30px" }}>
-                1000 Comments
+            <Divider variant="middle" />
+            <Box fontWeight="fontWeightBold" fontSize={13} m={1} style={{ marginLeft: "30px" }}>
+                {data.comments.length} Comments
             </Box>
-            <Divider variant="middle" component="li" />
+            <Divider variant="middle" />
             <form
                 onSubmit={handleSubmit}
                 className={classes.root}
@@ -112,6 +118,7 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                                         color="secondary"
                                         type="reset"
                                         size="small"
+                                        onClick={handleCancel}
                                     >
                                         CANCEL
                                     </ColorButton>
@@ -133,7 +140,7 @@ export default function MakeCommentCard({ personId, refresh, setRefresh }) {
                     </div>
                 </div>
             </form>
-            <Divider variant="middle" component="li" />
+            <Divider variant="middle"/>
         </div>
     );
 }

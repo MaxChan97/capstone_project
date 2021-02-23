@@ -10,9 +10,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 import Divider from "@material-ui/core/Divider";
-import ReplyCard from "./ReplyCard";
+import ReplyList from "./ReplyList";
 
-export default function ReplyCommentCard({ personId, refresh, setRefresh }) {
+export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
     const alert = useAlert();
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -39,20 +39,24 @@ export default function ReplyCommentCard({ personId, refresh, setRefresh }) {
         setComment(event.target.value);
     };
 
+    const handleCancel = (event) => {
+        setComment("");
+    };
+
+    const currentUser = useSelector((state) => state.currentUser);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        //replace with actual api when done
-        /*
-        Api.createCommentForPerson(personId, comment)
+          
+        Api.createReplyForProfileComment(commentData.id, currentUser, comment)
           .done(() => {
-            alert.show("Comment successfully created!");
+            alert.show("Reply successfully created!");
             setComment("");
             setRefresh(!refresh);
           })
           .fail((xhr, status, error) => {
             alert.show("Something went wrong, please try again!");
           });
-          */
     };
 
     const [comment, setComment] = React.useState("");
@@ -113,6 +117,7 @@ export default function ReplyCommentCard({ personId, refresh, setRefresh }) {
                                         color="secondary"
                                         type="reset"
                                         size="small"
+                                        onClick={handleCancel}
                                     >
                                         CANCEL
                                     </ColorButton>
@@ -134,7 +139,8 @@ export default function ReplyCommentCard({ personId, refresh, setRefresh }) {
                     </div>
                 </div>
             </form>
-            <ReplyCard></ReplyCard>
+            <ReplyList repliesData={commentData.replies} refresh={refresh}
+                setRefresh={setRefresh}></ReplyList>
         </div>
     );
 }
