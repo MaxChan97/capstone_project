@@ -82,9 +82,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
     }
 
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        return personSB.getPersonById(p.getId());
+    }
+
     private void detachLikes(List<Person> likes) throws NoResultException, NotValidException {
         for (Person person : likes) {
-            person = personSB.getPersonById(person.getId());
+            person = getDetachedPerson(person);
         }
     }
 
@@ -210,17 +214,18 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.detach(p.getAuthor());
 
         Person postAuthor = p.getAuthor();
-        p.setAuthor(personSB.getPersonById(postAuthor.getId()));
+        p.setAuthor(getDetachedPerson(postAuthor));
 
         List<Comment> comments = p.getComments();
 
         detachLikes(p.getLikes());
 
         for (Comment c : comments) {
-            if (c.getAuthor() != null) {
+            Person commentAuthor = c.getAuthor();
 
-                Person commentAuthor = c.getAuthor();
-                c.setAuthor(personSB.getPersonById(commentAuthor.getId()));
+            if (commentAuthor != null) {
+
+                c.setAuthor(getDetachedPerson(commentAuthor));
 
             }
 
@@ -229,10 +234,11 @@ public class PostSessionBean implements PostSessionBeanLocal {
             List<Reply> replies = c.getReplies();
 
             for (Reply r : replies) {
-                if (r.getAuthor() != null) {
+                Person replyAuthor = r.getAuthor();
 
-                    Person replyAuthor = r.getAuthor();
-                    r.setAuthor(personSB.getPersonById(replyAuthor.getId()));
+                if (replyAuthor != null) {
+
+                    r.setAuthor(getDetachedPerson(replyAuthor));
 
                 }
 
