@@ -89,4 +89,50 @@ export default {
       }),
     });
   },
+
+  createChat(senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + senderId + "/" + recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
+    });
+  },
+
+  getPersonsChat(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  addMessageToChat(chatId, senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/message/" +
+        chatId +
+        "/" +
+        senderId +
+        "/" +
+        recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
+    });
+  },
 };

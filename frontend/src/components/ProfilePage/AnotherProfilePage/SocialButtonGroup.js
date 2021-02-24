@@ -1,6 +1,8 @@
 import React from "react";
 import { Button } from "@material-ui/core";
+import chatLogo from "../../../assets/Chat logo.svg";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -12,7 +14,7 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default function SocialButtonGroup() {
+export default function SocialButtonGroup({ id }) {
   return (
     <div
       style={{
@@ -21,8 +23,14 @@ export default function SocialButtonGroup() {
         justifyContent: "center",
         alignItems: "center",
         width: "35%",
+        marginRight: "2.31%",
       }}
     >
+      <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
+        <Button style={{ height: "40px", width: "25px" }} variant="contained">
+          <img src={chatLogo} alt="chatLogo" />
+        </Button>
+      </Link>
       <ColorButton
         style={{
           height: "40px",

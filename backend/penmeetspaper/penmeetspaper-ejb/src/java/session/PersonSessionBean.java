@@ -80,6 +80,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         em.detach(person);
         person.setPosts(null);
+        person.setChats(null);
 
         return person;
     } //end getPersonById

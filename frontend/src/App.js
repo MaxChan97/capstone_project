@@ -16,9 +16,29 @@ import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
 import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./components/ProfilePage/UserSettings";
+import ChatPage from "./screens/ChatPage";
 
 function App() {
   let location = useLocation();
+
+  function renderNavSide() {
+    if (location.pathname === "/login" || location.pathname === "/register") {
+      return "";
+    } else if (location.pathname === "/chat") {
+      return (
+        <div>
+          <Navbar />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Navbar />
+          <Sidebar />
+        </div>
+      );
+    }
+  }
 
   return (
     <div className="App">
@@ -27,15 +47,7 @@ function App() {
         <Route exact path="/login" component={Login} />
         <div className="layout-navbar-fixed">
           <div className="wrapper">
-            {location.pathname !== "/login" &&
-            location.pathname !== "/register" ? (
-              <div>
-                <Navbar />
-                <Sidebar />
-              </div>
-            ) : (
-              ""
-            )}
+            {renderNavSide()}
             <Route exact path="/" component={LivePage} />
             <Route exact path="/following" component={FollowingPage} />
             <Route exact path="/liked" component={LikedPage} />
@@ -47,6 +59,7 @@ function App() {
             <Route exact path="/postCard" component={ProfilePostCard} />
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
+            <Route exact path="/chat/:personId" component={ChatPage} />
           </div>
         </div>
       </Switch>

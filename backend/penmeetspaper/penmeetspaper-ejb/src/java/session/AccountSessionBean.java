@@ -43,6 +43,7 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
       Person p = (Person) q.getSingleResult();
       em.detach(p);
       p.setPosts(null);
+      p.setChats(null);
       return p;
     } catch (Exception e) {
       throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);

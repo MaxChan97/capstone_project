@@ -61,6 +61,7 @@ export default function AnotherProfilePage({ personId }) {
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={anotherPerson.username}
+            id={anotherPerson.id}
             numFollowers={anotherPerson.followers.length}
           />
           {handleTabView(tabValue)}
