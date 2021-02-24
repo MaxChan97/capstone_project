@@ -5,11 +5,16 @@
  */
 package entity.personToPersonEntities;
 
+import entity.personEntities.Person;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -23,12 +28,24 @@ public class Ban implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany
+    @JoinColumn(name = "ban_personId")
+    private List<Person> banList = new ArrayList();
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Person> getBanList() {
+        return banList;
+    }
+
+    public void setBanList(List<Person> banList) {
+        this.banList = banList;
     }
 
     @Override

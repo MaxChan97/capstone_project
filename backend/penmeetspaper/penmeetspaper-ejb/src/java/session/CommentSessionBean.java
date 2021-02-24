@@ -117,6 +117,10 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
         Comment commentToDelete = emGetComment(commentId);
 
+        if (commentToDelete.getAuthor() == null) {
+            throw new NotValidException(CommentSessionBeanLocal.COMMENT_ALREADY_DELETED);
+        }
+
         checkCredentials(commentToDelete, personId);
 
         commentToDelete.setBody("Commment Deleted");
