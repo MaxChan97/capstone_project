@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
@@ -8,6 +8,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
+import Api from "../../helpers/Api";
+import moment from 'moment';
 
 const options = ["Edit Reply", "Delete Reply"];
 
@@ -25,6 +27,35 @@ export default function ReplyCard({ data, refresh, setRefresh}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [liked, setLiked] = useState();
+  const currentUser = useSelector((state) => state.currentUser);
+
+  const handleLike = (event) => {
+    Api.likeProfilePostReply(data.id, currentUser)
+    setRefresh(!refresh);
+    setLiked(true);
+  };
+
+  const handleUnlike = (event) => {
+    Api.unlikeProfilePostReply(data.id, currentUser)
+    setRefresh(!refresh);
+    setLiked(false);
+  };
+
+  function checkedLiked() {
+    data.likes.forEach(function (arrayItem) {
+      if (arrayItem.id == currentUser) {
+        setLiked(true);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (data) {
+      checkedLiked();
+    }
+  }, []);
 
   return (
     <div
@@ -55,7 +86,8 @@ export default function ReplyCard({ data, refresh, setRefresh}) {
                      
                   </span>
 
-                  <span class="description">{data.datePosted}</span>
+                  <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
+                  {moment().startOf('day').fromNow(data.datePosted)} ago</span>
          
               </div>
               <div style={{ textAlign: "right" }}>
@@ -92,9 +124,15 @@ export default function ReplyCard({ data, refresh, setRefresh}) {
          
               <p style={{ marginLeft: 10 }}>{data.body}</p>
             <p style={{ marginLeft: 10, }}>
-              <a href="#" class="link-black text-sm">
-                <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                </a>
+            {liked == true ? (
+                  <Link onClick={handleUnlike}>
+                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                  </Link>
+                ) : (
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  )}
             </p>
           </div>
         </div>
