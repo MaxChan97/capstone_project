@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
@@ -39,7 +39,6 @@ function App() {
             ) : (
               ""
             )}
-            <Route exact path="/" component={LivePage} />
             <Route exact path="/following" component={FollowingPage} />
             <Route exact path="/liked" component={LikedPage} />
             <Route exact path="/library" component={LibraryPage} />
@@ -50,9 +49,18 @@ function App() {
             <Route exact path="/postCard" component={ProfilePostCard} />
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
-            <Route exact path="/customiseProfile" component={CustomiseProfile} />
+            <Route
+              exact
+              path="/customiseProfile"
+              component={CustomiseProfile}
+            />
             <Route exact path="/subscribers" component={Subscribers} />
-            <Route exact path="/post/:postId" component={ProfilePostWithComments} />
+            <Route
+              exact
+              path="/post/:postId"
+              component={ProfilePostWithComments}
+            />
+            <Route exact path="/" component={LivePage} />
           </div>
         </div>
       </Switch>
