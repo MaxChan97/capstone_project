@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
+import Api from "../../helpers/Api";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,26 +16,64 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
     },
     chip: {
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        '& > *': {
         margin: theme.spacing(0.5),
-    },
+        },
+    }
 }));
 
 //chip is the topic tag
 
 export default function AboutMe() {
     const classes = useStyles();
-    const [chipData, setChipData] = React.useState([
-        { key: 0, label: 'Stocks' },
-        { key: 1, label: 'Insurance' },
-        { key: 2, label: 'CPF' },
-        { key: 3, label: 'Savings' },
-        { key: 4, label: 'React' },
-    ]);
+
+    const [description, setAbout] = useState();
+    const [topicInterests, setTopicInterests] = useState();
+
+    //   const [profilePicture, setProfilePicture] = useState("");
+    //   const [profileBanner, setProfileBanner] = useState("");
+
+    const [currentPerson, setCurrentPerson] = useState({});
 
     const currentUser = useSelector((state) => state.currentUser);
-    if (currentUser === null) {
-        return <Redirect to="/login" />;
+
+    useEffect(() => {
+    if (currentUser) {
+        loadData(currentUser);
+        console.log(currentUser);
     }
+    }, [currentUser]);
+
+    if (currentUser === null) {
+    return <Redirect to="/login" />;
+    }
+
+    function loadData(currentUser) {
+    Api.getPersonById(currentUser)
+        .done((currentPerson) => {
+        setCurrentPerson(currentPerson);
+        setAbout(currentPerson.description);
+        setTopicInterests(currentPerson.topicInterests);
+        console.log(currentPerson);
+        })
+        .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+        });
+    }
+
+    function toTitleCase(str) {
+        var i,
+          frags = str.split("_");
+        for (i = 0; i < frags.length; i++) {
+          frags[i] =
+            frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
+        }
+        return frags.join(" ");
+    }
+
 
     return (
         <div className="content-wrapper">
@@ -44,36 +83,22 @@ export default function AboutMe() {
 
                     <div class="card-body">
 
-                        <strong><i class="fas fa-user mr-1"></i> About</strong>
+                        <strong>About</strong>
 
                         <p>
-                            Lorem ipsum dolor sit amet, id malorum accusata temporibus est,
-                            impedit delectus quo in, possit nostro explicari ut eos. Mei eu
-                            omnium vulputate, quodsi vituperatoribus sit te, sit ad iudico diceret.
-                            Ad recteque scriptorem has. Mea oratio tincidunt ex, ei mea illum exerci,
-                            ea sit omittam adipiscing deterruisset. Ut sea esse facilisis, periculis
-                            inciderint eu vel. Ius habeo tractatos constituto no.
+                            {description}
                         </p>
 
                         <hr></hr>
 
 
-                        <strong><i class="far fa-file-alt mr-1"></i> Interests</strong>
-
-                        <div component="ul" className={classes.root}>
-                            {chipData.map((data) => {
-
-                                return (
-                                    <li key={data.key}>
-                                        <Chip
-                                           
-                                            label={data.label}
-                                            className={classes.chip}
-                                        />
-                                    </li>
-                                );
-                            })}
+                        <strong> Interests</strong>
+                        {topicInterests !== undefined ? (
+                        <div component="ul" className={classes.chip}>
+                            {topicInterests.map((topics, index) => <Chip label={toTitleCase(topics)} key={index} style={{backgroundColor: '#F1F3F8'}}/>)}
                         </div>
+                        ) :
+                        (null)}
                     </div>
 
                 </div>

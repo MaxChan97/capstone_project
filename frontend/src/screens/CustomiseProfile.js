@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const topics = [
   { value: "REAL_ESTATE", label: "Real Estate" },
   { value: "FUTURES", label: "Futures" },
@@ -115,11 +116,7 @@ export default function CustomiseProfile() {
     );
   };
 
-  const handleInputChange = (value, e) => {
-    if (e.action === "input-change") {
-      this.setState({ value });
-    }
-  };
+
 
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);
@@ -212,14 +209,16 @@ export default function CustomiseProfile() {
                     <img
                       style={{
                         resizeMode: "repeat",
-                        height: 100,
-                        width: 100,
+                        height: 130,
+                        width: 130,
+                        borderRadius: "50%",
+                        display: "block"
                       }}
                       src={profilePicture || defaultDP}
-                      alt="defaultDP"
+                      alt="Profile Picture"
                     />
                   </div>
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <label
                       for="pp"
                       className="btn"
