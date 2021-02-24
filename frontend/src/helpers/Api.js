@@ -91,8 +91,8 @@ export default {
     username,
     description,
     topicInterests,
-    profilePictureUrl,
-    profileBannerUrl
+    profilePicture,
+    profileBanner
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
@@ -105,8 +105,8 @@ export default {
         username: username,
         description: description,
         topicInterests: topicInterests,
-        profilePictureUrl: profilePictureUrl,
-        profileBannerUrl: profileBannerUrl,
+        profilePicture: profilePicture,
+        profileBanner: profileBanner,
       }),
     });
   },
@@ -186,7 +186,13 @@ export default {
 
   likeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId + "/like",
+      url:
+        this.SERVER_PREFIX +
+        "/comment/" +
+        commentId +
+        "/person/" +
+        personId +
+        "/like",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
