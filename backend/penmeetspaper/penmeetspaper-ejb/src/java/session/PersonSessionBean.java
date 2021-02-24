@@ -110,6 +110,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             oldPerson.setTopicInterests(person.getTopicInterests());
             oldPerson.setChatIsPaid(person.isChatIsPaid());
             oldPerson.setHasExplicitLanguage(person.isHasExplicitLanguage());
+            oldPerson.setProfilePicture(person.getProfilePicture());
+            oldPerson.setProfileBanner(person.getProfileBanner());
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }

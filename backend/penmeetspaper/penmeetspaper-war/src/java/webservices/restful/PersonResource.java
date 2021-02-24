@@ -11,10 +11,14 @@ import entity.personToPersonEntities.Subscription;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,10 +31,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.PersonSessionBeanLocal;
-import java.io.StringReader;
-import java.util.ArrayList;
-import javax.json.JsonArray;
-import javax.json.JsonReader;
 
 /**
  * REST Web Service
@@ -55,6 +55,25 @@ public class PersonResource {
 
         return Response.status(statusCode).entity(exception)
                 .type(MediaType.APPLICATION_JSON).build();
+    }
+
+    private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
+        List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+
+        for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
+            String topicInterest = topicInterestsJsonArray.getString(i);
+            if ("REAL_ESTATE".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.REAL_ESTATE);
+            } else if ("STOCKS".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.STOCKS);
+            } else if ("FUTURES".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.FUTURES);
+            } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+            }
+        }
+
+        return topicInterests;
     }
 
     // Main Business logic -------------------------------------
@@ -115,6 +134,8 @@ public class PersonResource {
         // Might want to hash password, see how
         p.setPassword(password);
         p.setDescription("");
+        p.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
+        p.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         try {
             Person addedPerson = personSB.createPerson(p);
             return Response.status(200).entity(
@@ -148,44 +169,32 @@ public class PersonResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonProfileInformation(@PathParam("id") String id, @QueryParam("type") String editType, String jsonString) {
+    public Response editPersonProfileInformation(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
-        if (editType.equals("information")) {
-            String username = jsonObject.getString("username");
-            String description = jsonObject.getString("description");
-            JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
 
-            List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
-            for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
-                String topicInterest = topicInterestsJsonArray.getString(i);
-                if ("REAL_ESTATE".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.REAL_ESTATE);
-                } else if ("STOCKS".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.STOCKS);
-                } else if ("FUTURES".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.FUTURES);
-                } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.CRYPTOCURRENCY);
-                }
-            }
+        String username = jsonObject.getString("username");
+        String description = jsonObject.getString("description");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+        String profilePicture = jsonObject.getString("profilePicture");
+        String profileBanner = jsonObject.getString("profileBanner");
 
-            try {
-                Person p = personSB.getPersonById(Long.valueOf(id));
-                p.setUsername(username);
-                p.setDescription(description);
-                p.setTopicInterests(topicInterests);
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
-                personSB.updatePerson(p);
-                return Response.status(204).build();
-            } catch (NoResultException | NotValidException e) {
-                return buildError(e, 400);
-            }
-        } else if (editType.equals("profilePicture")) {
-            return Response.status(422).build();
-        } else {
-            // editType.equals(profileBanner)
-            return Response.status(422).build();
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setUsername(username);
+            p.setDescription(description);
+            p.setTopicInterests(topicInterests);
+            p.setProfilePicture(profilePicture);
+            p.setProfileBanner(profileBanner);
+
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
         }
+
     }
 
     @PUT

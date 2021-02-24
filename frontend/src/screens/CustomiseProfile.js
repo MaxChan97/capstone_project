@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import defaultDP from "../assets/Default Dp logo.svg";
-import profileBanner from "../assets/Profile Banner Image.png";
+import defaultBanner from "../assets/Profile Banner Image.png";
 import Select from "react-select";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
 
 const topics = [
   { value: "REAL_ESTATE", label: "Real Estate" },
@@ -44,18 +45,16 @@ export default function CustomiseProfile() {
   };
 
   const [topicInterests, setTopicInterests] = useState();
-  console.log(topicInterests);
   const handleTopicInterestsChange = (selectedOptions) => {
     let tempSelectedOptions = [];
     for (var i = 0; i < selectedOptions.length; i++) {
       tempSelectedOptions.push(selectedOptions[i].value);
     }
-    console.log(tempSelectedOptions);
     setTopicInterests(tempSelectedOptions);
   };
 
-  const [profilePictureUrl, setProfilePictureUrl] = useState("");
-  const [profileBannerUrl, setProfileBannerUrl] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [profileBanner, setProfileBanner] = useState("");
 
   const changeProfilePictureHandler = (event) => {
     var oldName = event.target.files[0].name;
@@ -81,7 +80,7 @@ export default function CustomiseProfile() {
           .child(newName)
           .getDownloadURL()
           .then((url) => {
-            setProfilePictureUrl(url);
+            setProfilePicture(url);
           });
       }
     );
@@ -111,17 +110,13 @@ export default function CustomiseProfile() {
           .child(newName)
           .getDownloadURL()
           .then((url) => {
-            setProfileBannerUrl(url);
+            setProfileBanner(url);
           });
       }
     );
   };
 
-  const handleInputChange = (value, e) => {
-    if (e.action === "input-change") {
-      this.setState({ value });
-    }
-  };
+
 
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);
@@ -131,7 +126,7 @@ export default function CustomiseProfile() {
   useEffect(() => {
     if (currentUser) {
       loadData(currentUser);
-      console.log(topicInterests);
+      console.log(currentUser);
     }
   }, [currentUser, refresh]);
 
@@ -146,8 +141,9 @@ export default function CustomiseProfile() {
         setUsername(currentPerson.username);
         setAbout(currentPerson.description);
         setTopicInterests(currentPerson.topicInterests);
-        setProfilePictureUrl(currentPerson.profilePicure);
-        setProfileBannerUrl(currentPerson.profileBanner);
+        setProfilePicture(currentPerson.profilePicture);
+        setProfileBanner(currentPerson.profileBanner);
+        console.log(currentPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -186,8 +182,8 @@ export default function CustomiseProfile() {
       username,
       description,
       topicInterests,
-      profilePictureUrl,
-      profileBannerUrl
+      profilePicture,
+      profileBanner
     )
       .done(() => {
         alert.show("Profile updated successfully!");
@@ -200,9 +196,9 @@ export default function CustomiseProfile() {
 
   return (
     <div className="content-wrapper">
-      <div class="col-md-9" style={{ textAlign: "left" }}>
-        <div class="card card-primary">
-          <div class="card-body">
+      <div className="col-md-9" style={{ textAlign: "left" }}>
+        <div className="card card-primary">
+          <div className="card-body">
             <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
               Profile Picture
             </Box>
@@ -213,14 +209,16 @@ export default function CustomiseProfile() {
                     <img
                       style={{
                         resizeMode: "repeat",
-                        height: 100,
-                        width: 100,
+                        height: 130,
+                        width: 130,
+                        borderRadius: "50%",
+                        display: "block"
                       }}
-                      src={profilePictureUrl || defaultDP}
-                      alt="defaultDP"
+                      src={profilePicture || defaultDP}
+                      alt="Profile Picture"
                     />
                   </div>
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <label
                       for="pp"
                       className="btn"
@@ -262,7 +260,7 @@ export default function CustomiseProfile() {
                 height: 80,
                 width: 512,
               }}
-              src={profileBannerUrl || profileBanner}
+              src={profileBanner || defaultBanner}
             />
             <Box fontWeight="fontWeightRegular" m={1}>
               File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)

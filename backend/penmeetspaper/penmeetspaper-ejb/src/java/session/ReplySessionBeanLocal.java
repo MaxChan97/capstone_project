@@ -19,6 +19,7 @@ public interface ReplySessionBeanLocal {
 
     public final static String MISSING_REPLY = "Missing reply parameter";
     public final static String INVALID_CREDENTIALS = "Incorrect credentials to modify Comment";
+    public final static String REPLY_ALREADY_DELETED = "Reply has already been deleted";
 
     public final static String MISSING_PERSON_ID = "Missing person id";
     public final static String MISSING_COMMENT_ID = "Missing comment id";
