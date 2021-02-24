@@ -55,13 +55,13 @@ export default function AnotherProfilePage({ personId }) {
 
   return (
     <div className="content-wrapper">
-      {anotherPerson != {} && anotherPerson.followers != null ? (
+      {anotherPerson != {} ? (
         <div>
           <AnotherProfileTopBar
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={anotherPerson.username}
-            numFollowers={anotherPerson.followers.length}
+            
           />
           {handleTabView(tabValue)}
         </div>
