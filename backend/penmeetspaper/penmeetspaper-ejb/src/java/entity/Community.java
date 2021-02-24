@@ -11,6 +11,7 @@ import entity.viewEntities.CommunityPageView;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -45,6 +48,10 @@ public class Community implements Serializable {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
 
     @ManyToOne
     @JoinColumn(name = "owner")
@@ -91,6 +98,14 @@ public class Community implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Person getOwner() {

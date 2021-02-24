@@ -28,11 +28,11 @@ public interface CommunitySessionBeanLocal {
     public final static String CANNOT_FIND_COMMUNITY = "Could not find community";
     public final static String CANNOT_FIND_PERSON = "Could not find person";
 
-    public Community createCommunity(Community community) throws NotValidException;
+    public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException;
 
     public List<Community> searchCommunityByName(String name);
 
-    public void updateCommunity(Community community) throws NoResultException, NotValidException;
+    public void updateCommunity(Community community, Long ownerId) throws NoResultException, NotValidException;
 
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException;
 
