@@ -72,7 +72,7 @@ public class ReplyResource {
     @DELETE
     @Path("/{replyId}/person/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteComment(@PathParam("replyId") Long replyId, @PathParam("personId") Long personId) {
+    public Response deleteReply(@PathParam("replyId") Long replyId, @PathParam("personId") Long personId) {
         try {
             replySB.deleteReply(replyId, personId);
 
