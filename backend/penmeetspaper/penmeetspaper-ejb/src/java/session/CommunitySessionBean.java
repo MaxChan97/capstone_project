@@ -111,7 +111,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     // Edit Community
     @Override
-    public void updateCommunity(Community community, Long ownerId) throws NoResultException, NotValidException {
+    public void updateCommunity(Community community) throws NoResultException, NotValidException {
         if (community == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
         }
