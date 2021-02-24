@@ -222,4 +222,88 @@ export default {
       }),
     });
   },
+
+  unlikeProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId + "/unlike",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  likeProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/like",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  unlikeProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/unlike",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  editProfilePostReply(replyId, personId, replyBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        replyBody: replyBody,
+      }),
+    });
+  },
+
+  deleteProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  editProfilePostComment(commentId, personId, commentBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
+    });
+  },
+
+  deleteProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
 };
