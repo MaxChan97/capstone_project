@@ -197,7 +197,7 @@ public class PersonResource {
             String profileBanner = jsonObject.getString("profileBanner");
             try {
                 Person p = personSB.getPersonById(Long.valueOf(id));
-                p.setProfilePicture(profilePicture);
+                p.setProfileBanner(profileBanner);
 
                 personSB.updatePerson(p);
             } catch (NoResultException | NotValidException e) {
