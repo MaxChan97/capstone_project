@@ -19,6 +19,7 @@ public interface CommentSessionBeanLocal {
 
     public final static String MISSING_COMMENT = "Missing comment parameter";
     public final static String INVALID_CREDENTIALS = "Incorrect credentials to modify Comment";
+    public final static String COMMENT_ALREADY_DELETED = "Comment has already been deleted";
 
     public final static String MISSING_PERSON_ID = "Missing person id";
     public final static String MISSING_POST_ID = "Missing post id";
