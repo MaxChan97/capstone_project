@@ -32,12 +32,12 @@ public interface CommunitySessionBeanLocal {
 
     public List<Community> searchCommunityByName(String name);
 
-    public void updateCommunity(Community community, Long ownerId) throws NoResultException, NotValidException;
-
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException;
 
     public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
 
     public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
+
+    public void updateCommunity(Community community) throws NoResultException, NotValidException;
 
 }

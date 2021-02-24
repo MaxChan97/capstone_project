@@ -57,6 +57,25 @@ public class PersonResource {
                 .type(MediaType.APPLICATION_JSON).build();
     }
 
+    private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
+        List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+
+        for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
+            String topicInterest = topicInterestsJsonArray.getString(i);
+            if ("REAL_ESTATE".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.REAL_ESTATE);
+            } else if ("STOCKS".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.STOCKS);
+            } else if ("FUTURES".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.FUTURES);
+            } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
+                topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+            }
+        }
+
+        return topicInterests;
+    }
+
     // Main Business logic -------------------------------------
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -150,68 +169,32 @@ public class PersonResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonProfileInformation(@PathParam("id") String id, @QueryParam("type") String editType, String jsonString) {
+    public Response editPersonProfileInformation(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
-        if (editType.equals("information")) {
-            String username = jsonObject.getString("username");
-            String description = jsonObject.getString("description");
-            JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
-            String profilePicture = jsonObject.getString("profilePicture");
-            String profileBanner = jsonObject.getString("profileBanner");
 
-            List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
-            for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
-                String topicInterest = topicInterestsJsonArray.getString(i);
-                if ("REAL_ESTATE".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.REAL_ESTATE);
-                } else if ("STOCKS".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.STOCKS);
-                } else if ("FUTURES".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.FUTURES);
-                } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
-                    topicInterests.add(TopicEnum.CRYPTOCURRENCY);
-                }
-            }
+        String username = jsonObject.getString("username");
+        String description = jsonObject.getString("description");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+        String profilePicture = jsonObject.getString("profilePicture");
+        String profileBanner = jsonObject.getString("profileBanner");
 
-            try {
-                Person p = personSB.getPersonById(Long.valueOf(id));
-                p.setUsername(username);
-                p.setDescription(description);
-                p.setTopicInterests(topicInterests);
-                p.setProfilePicture(profilePicture);
-                p.setProfileBanner(profileBanner);
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
-                personSB.updatePerson(p);
-                return Response.status(204).build();
-            } catch (NoResultException | NotValidException e) {
-                return buildError(e, 400);
-            }
-        } else if (editType.equals("profilePicture")) {
-            String profilePicture = jsonObject.getString("profilePicture");
-            try {
-                Person p = personSB.getPersonById(Long.valueOf(id));
-                p.setProfilePicture(profilePicture);
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setUsername(username);
+            p.setDescription(description);
+            p.setTopicInterests(topicInterests);
+            p.setProfilePicture(profilePicture);
+            p.setProfileBanner(profileBanner);
 
-                personSB.updatePerson(p);
-            } catch (NoResultException | NotValidException e) {
-                return buildError(e, 400);
-            }
+            personSB.updatePerson(p);
+            return Response.status(204).build();
 
-            return Response.status(422).build();
-        } else {
-            // editType.equals(profileBanner)
-            String profileBanner = jsonObject.getString("profileBanner");
-            try {
-                Person p = personSB.getPersonById(Long.valueOf(id));
-                p.setProfileBanner(profileBanner);
-
-                personSB.updatePerson(p);
-            } catch (NoResultException | NotValidException e) {
-                return buildError(e, 400);
-            }
-
-            return Response.status(422).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
         }
+
     }
 
     @PUT
