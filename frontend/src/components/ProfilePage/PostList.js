@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostList({ personId, refresh }) {
+export default function PostList({ personId, refresh, setRefresh}) {
   const classes = useStyles();
   const alert = useAlert();
 
@@ -46,7 +46,8 @@ export default function PostList({ personId, refresh }) {
       {dataList.map((data) => (
         <div>
           <ListItem alignItems="flex-start">
-            <ProfilePostCard key={data.id} data={data} />
+            <ProfilePostCard key={data.id} data={data} refresh={refresh}
+                setRefresh={setRefresh} />
           </ListItem>
         </div>
       ))}

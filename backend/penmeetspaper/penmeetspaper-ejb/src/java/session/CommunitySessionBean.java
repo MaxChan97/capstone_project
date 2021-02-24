@@ -6,10 +6,12 @@
 package session;
 
 import entity.Community;
+import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,8 +27,50 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
+    @EJB
+    private PersonSessionBeanLocal personSB;
+
+    @EJB
+    private PostSessionBeanLocal postSB;
+
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        return personSB.getPersonById(p.getId());
+    }
+
+    private Post getDetachedPost(Post p) throws NoResultException, NotValidException {
+        return postSB.getPostById(p.getId());
+    }
+
+    private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
+        if (communityId == null) {
+            throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY_ID);
+        }
+
+        Community community = em.find(Community.class, communityId);
+
+        if (community == null) {
+            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+
+        return community;
+    }
+
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(CommunitySessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
+    }
+
     @Override
-    public Community createCommunity(Community community) throws NotValidException {
+    public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException {
         if (community == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
         }
@@ -42,17 +86,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.NAME_TAKEN);
         }
 
-        Person retrivedOwner = community.getOwner();
-
-        if (retrivedOwner == null) {
-            throw new NotValidException(CommunitySessionBeanLocal.INVALID_OWNER);
-        }
-
-        Person owner = em.find(Person.class, retrivedOwner.getId());
-
-        if (owner == null) {
-            throw new NotValidException(CommunitySessionBeanLocal.INVALID_OWNER);
-        }
+        Person owner = emGetPerson(ownerId);
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);
@@ -82,16 +116,73 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
         }
 
-        Community oldCommunity = em.find(Community.class, community.getId());
-
-        if (oldCommunity == null) {
-            throw new NoResultException(CommunitySessionBeanLocal.CANNOT_FIND_COMMUNITY);
-        }
+        Community oldCommunity = emGetCommunity(community.getId());
 
         oldCommunity.setDescription(community.getDescription());
         oldCommunity.setTopicEnums(community.getTopicEnums());
         oldCommunity.setCommunityProfilePicture(community.getCommunityProfilePicture());
     } // end of updateCommunity
 
+    @Override
+    public Community getCommunityById(Long communityId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+
+        em.detach(community.getOwner());
+        Person owner = community.getOwner();
+
+        community.setOwner(getDetachedPerson(owner));
+
+        List<Post> posts = community.getPosts();
+
+        for (Post p : posts) {
+
+            p = getDetachedPost(p);
+
+        }
+
+        List<Person> members = community.getMembers();
+
+        for (Person p : members) {
+            p = getDetachedPerson(p);
+        }
+
+        return community;
+
+    }
+
+    @Override
+    public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        List<Person> members = community.getMembers();
+        List<Community> followingCommunity = person.getFollowingCommunities();
+
+        if (members.contains(person) && followingCommunity.contains(community)) {
+            // Person already following the community
+            return;
+        }
+
+        members.add(person);
+        followingCommunity.add(community);
+
+    }
+
+    @Override
+    public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        List<Person> members = community.getMembers();
+        List<Community> followingCommunity = person.getFollowingCommunities();
+
+        if (!members.contains(person) && !followingCommunity.contains(community)) {
+            // Person already following the community
+            return;
+        }
+
+        members.remove(person);
+        followingCommunity.remove(community);
+    }
     // Delete Community
 }

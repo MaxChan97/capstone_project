@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
@@ -17,6 +17,9 @@ import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
 import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./components/ProfilePage/UserSettings";
 import ChatPage from "./screens/ChatPage";
+import CustomiseProfile from "./screens/CustomiseProfile";
+import Subscribers from "./screens/SubscribersPage";
+import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 
 function App() {
   let location = useLocation();
@@ -60,6 +63,17 @@ function App() {
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
+            <Route
+              exact
+              path="/customiseProfile"
+              component={CustomiseProfile}
+            />
+            <Route exact path="/subscribers" component={Subscribers} />
+            <Route
+              exact
+              path="/post/:postId"
+              component={ProfilePostWithComments}
+            />
           </div>
         </div>
       </Switch>

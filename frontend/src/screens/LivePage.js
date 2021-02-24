@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { logOut } from "../redux/actions/index";
 import Webcam from "react-webcam";
+import UploadFile from "../components/UploadFile.js";
 
 export default function LivePage() {
-  const dispatch = useDispatch();
-
   const currentUser = useSelector((state) => state.currentUser);
+
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
@@ -23,14 +22,7 @@ export default function LivePage() {
       >
         {/* <Webcam /> */}
         <h1>Live Page</h1>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(logOut());
-          }}
-        >
-          Log Out
-        </button>
+        <UploadFile />
       </div>
     </div>
   );

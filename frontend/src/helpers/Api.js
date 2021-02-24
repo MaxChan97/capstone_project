@@ -63,6 +63,7 @@ export default {
     });
   },
 
+  //get a list of posts
   getPersonsPost(id) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + id,
@@ -74,7 +75,25 @@ export default {
     });
   },
 
-  editPersonProfileInformation(id, username, description, topicInterests) {
+  getPost(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  editPersonProfileInformation(
+    id,
+    username,
+    description,
+    topicInterests,
+    profilePicture,
+    profileBanner
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
       headers: {
@@ -86,6 +105,126 @@ export default {
         username: username,
         description: description,
         topicInterests: topicInterests,
+        profilePicture: profilePicture,
+        profileBanner: profileBanner,
+      }),
+    });
+  },
+
+  editProfilePost(personId, postId, postBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/person/" + personId + "/edit/" + postId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        postBody: postBody,
+      }),
+    });
+  },
+
+  deleteProfilePost(personId, postId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/person/" + personId + "/" + postId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  createCommentForProfilePosts(postId, personId, commentBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/" + postId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
+    });
+  },
+
+  likeProfilePost(postId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/post/" +
+        postId +
+        "/person/" +
+        personId +
+        "/like",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  unlikeProfilePost(postId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/post/" +
+        postId +
+        "/person/" +
+        personId +
+        "/unlike",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  likeProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/comment/" +
+        commentId +
+        "/person/" +
+        personId +
+        "/like",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  saveFileUrl(url) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/file",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        url: url,
+      }),
+    });
+  },
+
+  createReplyForProfileComment(commentId, personId, replyBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        replyBody: replyBody,
       }),
     });
   },

@@ -18,17 +18,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CommentList({ personId, refresh }) {
+export default function CommentList({ comments, refresh, setRefresh }) {
   const classes = useStyles();
   const alert = useAlert();
 
   const [dataList, setDataList] = useState([]);
-
+ 
   useEffect(() => {
-    if (personId) {
-      loadData(personId);
-    }
-  }, [personId, refresh]);
+    //if (personId) {
+      //loadData(personId);
+   // }
+   setDataList(comments);
+  }, [comments]);
 
   function loadData(personId) {
     //REPLACE WITH API
@@ -49,12 +50,13 @@ export default function CommentList({ personId, refresh }) {
       {dataList.map((data) => (
         <div>
           <ListItem alignItems="flex-start">
-            <CommentCard key={data.id} data={data} />
+            <CommentCard key={data.id} data={data} refresh={refresh}
+                setRefresh={setRefresh} />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-      <p>No Comments yet</p>
+      <p></p>
     );
 }

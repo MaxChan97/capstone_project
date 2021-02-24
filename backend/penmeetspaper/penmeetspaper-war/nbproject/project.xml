@@ -14,7 +14,8 @@
                     <file>${reference.penmeetspaper-ejb.dist}</file>
                 </library>
                 <library dirs="200">
-                    <file>${libs.GlassFish Server JAX-RS.classpath}</file>
+                    <file>${libs.restapi.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
                     <file>${libs.javaee-web-api-8.0.classpath}</file>

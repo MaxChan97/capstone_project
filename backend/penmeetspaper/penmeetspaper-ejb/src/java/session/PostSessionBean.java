@@ -5,8 +5,10 @@
  */
 package session;
 
+import entity.Comment;
 import entity.Community;
 import entity.Post;
+import entity.Reply;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -29,7 +31,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     private EntityManager em;
 
     @EJB
-    private PersonSessionBeanLocal personSessionLocal;
+    private PersonSessionBeanLocal personSB;
 
     // Helper methods to check and retrieve entities
     private Post emGetPost(Long postId) throws NoResultException, NotValidException {
@@ -74,7 +76,23 @@ public class PostSessionBean implements PostSessionBeanLocal {
         return community;
     }
 
-    // Main logic
+    private void checkPostCredentials(Post post, Long personId) throws NotValidException {
+        if (!Objects.equals(post.getAuthor().getId(), personId)) {
+            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
+    }
+
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        return personSB.getPersonById(p.getId());
+    }
+
+    private void detachLikes(List<Person> likes) throws NoResultException, NotValidException {
+        for (Person person : likes) {
+            person = getDetachedPerson(person);
+        }
+    }
+
+    // Main logic ---------------------------------------------------------------------
     @Override
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
 
@@ -88,6 +106,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
+
     } // end createPostForPerson
 
     @Override
@@ -106,7 +125,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.persist(post);
         person.getPosts().add(post);
         community.getPosts().add(post);
-    }
+
+    } // end createPostForCommunity
 
     @Override
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
@@ -114,11 +134,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         List<Post> posts = person.getPosts();
         for (Post p : posts) {
-            em.detach(p.getAuthor());
-            p.getAuthor().setPosts(null);
-            p.getAuthor().setChats(null);
+            p = getPostById(p.getId());
         }
         return posts;
+
     } // end getPersonsPost
 
     @Override
@@ -131,6 +150,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             q = em.createQuery("SELECT p FROM Post p");
         }
         return q.getResultList();
+
     } // end searchPostByTitle
 
     @Override
@@ -141,9 +161,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         Post oldPost = emGetPost(post.getId());
 
-        if (!Objects.equals(oldPost.getAuthor().getId(), personId)) {
-            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
-        }
+        checkPostCredentials(oldPost, personId);
 
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
@@ -155,9 +173,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (!Objects.equals(post.getAuthor().getId(), personId)) {
-            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
-        }
+        checkPostCredentials(post, personId);
 
         // unlinking
         person.getPosts().remove(post);
@@ -171,25 +187,67 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (post.getLikes().contains(person) && person.getLikedPosts().contains(post)) {
+        if (post.getLikes().contains(person)) {
             return;
         }
 
         post.getLikes().add(person);
-        person.getLikedPosts().add(post);
-    }
+
+    } // end likePost
 
     @Override
     public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);
 
-        if (!post.getLikes().contains(person) && !person.getLikedPosts().contains(post)) {
+        if (!post.getLikes().contains(person)) {
             return;
         }
 
         post.getLikes().remove(person);
-        person.getLikedPosts().remove(post);
-    }
+
+    } // end unlikePost
+
+    @Override
+    public Post getPostById(Long postId) throws NoResultException, NotValidException {
+        Post p = emGetPost(postId);
+        em.detach(p.getAuthor());
+
+        Person postAuthor = p.getAuthor();
+        p.setAuthor(getDetachedPerson(postAuthor));
+
+        List<Comment> comments = p.getComments();
+
+        detachLikes(p.getLikes());
+
+        for (Comment c : comments) {
+            Person commentAuthor = c.getAuthor();
+
+            if (commentAuthor != null) {
+
+                c.setAuthor(getDetachedPerson(commentAuthor));
+
+            }
+
+            detachLikes(c.getLikes());
+
+            List<Reply> replies = c.getReplies();
+
+            for (Reply r : replies) {
+                Person replyAuthor = r.getAuthor();
+
+                if (replyAuthor != null) {
+
+                    r.setAuthor(getDetachedPerson(replyAuthor));
+
+                }
+
+                detachLikes(r.getLikes());
+            }
+
+        }
+
+        return p;
+    } // end getPostById
 
 }
