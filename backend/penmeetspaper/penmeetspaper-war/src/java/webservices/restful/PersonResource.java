@@ -181,9 +181,29 @@ public class PersonResource {
                 return buildError(e, 400);
             }
         } else if (editType.equals("profilePicture")) {
+            String profilePicture = jsonObject.getString("profilePicture");
+            try {
+                Person p = personSB.getPersonById(Long.valueOf(id));
+                p.setProfilePicture(profilePicture);
+
+                personSB.updatePerson(p);
+            } catch (NoResultException | NotValidException e) {
+                return buildError(e, 400);
+            }
+
             return Response.status(422).build();
         } else {
             // editType.equals(profileBanner)
+            String profileBanner = jsonObject.getString("profileBanner");
+            try {
+                Person p = personSB.getPersonById(Long.valueOf(id));
+                p.setProfilePicture(profilePicture);
+
+                personSB.updatePerson(p);
+            } catch (NoResultException | NotValidException e) {
+                return buildError(e, 400);
+            }
+
             return Response.status(422).build();
         }
     }
