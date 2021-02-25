@@ -79,8 +79,23 @@ public class PersonResource {
     // Main Business logic -------------------------------------
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Person> getAllPerson() {
-        return personSB.searchPersonByUsername(null);
+    public Response getAllPerson() {
+        try {
+        List<Person> personList =  personSB.searchPersonByUsername(null);
+        for (Person p: personList) {
+            p = personSB.getPersonById(p.getId());
+        }
+        
+        GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {};
+
+            return Response.status(200).entity(
+                    entity
+            ).build();
+        
+        
+        }  catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     } //end getAllPerson
 
     @GET
