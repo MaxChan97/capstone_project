@@ -312,4 +312,48 @@ export default {
     });
   },
 
+  getFollowers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getFollowing(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/following/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscriptions(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscriptions/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscribers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscribers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
 };
