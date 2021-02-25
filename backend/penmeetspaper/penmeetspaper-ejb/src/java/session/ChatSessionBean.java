@@ -37,7 +37,7 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
         chatParticipants.add(sender);
         chatParticipants.add(recipient);
         newChat.setChatParticipants(chatParticipants);
-        
+
         message.setSender(sender);
         message.setRecipient(recipient);
         em.persist(message);
@@ -49,7 +49,17 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
         List<Chat> person2Chat = recipient.getChats();
         person1Chat.add(newChat);
         person2Chat.add(newChat);
-        
+
+        for (Person person : newChat.getChatParticipants()) {
+            em.detach(person);
+            person.setPosts(null);
+            person.setChats(null);
+            person.setFollowers(null);
+            person.setFollowing(null);
+            person.setSubscriptions(null);
+            person.setPublications(null);
+        }
+
         return newChat;
     }
 
@@ -74,14 +84,28 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
                 em.detach(p);
                 p.setChats(null);
                 p.setPosts(null);
+                p.setFollowers(null);
+                p.setFollowing(null);
+                p.setSubscriptions(null);
+                p.setPublications(null);
             }
             List<Message> chatMessages = c.getChatMessages();
             for (Message m : chatMessages) {
                 em.detach(m.getSender());
+                m.getSender().setPosts(null);
                 m.getSender().setChats(null);
-                
+                m.getSender().setFollowers(null);
+                m.getSender().setFollowing(null);
+                m.getSender().setSubscriptions(null);
+                m.getSender().setPublications(null);
+
                 em.detach(m.getRecipient());
+                m.getRecipient().setPosts(null);
                 m.getRecipient().setChats(null);
+                m.getRecipient().setFollowers(null);
+                m.getRecipient().setFollowing(null);
+                m.getRecipient().setSubscriptions(null);
+                m.getRecipient().setPublications(null);
             }
         }
         // Must sort this chats before returning
