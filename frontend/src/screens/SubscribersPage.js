@@ -1,45 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import SubscriberCard from "../components/SubscribersPage/SubscriberCard";
 import FollowerCard from "../components/SubscribersPage/FollowerCard";
 import SearchCard from "../components/SubscribersPage/SearchCard";
+import Api from "../helpers/Api";
 
 
 
-export default function FeedPage() {
-  const followerList = [
-    { name: "follower", rank: "1" },
-    { name: "follower", rank: "2" },
-    { name: "follower", rank: "3" },
-    { name: "follower", rank: "4" },
-    { name: "follower", rank: "5" },
-    { name: "follower", rank: "6" },
-    { name: "follower", rank: "7" },
-    { name: "follower", rank: "8" },
-
-  ];
-
-  const subscriberList = [
-    { name: "subber", rank: "1" },
-    { name: "subber", rank: "2" },
-    { name: "subber", rank: "3" },
-    { name: "subber", rank: "4" },
-    { name: "subber", rank: "5" },
-    { name: "subber", rank: "6" },
-
-  ];
-
-  const [followerboard, setFollowerboard] = useState(followerList);
-  const [subscriberboard, setSubscriberboard] = useState(subscriberList);
-
+export default function SubscriberPage() {
   const currentUser = useSelector((state) => state.currentUser);
+  const [followerList, setFollowerList] = useState([]);
+  const [subscriberList, setSubscriberList] = useState([]);
+  const { personId } = useParams();
 
-  useEffect(() => { }, [subscriberList]);
-  useEffect(() => { }, [subscriberboard]);
+  const [currentPerson, setCurrentPerson] = useState({});
+
+  useEffect(() => { 
+    if (currentUser) {
+      loadData(currentUser);
+      console.log(currentUser);
+    }
+  }, [currentUser]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  //useEffect(() => { }, [subscriberList]);
+  //useEffect(() => { }, [followerList]);
+
+  function loadData(currentUser) {
+    Api.getFollowers(currentUser.id)
+      .done((currentUser) => {
+        setFollowerList(followerList);
+        console.log(currentPerson);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+
+      Api.getSubscribers(currentUser.id)
+      .done((currentUser) => {
+        setSubscriberList(subscriberList);
+        console.log(currentPerson);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
   }
 
   return (
