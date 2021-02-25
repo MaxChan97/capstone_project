@@ -12,16 +12,19 @@ import ReplyCommentCard from "./ReplyCommentCard";
 import Divider from "@material-ui/core/Divider";
 import Api from "../../helpers/Api";
 import moment from 'moment';
-
-const options = ["Edit Comment", "Delete Comment"];
+import EditCommentModal from "./EditCommentModal";
+import DeleteCommentModal from "./DeleteCommentModal";
+import { useAlert } from "react-alert";
 
 const ITEM_HEIGHT = 30;
 
 export default function CommentCard({ key, data, refresh, setRefresh }) {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
+  //set to true as it loads slow. will have error for deleted if default false
+  const [deleted, setDeleted] = React.useState(true);
   const open = Boolean(anchorEl);
-
+  const alert = useAlert();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -29,6 +32,39 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleEdit = () => {
+    openEditCommentModal();
+  };
+
+  const handleDelete = () => {
+    openDeleteCommentModal();
+  };
+
+
+  const [showEditCommentModal, setShowEditCommentModal] = React.useState(false);
+
+  function openEditCommentModal() {
+    setShowEditCommentModal(true);
+  }
+
+  function closeEditCommentModal() {
+    setShowEditCommentModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+  const [deleteCommentModal, setDeleteCommentModal] = React.useState(false);
+
+  function openDeleteCommentModal() {
+    setDeleteCommentModal(true);
+  }
+
+  function closeDeleteCommentModal() {
+    setDeleteCommentModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
 
   const [showReplies, setShowReplies] = React.useState(false);
 
@@ -60,12 +96,15 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   }
 
   useEffect(() => {
-    if (data) {
+    if (data && data.body == "Commment Deleted") {
+      setDeleted(true);
+    } else {
+      setDeleted(false);
       checkedLiked();
     }
-  }, []);
+  }, [refresh]);
 
-  return (
+  return deleted == false && data ? (
     <div
       style={{
         display: "flex",
@@ -75,6 +114,17 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div class="col-md-9">
+        <DeleteCommentModal
+          show={deleteCommentModal}
+          handleClose={closeDeleteCommentModal}
+          data={data}
+          setDeleted={setDeleted}
+        />
+        <EditCommentModal
+          show={showEditCommentModal}
+          handleClose={closeEditCommentModal}
+          data={data}
+        />
         <div class="card-body" style={{
           minWidth: "80ch",
           maxWidth: "80ch",
@@ -96,36 +146,46 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                   {moment().startOf('day').fromNow(data.datePosted)} ago</span>
 
               </div>
-              <div style={{ textAlign: "right" }}>
-                <IconButton
-                  style={{ outline: "none" }}
-                  aria-label="more"
-                  aria-controls="long-menu"
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  id="long-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={open}
-                  onClose={handleClose}
-                  PaperProps={{
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5,
-                      width: "20ch",
-                    },
-                  }}
-                >
-                  {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
-                      {option}
+              {data.author.id == currentUser ? (
+                <div style={{ textAlign: "right" }}>
+                  <IconButton
+                    style={{ outline: "none" }}
+                    aria-label="more"
+                    aria-controls="long-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                      style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: "20ch",
+                      },
+                    }}
+                  >
+                    <MenuItem
+                      value={1}
+                      onClick={handleEdit}
+                    >
+                      <div>Edit Comment</div>
                     </MenuItem>
-                  ))}
-                </Menu>
-              </div>
+                    <MenuItem
+                      value={2}
+                      onClick={handleDelete}
+                    >
+                      <div>Delete Comment</div>
+                    </MenuItem>
+                  </Menu>
+                </div>) : (
+                  <span></span>
+                )}
             </div>
 
             <p style={{ marginLeft: 10 }}>{data.body}</p>
@@ -144,7 +204,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
               <span>
 
-                <i class="fas fa-comments mr-1" style={{color:"black", marginLeft: 10}}></i> {data.replies.length}
+                <i class="fas fa-comments mr-1" style={{ color: "black", marginLeft: 10 }}></i> {data.replies.length}
 
               </span>
             </p>
@@ -166,5 +226,12 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
       </div>
     </div>
-  );
+  ) : (
+      <div class="card-body" style={{
+        minWidth: "80ch",
+        maxWidth: "80ch",
+      }}>
+        <p>[Comment does not exist/deleted!]</p>
+      </div>
+    );
 }
