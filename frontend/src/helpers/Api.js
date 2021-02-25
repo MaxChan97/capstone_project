@@ -86,7 +86,14 @@ export default {
     });
   },
 
-  editPersonProfileInformation(id, username, description, topicInterests) {
+  editPersonProfileInformation(
+    id,
+    username,
+    description,
+    topicInterests,
+    profilePicture,
+    profileBanner
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
       headers: {
@@ -98,6 +105,8 @@ export default {
         username: username,
         description: description,
         topicInterests: topicInterests,
+        profilePicture: profilePicture,
+        profileBanner: profileBanner,
       }),
     });
   },
@@ -134,7 +143,10 @@ export default {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      commentBody: commentBody,
+      type: "POST",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
     });
   },
 
@@ -172,15 +184,15 @@ export default {
     });
   },
 
-  likeProfilePostComment(postId, personId) {
+  likeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
-        "/post/" +
-        postId +
+        "/comment/" +
+        commentId +
         "/person/" +
         personId +
-        "/unlike",
+        "/like",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -203,47 +215,100 @@ export default {
     });
   },
 
-  getFollowers(id) {
+  createReplyForProfileComment(commentId, personId, replyBody) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/" + id + "/followers",
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "POST",
+      data: JSON.stringify({
+        replyBody: replyBody,
+      }),
     });
   },
 
-  getFollowing(id) {
+  unlikeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/" + id + "/following",
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId + "/unlike",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "PUT",
     });
   },
 
-  getSubscribers(id) {
+  likeProfilePostReply(replyId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/" + id + "/subscribers",
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/like",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "PUT",
     });
   },
 
-  getSubscriptions(id) {
+  unlikeProfilePostReply(replyId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/" + id + "/subscriptions",
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/unlike",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "PUT",
+    });
+  },
+
+  editProfilePostReply(replyId, personId, replyBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        replyBody: replyBody,
+      }),
+    });
+  },
+
+  deleteProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  editProfilePostComment(commentId, personId, commentBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
+    });
+  },
+
+  deleteProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
     });
   },
 

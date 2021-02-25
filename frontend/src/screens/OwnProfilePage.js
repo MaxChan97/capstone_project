@@ -49,7 +49,7 @@ export default function OwnProfilePage({ personId }) {
               </div>
 
             </div>
-            <PostList personId={personId} refresh={refresh} />
+            <PostList personId={personId} refresh={refresh} setRefresh={setRefresh} />
           </div>
         );
       } else {
@@ -68,13 +68,13 @@ export default function OwnProfilePage({ personId }) {
 
   return (
     <div className="content-wrapper">
-      {currentPerson != {} && currentPerson.followers != null ? (
+      {currentPerson != {} ? (
         <div>
           <OwnProfileTopBar
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={currentPerson.username}
-            numFollowers={currentPerson.followers.length}
+            
           />
           {handleTabView(tabValue)}
         </div>

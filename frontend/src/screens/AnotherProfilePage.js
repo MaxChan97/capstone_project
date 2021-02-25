@@ -36,7 +36,7 @@ export default function AnotherProfilePage({ personId }) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <PostList personId={personId} refresh={refresh} />
+            <PostList personId={personId} refresh={refresh} setRefresh={setRefresh} />
           </div>
         );
       } else {
@@ -55,13 +55,13 @@ export default function AnotherProfilePage({ personId }) {
 
   return (
     <div className="content-wrapper">
-      {anotherPerson != {} && anotherPerson.followers != null ? (
+      {anotherPerson != {} ? (
         <div>
           <AnotherProfileTopBar
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={anotherPerson.username}
-            numFollowers={anotherPerson.followers.length}
+            
           />
           {handleTabView(tabValue)}
         </div>

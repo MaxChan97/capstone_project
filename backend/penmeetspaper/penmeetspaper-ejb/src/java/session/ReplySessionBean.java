@@ -116,6 +116,10 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
 
         Reply reply = emGetReply(replyId);
 
+        if (reply.getAuthor() == null) {
+            throw new NotValidException(ReplySessionBeanLocal.REPLY_ALREADY_DELETED);
+        }
+
         checkReplyCredentials(reply, personId);
 
         reply.setBody("Reply Deleted");

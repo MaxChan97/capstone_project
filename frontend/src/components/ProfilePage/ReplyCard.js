@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
@@ -8,12 +8,14 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
+import Api from "../../helpers/Api";
+import moment from 'moment';
 
 const options = ["Edit Reply", "Delete Reply"];
 
 const ITEM_HEIGHT = 30;
 
-export default function ReplyCard({ key, data }) {
+export default function ReplyCard({ data, refresh, setRefresh}) {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -25,6 +27,35 @@ export default function ReplyCard({ key, data }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [liked, setLiked] = useState();
+  const currentUser = useSelector((state) => state.currentUser);
+
+  const handleLike = (event) => {
+    Api.likeProfilePostReply(data.id, currentUser)
+    setRefresh(!refresh);
+    setLiked(true);
+  };
+
+  const handleUnlike = (event) => {
+    Api.unlikeProfilePostReply(data.id, currentUser)
+    setRefresh(!refresh);
+    setLiked(false);
+  };
+
+  function checkedLiked() {
+    data.likes.forEach(function (arrayItem) {
+      if (arrayItem.id == currentUser) {
+        setLiked(true);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (data) {
+      checkedLiked();
+    }
+  }, []);
 
   return (
     <div
@@ -45,9 +76,8 @@ export default function ReplyCard({ key, data }) {
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img src={defaultDP} alt="User profile picture" />
-                <span class="username"><Link>username</Link></span>
-                <span class="description">time</span>
-                {/* CAN UNCOMMENT WHEN GOT ACTUAL DATA
+               
+               
                   <span class="username">
                       
                     <Link to={"/profile/" + data.author.id}>
@@ -56,8 +86,9 @@ export default function ReplyCard({ key, data }) {
                      
                   </span>
 
-                  <span class="description">{data.datePosted}</span>
-                   */}
+                  <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
+                  {moment().startOf('day').fromNow(data.datePosted)} ago</span>
+         
               </div>
               <div style={{ textAlign: "right" }}>
                 <IconButton
@@ -90,14 +121,18 @@ export default function ReplyCard({ key, data }) {
                 </Menu>
               </div>
             </div>
-            {/*
+         
               <p style={{ marginLeft: 10 }}>{data.body}</p>
-            */}
-            <p style={{ marginLeft: 10 }}>reply body </p>
             <p style={{ marginLeft: 10, }}>
-              <a href="#" class="link-black text-sm">
-                <i class="fas fa-thumbs-up mr-1"></i> 700
-                </a>
+            {liked == true ? (
+                  <Link onClick={handleUnlike}>
+                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                  </Link>
+                ) : (
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  )}
             </p>
           </div>
         </div>
