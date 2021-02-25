@@ -35,7 +35,7 @@ export default function FeedPage() {
 
   const currentUser = useSelector((state) => state.currentUser);
 
-  useEffect(() => { }, [followerboard]);
+  useEffect(() => { }, [subscriberList]);
   useEffect(() => { }, [subscriberboard]);
 
   if (currentUser === null) {
@@ -47,10 +47,10 @@ export default function FeedPage() {
       <div className="container">
         <div className="row">
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <FollowerCard data={followerboard} />
+            <FollowerCard followerList={followerList} />
           </div>
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <SubscriberCard data={subscriberboard} />
+            <SubscriberCard subscriberList={subscriberList} />
           </div>
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
             <SearchCard />

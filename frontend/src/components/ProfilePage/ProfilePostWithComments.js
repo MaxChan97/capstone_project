@@ -11,6 +11,7 @@ import MakeCommentCard from "./MakeCommentCard";
 import CommentList from "./CommentList";
 import { useParams } from "react-router";
 import Api from "../../helpers/Api";
+import moment from 'moment';
 
 const options = ["Edit Post", "Delete Post"];
 
@@ -33,7 +34,7 @@ export default function ProfilePostWithComments() {
   };
 
   const [data, setData] = useState();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState();
 
   useEffect(() => {
     if (postId) {
@@ -50,10 +51,19 @@ export default function ProfilePostWithComments() {
     Api.getPost(postId)
       .done((post) => {
         setData(post);
+        checkedLiked(post);
       })
       .fail(() => {
         alert.show("Unable to load post!");
       });
+  }
+
+  function checkedLiked(post) {
+    post.likes.forEach(function (arrayItem) {
+      if (arrayItem.id == currentUser) {
+        setLiked(true);
+      }
+    });
   }
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -93,7 +103,8 @@ export default function ProfilePostWithComments() {
                   <Link to={"/profile/" + data.author.id} style={{ marginLeft: 10}}>
                       {data.author.username}
                   </Link>
-                  <span class="description">{data.datePosted}</span>
+                  <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
+                  {moment().startOf('day').fromNow(data.datePosted)} ago</span>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <IconButton
