@@ -38,4 +38,5 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
         // Linking Chat and Message
         chat.addChatMessage(message);
     }
+    
 }

@@ -17,10 +17,10 @@ import javax.ejb.Local;
 @Local
 public interface ChatSessionBeanLocal {
 
-    public Chat createChat(Long person1Id, Long person2Id, Message message);
+  public Chat createChat(Long person1Id, Long person2Id, Message message);
 
-    public List<Chat> getPersonsChat(Long personId);
-    
-    public void setAllMessagesAsOpened(Long chatId);
-    
+  public List<Chat> getPersonsChat(Long personId);
+
+  public void setAllMessagesAsOpened(Long chatId);
+
 }
