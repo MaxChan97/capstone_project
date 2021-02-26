@@ -82,7 +82,7 @@ public class ChatResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     }
-    
+
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
