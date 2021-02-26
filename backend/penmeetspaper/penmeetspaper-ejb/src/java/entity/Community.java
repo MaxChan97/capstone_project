@@ -11,6 +11,7 @@ import entity.viewEntities.CommunityPageView;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -43,7 +47,14 @@ public class Community implements Serializable {
     private String communityProfilePicture;
 
     @Column(nullable = false)
+    private String communityBanner;
+
+    @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
 
     @ManyToOne
     @JoinColumn(name = "owner")
@@ -61,9 +72,8 @@ public class Community implements Serializable {
     private List<CommunityPageView> communityPageViews = new ArrayList<>();
 
     // Unidirectional
-    @OneToMany
-    @JoinColumn(name = "ban_id")
-    private List<Ban> ban = new ArrayList<>();
+    @OneToOne
+    private Ban ban = new Ban();
 
     @ManyToMany
     @JoinColumn(name = "community_members")
@@ -91,6 +101,14 @@ public class Community implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Person getOwner() {
@@ -133,12 +151,12 @@ public class Community implements Serializable {
         this.communityProfilePicture = communityProfilePicture;
     }
 
-    public List<Ban> getBan() {
-        return ban;
+    public String getCommunityBanner() {
+        return communityBanner;
     }
 
-    public void setBan(List<Ban> ban) {
-        this.ban = ban;
+    public void setCommunityBanner(String communityBanner) {
+        this.communityBanner = communityBanner;
     }
 
     public List<Person> getMembers() {
@@ -147,6 +165,14 @@ public class Community implements Serializable {
 
     public void setMembers(List<Person> members) {
         this.members = members;
+    }
+
+    public Ban getBan() {
+        return ban;
+    }
+
+    public void setBan(Ban ban) {
+        this.ban = ban;
     }
 
     @Override

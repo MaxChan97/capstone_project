@@ -70,7 +70,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     }
 
     @Override
-    public Community createCommunity(Community community) throws NotValidException {
+    public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException {
         if (community == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY);
         }
@@ -86,17 +86,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.NAME_TAKEN);
         }
 
-        Person retrivedOwner = community.getOwner();
-
-        if (retrivedOwner == null) {
-            throw new NotValidException(CommunitySessionBeanLocal.INVALID_OWNER);
-        }
-
-        Person owner = em.find(Person.class, retrivedOwner.getId());
-
-        if (owner == null) {
-            throw new NotValidException(CommunitySessionBeanLocal.INVALID_OWNER);
-        }
+        Person owner = emGetPerson(ownerId);
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);

@@ -28,7 +28,7 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // unidirectional
@@ -42,7 +42,9 @@ public class Message implements Serializable {
     private Person recipient;
 
     private String body;
-
+    
+    private boolean opened = false;
+    
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
@@ -124,4 +126,18 @@ public class Message implements Serializable {
         return "entity.Message[ id=" + id + " ]";
     }
 
+    /**
+     * @return the opened
+     */
+    public boolean isOpened() {
+        return opened;
+    }
+
+    /**
+     * @param opened the opened to set
+     */
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
+    
 }

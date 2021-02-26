@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
@@ -10,8 +10,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MakeCommentCard from "./MakeCommentCard";
 import CommentList from "./CommentList";
 import Api from "../../helpers/Api";
-
-const options = ["Edit Post", "Delete Post"];
+import moment from 'moment';
+import EditPostModal from "./EditPostModal";
+import DeletePostModal from "./DeletePostModal";
 
 const ITEM_HEIGHT = 30;
 
@@ -27,8 +28,43 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [liked, setLiked] = useState(false);
-  const currentUser = useSelector((state) => state.currentUser); 
+
+  const handleEdit = () => {
+    openEditPostModal();
+  };
+
+  const handleDelete = () => {
+    openDeletePostModal();
+  };
+
+
+  const [showEditPostModal, setShowEditPostModal] = React.useState(false);
+
+  function openEditPostModal() {
+    setShowEditPostModal(true);
+  }
+
+  function closeEditPostModal() {
+    setShowEditPostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+  const [deletePostModal, setDeletePostModal] = React.useState(false);
+
+  function openDeletePostModal() {
+    setDeletePostModal(true);
+  }
+
+  function closeDeletePostModal() {
+    setDeletePostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+
+  const [liked, setLiked] = useState();
+  const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
     Api.likeProfilePost(data.id, currentUser)
@@ -42,7 +78,21 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
     setLiked(false);
   };
 
-  return (
+  function checkedLiked() {
+    data.likes.forEach(function (arrayItem) {
+      if (arrayItem.id == currentUser) {
+        setLiked(true);
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (data) {
+      checkedLiked();
+    }
+  }, []);
+
+  return data ? (
     <div
       style={{
         display: "flex",
@@ -52,6 +102,16 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div class="col-md-9">
+        <DeletePostModal
+          show={deletePostModal}
+          handleClose={closeDeletePostModal}
+          data={data}
+        />
+        <EditPostModal
+          show={showEditPostModal}
+          handleClose={closeEditPostModal}
+          data={data}
+        />
         <div class="card" style={{
           minWidth: "80ch",
           maxWidth: "80ch",
@@ -67,8 +127,10 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     </Link>
                   </span>
 
-                  <span class="description">{data.datePosted}</span>
+                  <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
+                    {moment().startOf('day').fromNow(data.datePosted)} ago</span>
                 </div>
+                { data.author.id == currentUser ? (
                 <div style={{ textAlign: "right" }}>
                   <IconButton
                     style={{ outline: "none" }}
@@ -92,29 +154,38 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                       },
                     }}
                   >
-                    {options.map((option) => (
-                      <MenuItem key={option} onClick={handleClose}>
-                        {option}
-                      </MenuItem>
-                    ))}
+                    <MenuItem
+                      value={1}
+                      onClick={handleEdit}
+                    >
+                      <div>Edit Post</div>
+                    </MenuItem>
+                    <MenuItem
+                      value={2}
+                      onClick={handleDelete}
+                    >
+                      <div>Delete Post</div>
+                    </MenuItem>
                   </Menu>
-                </div>
-              </div>
+                </div> ) : (
+                    <span></span>
+                  )}
+              </div> 
               <p>{data.body}</p>
               <p>
-              {liked == true  ? (
+                {liked == true ? (
                   <Link onClick={handleUnlike}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
-                  <Link onClick={handleLike} style={{color: "black"}}>
-                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                  </Link>
-                )}
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  )}
 
                 <span>
                   <Link to={"/post/" + data.id}
-                    style={{ marginLeft: 10, color: "black"}}
+                    style={{ marginLeft: 10, color: "black" }}
                   >
                     <i class="fas fa-comments mr-1"></i> {data.comments.length}
                   </Link>
@@ -122,10 +193,12 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
               </p>
             </div>
           </div>
-          
+
         </div>
 
       </div>
     </div>
-  );
+  ) : (
+      <p></p>
+    );
 }

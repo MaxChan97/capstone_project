@@ -66,20 +66,24 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.persist(person);
 
         return person;
-    } //end createPerson
+    } // end createPerson
 
     @Override
-    public List<Person> searchPersonByUsername(String username) {
+    public List<Person> searchPersonByUsername(String username) throws NoResultException, NotValidException {
         Query q;
         if (username != null) {
-            q = em.createQuery("SELECT p FROM Person p WHERE "
-                    + "LOWER(p.username) LIKE :username");
+            q = em.createQuery("SELECT p FROM Person p WHERE " + "LOWER(p.username) LIKE :username");
             q.setParameter("username", "%" + username.toLowerCase() + "%");
         } else {
             q = em.createQuery("SELECT p FROM Person p");
         }
-        return q.getResultList();
-    } //end searchPersonByUsername
+        List<Person> personList = q.getResultList();
+        for (Person p : personList) {
+            p = getPersonById(p.getId());
+        }
+
+        return personList;
+    } // end searchPersonByUsername
 
     @Override
     // Detach methods will be here
@@ -88,13 +92,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         em.detach(person);
         person.setPosts(null);
+        person.setChats(null);
         person.setFollowers(null);
         person.setFollowing(null);
         person.setSubscriptions(null);
         person.setPublications(null);
 
         return person;
-    } //end getPersonById
+    } // end getPersonById
 
     @Override
     public void updatePerson(Person person) throws NoResultException, NotValidException {
@@ -115,13 +120,13 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
-    } //end updatePerson
+    } // end updatePerson
 
     @Override
     public void deletePerson(Long pId) throws NoResultException, NotValidException {
         Person p = emGetPerson(pId);
         em.remove(p);
-    } //end deletePerson
+    } // end deletePerson
 
     public void updatePricingPlan(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());

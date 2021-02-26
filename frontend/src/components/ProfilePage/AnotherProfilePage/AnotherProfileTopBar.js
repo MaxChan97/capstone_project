@@ -36,6 +36,7 @@ export default function AnotherProfileTopBar({
   tabValue,
   setTabValue,
   username,
+  id,
   numFollowers,
 }) {
   const handleTabValueChange = (event, newValue) => {
@@ -57,7 +58,7 @@ export default function AnotherProfileTopBar({
         }}
       >
         <ProfileGroup username={username} numFollowers={numFollowers} />
-        <SocialButtonGroup />
+        <SocialButtonGroup id={id} />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

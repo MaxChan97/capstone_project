@@ -228,4 +228,206 @@ export default {
       }),
     });
   },
+
+  createChat(senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + senderId + "/" + recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
+    });
+  },
+
+  unlikeProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/comment/" +
+        commentId +
+        "/person/" +
+        personId +
+        "/unlike",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  likeProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/reply/" +
+        replyId +
+        "/person/" +
+        personId +
+        "/like",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  unlikeProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/reply/" +
+        replyId +
+        "/person/" +
+        personId +
+        "/unlike",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  editProfilePostReply(replyId, personId, replyBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        replyBody: replyBody,
+      }),
+    });
+  },
+
+  getPersonsChat(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  setAllMessagesAsOpened(chatId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + chatId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  deleteProfilePostReply(replyId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  addMessageToChat(chatId, senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/message/" +
+        chatId +
+        "/" +
+        senderId +
+        "/" +
+        recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
+    });
+  },
+
+  editProfilePostComment(commentId, personId, commentBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        commentBody: commentBody,
+      }),
+    });
+  },
+
+  deleteProfilePostComment(commentId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  getFollowers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getFollowing(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/following/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscriptions(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscriptions/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscribers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscribers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

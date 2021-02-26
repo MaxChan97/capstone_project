@@ -1,22 +1,25 @@
 import React from "react";
-import UserRow from "./UserRow";
+import FollowerRow from "./FollowerRow";
 
-export default function FollowerCard({ data }) {
+export default function FollowerCard({ followerList }) {
   return (
+    followerList !== undefined ? (
     <div className="card card-primary">
       <div className="card-body">
         <p className="font-weight-bold">Followers</p>
-        <p className="font-weight-light">Number of followers:</p>
+
+          <p className="font-weight-light"> Number of followers: {followerList.length}</p>
+        
         <ul class="list-group list-group-flush">
-          {data.map((row, index) => {
+          {followerList.map((row, index) => {
             return (
               <li key={index} class="list-group-item">
-                <UserRow data={row} />
+                <FollowerRow follower={row} />
               </li>
             );
           })}
         </ul>
       </div>
     </div>
-  );
+  ) : (""))
 }
