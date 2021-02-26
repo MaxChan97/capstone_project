@@ -55,6 +55,7 @@ export default function ChatBox({
   const [newText, setNewText] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
+  const [fileType, setFileType] = useState("");
   const [caption, setCaption] = useState("");
   const [open, setOpen] = React.useState(false);
   const [progress, setProgress] = useState(0);
@@ -68,12 +69,14 @@ export default function ChatBox({
     setOpen(false);
     setFileName("");
     setFileUrl("");
+    setFileType("");
     setCaption("");
   };
 
   const changeFileHandler = (event) => {
     var oldName = event.target.files[0].name;
     setFileName(event.target.files[0].name);
+    setFileType(event.target.files[0].type);
     var suffix = oldName.split(".")[1];
     var randomId = uuid.v4();
     var newName = randomId.toString() + "." + suffix;
@@ -237,7 +240,8 @@ export default function ChatBox({
         getChatOtherPerson(selectedChat.chatParticipants).id,
         caption,
         fileName,
-        fileUrl
+        fileUrl,
+        fileType
       ).done((createdChat) => {
         // setNewText("");
         // inputRef.current.clear();
@@ -263,7 +267,8 @@ export default function ChatBox({
         getChatOtherPerson(selectedChat.chatParticipants).id,
         caption,
         fileName,
-        fileUrl
+        fileUrl,
+        fileType
       ).done(() => {
         handleClose();
         // setNewText("");

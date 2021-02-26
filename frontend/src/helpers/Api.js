@@ -243,7 +243,14 @@ export default {
     });
   },
 
-  createFileChat(senderId, recipientId, messageBody, fileName, fileUrl) {
+  createFileChat(
+    senderId,
+    recipientId,
+    messageBody,
+    fileName,
+    fileUrl,
+    fileType
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/chat/file/" + senderId + "/" + recipientId,
       headers: {
@@ -255,6 +262,7 @@ export default {
         body: messageBody,
         fileName: fileName,
         fileUrl: fileUrl,
+        fileType: fileType,
       }),
     });
   },
@@ -378,7 +386,15 @@ export default {
     });
   },
 
-  addFileToChat(chatId, senderId, recipientId, messageBody, fileName, fileUrl) {
+  addFileToChat(
+    chatId,
+    senderId,
+    recipientId,
+    messageBody,
+    fileName,
+    fileUrl,
+    fileType
+  ) {
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
@@ -397,6 +413,7 @@ export default {
         body: messageBody,
         fileName: fileName,
         fileUrl: fileUrl,
+        fileType: fileType,
       }),
     });
   },
