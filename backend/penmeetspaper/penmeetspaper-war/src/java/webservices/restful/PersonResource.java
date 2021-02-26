@@ -81,19 +81,19 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPerson() {
         try {
-        List<Person> personList =  personSB.searchPersonByUsername(null);
-        for (Person p: personList) {
-            p = personSB.getPersonById(p.getId());
-        }
-        
-        GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {};
+            List<Person> personList = personSB.searchPersonByUsername(null);
+            for (Person p : personList) {
+                p = personSB.getPersonById(p.getId());
+            }
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {
+            };
 
             return Response.status(200).entity(
                     entity
             ).build();
-        
-        
-        }  catch (NoResultException | NotValidException e) {
+
+        } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     } //end getAllPerson
