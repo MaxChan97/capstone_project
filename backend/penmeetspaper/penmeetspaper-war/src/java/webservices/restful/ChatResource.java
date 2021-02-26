@@ -33,103 +33,97 @@ import session.ChatSessionBeanLocal;
 @Path("chat")
 public class ChatResource {
 
-    @EJB
-    private ChatSessionBeanLocal chatSBLocal;
+  @EJB
+  private ChatSessionBeanLocal chatSBLocal;
 
-    @POST
-    @Path("/{senderId}/{recipientId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
-        String messageBody = jsonObject.getString("body");
-        
-        Message m = new Message();
-        m.setBody(messageBody);
-        m.setDateTime(new Date());
-        
-        try {
-            Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
-            return Response.status(200).entity(newChat).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
+  @POST
+  @Path("/{senderId}/{recipientId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response createChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId,
+      String jsonString) {
+    JsonReader reader = Json.createReader(new StringReader(jsonString));
+    JsonObject jsonObject = reader.readObject();
+    String messageBody = jsonObject.getString("body");
 
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
+    Message m = new Message();
+    m.setBody(messageBody);
+    m.setDateTime(new Date());
+
+    try {
+      Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
+      return Response.status(200).entity(newChat).build();
+    } catch (Exception e) {
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
-    
-    @POST
-    @Path("/file/{senderId}/{recipientId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createFileChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId, String jsonString) {
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
-        String messageBody = jsonObject.getString("body");
-        String fileName = jsonObject.getString("fileName");
-        String fileUrl = jsonObject.getString("fileUrl");
+  }
 
-        
-        Message m = new Message();
-        m.setFileName(fileName);
-        m.setFileUrl(fileUrl);
-        m.setBody(messageBody);
-        m.setDateTime(new Date());
-        
-        try {
-            Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
-            return Response.status(200).entity(newChat).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
+  @POST
+  @Path("/file/{senderId}/{recipientId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response createFileChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId,
+      String jsonString) {
+    JsonReader reader = Json.createReader(new StringReader(jsonString));
+    JsonObject jsonObject = reader.readObject();
+    String messageBody = jsonObject.getString("body");
+    String fileName = jsonObject.getString("fileName");
+    String fileUrl = jsonObject.getString("fileUrl");
+    String fileType = jsonObject.getString("fileType");
 
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
+    Message m = new Message();
+    m.setFileName(fileName);
+    m.setFileUrl(fileUrl);
+    m.setFileType(fileType);
+    m.setBody(messageBody);
+    m.setDateTime(new Date());
+
+    try {
+      Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
+      return Response.status(200).entity(newChat).build();
+    } catch (Exception e) {
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
+  }
 
-    @GET
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonsChat(@PathParam("id") Long personId) {
-        try {
-            List<Chat> results = chatSBLocal.getPersonsChat(personId);
-            GenericEntity<List<Chat>> entity = new GenericEntity<List<Chat>>(results) {
-            };
-            
-            return Response.status(200).entity(entity).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
+  @GET
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getPersonsChat(@PathParam("id") Long personId) {
+    try {
+      List<Chat> results = chatSBLocal.getPersonsChat(personId);
+      GenericEntity<List<Chat>> entity = new GenericEntity<List<Chat>>(results) {
+      };
 
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
+      return Response.status(200).entity(entity).build();
+    } catch (Exception e) {
+      JsonObject exception = Json.createObjectBuilder()
+              .add("error", e.getMessage())
+              .build();
+
+      return Response.status(404).entity(exception)
+              .type(MediaType.APPLICATION_JSON).build();
     }
 
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response setAllMessagesAsOpened(@PathParam("id") Long chatId) {
-        try {
-            chatSBLocal.setAllMessagesAsOpened(chatId);
-            
-            return Response.status(204).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
+  @PUT
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response setAllMessagesAsOpened(@PathParam("id") Long chatId) {
+    try {
+      chatSBLocal.setAllMessagesAsOpened(chatId);
 
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
+      return Response.status(204).build();
+    } catch (Exception e) {
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
+
+  }
 }

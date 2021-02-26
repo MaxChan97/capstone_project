@@ -16,6 +16,7 @@ import { storage } from "../../firebase";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
+import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 var uuid = require("uuid");
 
@@ -54,6 +55,8 @@ export default function ChatBox({
   const [newText, setNewText] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
+  const [fileType, setFileType] = useState("");
+  const [caption, setCaption] = useState("");
   const [open, setOpen] = React.useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -66,11 +69,14 @@ export default function ChatBox({
     setOpen(false);
     setFileName("");
     setFileUrl("");
+    setFileType("");
+    setCaption("");
   };
 
   const changeFileHandler = (event) => {
     var oldName = event.target.files[0].name;
     setFileName(event.target.files[0].name);
+    setFileType(event.target.files[0].type);
     var suffix = oldName.split(".")[1];
     var randomId = uuid.v4();
     var newName = randomId.toString() + "." + suffix;
@@ -274,9 +280,10 @@ export default function ChatBox({
       Api.createFileChat(
         currentUser,
         getChatOtherPerson(selectedChat.chatParticipants).id,
-        "hi",
+        caption,
         fileName,
-        fileUrl
+        fileUrl,
+        fileType
       ).done((createdChat) => {
         // setNewText("");
         // inputRef.current.clear();
@@ -296,16 +303,15 @@ export default function ChatBox({
       });
     } else {
       // existing chat
-      console.log("ec");
       Api.addFileToChat(
         selectedChat.id,
         currentUser,
         getChatOtherPerson(selectedChat.chatParticipants).id,
-        "hi",
+        caption,
         fileName,
-        fileUrl
+        fileUrl,
+        fileType
       ).done(() => {
-        console.log("here");
         handleClose();
         // setNewText("");
         // inputRef.current.clear();
@@ -377,10 +383,19 @@ export default function ChatBox({
         >
           <DialogContent dividers>
             {progress == 100 ? (
-              <img className="img-fluid" src={fileUrl} />
+              <img className="img-fluid mx-auto d-block" src={fileUrl} />
             ) : (
               <progress value={progress} max="100" />
             )}
+            <TextField
+              autoFocus
+              margin="dense"
+              id="body"
+              label="Caption"
+              type="text"
+              fullWidth
+              onChange={(e) => setCaption(e.target.value)}
+            />
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={handleFileSend} color="primary">
