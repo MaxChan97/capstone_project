@@ -11,8 +11,8 @@ import MakeCommentCard from "./MakeCommentCard";
 import CommentList from "./CommentList";
 import Api from "../../helpers/Api";
 import moment from 'moment';
-
-const options = ["Edit Post", "Delete Post"];
+import EditPostModal from "./EditPostModal";
+import DeletePostModal from "./DeletePostModal";
 
 const ITEM_HEIGHT = 30;
 
@@ -28,9 +28,40 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleEditDelete = (event) => {
-   
+
+  const handleEdit = () => {
+    openEditPostModal();
   };
+
+  const handleDelete = () => {
+    openDeletePostModal();
+  };
+
+
+  const [showEditPostModal, setShowEditPostModal] = React.useState(false);
+
+  function openEditPostModal() {
+    setShowEditPostModal(true);
+  }
+
+  function closeEditPostModal() {
+    setShowEditPostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+  const [deletePostModal, setDeletePostModal] = React.useState(false);
+
+  function openDeletePostModal() {
+    setDeletePostModal(true);
+  }
+
+  function closeDeletePostModal() {
+    setDeletePostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
 
   const [liked, setLiked] = useState();
   const currentUser = useSelector((state) => state.currentUser);
@@ -71,6 +102,16 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div class="col-md-9">
+        <DeletePostModal
+          show={deletePostModal}
+          handleClose={closeDeletePostModal}
+          data={data}
+        />
+        <EditPostModal
+          show={showEditPostModal}
+          handleClose={closeEditPostModal}
+          data={data}
+        />
         <div class="card" style={{
           minWidth: "80ch",
           maxWidth: "80ch",
@@ -87,8 +128,9 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   </span>
 
                   <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
-                  {moment().startOf('day').fromNow(data.datePosted)} ago</span>
+                    {moment().startOf('day').fromNow(data.datePosted)} ago</span>
                 </div>
+                { data.author.id == currentUser ? (
                 <div style={{ textAlign: "right" }}>
                   <IconButton
                     style={{ outline: "none" }}
@@ -112,14 +154,23 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                       },
                     }}
                   >
-                    {options.map((option) => (
-                      <MenuItem key={option} onClick={handleEditDelete}>
-                        {option}
-                      </MenuItem>
-                    ))}
+                    <MenuItem
+                      value={1}
+                      onClick={handleEdit}
+                    >
+                      <div>Edit Post</div>
+                    </MenuItem>
+                    <MenuItem
+                      value={2}
+                      onClick={handleDelete}
+                    >
+                      <div>Delete Post</div>
+                    </MenuItem>
                   </Menu>
-                </div>
-              </div>
+                </div> ) : (
+                    <span></span>
+                  )}
+              </div> 
               <p>{data.body}</p>
               <p>
                 {liked == true ? (

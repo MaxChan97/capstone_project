@@ -27,26 +27,26 @@ import session.AccountSessionBeanLocal;
 @Path("account")
 public class AccountResource {
 
-  @EJB
-  private AccountSessionBeanLocal accountSessionLocal;
-  
-  @GET
-  @Path("login/query")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
-    try {
-      Person p = accountSessionLocal.login(email, password);
-      return Response.status(200).entity(
-              p
-      ).type(MediaType.APPLICATION_JSON).build();
-    } catch (NoResultException | NotValidException e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+    @EJB
+    private AccountSessionBeanLocal accountSessionLocal;
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
-    }
-  } //end login
+    @GET
+    @Path("login/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
+        try {
+            Person p = accountSessionLocal.login(email, password);
+            return Response.status(200).entity(
+                    p
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end login
 
 }

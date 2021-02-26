@@ -69,7 +69,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     } // end createPerson
 
     @Override
-    public List<Person> searchPersonByUsername(String username) {
+    public List<Person> searchPersonByUsername(String username) throws NoResultException, NotValidException {
         Query q;
         if (username != null) {
             q = em.createQuery("SELECT p FROM Person p WHERE " + "LOWER(p.username) LIKE :username");
@@ -77,7 +77,12 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             q = em.createQuery("SELECT p FROM Person p");
         }
-        return q.getResultList();
+        List<Person> personList = q.getResultList();
+        for (Person p : personList) {
+            p = getPersonById(p.getId());
+        }
+
+        return personList;
     } // end searchPersonByUsername
 
     @Override

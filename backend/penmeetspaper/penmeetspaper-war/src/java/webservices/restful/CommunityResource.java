@@ -82,11 +82,27 @@ public class CommunityResource {
 
         String communityDescription = jsonObject.getString("communityDescription");
         String communityName = jsonObject.getString("communityName");
+        String communityProfilePicture = jsonObject.getString("communityProfilePicture");
+        String communityBanner = jsonObject.getString("communityBanner");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
         Community community = new Community();
         community.setName(communityName);
         community.setDescription(communityDescription);
         community.setDateCreated(new Date());
+        if (communityProfilePicture.trim().isEmpty()) {
+            community.setCommunityProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
+        } else {
+            community.setCommunityProfilePicture(communityProfilePicture);
+        }
+
+        if (communityBanner.trim().isEmpty()) {
+            community.setCommunityBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
+        } else {
+            community.setCommunityBanner(communityBanner);
+        }
+        community.setTopicEnums(topicInterests);
 
         try {
             Community createdCommunity = communitySB.createCommunity(community, personId);
@@ -124,6 +140,7 @@ public class CommunityResource {
         String description = jsonObject.getString("description");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
         String communityProfilePicture = jsonObject.getString("communityProfilePicture");
+        String communityBanner = jsonObject.getString("communityBanner");
 
         List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
@@ -133,6 +150,7 @@ public class CommunityResource {
             comm.setCommunityProfilePicture(communityProfilePicture);
             comm.setDescription(description);
             comm.setTopicEnums(topicInterests);
+            comm.setCommunityBanner(communityBanner);
 
             communitySB.updateCommunity(comm);
 

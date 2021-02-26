@@ -76,25 +76,38 @@ public class PersonResource {
     // Main Business logic -------------------------------------
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Person> getAllPerson() {
-        return personSB.searchPersonByUsername(null);
+    public Response getAllPerson() {
+        try {
+            List<Person> personList = personSB.searchPersonByUsername(null);
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     } // end getAllPerson
 
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchPersonByUsername(@QueryParam("username") String username) {
+        try {
+            if (username != null) {
+                List<Person> results = personSB.searchPersonByUsername(username);
+                GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+                };
 
-        if (username != null) {
-            List<Person> results = personSB.searchPersonByUsername(username);
-            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
-            };
+                return Response.status(200).entity(entity).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
 
-            return Response.status(200).entity(entity).build();
-        } else {
-            JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
-
-            return Response.status(400).entity(exception).build();
+                return Response.status(400).entity(exception).build();
+            }
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
         }
     } // end searchPersonByUsername
 
@@ -103,7 +116,6 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonById(@PathParam("id") String id) {
         try {
-            System.out.println(id);
             Person p = personSB.getPersonById(Long.valueOf(id));
             return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {

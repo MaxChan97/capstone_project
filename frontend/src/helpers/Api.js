@@ -319,6 +319,17 @@ export default {
     });
   },
 
+  setAllMessagesAsOpened(chatId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + chatId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
   deleteProfilePostReply(replyId, personId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
@@ -373,6 +384,50 @@ export default {
         "Content-Type": "application/json",
       },
       type: "DELETE",
+    });
+  },
+
+  getFollowers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getFollowing(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/following/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscriptions(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscriptions/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscribers(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/subscribers/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
     });
   },
 };

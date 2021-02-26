@@ -5,10 +5,10 @@
  */
 package session;
 
-import entity.Post;
 import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,32 +21,33 @@ import javax.persistence.Query;
 @Stateless
 public class AccountSessionBean implements AccountSessionBeanLocal {
 
-  @PersistenceContext
-  private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-  @Override
-  public Person login(String email, String password) throws NoResultException, NotValidException {
-    if (email == null) {
-      throw new NotValidException(AccountSessionBeanLocal.MISSING_EMAIL);
+    @EJB
+    private PersonSessionBeanLocal personSB;
+
+    @Override
+    public Person login(String email, String password) throws NoResultException, NotValidException {
+        if (email == null) {
+            throw new NotValidException(AccountSessionBeanLocal.MISSING_EMAIL);
+        }
+
+        if (password == null) {
+            throw new NotValidException(AccountSessionBeanLocal.MISSING_PASSWORD);
+        }
+
+        Query q;
+        q = em.createQuery("SELECT p from Person p WHERE p.email = :email AND p.password = :password");
+        q.setParameter("email", email);
+        q.setParameter("password", password);
+
+        try {
+            Person p = (Person) q.getSingleResult();
+            p = personSB.getPersonById(p.getId());
+            return p;
+        } catch (Exception e) {
+            throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);
+        }
     }
-
-    if (password == null) {
-      throw new NotValidException(AccountSessionBeanLocal.MISSING_PASSWORD);
-    }
-
-    Query q;
-    q = em.createQuery("SELECT p from Person p WHERE p.email = :email AND p.password = :password");
-    q.setParameter("email", email);
-    q.setParameter("password", password);
-
-    try {
-      Person p = (Person) q.getSingleResult();
-      em.detach(p);
-      p.setPosts(null);
-      p.setChats(null);
-      return p;
-    } catch (Exception e) {
-      throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);
-    }
-  }  
 }
