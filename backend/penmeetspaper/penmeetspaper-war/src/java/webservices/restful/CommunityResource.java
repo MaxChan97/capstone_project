@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Community;
+import entity.personToPersonEntities.Ban;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -54,7 +55,7 @@ public class CommunityResource {
     }
 
     private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
-        List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+        List<TopicEnum> topicInterests = new ArrayList<>();
 
         for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
             String topicInterest = topicInterestsJsonArray.getString(i);
@@ -103,6 +104,7 @@ public class CommunityResource {
             community.setCommunityBanner(communityBanner);
         }
         community.setTopicEnums(topicInterests);
+        community.setBan(new Ban());
 
         try {
             Community createdCommunity = communitySB.createCommunity(community, personId);

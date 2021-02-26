@@ -7,6 +7,7 @@ package session;
 
 import entity.Community;
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -50,6 +51,14 @@ public class BanSessionBean implements BanSessionBeanLocal {
         }
 
         return community;
+    }
+
+    @Override
+    public Ban createBan() {
+        Ban ban = new Ban();
+        em.persist(ban);
+        em.flush();
+        return ban;
     }
 
     @Override
