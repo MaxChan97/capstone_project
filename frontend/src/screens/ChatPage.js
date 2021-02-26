@@ -47,7 +47,6 @@ export default function ChatPage() {
   const [chats, setChats] = useState();
   const [newChat, setNewChat] = useState([]);
   const [selectedChat, setSelectedChat] = useState();
-  const [chatUser, setChatUser] = useState({});
   const [chatRefresh, setChatRefresh] = useState([]);
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -64,11 +63,14 @@ export default function ChatPage() {
 
   function refreshSelectedChat(chats, selectedChat) {
     for (var i = 0; i < chats.length; i++) {
+      console.log(chats[i].id);
+      console.log(selectedChat.id);
+      console.log(chats[i].id === selectedChat.id);
       if (chats[i].id === selectedChat.id) {
         return chats[i];
       }
-      return chats[0];
     }
+    return chats[0];
   }
 
   useEffect(() => {
@@ -76,12 +78,17 @@ export default function ChatPage() {
     if (currentUser != undefined) {
       Api.getPersonsChat(currentUser)
         .done((chats) => {
-          console.log(chats);
           setChats(chats);
           return chats;
         })
         .done((retrievedChats) => {
-          if (personId != currentUser) {
+          if (selectedChat != undefined && selectedChat.id != -1) {
+            let newSelectedChat = refreshSelectedChat(
+              retrievedChats,
+              selectedChat
+            );
+            setSelectedChat(newSelectedChat);
+          } else if (personId != currentUser) {
             // means we have to check and see if got existing chat
             let existingChatId;
             for (var i = 0; i < retrievedChats.length; i++) {
@@ -127,12 +134,6 @@ export default function ChatPage() {
             }
           } else if (selectedChat == undefined && retrievedChats.length != 0) {
             setSelectedChat(retrievedChats[0]);
-          } else if (selectedChat != undefined) {
-            let newSelectedChat = refreshSelectedChat(
-              retrievedChats,
-              selectedChat
-            );
-            setSelectedChat(newSelectedChat);
           }
         });
     }
@@ -145,20 +146,6 @@ export default function ChatPage() {
     };
     return test;
   }, []);
-
-  useEffect(() => {
-    // This useEffect sets the chatUser state attribute
-    // and adds a non persisted chat empty chat if personId is defined
-    if (currentUser != undefined) {
-      Api.getPersonById(currentUser).done((currentUserEntity) => {
-        setChatUser({
-          id: currentUserEntity.id,
-          name: currentUserEntity.username,
-          avatar: null,
-        });
-      });
-    }
-  }, [currentUser]);
 
   return (
     <div>

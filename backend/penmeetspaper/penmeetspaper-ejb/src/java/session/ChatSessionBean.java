@@ -34,7 +34,7 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
 
         Chat newChat = new Chat();
         newChat.getChatParticipants().add(sender);
-        newChat.getChatParticipants().add(recipient);
+            newChat.getChatParticipants().add(recipient);
 
         message.setSender(sender);
         message.setRecipient(recipient);
@@ -46,6 +46,8 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
         sender.getChats().add(newChat);
         recipient.getChats().add(newChat);
 
+        em.flush();
+        
         for (Person person : newChat.getChatParticipants()) {
             em.detach(person);
             person.setPosts(null);
@@ -71,10 +73,8 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
 
     @Override
     public List<Chat> getPersonsChat(Long personId) {
-        System.out.println(personId);
         Person person = em.find(Person.class, personId);
         List<Chat> chats = person.getChats();
-        System.out.println(chats);
         for (Chat c : chats) {
             em.detach(c);
             List<Person> chatParticipants = c.getChatParticipants();
@@ -112,10 +112,17 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
                 if (getDateOfLastChatMessage(c1) == null || getDateOfLastChatMessage(c2) == null) {
                     return 0;
                 }
-                return getDateOfLastChatMessage(c1).compareTo(getDateOfLastChatMessage(c2));
+                return getDateOfLastChatMessage(c2).compareTo(getDateOfLastChatMessage(c1));
             }
         });
-        System.out.println(chats);
         return chats;
+    }
+    
+    @Override
+    public void setAllMessagesAsOpened(Long chatId) {
+        Chat chat = em.find(Chat.class, chatId);
+        for (Message m : chat.getChatMessages()) {
+            m.setOpened(true);
+        }
     }
 }

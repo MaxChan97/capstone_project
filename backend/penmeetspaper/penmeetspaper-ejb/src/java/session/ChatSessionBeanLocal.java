@@ -21,4 +21,6 @@ public interface ChatSessionBeanLocal {
 
     public List<Chat> getPersonsChat(Long personId);
     
+    public void setAllMessagesAsOpened(Long chatId);
+    
 }

@@ -51,8 +51,38 @@ export default function ChatBox({
   }, [selectedChat]);
 
   useEffect(() => {
+    if (selectedChat.id != -1 && getUnreadCount(selectedChat) > 0) {
+      Api.setAllMessagesAsOpened(selectedChat.id).done(() => {
+        db.collection("ChatRefresh")
+          .doc("NtzSzbG7RS66mvutS0kT")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("ChatRefresh")
+                .doc("NtzSzbG7RS66mvutS0kT")
+                .update({ chatRefresh: !doc.data().chatRefresh });
+            }
+          });
+      });
+    }
+  });
+
+  useEffect(() => {
     scrollToBottomOfChat();
   });
+
+  function getUnreadCount(selectedChat) {
+    let unreadCount = 0;
+    for (var i = 0; i < selectedChat.chatMessages.length; i++) {
+      if (
+        selectedChat.chatMessages[i].opened === false &&
+        selectedChat.chatMessages[i].recipient.id == currentUser
+      ) {
+        unreadCount++;
+      }
+    }
+    return unreadCount;
+  }
 
   function scrollToBottomOfChat() {
     animateScroll.scrollToBottom({

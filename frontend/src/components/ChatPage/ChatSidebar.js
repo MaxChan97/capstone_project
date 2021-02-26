@@ -91,7 +91,7 @@ export default function ChatSidebar({
   }
 
   function getMessagePreview(selectedChat) {
-    let receivedMessages = [];
+    /*let receivedMessages = [];
     for (var i = 0; i < selectedChat.chatMessages.length; i++) {
       if (selectedChat.chatMessages[i].recipient.id === currentUser) {
         receivedMessages.push(selectedChat.chatMessages[i]);
@@ -105,6 +105,30 @@ export default function ChatSidebar({
         return returnString;
       }
       return receivedMessages[receivedMessages.length - 1].body;
+    }*/
+    if (selectedChat.chatMessages.length > 0) {
+      if (
+        selectedChat.chatMessages[selectedChat.chatMessages.length - 1].sender
+          .id === currentUser
+      ) {
+        // currentUser is sender of last msg
+        let returnString = "you: ";
+        returnString = returnString.concat(
+          selectedChat.chatMessages[selectedChat.chatMessages.length - 1].body
+        );
+        if (returnString.length > 15) {
+          returnString = returnString.slice(0, 14) + "...";
+        }
+        return returnString;
+      } else {
+        // currentUser is not sender of last msg
+        let returnString =
+          selectedChat.chatMessages[selectedChat.chatMessages.length - 1].body;
+        if (returnString.length > 15) {
+          returnString = returnString.slice(0, 14) + "...";
+        }
+        return returnString;
+      }
     }
   }
 
