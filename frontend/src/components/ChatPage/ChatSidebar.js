@@ -91,19 +91,20 @@ export default function ChatSidebar({
   }
 
   function getMessagePreview(selectedChat) {
-    if (selectedChat.chatMessages.length != 0) {
-      if (
-        selectedChat.chatMessages[selectedChat.chatMessages.length - 1].body
-          .length > 15
-      ) {
+    let receivedMessages = [];
+    for (var i = 0; i < selectedChat.chatMessages.length; i++) {
+      if (selectedChat.chatMessages[i].recipient.id === currentUser) {
+        receivedMessages.push(selectedChat.chatMessages[i]);
+      }
+    }
+    if (receivedMessages.length != 0) {
+      if (receivedMessages[receivedMessages.length - 1].body.length > 15) {
         let returnString =
-          selectedChat.chatMessages[
-            selectedChat.chatMessages.length - 1
-          ].body.slice(0, 14) + "...";
+          receivedMessages[receivedMessages.length - 1].body.slice(0, 14) +
+          "...";
         return returnString;
       }
-      return selectedChat.chatMessages[selectedChat.chatMessages.length - 1]
-        .body;
+      return receivedMessages[receivedMessages.length - 1].body;
     }
   }
 

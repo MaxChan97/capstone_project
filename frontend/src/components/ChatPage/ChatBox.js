@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,6 +10,8 @@ import chatSmile from "../../assets/chatSmile.png";
 import chatPaperClip from "../../assets/chatPaperClip.png";
 import chatMedia from "../../assets/chatMedia.png";
 import Api from "../../helpers/Api";
+import { db } from "../../firebase";
+import { animateScroll } from "react-scroll";
 
 const styles = {
   chat: {
@@ -27,9 +29,12 @@ export default function ChatBox({
   selectedChat,
   setSelectedChat,
   currentUser,
+  setNewChat,
 }) {
   const [messages, setMessages] = useState([]);
   const [newText, setNewText] = useState("");
+
+  const inputRef = useRef("");
 
   useEffect(() => {
     let messageList = [];
@@ -44,6 +49,16 @@ export default function ChatBox({
     });
     setMessages(messageList);
   }, [selectedChat]);
+
+  useEffect(() => {
+    scrollToBottomOfChat();
+  });
+
+  function scrollToBottomOfChat() {
+    animateScroll.scrollToBottom({
+      containerId: "Chat",
+    });
+  }
 
   function getChatOtherPerson(personList) {
     if (personList[0].id === currentUser) {
@@ -66,31 +81,59 @@ export default function ChatBox({
   }
 
   function handleSend() {
-    if (selectedChat.id === -1) {
-      // means is a new chat
-      Api.createChat(
-        currentUser,
-        getChatOtherPerson(selectedChat.chatParticipants).id,
-        newText
-      ).done((createdChat) => {
-        setSelectedChat(createdChat);
-      });
+    if (newText.trim() === "") {
+      // do nothing
     } else {
-      // existing chat
-      Api.addMessageToChat(
-        selectedChat.id,
-        currentUser,
-        getChatOtherPerson(selectedChat.chatParticipants).id,
-        newText
-      ).done(() => {
-        setNewText("");
-      });
+      if (selectedChat.id === -1) {
+        // means is a new chat
+        Api.createChat(
+          currentUser,
+          getChatOtherPerson(selectedChat.chatParticipants).id,
+          newText
+        ).done((createdChat) => {
+          setNewText("");
+          inputRef.current.clear();
+          setSelectedChat(createdChat);
+          setNewChat([]);
+          db.collection("ChatRefresh")
+            .doc("NtzSzbG7RS66mvutS0kT")
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                db.collection("ChatRefresh")
+                  .doc("NtzSzbG7RS66mvutS0kT")
+                  .update({ chatRefresh: !doc.data().chatRefresh });
+              }
+            });
+        });
+      } else {
+        // existing chat
+        Api.addMessageToChat(
+          selectedChat.id,
+          currentUser,
+          getChatOtherPerson(selectedChat.chatParticipants).id,
+          newText
+        ).done(() => {
+          setNewText("");
+          inputRef.current.clear();
+          db.collection("ChatRefresh")
+            .doc("NtzSzbG7RS66mvutS0kT")
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                db.collection("ChatRefresh")
+                  .doc("NtzSzbG7RS66mvutS0kT")
+                  .update({ chatRefresh: !doc.data().chatRefresh });
+              }
+            });
+        });
+      }
     }
   }
 
   function renderChat() {
     return (
-      <div style={{ overflowY: "auto", marginTop: "5px" }}>
+      <div id="Chat" style={{ overflowY: "auto", marginTop: "5px" }}>
         <MessageList
           className="message-list"
           lockable={true}
@@ -103,7 +146,7 @@ export default function ChatBox({
   function renderChatInput() {
     return (
       <Input
-        defaultValue={newText}
+        ref={inputRef}
         placeholder="Type here..."
         onChange={(e) => setNewText(e.target.value)}
         multiline={false}

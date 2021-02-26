@@ -8,6 +8,7 @@ import ChatSidebar from "../components/ChatPage/ChatSidebar";
 import Api from "../helpers/Api";
 import { useParams } from "react-router";
 import "react-chat-elements/dist/main.css";
+import { chatRefreshListener } from "../helpers/FirebaseApi";
 
 const styles = {
   container: {
@@ -44,9 +45,10 @@ const styles = {
 
 export default function ChatPage() {
   const [chats, setChats] = useState();
-  const [newChat, setNewChat] = useState();
+  const [newChat, setNewChat] = useState([]);
   const [selectedChat, setSelectedChat] = useState();
   const [chatUser, setChatUser] = useState({});
+  const [chatRefresh, setChatRefresh] = useState([]);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -74,63 +76,74 @@ export default function ChatPage() {
     if (currentUser != undefined) {
       Api.getPersonsChat(currentUser)
         .done((chats) => {
+          console.log(chats);
           setChats(chats);
           return chats;
         })
-        .done((chats) => {
-          if (chats.length != 0) {
-            if (selectedChat != undefined) {
-              let newSelectedChat = refreshSelectedChat(chats, selectedChat);
-              setSelectedChat(newSelectedChat);
-            } else if (personId != currentUser) {
-              // means we have to check and see if got existing chat
-              let existingChatId;
-              for (var i = 0; i < chats.length; i++) {
-                if (
-                  getChatOtherPerson(chats[i].chatParticipants).id == personId
-                ) {
-                  // we found the existing chat
-                  existingChatId = chats[i].id;
-                  //return chats[i];
-                  if (selectedChat == undefined) {
-                    setSelectedChat(chats[i]);
-                  }
+        .done((retrievedChats) => {
+          if (personId != currentUser) {
+            // means we have to check and see if got existing chat
+            let existingChatId;
+            for (var i = 0; i < retrievedChats.length; i++) {
+              if (
+                getChatOtherPerson(retrievedChats[i].chatParticipants).id ==
+                personId
+              ) {
+                // we found the existing chat
+                existingChatId = retrievedChats[i].id;
+                //return chats[i];
+                if (selectedChat == undefined) {
+                  setSelectedChat(retrievedChats[i]);
                 }
               }
-              if (existingChatId == undefined) {
-                // we did not find existing chat therefore need create
-                let currentPerson;
-                let newPerson;
-                let newChat;
-                Api.getPersonById(currentUser)
-                  .done((currentUserEntity) => {
-                    currentPerson = currentUserEntity;
-                  })
-                  .done(() => {
-                    Api.getPersonById(personId)
-                      .done((userEntity) => {
-                        newPerson = userEntity;
-                      })
-                      .done(() => {
-                        newChat = {
-                          chatMessages: [],
-                          chatParticipants: [currentPerson, newPerson],
-                          id: -1,
-                        };
-                        let newChatInList = [newChat];
-                        setNewChat(newChatInList);
-                        if (selectedChat == undefined) {
-                          setSelectedChat(newChat);
-                        }
-                      });
-                  });
-              }
-            } else if (selectedChat == undefined) {
-              setSelectedChat(chats[0]);
             }
+            if (existingChatId == undefined) {
+              // we did not find existing chat therefore need create
+              let currentPerson;
+              let newPerson;
+              let newChat;
+              Api.getPersonById(currentUser)
+                .done((currentUserEntity) => {
+                  currentPerson = currentUserEntity;
+                })
+                .done(() => {
+                  Api.getPersonById(personId)
+                    .done((userEntity) => {
+                      newPerson = userEntity;
+                    })
+                    .done(() => {
+                      newChat = {
+                        chatMessages: [],
+                        chatParticipants: [currentPerson, newPerson],
+                        id: -1,
+                      };
+                      let newChatList = [newChat];
+                      setNewChat(newChatList);
+                      if (selectedChat == undefined) {
+                        setSelectedChat(newChat);
+                      }
+                    });
+                });
+            }
+          } else if (selectedChat == undefined && retrievedChats.length != 0) {
+            setSelectedChat(retrievedChats[0]);
+          } else if (selectedChat != undefined) {
+            let newSelectedChat = refreshSelectedChat(
+              retrievedChats,
+              selectedChat
+            );
+            setSelectedChat(newSelectedChat);
           }
         });
     }
+  }, [chatRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = chatRefreshListener(setChatRefresh);
+    const test = () => {
+      return unsubscribe();
+    };
+    return test;
   }, []);
 
   useEffect(() => {
@@ -165,6 +178,7 @@ export default function ChatPage() {
                   selectedChat={selectedChat}
                   setSelectedChat={setSelectedChat}
                   currentUser={currentUser}
+                  setNewChat={setNewChat}
                 />
               </div>
             ) : (

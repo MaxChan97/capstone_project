@@ -33,10 +33,8 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
         Person recipient = em.find(Person.class, recipientId);
 
         Chat newChat = new Chat();
-        List<Person> chatParticipants = new ArrayList<Person>();
-        chatParticipants.add(sender);
-        chatParticipants.add(recipient);
-        newChat.setChatParticipants(chatParticipants);
+        newChat.getChatParticipants().add(sender);
+        newChat.getChatParticipants().add(recipient);
 
         message.setSender(sender);
         message.setRecipient(recipient);
@@ -45,10 +43,8 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
 
         em.persist(newChat);
 
-        List<Chat> person1Chat = sender.getChats();
-        List<Chat> person2Chat = recipient.getChats();
-        person1Chat.add(newChat);
-        person2Chat.add(newChat);
+        sender.getChats().add(newChat);
+        recipient.getChats().add(newChat);
 
         for (Person person : newChat.getChatParticipants()) {
             em.detach(person);
@@ -75,8 +71,10 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
 
     @Override
     public List<Chat> getPersonsChat(Long personId) {
+        System.out.println(personId);
         Person person = em.find(Person.class, personId);
         List<Chat> chats = person.getChats();
+        System.out.println(chats);
         for (Chat c : chats) {
             em.detach(c);
             List<Person> chatParticipants = c.getChatParticipants();
@@ -117,6 +115,7 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
                 return getDateOfLastChatMessage(c1).compareTo(getDateOfLastChatMessage(c2));
             }
         });
+        System.out.println(chats);
         return chats;
     }
 }

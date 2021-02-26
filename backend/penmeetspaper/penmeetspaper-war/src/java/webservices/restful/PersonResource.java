@@ -103,6 +103,7 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonById(@PathParam("id") String id) {
         try {
+            System.out.println(id);
             Person p = personSB.getPersonById(Long.valueOf(id));
             return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {

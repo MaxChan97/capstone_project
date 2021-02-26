@@ -65,6 +65,7 @@ export default function AnotherProfilePage({ personId }) {
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={anotherPerson.username}
+            id={personId}
           />
           {handleTabView(tabValue)}
         </div>
