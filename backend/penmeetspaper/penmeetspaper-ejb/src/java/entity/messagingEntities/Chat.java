@@ -6,7 +6,6 @@
 package entity.messagingEntities;
 
 import entity.personEntities.Person;
-import entity.messagingEntities.Message;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,7 @@ public class Chat implements Serializable {
     private Long id;
 
     @ManyToMany
+    @JoinColumn(name = "chat_person")
     private List<Person> chatParticipants = new ArrayList<>();
 
     @OneToMany
