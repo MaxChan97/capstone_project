@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -43,15 +42,15 @@ public class Message implements Serializable {
 
     private String body;
     
+    private String fileName;
+    
+    private String fileUrl;
+    
     private boolean opened = false;
     
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
-
-    // unidirectional / nullable
-    @OneToOne
-    private File file;
 
     public Long getId() {
         return id;
@@ -93,13 +92,21 @@ public class Message implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public File getFile() {
-        return file;
-    }
+  public String getFileName() {
+    return fileName;
+  }
 
-    public void setFile(File file) {
-        this.file = file;
-    }
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
+  }
 
     @Override
     public int hashCode() {
