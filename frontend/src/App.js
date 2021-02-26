@@ -18,7 +18,7 @@ import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./components/ProfilePage/UserSettings";
 import ChatPage from "./screens/ChatPage";
 import CustomiseProfile from "./screens/CustomiseProfile";
-import Subscribers from "./screens/SubscribersPage";
+import SubscribersPage from "./screens/SubscribersPage";
 import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 
 function App() {
@@ -68,7 +68,7 @@ function App() {
               path="/customiseProfile"
               component={CustomiseProfile}
             />
-            <Route exact path="/subscribers" component={Subscribers} />
+            <Route exact path="/subscribers" component={SubscribersPage} />
             <Route
               exact
               path="/post/:postId"

@@ -243,6 +243,22 @@ export default {
     });
   },
 
+  createFileChat(senderId, recipientId, messageBody, fileName, fileUrl) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/file/" + senderId + "/" + recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+        fileName: fileName,
+        fileUrl: fileUrl,
+      }),
+    });
+  },
+
   unlikeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
       url:
@@ -358,6 +374,29 @@ export default {
       type: "POST",
       data: JSON.stringify({
         body: messageBody,
+      }),
+    });
+  },
+
+  addFileToChat(chatId, senderId, recipientId, messageBody, fileName, fileUrl) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/message/file/" +
+        chatId +
+        "/" +
+        senderId +
+        "/" +
+        recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+        fileName: fileName,
+        fileUrl: fileUrl,
       }),
     });
   },
