@@ -104,13 +104,55 @@ export default function ChatBox({
   useEffect(() => {
     let messageList = [];
     selectedChat.chatMessages.map((data) => {
-      let message = {
-        position: data.sender.id === currentUser ? "right" : "left",
-        type: "text",
-        text: data.body,
-        date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-      };
-      messageList.push(message);
+      if (
+        data.fileName == null ||
+        data.fileUrl == null ||
+        data.fileType == null
+      ) {
+        let message = {
+          position: data.sender.id === currentUser ? "right" : "left",
+          type: "text",
+          text: data.body,
+          date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+        };
+        messageList.push(message);
+      } else {
+        // got file in this msg
+        let MIMEPrefix = data.fileType.split("/")[0];
+        if (MIMEPrefix === "image") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "photo",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+          };
+        } else if (MIMEPrefix === "video") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "video",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+          };
+        } else if (MIMEPrefix === "audio") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "audio",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+          };
+        } else {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "file",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+          };
+        }
+      }
     });
     setMessages(messageList);
   }, [selectedChat]);
