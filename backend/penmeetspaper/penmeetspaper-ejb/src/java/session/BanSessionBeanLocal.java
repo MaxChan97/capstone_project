@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;
@@ -32,5 +33,7 @@ public interface BanSessionBeanLocal {
     public void addPersonBan(Long personBanningId, Long personToBanId) throws NoResultException, NotValidException;
 
     public void removePersonBan(Long personBanningId, Long personToUnBanId) throws NoResultException, NotValidException;
+
+    public Ban createBan();
 
 }

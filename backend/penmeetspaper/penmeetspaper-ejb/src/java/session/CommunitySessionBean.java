@@ -8,6 +8,7 @@ package session;
 import entity.Community;
 import entity.Post;
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -32,6 +33,9 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     @EJB
     private PostSessionBeanLocal postSB;
+
+    @EJB
+    private BanSessionBeanLocal banSB;
 
     private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
         return personSB.getPersonById(p.getId());
@@ -87,6 +91,9 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         }
 
         Person owner = emGetPerson(ownerId);
+        Ban ban = banSB.createBan();
+        System.out.println(ban.getId());
+        community.setBan(ban);
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);
@@ -94,7 +101,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         return community;
     }
 
-    // Search Community 
+    // Search Community
     @Override
     public List<Community> searchCommunityByName(String name) {
         Query q;

@@ -28,6 +28,8 @@ public class Ban implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int numBan;
+
     @OneToMany
     @JoinColumn(name = "ban_personId")
     private List<Person> banList = new ArrayList();
@@ -38,6 +40,20 @@ public class Ban implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the numBan
+     */
+    public int getNumBan() {
+        return numBan;
+    }
+
+    /**
+     * @param numBan the numBan to set
+     */
+    public void setNumBan(int numBan) {
+        this.numBan = numBan;
     }
 
     public List<Person> getBanList() {

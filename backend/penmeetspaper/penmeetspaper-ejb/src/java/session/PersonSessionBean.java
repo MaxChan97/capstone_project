@@ -6,11 +6,13 @@
 package session;
 
 import entity.personEntities.Person;
+import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +27,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private BanSessionBeanLocal banSB;
 
     private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
         if (personId == null) {
@@ -63,6 +68,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
         }
 
+        Ban ban = banSB.createBan();
+
+        person.setBan(ban);
         em.persist(person);
 
         return person;
