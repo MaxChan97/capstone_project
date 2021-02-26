@@ -47,6 +47,9 @@ public class Community implements Serializable {
     private String communityProfilePicture;
 
     @Column(nullable = false)
+    private String communityBanner;
+
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
@@ -146,6 +149,14 @@ public class Community implements Serializable {
 
     public void setCommunityProfilePicture(String communityProfilePicture) {
         this.communityProfilePicture = communityProfilePicture;
+    }
+
+    public String getCommunityBanner() {
+        return communityBanner;
+    }
+
+    public void setCommunityBanner(String communityBanner) {
+        this.communityBanner = communityBanner;
     }
 
     public List<Person> getMembers() {
