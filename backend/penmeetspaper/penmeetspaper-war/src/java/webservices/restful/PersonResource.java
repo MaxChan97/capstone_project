@@ -82,9 +82,6 @@ public class PersonResource {
     public Response getAllPerson() {
         try {
             List<Person> personList = personSB.searchPersonByUsername(null);
-            for (Person p : personList) {
-                p = personSB.getPersonById(p.getId());
-            }
 
             GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {
             };
@@ -102,21 +99,24 @@ public class PersonResource {
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchPersonByUsername(@QueryParam("username") String username) {
+        try {
+            if (username != null) {
+                List<Person> results = personSB.searchPersonByUsername(username);
+                GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+                };
 
-        if (username != null) {
-            List<Person> results = personSB.searchPersonByUsername(username);
-            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
-            };
+                return Response.status(200).entity(
+                        entity
+                ).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder()
+                        .add("error", "No query conditions")
+                        .build();
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
-        } else {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "No query conditions")
-                    .build();
-
-            return Response.status(400).entity(exception).build();
+                return Response.status(400).entity(exception).build();
+            }
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
         }
     } //end searchPersonByUsername
 

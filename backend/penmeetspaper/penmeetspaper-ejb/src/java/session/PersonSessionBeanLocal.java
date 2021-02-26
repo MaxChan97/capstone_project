@@ -31,7 +31,7 @@ public interface PersonSessionBeanLocal {
 
     public Person createPerson(Person person) throws NotValidException;
 
-    public List<Person> searchPersonByUsername(String username);
+    public List<Person> searchPersonByUsername(String username) throws NoResultException, NotValidException;
 
     public Person getPersonById(Long pId) throws NoResultException, NotValidException;
 
