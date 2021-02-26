@@ -18,6 +18,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import FileTypes from "../../components/FileTypes.js";
 var uuid = require("uuid");
 
 const styles = {
@@ -340,11 +341,16 @@ export default function ChatBox({
           open={open}
         >
           <DialogContent dividers>
-            {progress == 100 ? (
-              <img className="img-fluid mx-auto d-block" src={fileUrl} />
+            {fileType.split("/")[0] == "image" ? (
+              progress == 100 ? (
+                <img className="img-fluid mx-auto d-block" src={fileUrl} />
+              ) : (
+                <progress value={progress} max="100" />
+              )
             ) : (
-              <progress value={progress} max="100" />
+              <FileTypes data={fileName.split(".")[1]}></FileTypes>
             )}
+
             <TextField
               autoFocus
               margin="dense"
