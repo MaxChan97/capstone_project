@@ -10,6 +10,7 @@ import notificationLogo from "../assets/Notification Logo.svg";
 import defaultDP from "../assets/Default Dp logo.svg";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar() {
+  let location = useLocation();
   const classes = useStyles();
   const [searchString, setSearchString] = useState("");
   const currentUser = useSelector((state) => state.currentUser);
@@ -53,16 +55,26 @@ function Navbar() {
       <div>
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="pushmenu"
-              style={{ cursor: "pointer" }}
-            >
-              <i style={{ fontSize: "18px" }} className="fa fa-bars" />
-            </a>
+            {location.pathname.slice(0, 5) !== "/chat" ? (
+              <a
+                className="nav-link"
+                data-widget="pushmenu"
+                style={{ cursor: "pointer" }}
+              >
+                <i style={{ fontSize: "18px" }} className="fa fa-bars" />
+              </a>
+            ) : (
+              <a className="nav-link">
+                <i
+                  style={{ fontSize: "18px", visibility: "hidden" }}
+                  className="fa fa-bars"
+                />
+              </a>
+            )}
           </li>
         </ul>
       </div>
+
       <div>
         <Paper component="form" className={classes.root}>
           <IconButton
@@ -96,7 +108,7 @@ function Navbar() {
         <Link to="/">
           <img src={uploadLogo} alt="uploadLogo" />
         </Link>
-        <Link to="/">
+        <Link to={"/chat/" + currentUser}>
           <img src={chatLogo} alt="chatLogo" />
         </Link>
         <Link to="/">

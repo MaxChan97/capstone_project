@@ -49,12 +49,9 @@ public class PersonResource {
     }
 
     private Response buildError(Exception e, int statusCode) {
-        JsonObject exception = Json.createObjectBuilder()
-                .add("error", e.getMessage())
-                .build();
+        JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-        return Response.status(statusCode).entity(exception)
-                .type(MediaType.APPLICATION_JSON).build();
+        return Response.status(statusCode).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
 
     private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
@@ -86,14 +83,12 @@ public class PersonResource {
             GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(personList) {
             };
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } //end getAllPerson
+    } // end getAllPerson
 
     @GET
     @Path("/query")
@@ -105,20 +100,16 @@ public class PersonResource {
                 GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
                 };
 
-                return Response.status(200).entity(
-                        entity
-                ).build();
+                return Response.status(200).entity(entity).build();
             } else {
-                JsonObject exception = Json.createObjectBuilder()
-                        .add("error", "No query conditions")
-                        .build();
+                JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
 
                 return Response.status(400).entity(exception).build();
             }
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } //end searchPersonByUsername
+    } // end searchPersonByUsername
 
     @GET
     @Path("/{id}")
@@ -126,13 +117,11 @@ public class PersonResource {
     public Response getPersonById(@PathParam("id") String id) {
         try {
             Person p = personSB.getPersonById(Long.valueOf(id));
-            return Response.status(200).entity(
-                    p
-            ).type(MediaType.APPLICATION_JSON).build();
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } //end getPersonById
+    } // end getPersonById
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -149,37 +138,36 @@ public class PersonResource {
         // Might want to hash password, see how
         p.setPassword(password);
         p.setDescription("");
-        p.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
-        p.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
+        p.setProfilePicture(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
+        p.setProfileBanner(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         try {
             Person addedPerson = personSB.createPerson(p);
-            return Response.status(200).entity(
-                    addedPerson
-            ).type(MediaType.APPLICATION_JSON).build();
+            return Response.status(200).entity(addedPerson).type(MediaType.APPLICATION_JSON).build();
 
         } catch (NotValidException e) {
             return buildError(e, 400);
         }
-    } //end createPerson
+    } // end createPerson
 
-    /*@PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePerson(@PathParam("id") String id, Person p) {
-        p.setId(Long.valueOf(id));
-        try {
-            personSessionLocal.updatePerson(p);
-            return Response.status(204).build();
-        } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
-    } //end updatePerson*/
+    /*
+     * @PUT
+     * 
+     * @Path("/{id}")
+     * 
+     * @Consumes(MediaType.APPLICATION_JSON)
+     * 
+     * @Produces(MediaType.APPLICATION_JSON) public Response
+     * updatePerson(@PathParam("id") String id, Person p) {
+     * p.setId(Long.valueOf(id)); try { personSessionLocal.updatePerson(p); return
+     * Response.status(204).build(); } catch (NoResultException | NotValidException
+     * e) { JsonObject exception = Json.createObjectBuilder() .add("error",
+     * e.getMessage()) .build();
+     * 
+     * return Response.status(404).entity(exception)
+     * .type(MediaType.APPLICATION_JSON).build(); } } //end updatePerson
+     */
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -255,12 +243,9 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", e.getMessage())
-                    .build();
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-            return Response.status(400).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
+            return Response.status(400).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
 
     }
@@ -274,9 +259,7 @@ public class PersonResource {
             GenericEntity<List<Follow>> entity = new GenericEntity<List<Follow>>(results) {
             };
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
@@ -292,9 +275,7 @@ public class PersonResource {
             GenericEntity<List<Follow>> entity = new GenericEntity<List<Follow>>(results) {
             };
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
@@ -310,9 +291,7 @@ public class PersonResource {
             GenericEntity<List<Subscription>> entity = new GenericEntity<List<Subscription>>(results) {
             };
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
@@ -328,9 +307,7 @@ public class PersonResource {
             GenericEntity<List<Subscription>> entity = new GenericEntity<List<Subscription>>(results) {
             };
 
-            return Response.status(200).entity(
-                    entity
-            ).build();
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);

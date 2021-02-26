@@ -36,7 +36,11 @@ export default function AnotherProfilePage({ personId }) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <PostList personId={personId} refresh={refresh} setRefresh={setRefresh} />
+            <PostList
+              personId={personId}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
           </div>
         );
       } else {
@@ -61,7 +65,7 @@ export default function AnotherProfilePage({ personId }) {
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={anotherPerson.username}
-            
+            id={personId}
           />
           {handleTabView(tabValue)}
         </div>

@@ -229,9 +229,29 @@ export default {
     });
   },
 
+  createChat(senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + senderId + "/" + recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
+    });
+  },
+
   unlikeProfilePostComment(commentId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/comment/" + commentId + "/person/" + personId + "/unlike",
+      url:
+        this.SERVER_PREFIX +
+        "/comment/" +
+        commentId +
+        "/person/" +
+        personId +
+        "/unlike",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -242,7 +262,13 @@ export default {
 
   likeProfilePostReply(replyId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/like",
+      url:
+        this.SERVER_PREFIX +
+        "/reply/" +
+        replyId +
+        "/person/" +
+        personId +
+        "/like",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -253,7 +279,13 @@ export default {
 
   unlikeProfilePostReply(replyId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId + "/unlike",
+      url:
+        this.SERVER_PREFIX +
+        "/reply/" +
+        replyId +
+        "/person/" +
+        personId +
+        "/unlike",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -276,6 +308,28 @@ export default {
     });
   },
 
+  getPersonsChat(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  setAllMessagesAsOpened(chatId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/chat/" + chatId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
   deleteProfilePostReply(replyId, personId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/reply/" + replyId + "/person/" + personId,
@@ -284,6 +338,27 @@ export default {
         "Content-Type": "application/json",
       },
       type: "DELETE",
+    });
+  },
+
+  addMessageToChat(chatId, senderId, recipientId, messageBody) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/message/" +
+        chatId +
+        "/" +
+        senderId +
+        "/" +
+        recipientId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        body: messageBody,
+      }),
     });
   },
 
@@ -355,5 +430,4 @@ export default {
       type: "GET",
     });
   },
-
 };
