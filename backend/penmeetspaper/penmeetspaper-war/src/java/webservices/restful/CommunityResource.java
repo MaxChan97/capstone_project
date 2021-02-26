@@ -84,6 +84,8 @@ public class CommunityResource {
         String communityName = jsonObject.getString("communityName");
         String communityProfilePicture = jsonObject.getString("communityProfilePicture");
         String communityBanner = jsonObject.getString("communityBanner");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
         Community community = new Community();
         community.setName(communityName);
@@ -100,6 +102,7 @@ public class CommunityResource {
         } else {
             community.setCommunityBanner(communityBanner);
         }
+        community.setTopicEnums(topicInterests);
 
         try {
             Community createdCommunity = communitySB.createCommunity(community, personId);
@@ -137,6 +140,7 @@ public class CommunityResource {
         String description = jsonObject.getString("description");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
         String communityProfilePicture = jsonObject.getString("communityProfilePicture");
+        String communityBanner = jsonObject.getString("communityBanner");
 
         List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
@@ -146,6 +150,7 @@ public class CommunityResource {
             comm.setCommunityProfilePicture(communityProfilePicture);
             comm.setDescription(description);
             comm.setTopicEnums(topicInterests);
+            comm.setCommunityBanner(communityBanner);
 
             communitySB.updateCommunity(comm);
 
