@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import TopBar from "../components/CommunityPage/TopBar";
 import CreatePostCard from "../components/CommunityPage/CreatePostCard";
@@ -7,13 +7,38 @@ import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import AboutMe from "../components/CommunityPage/AboutMe";
 import PostList from "../components/CommunityPage/PostList";
 import SearchCard from "../components/CommunityPage/SearchCard";
+import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
 
 export default function CommunityPage() {
+  const alert = useAlert();
+  const { communityId } = useParams();
+
+  const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const currentUser = useSelector((state) => state.currentUser);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadData(communityId);
+    }
+  }, [communityId]);
+
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
+
+  function loadData(communityId) {
+    Api.getCommunityById(communityId)
+      .done((currentCommunity) => {
+        console.log(currentCommunity);
+        setCurrentCommunity(currentCommunity);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This community does not exist!");
+      });
+  }
+
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
@@ -39,9 +64,17 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="content-wrapper">
-      <TopBar tabValue={tabValue} setTabValue={setTabValue} />
+    currentCommunity.members !== undefined ? (
+      <div className="content-wrapper">
+      <TopBar 
+      tabValue={tabValue} 
+      setTabValue={setTabValue} 
+      communityName={currentCommunity.name}
+      communityPicture= {currentCommunity.communityProfilePicture}
+      communityBanner = {currentCommunity.communityBanner}
+      numMembers = {currentCommunity.members.length} 
+      />
       {handleTabView(tabValue)}
     </div>
-  );
+    ) : (null));
 }

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import FollowerRow from "./FollowerRow";
 
-export default function FollowerCard({ followerList }) {
+export default function FollowerCard({ followerList, searchTerm}) {
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
+    console.log(followerList)
     const results = followerList.filter(follower =>
-      follower["follower"].toLowerCase().includes(searchTerm)
+      follower["follower"].username.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
   }, [searchTerm]);
