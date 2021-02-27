@@ -21,7 +21,6 @@ import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";
 import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 import CreateCommunity from "./screens/CreateCommunityPage";
-import MyCommunities from "./screens/MyCommunitiesPage";
 
 function App() {
   let location = useLocation();

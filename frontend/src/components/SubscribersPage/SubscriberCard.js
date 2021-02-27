@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SubscriberRow from "./SubscriberRow";
 
-export default function SubscriberCard({ subscriberList }) {
+export default function SubscriberCard({ subscriberList,searchTerm }) {
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    console.log(subscriberList)
+    const results = subscriberList.filter(subscriber =>
+      subscriber["subscriber"].username.toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(results);
+  }, [searchTerm]);
 
   return (
     subscriberList !== undefined ? (
@@ -16,7 +25,7 @@ export default function SubscriberCard({ subscriberList }) {
           </p>
 
           <ul class="list-group list-group-flush">
-            {subscriberList.map((row, index) => {
+            {searchResults.map((row, index) => {
               return (
                 <li key={index} class="list-group-item">
                   <SubscriberRow subscriber={row} />

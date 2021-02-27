@@ -72,52 +72,117 @@ export default function ChatBox({
     setFileUrl("");
     setFileType("");
     setCaption("");
+    setProgress(0);
   };
 
   const changeFileHandler = (event) => {
-    var oldName = event.target.files[0].name;
-    setFileName(event.target.files[0].name);
-    setFileType(event.target.files[0].type);
-    var suffix = oldName.split(".")[1];
-    var randomId = uuid.v4();
-    var newName = randomId.toString() + "." + suffix;
-    const uploadTask = storage
-      .ref(`images/${newName}`)
-      .put(event.target.files[0]);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("images")
-          .child(newName)
-          .getDownloadURL()
-          .then((url) => {
-            setFileUrl(url);
-          });
-        handleClickOpen();
-      }
-    );
+    if (event.target.files[0] != undefined) {
+      var oldName = event.target.files[0].name;
+      setFileName(event.target.files[0].name);
+      setFileType(event.target.files[0].type);
+      var suffix = oldName.split(".")[1];
+      var randomId = uuid.v4();
+      var newName = randomId.toString() + "." + suffix;
+      const uploadTask = storage
+        .ref(`files/${newName}`)
+        .put(event.target.files[0]);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progress);
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("files")
+            .child(newName)
+            .getDownloadURL()
+            .then((url) => {
+              setFileUrl(url);
+            });
+          handleClickOpen();
+        }
+      );
+    }
   };
 
   useEffect(() => {
     let messageList = [];
     selectedChat.chatMessages.map((data) => {
-      let message = {
-        position: data.sender.id === currentUser ? "right" : "left",
-        type: "text",
-        text: data.body,
-        date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-      };
-      messageList.push(message);
+      if (
+        data.fileName == null ||
+        data.fileUrl == null ||
+        data.fileType == null
+      ) {
+        let message = {
+          position: data.sender.id === currentUser ? "right" : "left",
+          type: "text",
+          text: data.body,
+          date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+        };
+        messageList.push(message);
+      } else {
+        // got file in this msg
+        let MIMEPrefix = data.fileType.split("/")[0];
+        if (MIMEPrefix === "image") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "photo",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
+          };
+          messageList.push(message);
+        } else if (MIMEPrefix === "video") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "video",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
+          };
+          messageList.push(message);
+        } else if (MIMEPrefix === "audio") {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "audio",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
+          };
+          messageList.push(message);
+        } else {
+          let message = {
+            position: data.sender.id === currentUser ? "right" : "left",
+            type: "file",
+            text: data.body,
+            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
+          };
+          messageList.push(message);
+        }
+      }
     });
     setMessages(messageList);
   }, [selectedChat]);
@@ -288,6 +353,27 @@ export default function ChatBox({
     }
   }
 
+  function handleMessageFileDownload(messageObject) {
+    if (messageObject.data != undefined) {
+      let httpsReference = storage.refFromURL(messageObject.data.uri);
+      httpsReference
+        .getDownloadURL()
+        .then((url) => {
+          // This can be downloaded directly:
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = (event) => {
+            var blob = xhr.response;
+          };
+          xhr.open("GET", url);
+          xhr.send();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
   function renderChat() {
     return (
       <div id="Chat" style={{ overflowY: "auto", marginTop: "5px" }}>
@@ -295,6 +381,7 @@ export default function ChatBox({
           className="message-list"
           lockable={true}
           dataSource={messages}
+          onClick={(messageObject) => handleMessageFileDownload(messageObject)}
         />
       </div>
     );
@@ -341,15 +428,18 @@ export default function ChatBox({
           open={open}
         >
           <DialogContent dividers>
-            {fileType.split("/")[0] == "image" ? (
-              progress == 100 ? (
-                <img className="img-fluid mx-auto d-block" src={fileUrl} />
+            {fileUrl &&
+              fileName &&
+              fileType &&
+              (fileType.split("/")[0] == "image" ? (
+                progress == 100 ? (
+                  <img className="img-fluid mx-auto d-block" src={fileUrl} />
+                ) : (
+                  <progress value={progress} max="100" />
+                )
               ) : (
-                <progress value={progress} max="100" />
-              )
-            ) : (
-              <FileTypes data={fileName.split(".")[1]}></FileTypes>
-            )}
+                <FileTypes data={fileName.split(".")[1]}></FileTypes>
+              ))}
 
             <TextField
               autoFocus

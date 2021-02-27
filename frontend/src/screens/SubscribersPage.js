@@ -13,8 +13,9 @@ export default function SubscriberPage() {
   const currentUser = useSelector((state) => state.currentUser);
   const [followerList, setFollowerList] = useState([]);
   const [subscriberList, setSubscriberList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // const [currentPerson, setCurrentPerson] = useState({});
+
   const alert = useAlert();
 
 
@@ -48,13 +49,13 @@ export default function SubscriberPage() {
       <div className="container">
         <div className="row">
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <FollowerCard followerList={followerList} />
+            <FollowerCard followerList={followerList} searchTerm = {searchTerm}/>
           </div>
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <SubscriberCard subscriberList={subscriberList} />
+            <SubscriberCard subscriberList={subscriberList} searchTerm = {searchTerm}/>
           </div>
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <SearchCard />
+            <SearchCard searchTerm = {searchTerm} setSearchTerm = {setSearchTerm}/>
           </div>
         </div>
       </div>
