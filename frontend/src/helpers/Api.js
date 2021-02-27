@@ -501,11 +501,12 @@ export default {
 
   createCommunity(
     id,
-    communityName, 
-    communityDescription, 
+    communityName,
+    communityDescription,
     topicEnums,
     communityProfilePicture,
-    communityBanner) {
+    communityBanner
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/community" + "/person/" + id,
       headers: {
@@ -521,5 +522,85 @@ export default {
         communityBanner: communityBanner,
       }),
     });
-  }
+  },
+
+  followPerson(followerId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/follow/follower/" +
+        followerId +
+        "/publisher/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+    });
+  },
+
+  unfollowPerson(followerId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/follow/follower/" +
+        followerId +
+        "/publisher/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  subscribeToPerson(subscriberId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/subscription/subscriber/" +
+        subscriberId +
+        "/publisher/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+    });
+  },
+
+  unsubscribeFromPerson(subscriberId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/subscription/subscriber/" +
+        subscriberId +
+        "/publisher/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  resubscribeToPerson(subscriberId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/subscription/subscriber/" +
+        subscriberId +
+        "/publisher/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
 };
