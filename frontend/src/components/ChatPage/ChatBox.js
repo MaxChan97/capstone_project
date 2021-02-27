@@ -81,7 +81,7 @@ export default function ChatBox({
     var randomId = uuid.v4();
     var newName = randomId.toString() + "." + suffix;
     const uploadTask = storage
-      .ref(`images/${newName}`)
+      .ref(`files/${newName}`)
       .put(event.target.files[0]);
     uploadTask.on(
       "state_changed",
@@ -96,7 +96,7 @@ export default function ChatBox({
       },
       () => {
         storage
-          .ref("images")
+          .ref("files")
           .child(newName)
           .getDownloadURL()
           .then((url) => {
@@ -131,32 +131,52 @@ export default function ChatBox({
             type: "photo",
             text: data.body,
             date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
           };
+          messageList.push(message);
         } else if (MIMEPrefix === "video") {
           let message = {
             position: data.sender.id === currentUser ? "right" : "left",
             type: "video",
             text: data.body,
             date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
           };
+          messageList.push(message);
         } else if (MIMEPrefix === "audio") {
           let message = {
             position: data.sender.id === currentUser ? "right" : "left",
             type: "audio",
             text: data.body,
             date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
           };
+          messageList.push(message);
         } else {
           let message = {
             position: data.sender.id === currentUser ? "right" : "left",
             type: "file",
             text: data.body,
             date: dayjs(data.dateTime.slice(0, 24)).toDate(),
-            data: { uri: data.fileUrl, status: { click: false, loading: 0 } },
+            data: {
+              uri: data.fileUrl,
+              status: { click: false, loading: 0 },
+              MIMEPrefix: MIMEPrefix,
+            },
           };
+          messageList.push(message);
         }
       }
     });
@@ -329,6 +349,27 @@ export default function ChatBox({
     }
   }
 
+  function handleMessageFileDownload(messageObject) {
+    if (messageObject.data != undefined) {
+      let httpsReference = storage.refFromURL(messageObject.data.uri);
+      httpsReference
+        .getDownloadURL()
+        .then((url) => {
+          // This can be downloaded directly:
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = (event) => {
+            var blob = xhr.response;
+          };
+          xhr.open("GET", url);
+          xhr.send();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
   function renderChat() {
     return (
       <div id="Chat" style={{ overflowY: "auto", marginTop: "5px" }}>
@@ -336,6 +377,7 @@ export default function ChatBox({
           className="message-list"
           lockable={true}
           dataSource={messages}
+          onClick={(messageObject) => handleMessageFileDownload(messageObject)}
         />
       </div>
     );
