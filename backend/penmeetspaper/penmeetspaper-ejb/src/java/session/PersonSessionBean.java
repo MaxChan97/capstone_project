@@ -5,12 +5,14 @@
  */
 package session;
 
+import entity.Community;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,6 +32,13 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @EJB
     private BanSessionBeanLocal banSB;
+
+    @EJB
+    private CommunitySessionBeanLocal communitySB;
+
+    private Community getDetachedCommunity(Community c) throws NoResultException, NotValidException {
+        return communitySB.getCommunityById(c.getId());
+    }
 
     private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
         if (personId == null) {
@@ -220,5 +229,25 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
 
         return publications;
+    }
+
+    @Override
+    public List<Community> getFollowingAndOwnedCommunities(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        List<Community> ownedCommunities = person.getOwnedCommunities();
+        List<Community> followingCommunities = person.getFollowingCommunities();
+
+        List<Community> result = new ArrayList();
+
+        for (Community c : ownedCommunities) {
+            result.add(getDetachedCommunity(c));
+        }
+
+        for (Community c : followingCommunities) {
+            result.add(getDetachedCommunity(c));
+        }
+
+        return result;
+
     }
 }
