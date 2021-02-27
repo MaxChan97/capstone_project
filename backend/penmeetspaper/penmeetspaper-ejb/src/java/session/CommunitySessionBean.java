@@ -94,6 +94,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         Ban ban = banSB.createBan();
 
         community.setOwner(owner);
+        community.getMembers().add(owner);
         community.setBan(ban);
 
         em.persist(community);
