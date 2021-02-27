@@ -109,6 +109,7 @@ public class ChatResource {
       return Response.status(404).entity(exception)
               .type(MediaType.APPLICATION_JSON).build();
     }
+  }
 
   @PUT
   @Path("/{id}")
