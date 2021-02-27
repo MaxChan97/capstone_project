@@ -9,7 +9,6 @@ import Api from "../helpers/Api";
 
 
 export default function SubscriberPage() {
-  const { personId } = useParams();
 
   const currentUser = useSelector((state) => state.currentUser);
   const [followerList, setFollowerList] = useState([]);
@@ -22,7 +21,6 @@ export default function SubscriberPage() {
   useEffect(() => { 
     if (currentUser) {
       loadData(currentUser);
-      console.log(currentUser);
     }
   }, [currentUser]);
 
@@ -30,8 +28,6 @@ export default function SubscriberPage() {
     return <Redirect to="/login" />;
   }
 
-  //useEffect(() => { }, [subscriberList]);
-  //useEffect(() => { }, [followerList]);
 
   function loadData(currentUser) {
     Api.getFollowers(currentUser)
