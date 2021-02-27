@@ -196,172 +196,174 @@ export default function CustomiseProfile() {
 
   return (
     <div className="content-wrapper">
-      <div className="col-md-9" style={{ textAlign: "left" }}>
-        <div className="card card-primary">
-          <div className="card-body">
-            <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
-              Profile Picture
-            </Box>
-            <div style={{ display: "flex", alignItems: "baseline" }}>
-              <div className="container">
-                <div className="row">
-                  <div className="col-sm-3">
-                    <img
-                      style={{
-                        resizeMode: "repeat",
-                        height: 130,
-                        width: 130,
-                        borderRadius: "50%",
-                        display: "block"
-                      }}
-                      src={profilePicture || defaultDP}
-                      alt="Profile Picture"
+      <div className="row">
+        <div className="col-md-9 mt-4 ml-4" style={{ textAlign: "left" }}>
+          <div className="card card-primary">
+            <div className="card-body">
+              <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
+                Profile Picture
+              </Box>
+              <div style={{ display: "flex", alignItems: "baseline" }}>
+                <div className="container">
+                  <div className="row">
+                    <div className="col-sm-3">
+                      <img
+                        style={{
+                          resizeMode: "repeat",
+                          height: 130,
+                          width: 130,
+                          borderRadius: "50%",
+                          display: "block"
+                        }}
+                        src={profilePicture || defaultDP}
+                        alt="Profile Picture"
+                      />
+                    </div>
+                    <div className="col-sm-8">
+                      <label
+                        for="pp"
+                        className="btn"
+                        style={{
+                          height: "35px",
+                          width: "200px",
+                          outline: "none",
+                          fontWeight: "600",
+                          "background-color": "#3B21CB",
+                          color: "white",
+                        }}
+                      >
+                        <p>ADD PROFILE PICTURE</p>
+                        <input
+                          id="pp"
+                          type="file"
+                          name="file"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          onChange={changeProfilePictureHandler}
+                        />
+                      </label>
+                      <Box fontWeight="fontWeightRegular" m={1}>
+                        JPEG or PNG only and cannot exceed 10MB. It’s recommended
+                        to use a picture that’s at least 100 x 100 pixels
+                      </Box>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br></br>
+
+              <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
+                Profile Banner
+              </Box>
+              <img
+                style={{
+                  resizeMode: "repeat",
+                  height: 80,
+                  width: 512,
+                }}
+                src={profileBanner || defaultBanner}
+              />
+              <Box fontWeight="fontWeightRegular" m={1}>
+                File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
+              </Box>
+              <label
+                for="pb"
+                className="btn"
+                style={{
+                  height: "35px",
+                  width: "100px",
+                  outline: "none",
+                  fontWeight: "600",
+                  "background-color": "#3B21CB",
+                  color: "white",
+                }}
+              >
+                <p>UPLOAD</p>
+                <input
+                  id="pb"
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={changeProfileBannerHandler}
+                />
+              </label>
+              <br></br>
+              <br></br>
+
+              <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
+                Profile Details
+              </Box>
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <div className="card-body">
+                  <div className="form-group">
+                    <label htmlFor="inputUsername">Username</label>
+                    <input
+                      type="text"
+                      id="inputUsername"
+                      // required
+                      className="form-control"
+                      value={username}
+                      onChange={handleUsernameChange}
                     />
                   </div>
-                  <div className="col-sm-8">
-                    <label
-                      for="pp"
-                      className="btn"
+                  <div className="form-group">
+                    <label htmlFor="inputAbout">About</label>
+                    <input
+                      type="text"
+                      id="inputAbout"
+                      // required
+                      className="form-control"
+                      value={description}
+                      onChange={handleAboutChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="inputInterests">Interests</label>
+                    {topicInterests !== undefined ? (
+                      <Select
+                        value={topicInterests.map((x) => MakeOption(x))}
+                        isMulti
+                        name="topics"
+                        options={topics}
+                        onChange={(selectedOptions) =>
+                          handleTopicInterestsChange(selectedOptions)
+                        }
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    ) : (
+                      <Select
+                        isMulti
+                        name="topics"
+                        options={topics}
+                        onChange={(selectedOptions) =>
+                          handleTopicInterestsChange(selectedOptions)
+                        }
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    )}
+                  </div>
+                  <div className="form-group">
+                    <ColorButton
                       style={{
                         height: "35px",
-                        width: "200px",
+                        width: "100px",
                         outline: "none",
+                        float: "right",
                         fontWeight: "600",
-                        "background-color": "#3B21CB",
-                        color: "white",
                       }}
+                      variant="contained"
+                      color="primary"
+                      type="submit"
                     >
-                      <p>ADD PROFILE PICTURE</p>
-                      <input
-                        id="pp"
-                        type="file"
-                        name="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        onChange={changeProfilePictureHandler}
-                      />
-                    </label>
-                    <Box fontWeight="fontWeightRegular" m={1}>
-                      JPEG or PNG only and cannot exceed 10MB. It’s recommended
-                      to use a picture that’s at least 100 x 100 pixels
-                    </Box>
+                      Save
+                    </ColorButton>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
-            <br></br>
-
-            <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
-              Profile Banner
-            </Box>
-            <img
-              style={{
-                resizeMode: "repeat",
-                height: 80,
-                width: 512,
-              }}
-              src={profileBanner || defaultBanner}
-            />
-            <Box fontWeight="fontWeightRegular" m={1}>
-              File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
-            </Box>
-            <label
-              for="pb"
-              className="btn"
-              style={{
-                height: "35px",
-                width: "100px",
-                outline: "none",
-                fontWeight: "600",
-                "background-color": "#3B21CB",
-                color: "white",
-              }}
-            >
-              <p>UPLOAD</p>
-              <input
-                id="pb"
-                type="file"
-                name="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={changeProfileBannerHandler}
-              />
-            </label>
-            <br></br>
-            <br></br>
-
-            <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
-              Profile Details
-            </Box>
-            <form onSubmit={(e) => handleSubmit(e)}>
-              <div className="card-body">
-                <div className="form-group">
-                  <label htmlFor="inputUsername">Username</label>
-                  <input
-                    type="text"
-                    id="inputUsername"
-                    // required
-                    className="form-control"
-                    value={username}
-                    onChange={handleUsernameChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="inputAbout">About</label>
-                  <input
-                    type="text"
-                    id="inputAbout"
-                    // required
-                    className="form-control"
-                    value={description}
-                    onChange={handleAboutChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="inputInterests">Interests</label>
-                  {topicInterests !== undefined ? (
-                    <Select
-                      value={topicInterests.map((x) => MakeOption(x))}
-                      isMulti
-                      name="topics"
-                      options={topics}
-                      onChange={(selectedOptions) =>
-                        handleTopicInterestsChange(selectedOptions)
-                      }
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  ) : (
-                    <Select
-                      isMulti
-                      name="topics"
-                      options={topics}
-                      onChange={(selectedOptions) =>
-                        handleTopicInterestsChange(selectedOptions)
-                      }
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  )}
-                </div>
-                <div className="form-group">
-                  <ColorButton
-                    style={{
-                      height: "35px",
-                      width: "100px",
-                      outline: "none",
-                      float: "right",
-                      fontWeight: "600",
-                    }}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                  >
-                    Save
-                  </ColorButton>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
       </div>

@@ -20,6 +20,8 @@ import ChatPage from "./screens/ChatPage";
 import CustomiseProfile from "./screens/CustomiseProfile";
 import Subscribers from "./screens/SubscribersPage";
 import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
+import CreateCommunity from "./screens/CreateCommunityPage";
+import MyCommunities from "./screens/MyCommunitiesPage";
 
 function App() {
   let location = useLocation();
@@ -63,6 +65,8 @@ function App() {
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
+            <Route exact path="/createCommunity" component={CreateCommunity} />
+            <Route exact path="/myCommunities" component={MyCommunities} />
             <Route
               exact
               path="/customiseProfile"
