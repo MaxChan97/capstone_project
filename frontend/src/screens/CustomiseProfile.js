@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const topics = [
   { value: "REAL_ESTATE", label: "Real Estate" },
   { value: "FUTURES", label: "Futures" },
@@ -67,7 +66,7 @@ export default function CustomiseProfile() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = Math.round(
+        let progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
       },
@@ -115,8 +114,6 @@ export default function CustomiseProfile() {
       }
     );
   };
-
-
 
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);

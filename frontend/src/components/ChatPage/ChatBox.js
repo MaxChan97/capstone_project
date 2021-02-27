@@ -12,6 +12,14 @@ import chatMedia from "../../assets/chatMedia.png";
 import Api from "../../helpers/Api";
 import { db } from "../../firebase";
 import { animateScroll } from "react-scroll";
+import { storage } from "../../firebase";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import TextField from "@material-ui/core/TextField";
+import { withStyles } from "@material-ui/core/styles";
+import FileTypes from "../../components/FileTypes.js";
+var uuid = require("uuid");
 
 const styles = {
   chat: {
@@ -25,6 +33,19 @@ const styles = {
   },
 };
 
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
+
 export default function ChatBox({
   selectedChat,
   setSelectedChat,
@@ -33,8 +54,59 @@ export default function ChatBox({
 }) {
   const [messages, setMessages] = useState([]);
   const [newText, setNewText] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
+  const [fileType, setFileType] = useState("");
+  const [caption, setCaption] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const [progress, setProgress] = useState(0);
 
   const inputRef = useRef("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setFileName("");
+    setFileUrl("");
+    setFileType("");
+    setCaption("");
+  };
+
+  const changeFileHandler = (event) => {
+    var oldName = event.target.files[0].name;
+    setFileName(event.target.files[0].name);
+    setFileType(event.target.files[0].type);
+    var suffix = oldName.split(".")[1];
+    var randomId = uuid.v4();
+    var newName = randomId.toString() + "." + suffix;
+    const uploadTask = storage
+      .ref(`images/${newName}`)
+      .put(event.target.files[0]);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("images")
+          .child(newName)
+          .getDownloadURL()
+          .then((url) => {
+            setFileUrl(url);
+          });
+        handleClickOpen();
+      }
+    );
+  };
 
   useEffect(() => {
     let messageList = [];
@@ -161,6 +233,61 @@ export default function ChatBox({
     }
   }
 
+  function handleFileSend() {
+    if (selectedChat.id === -1) {
+      // means is a new chat
+      Api.createFileChat(
+        currentUser,
+        getChatOtherPerson(selectedChat.chatParticipants).id,
+        caption,
+        fileName,
+        fileUrl,
+        fileType
+      ).done((createdChat) => {
+        // setNewText("");
+        // inputRef.current.clear();
+        setSelectedChat(createdChat);
+        setNewChat([]);
+        db.collection("ChatRefresh")
+          .doc("NtzSzbG7RS66mvutS0kT")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("ChatRefresh")
+                .doc("NtzSzbG7RS66mvutS0kT")
+                .update({ chatRefresh: !doc.data().chatRefresh });
+            }
+          });
+        handleClose();
+      });
+    } else {
+      // existing chat
+      Api.addFileToChat(
+        selectedChat.id,
+        currentUser,
+        getChatOtherPerson(selectedChat.chatParticipants).id,
+        caption,
+        fileName,
+        fileUrl,
+        fileType
+      ).done(() => {
+        handleClose();
+        // setNewText("");
+        // inputRef.current.clear();
+        db.collection("ChatRefresh")
+          .doc("NtzSzbG7RS66mvutS0kT")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("ChatRefresh")
+                .doc("NtzSzbG7RS66mvutS0kT")
+                .update({ chatRefresh: !doc.data().chatRefresh });
+            }
+          });
+      });
+    }
+  }
+
   function renderChat() {
     return (
       <div id="Chat" style={{ overflowY: "auto", marginTop: "5px" }}>
@@ -175,35 +302,72 @@ export default function ChatBox({
 
   function renderChatInput() {
     return (
-      <Input
-        ref={inputRef}
-        placeholder="Type here..."
-        onChange={(e) => setNewText(e.target.value)}
-        multiline={false}
-        autofocus={true}
-        rightButtons={
-          <Button style={{ outline: "none" }} onClick={handleSend}>
-            <img src={chatSendButton} alt="chatSendButton" />
-          </Button>
-        }
-        leftButtons={
-          <div>
-            <Button style={{ outline: "none" }}>
-              <img style={{ height: "23px" }} src={chatSmile} alt="chatSmile" />
+      <div>
+        <Input
+          ref={inputRef}
+          placeholder="Type here..."
+          onChange={(e) => setNewText(e.target.value)}
+          multiline={false}
+          autofocus={true}
+          rightButtons={
+            <Button style={{ outline: "none" }} onClick={handleSend}>
+              <img src={chatSendButton} alt="chatSendButton" />
             </Button>
-            <Button style={{ outline: "none" }}>
-              <img
-                style={{ height: "23px" }}
-                src={chatPaperClip}
-                alt="chatPaperClip"
-              />
+          }
+          leftButtons={
+            <div>
+              <Button style={{ outline: "none" }}>
+                <label for="pic" className="btn">
+                  <img
+                    style={{ height: "23px" }}
+                    src={chatPaperClip}
+                    alt="chatPaperClip"
+                  />
+                  <input
+                    id="pic"
+                    type="file"
+                    name="file"
+                    style={{ display: "none" }}
+                    onChange={changeFileHandler}
+                  />
+                </label>
+              </Button>
+            </div>
+          }
+        />
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <DialogContent dividers>
+            {fileType.split("/")[0] == "image" ? (
+              progress == 100 ? (
+                <img className="img-fluid mx-auto d-block" src={fileUrl} />
+              ) : (
+                <progress value={progress} max="100" />
+              )
+            ) : (
+              <FileTypes data={fileName.split(".")[1]}></FileTypes>
+            )}
+
+            <TextField
+              autoFocus
+              margin="dense"
+              id="body"
+              label="Caption"
+              type="text"
+              fullWidth
+              onChange={(e) => setCaption(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleFileSend} color="primary">
+              Send
             </Button>
-            <Button style={{ outline: "none" }}>
-              <img style={{ height: "23px" }} src={chatMedia} alt="chatMedia" />
-            </Button>
-          </div>
-        }
-      />
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   }
 

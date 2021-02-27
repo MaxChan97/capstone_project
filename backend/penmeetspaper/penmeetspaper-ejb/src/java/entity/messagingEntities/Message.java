@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,118 +25,136 @@ import javax.persistence.TemporalType;
 @Entity
 public class Message implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    // unidirectional
-    @ManyToOne
-    @JoinColumn(name = "messagesSent_person")
-    private Person sender;
+  // unidirectional
+  @ManyToOne
+  @JoinColumn(name = "messagesSent_person")
+  private Person sender;
 
-    // unidirectional
-    @ManyToOne
-    @JoinColumn(name = "messagesRecieved_person")
-    private Person recipient;
+  // unidirectional
+  @ManyToOne
+  @JoinColumn(name = "messagesRecieved_person")
+  private Person recipient;
 
-    private String body;
-    
-    private boolean opened = false;
-    
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTime;
+  private String body;
 
-    // unidirectional / nullable
-    @OneToOne
-    private File file;
+  private String fileName;
 
-    public Long getId() {
-        return id;
+  private String fileUrl;
+
+  private String fileType;
+
+  private boolean opened = false;
+
+  @Column(nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date dateTime;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Person getSender() {
+    return sender;
+  }
+
+  public void setSender(Person sender) {
+    this.sender = sender;
+  }
+
+  public Person getRecipient() {
+    return recipient;
+  }
+
+  public void setRecipient(Person recipient) {
+    this.recipient = recipient;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public void setBody(String body) {
+    this.body = body;
+  }
+
+  public Date getDateTime() {
+    return dateTime;
+  }
+
+  public void setDateTime(Date dateTime) {
+    this.dateTime = dateTime;
+  }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
+  }
+
+  public String getFileType() {
+    return fileType;
+  }
+
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof Message)) {
+      return false;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    Message other = (Message) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public Person getSender() {
-        return sender;
-    }
+  @Override
+  public String toString() {
+    return "entity.Message[ id=" + id + " ]";
+  }
 
-    public void setSender(Person sender) {
-        this.sender = sender;
-    }
+  /**
+   * @return the opened
+   */
+  public boolean isOpened() {
+    return opened;
+  }
 
-    public Person getRecipient() {
-        return recipient;
-    }
+  /**
+   * @param opened the opened to set
+   */
+  public void setOpened(boolean opened) {
+    this.opened = opened;
+  }
 
-    public void setRecipient(Person recipient) {
-        this.recipient = recipient;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public Date getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Message)) {
-            return false;
-        }
-        Message other = (Message) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Message[ id=" + id + " ]";
-    }
-
-    /**
-     * @return the opened
-     */
-    public boolean isOpened() {
-        return opened;
-    }
-
-    /**
-     * @param opened the opened to set
-     */
-    public void setOpened(boolean opened) {
-        this.opened = opened;
-    }
-    
 }

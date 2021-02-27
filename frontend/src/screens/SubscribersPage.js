@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAlert } from "react-alert";
 import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import SubscriberCard from "../components/SubscribersPage/SubscriberCard";
@@ -7,19 +8,19 @@ import SearchCard from "../components/SubscribersPage/SearchCard";
 import Api from "../helpers/Api";
 
 
-
 export default function SubscriberPage() {
+
   const currentUser = useSelector((state) => state.currentUser);
   const [followerList, setFollowerList] = useState([]);
   const [subscriberList, setSubscriberList] = useState([]);
-  const { personId } = useParams();
 
-  const [currentPerson, setCurrentPerson] = useState({});
+  // const [currentPerson, setCurrentPerson] = useState({});
+  const alert = useAlert();
+
 
   useEffect(() => { 
     if (currentUser) {
       loadData(currentUser);
-      console.log(currentUser);
     }
   }, [currentUser]);
 
@@ -27,23 +28,15 @@ export default function SubscriberPage() {
     return <Redirect to="/login" />;
   }
 
-  //useEffect(() => { }, [subscriberList]);
-  //useEffect(() => { }, [followerList]);
 
   function loadData(currentUser) {
-    Api.getFollowers(currentUser.id)
-      .done((currentUser) => {
-        setFollowerList(followerList);
-        console.log(currentPerson);
+    Api.getFollowers(currentUser)
+      .done((data) => {
+        setFollowerList(data);
       })
-      .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
-      });
-
-      Api.getSubscribers(currentUser.id)
-      .done((currentUser) => {
-        setSubscriberList(subscriberList);
-        console.log(currentPerson);
+      Api.getSubscribers(currentUser)
+      .done((data) => {
+        setSubscriberList(data);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");

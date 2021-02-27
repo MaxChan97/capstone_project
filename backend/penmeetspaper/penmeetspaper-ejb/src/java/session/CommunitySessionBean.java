@@ -92,7 +92,8 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         Person owner = emGetPerson(ownerId);
         Ban ban = banSB.createBan();
-        System.out.println(ban.getId());
+
+        community.setOwner(owner);
         community.setBan(ban);
 
         em.persist(community);
@@ -135,6 +136,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         Community community = emGetCommunity(communityId);
 
         em.detach(community.getOwner());
+
         Person owner = community.getOwner();
 
         community.setOwner(getDetachedPerson(owner));
