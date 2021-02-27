@@ -85,6 +85,7 @@ export default function ProfilePostWithComments() {
       .done((post) => {
         setData(post);
         checkedLiked(post);
+        changeDateFormat(post);
       })
       .fail(() => {
         alert.show("Unable to load post/Post deleted!");
@@ -112,6 +113,14 @@ export default function ProfilePostWithComments() {
     setRefresh(!refresh);
     setLiked(false);
   };
+
+  const [formatDate, setFormatDate] = useState();
+  function changeDateFormat(post) {
+    //remove [UTC] suffix
+    var changedDate = post.datePosted.substring(
+      0,post.datePosted.length - 5);
+      setFormatDate(changedDate);
+  }
 
   return data ? (
     <div className="content-wrapper">
@@ -146,8 +155,12 @@ export default function ProfilePostWithComments() {
                     <Link to={"/profile/" + data.author.id} style={{ marginLeft: 10 }}>
                       {data.author.username}
                     </Link>
-                    <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
-                      {moment().startOf('day').fromNow(data.datePosted)} ago</span>
+                    <span class="description">
+                    {" "}
+                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                    <span>&nbsp; </span>
+                    {moment.utc(formatDate).fromNow()}
+                  </span>
                   </div>
                   {data.author.id == currentUser ? (
                     <div style={{ textAlign: "right" }}>
