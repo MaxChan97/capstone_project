@@ -14,7 +14,6 @@ export default function SubscriberPage() {
   const [followerList, setFollowerList] = useState([]);
   const [subscriberList, setSubscriberList] = useState([]);
 
-  // const [currentPerson, setCurrentPerson] = useState({});
   const alert = useAlert();
 
 
