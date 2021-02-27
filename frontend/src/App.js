@@ -57,7 +57,7 @@ function App() {
             <Route exact path="/following" component={FollowingPage} />
             <Route exact path="/liked" component={LikedPage} />
             <Route exact path="/library" component={LibraryPage} />
-            <Route exact path="/community" component={CommunityPage} />
+            <Route exact path="/community/:communityId" component={CommunityPage} />
             <Route exact path="/categories" component={CategoriesPage} />
             <Route exact path="/feed" component={FeedPage} />
             <Route exact path="/profile/:personId" component={ProfilePage} />
@@ -66,7 +66,7 @@ function App() {
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
-            <Route exact path="/myCommunities" component={MyCommunities} />
+            {/* <Route exact path="/myCommunities" component={MyCommunities} /> */}
             <Route
               exact
               path="/customiseProfile"

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from "react";
 import ProfileGroup from "./ProfileGroup";
 import SocialButtonGroup from "./SocialButtonGroup";
@@ -23,7 +24,7 @@ const StyledTab = withStyles((theme) => ({
     color: "#4A5056",
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(-5),
     "&:focus": {
       opacity: 1,
       color: "#3B21CB",
@@ -32,27 +33,45 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function TopBar({ tabValue, setTabValue }) {
+export default function TopBar({ 
+  tabValue, 
+  setTabValue, 
+  communityName,
+  numMembers,
+  communityPicture,
+  communityBanner}) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div
-          style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
-        ></div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+    
+      <img
+        style={{
+          width:"100%"
+        }}
+        src={communityBanner}
+        alt="Community Banner"
+      />
+     
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingTop: "2.5%",
+          backgroundColor: "#FDFDFD",
+        }}
+      >
+        <ProfileGroup 
+        communityName={communityName}
+        numMembers={numMembers}
+        communityPicture={communityPicture}
+        />
+        <SocialButtonGroup />
       </div>
-      <div className="row py-4" style={{ backgroundColor: "#FDFDFD" }}>
-        <div className="col-sm-8">
-          <ProfileGroup />
-        </div>
-        <div className="col-sm-4 d-flex justify-content-center">
-          <SocialButtonGroup />
-        </div>
-      </div>
-      <div className="row" style={{ backgroundColor: "#FDFDFD" }}>
+      <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%", paddingLeft:"5%"}}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
           <StyledTab label="Posts" />
           <StyledTab label="About" />
