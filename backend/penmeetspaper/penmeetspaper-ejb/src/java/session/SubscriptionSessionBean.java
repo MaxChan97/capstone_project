@@ -84,8 +84,15 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
         }
 
-        if (existingSubscription != null) {
+        if (existingSubscription != null && !existingSubscription.isIsTerminated()) {
+
             throw new NotValidException(SubscriptionSessionBeanLocal.SUB_ALREADY_EXISTS);
+
+        } else if (existingSubscription != null && existingSubscription.isIsTerminated()) {
+
+            // existing subscription that is terminated
+            existingSubscription.setIsTerminated(false);
+            return;
         }
 
         Person subscriber = emGetPerson(subscriberId);
@@ -116,10 +123,4 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
         subscription.setIsTerminated(true);
     }
 
-    @Override
-    public void resubscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
-        Subscription subscription = getSubscription(subscriberId, publisherId);
-
-        subscription.setIsTerminated(false);
-    }
 }
