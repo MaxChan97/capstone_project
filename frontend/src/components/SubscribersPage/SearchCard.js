@@ -25,9 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchCard() {
+export default function SearchCard( {searchTerm, setSearchTerm} ) {
   const classes = useStyles();
-  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div className="card card-primary mx-2">

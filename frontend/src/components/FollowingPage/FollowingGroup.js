@@ -12,7 +12,6 @@ export default function FollowingGroup({ username, numFollowing}) {
         width: "30%",
       }}
     >
-      <img style={{ height: "10vh" }} src={defaultDP} alt="defaultDP" />
       <div
         style={{
           display: "flex",
