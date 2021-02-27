@@ -69,8 +69,6 @@ public class MessageResource {
     String fileUrl = jsonObject.getString("fileUrl");
     String fileType = jsonObject.getString("fileType");
 
-    System.out.println("reach");
-
     Message m = new Message();
     m.setFileName(fileName);
     m.setFileUrl(fileUrl);

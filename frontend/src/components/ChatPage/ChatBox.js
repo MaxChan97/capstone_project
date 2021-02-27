@@ -72,40 +72,43 @@ export default function ChatBox({
     setFileUrl("");
     setFileType("");
     setCaption("");
+    setProgress(0);
   };
 
   const changeFileHandler = (event) => {
-    var oldName = event.target.files[0].name;
-    setFileName(event.target.files[0].name);
-    setFileType(event.target.files[0].type);
-    var suffix = oldName.split(".")[1];
-    var randomId = uuid.v4();
-    var newName = randomId.toString() + "." + suffix;
-    const uploadTask = storage
-      .ref(`files/${newName}`)
-      .put(event.target.files[0]);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("files")
-          .child(newName)
-          .getDownloadURL()
-          .then((url) => {
-            setFileUrl(url);
-          });
-        handleClickOpen();
-      }
-    );
+    if (event.target.files[0] != undefined) {
+      var oldName = event.target.files[0].name;
+      setFileName(event.target.files[0].name);
+      setFileType(event.target.files[0].type);
+      var suffix = oldName.split(".")[1];
+      var randomId = uuid.v4();
+      var newName = randomId.toString() + "." + suffix;
+      const uploadTask = storage
+        .ref(`files/${newName}`)
+        .put(event.target.files[0]);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progress);
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("files")
+            .child(newName)
+            .getDownloadURL()
+            .then((url) => {
+              setFileUrl(url);
+            });
+          handleClickOpen();
+        }
+      );
+    }
   };
 
   useEffect(() => {
@@ -425,15 +428,18 @@ export default function ChatBox({
           open={open}
         >
           <DialogContent dividers>
-            {fileType.split("/")[0] == "image" ? (
-              progress == 100 ? (
-                <img className="img-fluid mx-auto d-block" src={fileUrl} />
+            {fileUrl &&
+              fileName &&
+              fileType &&
+              (fileType.split("/")[0] == "image" ? (
+                progress == 100 ? (
+                  <img className="img-fluid mx-auto d-block" src={fileUrl} />
+                ) : (
+                  <progress value={progress} max="100" />
+                )
               ) : (
-                <progress value={progress} max="100" />
-              )
-            ) : (
-              <FileTypes data={fileName.split(".")[1]}></FileTypes>
-            )}
+                <FileTypes data={fileName.split(".")[1]}></FileTypes>
+              ))}
 
             <TextField
               autoFocus
