@@ -49,7 +49,7 @@ export default {
     });
   },
 
-  createPostForPerson(id, postBody) {
+  createPostForPerson(id, postBody, fileName, fileUrl, fileType) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + id,
       headers: {
@@ -59,6 +59,9 @@ export default {
       type: "POST",
       data: JSON.stringify({
         postBody: postBody,
+        fileName: fileName,
+        fileUrl: fileUrl,
+        fileType: fileType,
       }),
     });
   },
