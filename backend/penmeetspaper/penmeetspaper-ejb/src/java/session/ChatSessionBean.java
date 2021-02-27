@@ -8,7 +8,6 @@ package session;
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
 import entity.personEntities.Person;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -60,6 +59,7 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
 
         return newChat;
     }
+    
 
     public Date getDateOfLastChatMessage(Chat chat) {
         if (chat.getChatMessages().size() != 0) {
