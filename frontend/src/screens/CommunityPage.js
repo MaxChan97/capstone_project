@@ -8,8 +8,10 @@ import AboutMe from "../components/CommunityPage/AboutMe";
 import PostList from "../components/CommunityPage/PostList";
 import SearchCard from "../components/CommunityPage/SearchCard";
 import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
 
 export default function CommunityPage() {
+  const alert = useAlert();
   const { communityId } = useParams();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
