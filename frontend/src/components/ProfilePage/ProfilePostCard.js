@@ -83,10 +83,19 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }
     });
   }
+  
+  const [formatDate, setFormatDate] = useState();
+  function changeDateFormat() {
+    //remove [UTC] suffix
+    var changedDate = data.datePosted.substring(
+      0,data.datePosted.length - 5);
+      setFormatDate(changedDate);
+  }
 
   useEffect(() => {
     if (data) {
       checkedLiked();
+      changeDateFormat();
     }
   }, []);
 
@@ -130,8 +139,9 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
                   <span class="description">
                     {" "}
-                    {moment().calendar(data.datePosted)} <span>&nbsp; </span>
-                    {moment().startOf("day").fromNow(data.datePosted)} ago
+                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                    <span>&nbsp; </span>
+                    {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>
                 {data.author.id == currentUser ? (
