@@ -40,7 +40,8 @@ public class ChatResource {
   @Path("/{senderId}/{recipientId}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response createChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId, String jsonString) {
+  public Response createChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId,
+      String jsonString) {
     JsonReader reader = Json.createReader(new StringReader(jsonString));
     JsonObject jsonObject = reader.readObject();
     String messageBody = jsonObject.getString("body");
@@ -53,12 +54,9 @@ public class ChatResource {
       Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
       return Response.status(200).entity(newChat).build();
     } catch (Exception e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
   }
 
@@ -66,7 +64,8 @@ public class ChatResource {
   @Path("/file/{senderId}/{recipientId}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response createFileChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId, String jsonString) {
+  public Response createFileChat(@PathParam("senderId") Long senderId, @PathParam("recipientId") Long recipientId,
+      String jsonString) {
     JsonReader reader = Json.createReader(new StringReader(jsonString));
     JsonObject jsonObject = reader.readObject();
     String messageBody = jsonObject.getString("body");
@@ -85,12 +84,9 @@ public class ChatResource {
       Chat newChat = chatSBLocal.createChat(senderId, recipientId, m);
       return Response.status(200).entity(newChat).build();
     } catch (Exception e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
   }
 
@@ -125,12 +121,10 @@ public class ChatResource {
 
       return Response.status(204).build();
     } catch (Exception e) {
-      JsonObject exception = Json.createObjectBuilder()
-              .add("error", e.getMessage())
-              .build();
+      JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-      return Response.status(404).entity(exception)
-              .type(MediaType.APPLICATION_JSON).build();
+      return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
+
   }
 }
