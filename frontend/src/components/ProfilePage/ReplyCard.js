@@ -133,7 +133,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
           maxWidth: "72ch",
         }}>
           <div class="post">
-            <Divider variant="fullWidth" component="li" />
+            <Divider variant="middle" />
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img src={defaultDP} alt="User profile picture" />

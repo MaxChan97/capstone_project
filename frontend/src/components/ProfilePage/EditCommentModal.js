@@ -22,7 +22,9 @@ const useStyles = makeStyles({
     minHeight: 100,
     paddingLeft: "5%",
     paddingRight: "5%",
-    marginTop: 150,
+    top: '50%',
+    transform: 'translate(0, -50%)',
+    overflowY: 'auto',
     maxHeight: "auto",
     border: "1px solid #BEBEBE",
     boxShadow: "-10px 10px 4px rgba(0, 0, 0, 0.05)",
@@ -69,10 +71,10 @@ export default function EditCommentModal({ show, handleClose, data }) {
 
   async function handleCancel() {
     handleClose();
-}
+  }
 
   async function handleSubmit() {
-    Api.editProfilePostComment( data.id, currentUser, comment)
+    Api.editProfilePostComment(data.id, currentUser, comment)
       .done(() => {
         alert.show("Edit success!");
       })
@@ -109,7 +111,7 @@ export default function EditCommentModal({ show, handleClose, data }) {
             fullWidth={true}
           />
           <br></br>
-          <div style={{  display: "flex", alignItems: "baseline" }}>
+          <div style={{ display: "flex", alignItems: "baseline" }}>
             <ColorButton
               style={{
                 outline: "none",
@@ -139,7 +141,7 @@ export default function EditCommentModal({ show, handleClose, data }) {
               size="small"
               onClick={handleSubmit}
             >
-             Edit
+              Edit
             </ColorButton>
           </div>
         </CardContent>
