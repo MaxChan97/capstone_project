@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 const jQuery = require("jquery");
 
 const SERVER_PREFIX = "http://localhost:8080/penmeetspaper-war/webresources";
@@ -486,4 +487,39 @@ export default {
       type: "GET",
     });
   },
+
+  getCommunityById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  createCommunity(
+    id,
+    communityName, 
+    communityDescription, 
+    topicEnums,
+    communityProfilePicture,
+    communityBanner) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community" + "/person/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        communityName: communityName,
+        communityDescription: communityDescription,
+        topicEnums: topicEnums,
+        communityProfilePicture: communityProfilePicture,
+        communityBanner: communityBanner,
+      }),
+    });
+  }
 };

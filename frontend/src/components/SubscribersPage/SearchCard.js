@@ -27,22 +27,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchCard() {
   const classes = useStyles();
-  const [searchString, setSearchString] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div className="card card-primary mx-2">
       <div className="card-body">
         <p className="font-weight-normal">
-          Search within your followers and subscribers
+          Search in followers and subscribers
         </p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
             <InputBase
-              value={searchString}
+              value={searchTerm}
               className={classes.input}
               placeholder="Search users"
               onChange={(e) => {
-                setSearchString(e.target.value);
+                setSearchTerm(e.target.value);
               }}
             />
             <IconButton

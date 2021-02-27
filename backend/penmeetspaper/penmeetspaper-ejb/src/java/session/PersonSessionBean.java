@@ -105,6 +105,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setFollowing(null);
         person.setSubscriptions(null);
         person.setPublications(null);
+        person.setOwnedCommunities(null);
+        person.setFollowingCommunities(null);
 
         return person;
     } // end getPersonById

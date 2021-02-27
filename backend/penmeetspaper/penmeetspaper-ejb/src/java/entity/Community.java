@@ -60,10 +60,10 @@ public class Community implements Serializable {
     private Person owner;
 
     @Enumerated(EnumType.STRING)
-    private List<TopicEnum> topicEnums = new ArrayList<>();
+    private List<TopicEnum> topicEnums = new ArrayList();
 
     @OneToMany(mappedBy = "postCommunity")
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList();
 
     // Unidirectional
     @OneToMany

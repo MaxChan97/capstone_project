@@ -92,6 +92,7 @@ public class CommunityResource {
         community.setName(communityName);
         community.setDescription(communityDescription);
         community.setDateCreated(new Date());
+
         if (communityProfilePicture.trim().isEmpty()) {
             community.setCommunityProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
         } else {
@@ -103,13 +104,16 @@ public class CommunityResource {
         } else {
             community.setCommunityBanner(communityBanner);
         }
+
         community.setTopicEnums(topicInterests);
         community.setBan(new Ban());
 
         try {
             Community createdCommunity = communitySB.createCommunity(community, personId);
+            Community detachedCommunity = communitySB.getCommunityById(createdCommunity.getId());
+
             return Response.status(200).entity(
-                    createdCommunity
+                    detachedCommunity
             ).type(MediaType.APPLICATION_JSON).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -122,6 +126,7 @@ public class CommunityResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCommunity(@PathParam("communityId") Long communityId) {
         try {
+
             Community community = communitySB.getCommunityById(communityId);
             return Response.status(200).entity(
                     community
