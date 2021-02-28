@@ -636,4 +636,27 @@ export default {
     });
   },
 
+  editCommunityDetails(
+    communityId,
+    description,
+    topicEnums,
+    communityProfilePicture,
+    communityBanner
+  ) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/" + communityId + "?type=information",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        description: description,
+        topicEnums: topicEnums,
+        communityProfilePicture: communityProfilePicture,
+        communityBanner: communityBanner,
+      }),
+    });
+  },
+
 };

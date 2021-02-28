@@ -21,6 +21,7 @@ import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";
 import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 import CreateCommunity from "./screens/CreateCommunityPage";
+import ManageCommunityDetails from "./screens/ManageCommunityDetails";
 
 function App() {
   let location = useLocation();
@@ -69,6 +70,7 @@ function App() {
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
+            <Route exact path="/community/:communityId/manageDetails" component={ManageCommunityDetails} />
             <Route
               exact
               path="/customiseProfile"

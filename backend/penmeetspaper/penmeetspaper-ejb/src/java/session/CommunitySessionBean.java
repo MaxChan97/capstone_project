@@ -130,6 +130,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         oldCommunity.setDescription(community.getDescription());
         oldCommunity.setTopicEnums(community.getTopicEnums());
         oldCommunity.setCommunityProfilePicture(community.getCommunityProfilePicture());
+        oldCommunity.setCommunityBanner(community.getCommunityBanner());
     } // end of updateCommunity
 
     @Override
