@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
-import SearchCard from "./SearchCard";
+import Api from "../../helpers/Api";
+import Box from "@material-ui/core/Box";
+import * as dayjs from "dayjs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,72 +16,95 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   chip: {
-    margin: theme.spacing(0.5),
+    display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0.5),
+        },
   },
 }));
 
-//chip is the topic tag
+function toTitleCase(str) {
+  var i,
+    frags = str.split("_");
+  for (i = 0; i < frags.length; i++) {
+    frags[i] =
+      frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
+  }
+  return frags.join(" ");
+}
 
 export default function AboutMe() {
   const classes = useStyles();
-  const [topicData, setTopicData] = React.useState([
-    { key: 0, label: "Science" },
-    { key: 1, label: "Comp Sci" },
-    { key: 2, label: "React" },
-  ]);
+  const { communityId } = useParams();
 
-  const [educationLevelData, setEducationLevelData] = React.useState([
-    { key: 1, label: "Primary" },
-    { key: 2, label: "Secondary" },
-    { key: 3, label: "Tertiary" },
-    { key: 4, label: "University" },
-  ]);
-
+  const [currentCommunity, setCurrentCommunity] = useState({});
+  const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
+  useEffect(() => {
+    if (currentUser) {
+      loadData(communityId);
+    }
+  }, [communityId]);
+
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  function loadData(communityId) {
+    Api.getCommunityById(communityId)
+      .done((currentCommunity) => {
+        console.log(currentCommunity);
+        setCurrentCommunity(currentCommunity);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This community does not exist!");
+      });
+      Api.getPersonById(currentUser)
+      .done((currentPerson) => {
+      setCurrentPerson(currentPerson);
+      })
+      .fail((xhr, status, error) => {
+      alert.show("This user does not exist!");
+      });
   }
 
   return (
     <div className="container mt-3 ">
       <div className="row" style={{ textAlign: "left" }}>
-        <div className="card card-primary mx-2 p-2">
-          <div className="card-body">
-            <p className="font-weight-bold">About this Community</p>
-            <p className="font-weight-light">Created 3 January 2021</p>
-            <p className="font-weight-normal">
-              Lorem ipsum dolor sit amet, id malorum accusata temporibus est,
-              impedit delectus quo in, possit nostro explicari ut eos. Mei eu
-              omnium vulputate, quodsi vituperatoribus sit te, sit ad iudico
-              diceret. Ad recteque scriptorem has. Mea oratio tincidunt ex, ei
-              mea illum exerci, ea sit omittam adipiscing deterruisset. Ut sea
-              esse facilisis, periculis inciderint eu vel. Ius habeo tractatos
-              constituto no.
-            </p>
-            <p className="font-weight-bold">Topics</p>
-            <div component="ul" className={classes.root}>
-              {topicData.map((data) => {
-                return (
-                  <li key={data.key}>
-                    <Chip label={data.label} className={classes.chip} />
-                  </li>
-                );
-              })}
+        <div className="col-md-9">
+          <div className="card card-primary mx-2 p-2">
+            <div className="card-body">
+              <Box fontWeight="600" fontSize={20}>
+                  About this Community
+              </Box>
+              {currentCommunity.dateCreated !== undefined ? (
+                <p className="font-weight-light" >Created {dayjs(currentCommunity.dateCreated.slice(0, -5)).format('DD MMMM YYYY')}</p>
+              ): (null)}
+              <p className="font-weight-normal">
+                {currentCommunity.description}
+              </p>
+              
+              <Box fontWeight="600" fontSize={20}>
+                  Related Topics
+              </Box>
+              <div component="ul" className={classes.root}>
+              {currentCommunity.topicEnums !== undefined ? (
+                          <div component="ul" className={classes.chip}>
+                              {currentCommunity.topicEnums.map((topics, index) => <Chip label={toTitleCase(topics)} key={index} style={{backgroundColor: '#F1F3F8'}}/>)}
+                          </div>
+                          ) :
+                          (null)}
+              </div>
+              <br/>
+              <Box fontWeight="600" fontSize={20}>
+                  Community Owner
+              </Box>
+              <p className="font-weight-normal">
+                @{currentPerson.username}
+              </p>
             </div>
-            <p className="font-weight-bold">Education Level</p>
-            <div component="ul" className={classes.root}>
-              {educationLevelData.map((data) => {
-                return (
-                  <li key={data.key}>
-                    <Chip label={data.label} className={classes.chip} />
-                  </li>
-                );
-              })}
-            </div>
-            <p className="font-weight-bold">Community Owner</p>
-            <p className="font-weight-normal">
-              @Reaxpert <i class="fas fa-check-circle"></i>
-            </p>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default function ProfileGroup({
   communityName, 
   numMembers, 
@@ -14,7 +15,12 @@ export default function ProfileGroup({
         width: "30%",
       }}
     >
-      <img style={{ height: "10vh" }} src={communityPicture} alt="communityPicture" />
+      <img style={{  
+        height: 110,
+        width: 110,
+        borderRadius: "50%",
+        display: "block"}} 
+        src={communityPicture} alt="communityPicture" />
       <div
         style={{
           display: "flex",
