@@ -166,4 +166,33 @@ public class CommunityResource {
         }
     }
 
+    @PUT
+    @Path("/{communityId}/person/{personId}/follow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response followCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
+        try {
+
+            communitySB.followCommunity(communityId, communityId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{communityId}/person/{personId}/unfollow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unfollowCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
+        try {
+
+            communitySB.unfollowCommunity(communityId, communityId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }
