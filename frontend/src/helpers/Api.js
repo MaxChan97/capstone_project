@@ -606,4 +606,34 @@ export default {
       type: "PUT",
     });
   },
+
+  updateExplicitAndChat(personId, explicit, chatIsPaid) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/settings",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        explicit: explicit,
+        subscriberOnly: chatIsPaid,
+      }),
+    });
+  },
+
+  updatePricingPlan(personId, pricing) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/pricingPlan",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        pricingPlan: pricing,
+      }),
+    });
+  },
+
 };

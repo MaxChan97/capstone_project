@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
+import { useSelector } from "react-redux";
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -7,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,16 +21,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserSettings() {
+    const alert = useAlert();
     const classes = useStyles();
-    //need to load the boolean before loading the page according to saved settings
-    //cause now its default false when you enter the page
-    const [state, setState] = React.useState({
-        explicit: false,
-        subscriberOnly: false,
-    });
+    const [refresh, setRefresh] = useState(true);
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
+    const currentUser = useSelector((state) => state.currentUser);
+
+    const [explicit, setExplicit] = React.useState(false);
+    const [chatIsPaid, setChatIsPaid] = React.useState(false);
+    const handleExplicit = (event) => {
+        setExplicit(event.target.checked);
+    };
+
+    const handleChatIsPaid = (event) => {
+        setChatIsPaid(event.target.checked);
     };
 
     const ColorButton = withStyles((theme) => ({
@@ -40,16 +47,43 @@ export default function UserSettings() {
         },
     }))(Button);
 
-    //load with the current user's pricing plan. Now it's 0 default
     const [pricing, setPricing] = React.useState(0);
 
     const handlePricing = (event) => {
         setPricing(event.target.value);
     };
 
+    function loadData(currentUser) {
+        Api.getPersonById(currentUser)
+          .done((currentPerson) => {
+            setChatIsPaid(currentPerson.chatIsPaid);
+            setExplicit(currentPerson.hasExplicitLanguage);
+            setPricing(currentPerson.pricingPlan);
+          })
+          .fail((xhr, status, error) => {
+            alert.show("This user does not exist!");
+          });
+      }
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        Api.updateExplicitAndChat(currentUser,explicit,chatIsPaid)
+          .done(() => {
+            Api.updatePricingPlan(currentUser,pricing);
+            alert.show("Settings saved!");
+            setRefresh(!refresh);
+          })
+          .fail((xhr, status, error) => {
+            alert.show("This user does not exist!");
+          });
+        
     }
+
+    useEffect(() => {
+        if (currentUser) {
+          loadData(currentUser);
+        }
+      }, [currentUser, refresh]);
 
     return (
         <div className="content-wrapper">
@@ -88,30 +122,15 @@ export default function UserSettings() {
                                 />
                             </div>
 
-
-                            <div style={{ textAlign: "right" }}>
-                                <ColorButton
-                                    style={{
-                                        height: "30px",
-                                        width: "100px",
-                                        outline: "none",
-                                        marginRight: "3%",
-                                    }}
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                >
-                                    Save
-                            </ColorButton>
-                            </div>
+                            <br></br>
                             <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                                 Content settings
                             </Box>
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={state.explicit}
-                                        onChange={handleChange}
+                                        checked={explicit}
+                                        onChange={handleExplicit}
                                         name="explicit"
                                         color="primary"
                                     />
@@ -132,8 +151,8 @@ export default function UserSettings() {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={state.subscriberOnly}
-                                        onChange={handleChange}
+                                        checked={chatIsPaid}
+                                        onChange={handleChatIsPaid}
                                         name="subscriberOnly"
                                         color="primary"
                                     />
@@ -145,6 +164,21 @@ export default function UserSettings() {
                             <Box fontWeight="fontWeightRegular" m={1}>
                                 Only enable private chat for subscribers.
                             </Box>
+                            <div style={{ textAlign: "right" }}>
+                                <ColorButton
+                                    style={{
+                                        height: "30px",
+                                        width: "100px",
+                                        outline: "none",
+                                        marginRight: "3%",
+                                    }}
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                >
+                                    Save
+                                </ColorButton>
+                            </div>
                         </div>
                     </form>
                 </div>

@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import entity.Community;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
@@ -153,18 +154,18 @@ public class PersonResource {
 
     /*
      * @PUT
-     * 
+     *
      * @Path("/{id}")
-     * 
+     *
      * @Consumes(MediaType.APPLICATION_JSON)
-     * 
+     *
      * @Produces(MediaType.APPLICATION_JSON) public Response
      * updatePerson(@PathParam("id") String id, Person p) {
      * p.setId(Long.valueOf(id)); try { personSessionLocal.updatePerson(p); return
      * Response.status(204).build(); } catch (NoResultException | NotValidException
      * e) { JsonObject exception = Json.createObjectBuilder() .add("error",
      * e.getMessage()) .build();
-     * 
+     *
      * return Response.status(404).entity(exception)
      * .type(MediaType.APPLICATION_JSON).build(); } } //end updatePerson
      */
@@ -309,6 +310,21 @@ public class PersonResource {
 
             return Response.status(200).entity(entity).build();
 
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/followingandowned")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingAndOwned(@PathParam("personId") Long personId) {
+        try {
+            List<Community> results = personSB.getFollowingAndOwnedCommunities(personId);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }

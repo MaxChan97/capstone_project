@@ -15,7 +15,7 @@ import FeedPage from "./screens/FeedPage";
 import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
 import AboutMe from "./components/ProfilePage/AboutMe";
-import UserSettings from "./components/ProfilePage/UserSettings";
+import UserSettings from "./screens/UserSettings";
 import ChatPage from "./screens/ChatPage";
 import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";

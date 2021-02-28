@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Community;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
@@ -48,5 +49,7 @@ public interface PersonSessionBeanLocal {
     public List<Subscription> getSubscription(Long personId) throws NoResultException, NotValidException;
 
     public List<Subscription> getPublications(Long personId) throws NoResultException, NotValidException;
+
+    public List<Community> getFollowingAndOwnedCommunities(Long personId) throws NoResultException, NotValidException;
 
 }

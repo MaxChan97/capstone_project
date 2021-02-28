@@ -6,7 +6,6 @@
 package webservices.restful;
 
 import entity.Community;
-import entity.personToPersonEntities.Ban;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -106,7 +105,6 @@ public class CommunityResource {
         }
 
         community.setTopicEnums(topicInterests);
-        community.setBan(new Ban());
 
         try {
             Community createdCommunity = communitySB.createCommunity(community, personId);

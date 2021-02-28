@@ -89,12 +89,21 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     });
   }
 
+  const [formatDate, setFormatDate] = useState();
+  function changeDateFormat() {
+    //remove [UTC] suffix
+    var changedDate = data.datePosted.substring(
+      0,data.datePosted.length - 5);
+      setFormatDate(changedDate);
+  }
+
   useEffect(() => {
     if (data && data.body == "Reply Deleted") {
       setDeleted(true);
     } else {
       setDeleted(false);
       checkedLiked();
+      changeDateFormat();
     }
   }, [refresh]);
 
@@ -124,7 +133,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
           maxWidth: "72ch",
         }}>
           <div class="post">
-            <Divider variant="fullWidth" component="li" />
+            <Divider variant="middle" />
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img src={defaultDP} alt="User profile picture" />
@@ -138,9 +147,12 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
 
                 </span>
 
-                <span class="description"> {moment().calendar(data.datePosted)} <span>&nbsp; </span>
-                  {moment().startOf('day').fromNow(data.datePosted)} ago</span>
-
+                <span class="description">
+                    {" "}
+                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                    <span>&nbsp; </span>
+                    {moment.utc(formatDate).fromNow()}
+                </span>
               </div>
               {data.author.id == currentUser ? (
                 <div style={{ textAlign: "right" }}>
