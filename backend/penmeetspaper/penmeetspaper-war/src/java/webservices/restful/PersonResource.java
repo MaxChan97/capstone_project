@@ -330,4 +330,34 @@ public class PersonResource {
         }
     }
 
+    @GET
+    @Path("/{personId}/followingCommunities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingCommunities(@PathParam("personId") Long personId) {
+        try {
+            List<Community> results = personSB.getFollowingCommunities(personId);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/ownedCommunities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwnedCommunities(@PathParam("personId") Long personId) {
+        try {
+            List<Community> results = personSB.getOwnedCommunities(personId);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }
