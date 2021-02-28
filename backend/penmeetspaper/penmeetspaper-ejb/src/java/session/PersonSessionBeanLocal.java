@@ -52,4 +52,8 @@ public interface PersonSessionBeanLocal {
 
     public List<Community> getFollowingAndOwnedCommunities(Long personId) throws NoResultException, NotValidException;
 
+    public List<Community> getFollowingCommunities(Long personId) throws NoResultException, NotValidException;
+
+    public List<Community> getOwnedCommunities(Long personId) throws NoResultException, NotValidException;
+
 }

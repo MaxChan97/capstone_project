@@ -244,10 +244,40 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
 
         for (Community c : followingCommunities) {
-            result.add(getDetachedCommunity(c));
+            if (!result.contains(c)) {
+                result.add(getDetachedCommunity(c));
+            }
         }
 
         return result;
 
+    }
+
+    @Override
+    public List<Community> getFollowingCommunities(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        List<Community> followingCommunities = person.getFollowingCommunities();
+
+        List<Community> result = new ArrayList();
+
+        for (Community c : followingCommunities) {
+            result.add(getDetachedCommunity(c));
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Community> getOwnedCommunities(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        List<Community> ownedCommunities = person.getOwnedCommunities();
+
+        List<Community> result = new ArrayList();
+
+        for (Community c : ownedCommunities) {
+            result.add(getDetachedCommunity(c));
+        }
+
+        return result;
     }
 }
