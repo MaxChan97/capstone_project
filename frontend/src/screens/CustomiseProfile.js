@@ -306,14 +306,19 @@ export default function CustomiseProfile() {
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputAbout">About</label>
-                    <input
+                    {/* <input
                       type="text"
                       id="inputAbout"
                       // required
                       className="form-control"
                       value={description}
                       onChange={handleAboutChange}
-                    />
+                    /> */}
+                    <textarea className="form-control" value={description} maxLength={255} onChange={(e) => {
+                        setAbout(e.target.value);}} />
+                        {description !== undefined ? (
+                        <p style={{textAlign: "right"}}>{description.length}/255</p>) : 
+                        (<p style={{textAlign: "right"}}>0/255</p>)}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputInterests">Interests</label>
