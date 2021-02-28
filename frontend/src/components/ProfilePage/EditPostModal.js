@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     maxHeight: "auto",
     border: "1px solid #BEBEBE",
     boxShadow: "-10px 10px 4px rgba(0, 0, 0, 0.05)",
-    margin: "auto"
+    margin: "auto",
   },
   cardContent: {
     display: "flex",
@@ -55,8 +55,13 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-
-export default function EditPostModal({ show, handleClose, data }) {
+export default function EditPostModal({
+  show,
+  handleClose,
+  data,
+  refresh,
+  setRefresh,
+}) {
   const styles = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const theme = useTheme();
@@ -69,17 +74,19 @@ export default function EditPostModal({ show, handleClose, data }) {
 
   async function handleCancel() {
     handleClose();
-}
+  }
 
   async function handleSubmit() {
     Api.editProfilePost(currentUser, data.id, post)
       .done(() => {
         alert.show("Edit success!");
+        setRefresh(!refresh);
+        handleClose();
       })
       .fail((xhr, status, error) => {
         alert.show("Something went wrong, please try again!");
+        handleClose();
       });
-    handleClose();
   }
 
   return (
@@ -95,12 +102,11 @@ export default function EditPostModal({ show, handleClose, data }) {
         maxHeight: "60%",
         top: "20%",
         alignSelf: "center",
-        textAlign: "center"
+        textAlign: "center",
       }}
     >
       <Card className={styles.cardContainer}>
         <CardContent className={styles.cardContent}>
-
           <TextField
             label="Edit Post"
             multiline
@@ -109,14 +115,13 @@ export default function EditPostModal({ show, handleClose, data }) {
             fullWidth={true}
           />
           <br></br>
-          <div style={{  display: "flex", alignItems: "baseline" }}>
+          <div style={{ display: "flex", alignItems: "baseline" }}>
             <ColorButton
               style={{
                 outline: "none",
                 marginRight: "3%",
                 backgroundColor: "#FFFFFF",
-                color: "#4A5056"
-
+                color: "#4A5056",
               }}
               variant="contained"
               color="secondary"
@@ -139,7 +144,7 @@ export default function EditPostModal({ show, handleClose, data }) {
               size="small"
               onClick={handleSubmit}
             >
-             Edit
+              Edit
             </ColorButton>
           </div>
         </CardContent>

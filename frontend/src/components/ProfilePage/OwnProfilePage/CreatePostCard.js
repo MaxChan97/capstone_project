@@ -9,6 +9,7 @@ import { useAlert } from "react-alert";
 import { storage } from "../../../firebase";
 import FileTypes from "../../../components/FileTypes.js";
 import chatPaperClip from "../../../assets/chatPaperClip.png";
+import postPoll from "../../../assets/postPoll.png";
 
 var uuid = require("uuid");
 
@@ -153,7 +154,7 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
               <div className="col-6">
                 <label for="pic" className="btn">
                   <img
-                    style={{ height: "26px" }}
+                    style={{ height: "25px" }}
                     src={chatPaperClip}
                     alt="chatPaperClip"
                   />
@@ -165,13 +166,15 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                     onChange={changeFileHandler}
                   />
                 </label>
-                <a
-                  href="#"
-                  className="link-black text-sm"
-                  style={{ marginLeft: 10 }}
+                <button
+                  style={{ padding: "0px", border: "none", background: "none" }}
                 >
-                  <i className="fas fa-poll fa-2x"></i>
-                </a>
+                  <img
+                    style={{ height: "25px" }}
+                    src={postPoll}
+                    alt="postPoll"
+                  />
+                </button>
               </div>
               <div className="col-6">
                 <div style={{ textAlign: "right" }}>

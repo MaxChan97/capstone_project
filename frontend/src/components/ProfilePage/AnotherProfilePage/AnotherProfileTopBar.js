@@ -58,7 +58,7 @@ export default function AnotherProfileTopBar({
         }}
       >
         <ProfileGroup username={username} numFollowers={numFollowers} />
-        <SocialButtonGroup id={id} />
+        <SocialButtonGroup id={id} username={username} />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

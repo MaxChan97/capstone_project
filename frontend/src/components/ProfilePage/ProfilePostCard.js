@@ -104,11 +104,15 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           show={deletePostModal}
           handleClose={closeDeletePostModal}
           data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
         <EditPostModal
           show={showEditPostModal}
           handleClose={closeEditPostModal}
           data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
         <div
           class="card"

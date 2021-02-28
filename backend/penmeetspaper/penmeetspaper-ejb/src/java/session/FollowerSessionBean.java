@@ -89,7 +89,7 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
 
         em.persist(followEntity);
 
-        publisher.getFollowing().add(followEntity);
+        publisher.getFollowers().add(followEntity);
         follower.getFollowing().add(followEntity);
     }
 
@@ -103,7 +103,7 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
 
         Person publisher = emGetPerson(publisherId);
 
-        publisher.getFollowing().remove(followEntity);
+        publisher.getFollowers().remove(followEntity);
         follower.getFollowing().remove(followEntity);
 
         em.remove(followEntity);
