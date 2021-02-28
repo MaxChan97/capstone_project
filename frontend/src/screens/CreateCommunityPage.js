@@ -41,6 +41,8 @@ export default function CreateCommunity() {
   const [topicInterests, setTopicInterests] = useState([]);
   const [communityPicture, setCommunityPicture] = useState("");
   const [communityBanner, setCommunityBanner] = useState("");
+  const [charLimit, setCharLimit] = useState(1000);
+  console.log(charLimit);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -302,16 +304,9 @@ export default function CreateCommunity() {
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputDescription">Description</label>
-                    <input
-                      type="text"
-                      id="inputDescription"
-                      // required
-                      className="form-control"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(e.target.value);
-                      }}
-                    />
+                    <textarea className="form-control" value={description} maxLength={1000} onChange={(e) => {
+                        setDescription(e.target.value);}} />
+                    <p style={{textAlign: "right"}}>{description.length}/1000</p>
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputTopics">Related Topics</label>
