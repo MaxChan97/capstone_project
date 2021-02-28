@@ -29,7 +29,7 @@ export default function FollowingGroup({ username, numFollowing}) {
             fontSize: "30px",
           }}
         >
-          {username}
+          {"Following"}
         </p>
         <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
           {numFollowing} following

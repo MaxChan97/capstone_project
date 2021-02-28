@@ -40,7 +40,11 @@ export default function SubscriberPage() {
         setSubscriberList(data);
       })
       .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
+        if (xhr, status, error === "Cannot find person") {
+          alert.show("You are not logged in");
+        } else if (xhr, status, error === "Missing person id") {
+          alert.show("The person ID is missing");
+        }
       });
   }
 
