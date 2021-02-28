@@ -48,7 +48,7 @@ public class Community implements Serializable {
     @Column(nullable = false)
     private String communityBanner;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2028)
     private String description;
 
     @Column(nullable = false)
