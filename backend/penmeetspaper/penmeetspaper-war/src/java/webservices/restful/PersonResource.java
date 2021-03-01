@@ -123,6 +123,30 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonById
+    
+    @GET
+    @Path("/email/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonByEmail(@PathParam("email") String email) {
+        try {
+            Person p = personSB.getPersonByEmail(email);
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonByEmail
+    
+    @GET
+    @Path("/resetPassword/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@PathParam("email") String email) {
+        try {
+            Person p = personSB.resetPassword(email);
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end resetPassword
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

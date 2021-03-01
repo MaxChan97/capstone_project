@@ -50,6 +50,28 @@ export default {
     });
   },
 
+  getPersonByEmail(email) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/email/" + email,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  resetPassword(email) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/resetPassword/" + email,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   createPostForPerson(id, postBody, fileName, fileUrl, fileType) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + id,
@@ -644,7 +666,8 @@ export default {
     communityBanner
   ) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/community/" + communityId + "?type=information",
+      url:
+        this.SERVER_PREFIX + "/community/" + communityId + "?type=information",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -658,5 +681,4 @@ export default {
       }),
     });
   },
-
 };
