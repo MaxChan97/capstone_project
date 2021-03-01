@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Community;
+import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
@@ -123,7 +124,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonById
-    
+
     @GET
     @Path("/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -135,7 +136,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonByEmail
-    
+
     @GET
     @Path("/resetPassword/{email}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -376,6 +377,21 @@ public class PersonResource {
         try {
             List<Community> results = personSB.getOwnedCommunities(personId);
             GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/followingPosts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingPost(@PathParam("personId") Long personId) {
+        try {
+            List<Post> results = personSB.getFollowingPosts(personId);
+            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
             };
 
             return Response.status(200).entity(entity).build();
