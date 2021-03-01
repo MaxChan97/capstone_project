@@ -62,6 +62,18 @@ public class PostResource {
         return Response.status(statusCode).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
 
+    private Poll createPoll(String postPollQuestion, JsonArray postPollOptions) {
+        Poll postPoll = new Poll();
+        postPoll.setQuestion(postPollQuestion);
+        for (int i = 0; i < postPollOptions.size(); i++) {
+            String pollOption = postPollOptions.getString(i);
+            PersonAnswer personAnswer = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer = personAnswerSBLocal.createPersonAnswer(personAnswer);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer);
+        }
+        return pollSBLocal.createPoll(postPoll);
+    }
+
     @POST
     @Path("/person/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -86,16 +98,7 @@ public class PostResource {
 
         if (!postPollQuestion.equals("")) {
             // means got poll need create poll
-            Poll postPoll = new Poll();
-            postPoll.setQuestion(postPollQuestion);
-            for (int i = 0; i < postPollOptions.size(); i++) {
-                String pollOption = postPollOptions.getString(i);
-                PersonAnswer personAnswer = new PersonAnswer();
-                PersonAnswer persistedPersonAnswer = personAnswerSBLocal.createPersonAnswer(personAnswer);
-                postPoll.getOptions().put(pollOption, persistedPersonAnswer);
-            }
-            Poll persistedPoll = pollSBLocal.createPoll(postPoll);
-            p.setPoll(persistedPoll);
+            p.setPoll(createPoll(postPollQuestion, postPollOptions));
         }
 
         try {
