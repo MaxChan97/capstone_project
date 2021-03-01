@@ -13,6 +13,7 @@ import entity.personToPersonEntities.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -76,6 +77,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         if (q.getResultList().size() > 0) {
             throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
         }
+
+        person.setCreatedDate(new Date());
 
         Ban ban = banSB.createBan();
 
