@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import LiveTab from "../components/FollowingPage/LiveTab";
-import ChannelsTab from "../components/FollowingPage/ChannelsTab"
+import ChannelsTab from "../components/FollowingPage/ChannelsTab.js"
 import VideosTab from "../components/FollowingPage/VideosTab";
 import FollowingPageTopBar from "../components/FollowingPage/FollowingPageTopBar";
 import FollowingGroup from "../components/FollowingPage/FollowingGroup";
@@ -10,10 +10,10 @@ import Api from "../helpers/Api";
 
 
 export default function FollowingPage() {
+
   const currentUser = useSelector((state) => state.currentUser);
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
-
   const [followingList, setFollowingList] = useState([]);
 
   if (currentUser === null) {
@@ -26,7 +26,11 @@ export default function FollowingPage() {
         setFollowingList(data);
       })
       .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
+        if (xhr, status, error === "Cannot find person") {
+          alert.show("You are not logged in");
+        } else if (xhr, status, error === "Missing person id") {
+          alert.show("The person ID is missing");
+        }
       });
   }
 

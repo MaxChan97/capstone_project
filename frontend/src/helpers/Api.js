@@ -50,6 +50,28 @@ export default {
     });
   },
 
+  getPersonByEmail(email) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/email/" + email,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  resetPassword(email) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/resetPassword/" + email,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   createPostForPerson(
     id,
     postBody,
@@ -601,22 +623,6 @@ export default {
     });
   },
 
-  resubscribeToPerson(subscriberId, publisherId) {
-    return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/subscription/subscriber/" +
-        subscriberId +
-        "/publisher/" +
-        publisherId,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      type: "PUT",
-    });
-  },
-
   updateExplicitAndChat(personId, explicit, chatIsPaid) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/settings",
@@ -656,6 +662,30 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         optionVoted: optionVoted,
+      }),
+    });
+  },
+
+  editCommunityDetails(
+    communityId,
+    description,
+    topicEnums,
+    communityProfilePicture,
+    communityBanner
+  ) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX + "/community/" + communityId + "?type=information",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        description: description,
+        topicEnums: topicEnums,
+        communityProfilePicture: communityProfilePicture,
+        communityBanner: communityBanner,
       }),
     });
   },

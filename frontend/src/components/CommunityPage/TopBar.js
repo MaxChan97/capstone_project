@@ -39,7 +39,8 @@ export default function TopBar({
   communityName,
   numMembers,
   communityPicture,
-  communityBanner}) {
+  communityBanner,
+}) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
   };

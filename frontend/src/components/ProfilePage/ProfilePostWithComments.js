@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
 import { Link } from "react-router-dom";
@@ -11,10 +10,11 @@ import MakeCommentCard from "./MakeCommentCard";
 import CommentList from "./CommentList";
 import { useParams } from "react-router";
 import Api from "../../helpers/Api";
-import moment from 'moment';
+import moment from "moment";
 import EditPostModal from "./EditPostModal";
 import DeletePostModal from "./DeletePostModal";
 import { useAlert } from "react-alert";
+import FileTypes from "../../components/FileTypes.js";
 
 const ITEM_HEIGHT = 30;
 
@@ -41,7 +41,6 @@ export default function ProfilePostWithComments() {
   const handleDelete = () => {
     openDeletePostModal();
   };
-
 
   const [showEditPostModal, setShowEditPostModal] = React.useState(false);
 
@@ -103,13 +102,13 @@ export default function ProfilePostWithComments() {
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
-    Api.likeProfilePost(data.id, currentUser)
+    Api.likeProfilePost(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(true);
   };
 
   const handleUnlike = (event) => {
-    Api.unlikeProfilePost(data.id, currentUser)
+    Api.unlikeProfilePost(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(false);
   };
@@ -117,9 +116,8 @@ export default function ProfilePostWithComments() {
   const [formatDate, setFormatDate] = useState();
   function changeDateFormat(post) {
     //remove [UTC] suffix
-    var changedDate = post.datePosted.substring(
-      0,post.datePosted.length - 5);
-      setFormatDate(changedDate);
+    var changedDate = post.datePosted.substring(0, post.datePosted.length - 5);
+    setFormatDate(changedDate);
   }
 
   return data ? (
@@ -143,24 +141,30 @@ export default function ProfilePostWithComments() {
             handleClose={closeEditPostModal}
             data={data}
           />
-          <div class="card" style={{
-            minWidth: "80ch",
-            maxWidth: "80ch",
-          }}>
+          <div
+            class="card"
+            style={{
+              minWidth: "80ch",
+              maxWidth: "80ch",
+            }}
+          >
             <div class="card-body">
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
                   <div class="user-block">
                     <img src={defaultDP} alt="User profile picture" />
-                    <Link to={"/profile/" + data.author.id} style={{ marginLeft: 10 }}>
+                    <Link
+                      to={"/profile/" + data.author.id}
+                      style={{ marginLeft: 10 }}
+                    >
                       {data.author.username}
                     </Link>
                     <span class="description">
-                    {" "}
-                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                    <span>&nbsp; </span>
-                    {moment.utc(formatDate).fromNow()}
-                  </span>
+                      {" "}
+                      {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                      <span>&nbsp; </span>
+                      {moment.utc(formatDate).fromNow()}
+                    </span>
                   </div>
                   {data.author.id == currentUser ? (
                     <div style={{ textAlign: "right" }}>
@@ -186,24 +190,35 @@ export default function ProfilePostWithComments() {
                           },
                         }}
                       >
-                        <MenuItem
-                          value={1}
-                          onClick={handleEdit}
-                        >
+                        <MenuItem value={1} onClick={handleEdit}>
                           <div>Edit Post</div>
                         </MenuItem>
-                        <MenuItem
-                          value={2}
-                          onClick={handleDelete}
-                        >
+                        <MenuItem value={2} onClick={handleDelete}>
                           <div>Delete Post</div>
                         </MenuItem>
                       </Menu>
-                    </div>) : (
-                      <span></span>
-                    )}
-
+                    </div>
+                  ) : (
+                    <span></span>
+                  )}
                 </div>
+                {data.fileUrl &&
+                  data.fileName &&
+                  data.fileType &&
+                  (data.fileType.split("/")[0] == "image" ? (
+                    <img
+                      className="mx-auto d-block"
+                      width="300"
+                      src={data.fileUrl}
+                    />
+                  ) : (
+                    <div>
+                      <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
+                      <p className="text-center font-weight-bold">
+                        {data.fileName.split(".")[0]}
+                      </p>
+                    </div>
+                  ))}
                 <p>{data.body}</p>
                 <p>
                   {liked == true ? (
@@ -211,23 +226,28 @@ export default function ProfilePostWithComments() {
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
                   ) : (
-                      <Link onClick={handleLike} style={{ color: "black" }}>
-                        <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                      </Link>
-                    )}
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  )}
                 </p>
               </div>
             </div>
-            <MakeCommentCard data={data} refresh={refresh}
-              setRefresh={setRefresh}></MakeCommentCard>
-            <CommentList comments={data.comments} refresh={refresh}
-              setRefresh={setRefresh}></CommentList>
+            <MakeCommentCard
+              data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            ></MakeCommentCard>
+            <CommentList
+              comments={data.comments}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            ></CommentList>
           </div>
-
         </div>
       </div>
     </div>
   ) : (
-      <p>Post does not exist</p>
-    );
+    <p>Post does not exist</p>
+  );
 }

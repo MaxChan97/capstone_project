@@ -7,6 +7,8 @@ package session;
 
 import entity.messagingEntities.Chat;
 import entity.messagingEntities.Message;
+import exception.NoResultException;
+import exception.NotValidException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,10 +19,10 @@ import javax.ejb.Local;
 @Local
 public interface ChatSessionBeanLocal {
 
-  public Chat createChat(Long person1Id, Long person2Id, Message message);
+    public Chat createChat(Long senderId, Long recipientId, Message message) throws NoResultException, NotValidException;
 
-  public List<Chat> getPersonsChat(Long personId);
+    public List<Chat> getPersonsChat(Long personId) throws NoResultException, NotValidException;
 
-  public void setAllMessagesAsOpened(Long chatId);
+    public void setAllMessagesAsOpened(Long chatId);
 
 }

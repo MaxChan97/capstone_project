@@ -14,7 +14,6 @@ import entity.adminEntities.Report;
 import entity.streamingEntities.Stream;
 import entity.personToPersonEntities.Subscription;
 import entity.messagingEntities.Chat;
-import entity.messagingEntities.Message;
 import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.viewEntities.ProfilePageView;
@@ -31,7 +30,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,7 +68,7 @@ public class Person implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dob;
 
-    @Column
+    @Column(length = 2048)
     private String description;
 
     @Column

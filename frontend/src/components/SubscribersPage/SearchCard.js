@@ -31,8 +31,8 @@ export default function SearchCard( {searchTerm, setSearchTerm} ) {
   return (
     <div className="card card-primary mx-2">
       <div className="card-body">
-        <p className="font-weight-normal">
-          Search in followers and subscribers
+        <p className="font-weight-light">
+          Search followers and subscribers
         </p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
@@ -44,13 +44,13 @@ export default function SearchCard( {searchTerm, setSearchTerm} ) {
                 setSearchTerm(e.target.value);
               }}
             />
-            <IconButton
+            {/* <IconButton
               style={{ outline: "none" }}
               className={classes.iconButton}
               aria-label="search"
-            >
-              <img src={searchLogo} alt="searchLogo" />
-            </IconButton>
+            > */}
+              {/* <img src={searchLogo} alt="searchLogo" /> */}
+            {/* </IconButton> */}
           </Paper>
         </div>
       </div>

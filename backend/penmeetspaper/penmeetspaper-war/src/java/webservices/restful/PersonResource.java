@@ -123,6 +123,30 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonById
+    
+    @GET
+    @Path("/email/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonByEmail(@PathParam("email") String email) {
+        try {
+            Person p = personSB.getPersonByEmail(email);
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonByEmail
+    
+    @GET
+    @Path("/resetPassword/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@PathParam("email") String email) {
+        try {
+            Person p = personSB.resetPassword(email);
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end resetPassword
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -321,6 +345,36 @@ public class PersonResource {
     public Response getFollowingAndOwned(@PathParam("personId") Long personId) {
         try {
             List<Community> results = personSB.getFollowingAndOwnedCommunities(personId);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/followingCommunities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingCommunities(@PathParam("personId") Long personId) {
+        try {
+            List<Community> results = personSB.getFollowingCommunities(personId);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/ownedCommunities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwnedCommunities(@PathParam("personId") Long personId) {
+        try {
+            List<Community> results = personSB.getOwnedCommunities(personId);
             GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
             };
 

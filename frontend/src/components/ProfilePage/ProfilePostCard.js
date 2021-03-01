@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import defaultDP from "../../assets/Default Dp logo.svg";
 import { Link } from "react-router-dom";
@@ -7,8 +6,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import MakeCommentCard from "./MakeCommentCard";
-import CommentList from "./CommentList";
 import Api from "../../helpers/Api";
 import moment from "moment";
 import EditPostModal from "./EditPostModal";

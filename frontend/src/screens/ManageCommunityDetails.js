@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -32,22 +32,24 @@ const topics = [
   { value: "STOCKS", label: "Stocks" },
 ];
 
-export default function CreateCommunity() {
+export default function ManageCommunityDetails() {
   const classes = useStyles();
   const alert = useAlert();
+  const { communityId } = useParams();
+
+  const [currentCommunity, setCurrentCommunity] = useState({});
 
   const [communityName, setCommunityName] = useState("");
+  const handleCommunityNameChange = (event) => {
+    setCommunityName(event.target.value);
+  };
+
   const [description, setDescription] = useState("");
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
+
   const [topicInterests, setTopicInterests] = useState([]);
-  const [communityPicture, setCommunityPicture] = useState("");
-  const [communityBanner, setCommunityBanner] = useState("");
-  const [charLimit, setCharLimit] = useState(1000);
-  console.log(charLimit);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-  
-
   const handleTopicInterestsChange = (selectedOptions) => {
     let tempSelectedOptions = [];
     for (var i = 0; i < selectedOptions.length; i++) {
@@ -55,6 +57,10 @@ export default function CreateCommunity() {
     }
     setTopicInterests(tempSelectedOptions);
   };
+
+  const [communityPicture, setCommunityPicture] = useState("");
+  const [communityBanner, setCommunityBanner] = useState("");
+  
 
   const changeCommunityPictureHandler = (event) => {
     var oldName = event.target.files[0].name;
@@ -121,11 +127,32 @@ export default function CreateCommunity() {
 
   const currentUser = useSelector((state) => state.currentUser);
 
+  useEffect(() => {
+    if (currentUser) {
+      loadData(communityId);
+    }
+  }, [communityId]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
 
+
+  function loadData(communityId) {
+    Api.getCommunityById(communityId)
+      .done((currentCommunity) => {
+        console.log(currentCommunity);
+        setCurrentCommunity(currentCommunity);
+        setCommunityName(currentCommunity.name);
+        setDescription(currentCommunity.description);
+        setTopicInterests(currentCommunity.topicEnums);
+        setCommunityPicture(currentCommunity.communityProfilePicture);
+        setCommunityBanner(currentCommunity.communityBanner);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This community does not exist!");
+      });
+  }
 
   function toTitleCase(str) {
     var i,
@@ -151,31 +178,22 @@ export default function CreateCommunity() {
     },
   }))(Button);
 
-  function handleRegister(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    console.log("test1");
-    Api.createCommunity(
-        currentUser, 
-        communityName, 
+    
+    Api.editCommunityDetails(
+        communityId, 
         description, 
         topicInterests, 
         communityPicture, 
         communityBanner)
-      .done((createdCommunity) => {
-        alert.show("Community Created Successfully!");
-        setCommunityName("");
-        setDescription("");
-        setTopicInterests("");
-        setCommunityPicture("");
-        setCommunityBanner("");
-        history.push("/community/" + createdCommunity.id);
+      .done(() => {
+        console.log(communityBanner);
+        alert.show("Community Updated Successfully!");
+        setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
         console.log(xhr.responseJSON.error);
-        if (xhr.responseJSON.error === "Community Name taken") {
-          setCommunityName("");
-          alert.show("This community name is already in use");
-        }
         if (xhr.responseJSON.error === "Missing Community parameter") {
           setCommunityName("");
           alert.show("Please include the community id");
@@ -287,30 +305,24 @@ export default function CreateCommunity() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Community Details
               </Box>
-              <form onSubmit={(e) => handleRegister(e)}>
+              <form onSubmit={(e) => handleSubmit(e)}>
                 <div className="card-body">
                   <div className="form-group">
                     <label htmlFor="inputCommunityName">Community Name</label>
-                    <input
-                      type="text"
-                      id="inputCommunityName"
-                      // required
-                      className="form-control"
-                      value={communityName}
-                      onChange={(e) => {
-                        setCommunityName(e.target.value);
-                      }}
-                    />
+                    <p>{communityName}</p>
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputDescription">Description</label>
-                    <textarea className="form-control" value={description} maxLength={1000} onChange={(e) => {
-                        setDescription(e.target.value);}} />
-                    <p style={{textAlign: "right"}}>{description.length}/1000</p>
+                    <textarea className="form-control" value={description} maxLength={1000} onChange={handleDescriptionChange} />
+                        {description !== undefined ? (
+                        <p style={{textAlign: "right"}}>{description.length}/1000</p>) : 
+                        (<p style={{textAlign: "right"}}>0/1000</p>)}
                   </div>
                   <div className="form-group">
-                    <label htmlFor="inputTopics">Related Topics</label>
-                    <Select
+                    <label htmlFor="inputInterests">Related Topics</label>
+                    {topicInterests !== undefined ? (
+                      <Select
+                        value={topicInterests.map((x) => MakeOption(x))}
                         isMulti
                         name="topics"
                         options={topics}
@@ -320,6 +332,18 @@ export default function CreateCommunity() {
                         className="basic-multi-select"
                         classNamePrefix="select"
                       />
+                    ) : (
+                      <Select
+                        isMulti
+                        name="topics"
+                        options={topics}
+                        onChange={(selectedOptions) =>
+                          handleTopicInterestsChange(selectedOptions)
+                        }
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    )}
                   </div>
                   <div className="form-group">
                     <ColorButton

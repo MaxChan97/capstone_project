@@ -11,33 +11,40 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { logIn } from "../redux/actions/index";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import { logIn } from "../redux/actions/index";
+import emailjs from "emailjs-com";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
+  root: { height: "100vh", overflow: "hidden" },
   image: {
     backgroundRepeat: "no-repeat",
     backgroundColor: "#04005E",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
+  img: {
+    margin: "auto",
+    display: "block",
+    maxWidth: "70%",
+  },
   paper: {
     margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
+    vericalAlign: "middle",
     alignItems: "center",
     background: "#F5F8F6",
+    height: "100vh",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: "8%",
+    marginTop: "10%",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: "6%",
+    marginBottom: "2.1%",
     background: "#04005E",
     "&:hover": {
       backgroundColor: "#440BD4",
@@ -47,59 +54,74 @@ const useStyles = makeStyles((theme) => ({
     color: "#67776D",
   },
   input: {
-    borderColor: "#04005E",
+    borderColor: "#828282",
     borderWidth: 1,
     "&:hover": {
-      borderColor: "#440BD4",
+      borderColor: "#828282",
       borderWidth: 2,
     },
   },
-  login: {
+  loginLink: {
+    color: "#04005E",
+    fontSize: "14px",
+    "&:hover": {
+      color: "#440BD4",
+    },
+  },
+  register: {
     color: "#04005E",
     fontSize: "60px",
   },
-  forgetPassword: {
-    color: "#04005E",
-    position: "relative",
-    fontSize: "14px",
-    "&:hover": {
-      color: "#440BD4",
-    },
-  },
-  createAccount: {
-    color: "#04005E",
-    position: "relative",
-    fontSize: "14px",
-    "&:hover": {
-      color: "#440BD4",
-    },
-  },
 }));
 
-export default function Login() {
+export default function ResetPassword() {
   const alert = useAlert();
   const classes = useStyles();
+
+  const [email, setEmail] = useState("");
+
+  const [newPassword, setNewPassword] = useState("");
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  function handleLogin(e) {
-    // Enter login logic here
+  function handleResetPassword(e) {
     e.preventDefault();
-    Api.login(email, password)
-      .done((loggedInPerson) => {
-        alert.show("Welcome " + loggedInPerson.username + "!");
-        setEmail("");
-        setPassword("");
-        dispatch(logIn(loggedInPerson.id));
+
+    Api.resetPassword(email)
+      .done((person) => {
+        setEmail(person.email);
+        let template_params = {
+          to_email: person.email,
+          to_name: person.username,
+          new_password: person.password,
+        };
+        emailjs
+          .send(
+            "service_uxmtj2w",
+            "template_nzo4tcx",
+            template_params,
+            "user_VLkMjCcfGXgz2IkAs0sAL"
+          )
+          .then(
+            function (response) {
+              console.log(response.status, response.text);
+            },
+            function (err) {
+              console.log(err);
+            }
+          );
+        alert.show("Password has been resetted!");
         history.push("/");
       })
       .fail((xhr, status, error) => {
-        if (xhr.responseJSON.error === "Invalid credentials") {
-          alert.show("Invalid credentials, please try again");
+        if (xhr.responseJSON.error === "Missing person email") {
+          setEmail("");
+          alert.show("Email is empty");
+        }
+        if (xhr.responseJSON.error === "Cannot find person") {
+          setEmail("");
+          alert.show("Email is not under a registered account");
         }
       });
   }
@@ -110,12 +132,28 @@ export default function Login() {
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid
+      style={{ maxheight: "100%" }}
+      container
+      component="main"
+      className={classes.root}
+    >
       <CssBaseline />
+      <Grid
+        style={{
+          background: "#7AA18A",
+        }}
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        className={classes.image}
+      />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid
         style={{
           background: "#F5F8F6",
+          height: "100vh",
         }}
         item
         xs={12}
@@ -126,13 +164,16 @@ export default function Login() {
         square
       >
         <div style={{ marginTop: "18%" }} className={classes.paper}>
-          <h1 className={classes.login}>Login</h1>
-          <form
-            className={classes.form}
-            onSubmit={(e) => {
-              handleLogin(e);
+          <h1
+            style={{
+              position: "relative",
+              top: "30px",
             }}
+            className={classes.register}
           >
+            Reset Password
+          </h1>
+          <form className={classes.form} onSubmit={handleResetPassword}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -148,25 +189,7 @@ export default function Login() {
                 setEmail(e.target.value);
               }}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
@@ -175,17 +198,12 @@ export default function Login() {
               className={classes.submit}
               style={{ outline: "none" }}
             >
-              LOGIN
+              RESET PASSWORD
             </Button>
-            <Grid container direction="column">
+            <Grid container justify="center">
               <Grid item>
-                <Link className={classes.forgetPassword} to="/resetPassword">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link className={classes.createAccount} to="/register">
-                  {"Don't have an account? Register"}
+                <Link className={classes.loginLink} to="/">
+                  {"Already have an account? Login"}
                 </Link>
               </Grid>
             </Grid>

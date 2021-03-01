@@ -21,6 +21,8 @@ import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";
 import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithComments";
 import CreateCommunity from "./screens/CreateCommunityPage";
+import ManageCommunityDetails from "./screens/ManageCommunityDetails";
+import ResetPassword from "./screens/ResetPassword";
 
 function App() {
   let location = useLocation();
@@ -49,6 +51,7 @@ function App() {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/resetPassword" component={ResetPassword} />
         <div className="layout-navbar-fixed">
           <div className="wrapper">
             {renderNavSide()}
@@ -69,6 +72,11 @@ function App() {
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
+            <Route
+              exact
+              path="/community/:communityId/manageDetails"
+              component={ManageCommunityDetails}
+            />
             <Route
               exact
               path="/customiseProfile"

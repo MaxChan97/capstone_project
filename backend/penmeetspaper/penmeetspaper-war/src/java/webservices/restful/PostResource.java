@@ -42,193 +42,219 @@ import session.PostSessionBeanLocal;
 @Path("post")
 public class PostResource {
 
-  @EJB
-  private PostSessionBeanLocal postSBLocal;
-  @EJB
-  private CommentSessionBeanLocal commentSBLocal;
-  @EJB
-  private PollSessionBeanLocal pollSBLocal;
-  @EJB
-  private PersonAnswerSessionBeanLocal personAnswerSBLocal;
+    @EJB
+    private PostSessionBeanLocal postSBLocal;
+    @EJB
+    private CommentSessionBeanLocal commentSBLocal;
+    @EJB
+    private PollSessionBeanLocal pollSBLocal;
+    @EJB
+    private PersonAnswerSessionBeanLocal personAnswerSBLocal;
 
-  private JsonObject createJsonObject(String jsonString) {
-    JsonReader reader = Json.createReader(new StringReader(jsonString));
-    return reader.readObject();
-  }
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
+    }
 
-  private Response buildError(Exception e, int statusCode) {
-    JsonObject exception = Json.createObjectBuilder()
-            .add("error", e.getMessage())
-            .build();
+    private Response buildError(Exception e, int statusCode) {
+        JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-    return Response.status(statusCode).entity(exception)
-            .type(MediaType.APPLICATION_JSON).build();
-  }
+        return Response.status(statusCode).entity(exception).type(MediaType.APPLICATION_JSON).build();
+    }
 
-  @POST
-  @Path("/person/{id}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response createPostForPerson(@PathParam("id") Long personId, String jsonString) {
-    JsonObject jsonObject = createJsonObject(jsonString);
+    @POST
+    @Path("/person/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPostForPerson(@PathParam("id") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
 
-    String postBody = jsonObject.getString("postBody");
-    String fileName = jsonObject.getString("fileName");
-    String fileUrl = jsonObject.getString("fileUrl");
-    String fileType = jsonObject.getString("fileType");
+        String postBody = jsonObject.getString("postBody");
+        String fileName = jsonObject.getString("fileName");
+        String fileUrl = jsonObject.getString("fileUrl");
+        String fileType = jsonObject.getString("fileType");
 
-    Post p = new Post();
-    p.setBody(postBody);
-    p.setFileName(fileName);
-    p.setFileUrl(fileUrl);
-    p.setFileType(fileType);
-    p.setDatePosted(new Date());
-    
-    String postPollQuestion = jsonObject.getString("postPollQuestion");
-    JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
-    
-    if (!postPollQuestion.equals("")) {
-        // means got poll need create poll
-        Poll postPoll = new Poll();
-        postPoll.setQuestion(postPollQuestion);
-        for (int i = 0; i < postPollOptions.size(); i++) {
-            String pollOption = postPollOptions.getString(i);
-            PersonAnswer personAnswer = new PersonAnswer();
-            PersonAnswer persistedPersonAnswer = personAnswerSBLocal.createPersonAnswer(personAnswer);
-            postPoll.getOptions().put(pollOption, persistedPersonAnswer);
+        Post p = new Post();
+        p.setBody(postBody);
+        p.setFileName(fileName);
+        p.setFileUrl(fileUrl);
+        p.setFileType(fileType);
+        p.setDatePosted(new Date());
+
+        String postPollQuestion = jsonObject.getString("postPollQuestion");
+        JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
+
+        if (!postPollQuestion.equals("")) {
+            // means got poll need create poll
+            Poll postPoll = new Poll();
+            postPoll.setQuestion(postPollQuestion);
+            for (int i = 0; i < postPollOptions.size(); i++) {
+                String pollOption = postPollOptions.getString(i);
+                PersonAnswer personAnswer = new PersonAnswer();
+                PersonAnswer persistedPersonAnswer = personAnswerSBLocal.createPersonAnswer(personAnswer);
+                postPoll.getOptions().put(pollOption, persistedPersonAnswer);
+            }
+            Poll persistedPoll = pollSBLocal.createPoll(postPoll);
+            p.setPoll(persistedPoll);
         }
-        Poll persistedPoll = pollSBLocal.createPoll(postPoll);
-        p.setPoll(persistedPoll);
+
+        try {
+            postSBLocal.createPostForPerson(personId, p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+
     }
 
-    try {
-      postSBLocal.createPostForPerson(personId, p);
-      return Response.status(204).build();
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end createPostForPerson
+    @POST
+    @Path("/community/{communityId}/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPostForCommunity(@PathParam("communityId") Long communityId,
+            @PathParam("personId") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
 
-  @GET
-  @Path("/person/{id}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPersonsPost(@PathParam("id") Long personId) {
-    try {
+        String postBody = jsonObject.getString("postBody");
+        String fileName = jsonObject.getString("fileName");
+        String fileUrl = jsonObject.getString("fileUrl");
+        String fileType = jsonObject.getString("fileType");
 
-      List<Post> results = postSBLocal.getPersonsPost(personId);
-      GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
-      };
+        Post p = new Post();
+        p.setBody(postBody);
+        p.setFileName(fileName);
+        p.setFileUrl(fileUrl);
+        p.setFileType(fileType);
+        p.setDatePosted(new Date());
 
-      return Response.status(200).entity(entity).build();
+        try {
+            postSBLocal.createPostForCommunity(p, personId, communityId);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end createPostForPerson
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end getPersonsPost
+    @GET
+    @Path("/person/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsPost(@PathParam("id") Long personId) {
+        try {
 
-  @PUT
-  @Path("/person/{personId}/edit/{postId}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response editPersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId, String jsonString) {
+            List<Post> results = postSBLocal.getPersonsPost(personId);
+            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
+            };
 
-    JsonObject jsonObject = createJsonObject(jsonString);
+            return Response.status(200).entity(entity).build();
 
-    String postBody = jsonObject.getString("postBody");
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonsPost
 
-    Post p = new Post();
-    p.setBody(postBody);
-    p.setId(postId);
+    @PUT
+    @Path("/person/{personId}/edit/{postId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId,
+            String jsonString) {
 
-    try {
+        JsonObject jsonObject = createJsonObject(jsonString);
 
-      postSBLocal.updatePost(p, personId);
-      return Response.status(204).build();
+        String postBody = jsonObject.getString("postBody");
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
+        Post p = new Post();
+        p.setBody(postBody);
+        p.setId(postId);
 
-  } // end editPersonsPost
+        try {
 
-  @DELETE
-  @Path("/person/{personId}/{postId}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
-    try {
+            postSBLocal.updatePost(p, personId);
+            return Response.status(204).build();
 
-      postSBLocal.deletePostForPerson(postId, personId);
-      return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end deletePersonsPost  
+    } // end editPersonsPost
 
-  @POST
-  @Path("/{postId}/person/{personId}")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response createCommentForPost(@PathParam("postId") Long postId, @PathParam("personId") Long personId, String jsonString) {
+    @DELETE
+    @Path("/person/{personId}/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
+        try {
 
-    JsonObject jsonObject = createJsonObject(jsonString);
+            postSBLocal.deletePostForPerson(postId, personId);
+            return Response.status(204).build();
 
-    String commentBody = jsonObject.getString("commentBody");
-    Comment comment = new Comment();
-    comment.setBody(commentBody);
-    comment.setDatePosted(new Date());
-    try {
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end deletePersonsPost
 
-      commentSBLocal.createCommentForPost(personId, postId, comment);
-      return Response.status(204).build();
+    @POST
+    @Path("/{postId}/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createCommentForPost(@PathParam("postId") Long postId, @PathParam("personId") Long personId,
+            String jsonString) {
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end createCommentForPost
+        JsonObject jsonObject = createJsonObject(jsonString);
 
-  @PUT
-  @Path("/{postId}/person/{personId}/like")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response likePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
-    try {
+        String commentBody = jsonObject.getString("commentBody");
+        Comment comment = new Comment();
+        comment.setBody(commentBody);
+        comment.setDatePosted(new Date());
+        try {
 
-      postSBLocal.likePost(postId, personId);
-      return Response.status(204).build();
+            commentSBLocal.createCommentForPost(personId, postId, comment);
+            return Response.status(204).build();
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end likePost
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end createCommentForPost
 
-  @PUT
-  @Path("/{postId}/person/{personId}/unlike")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response unlikePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
-    try {
+    @PUT
+    @Path("/{postId}/person/{personId}/like")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response likePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
+        try {
 
-      postSBLocal.unlikePost(postId, personId);
-      return Response.status(204).build();
+            postSBLocal.likePost(postId, personId);
+            return Response.status(204).build();
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end unlikePost
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end likePost
 
-  @GET
-  @Path("/{postId}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPost(@PathParam("postId") Long postId) {
-    try {
+    @PUT
+    @Path("/{postId}/person/{personId}/unlike")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unlikePost(@PathParam("postId") Long postId, @PathParam("personId") Long personId) {
+        try {
 
-      Post post = postSBLocal.getPostById(postId);
+            postSBLocal.unlikePost(postId, personId);
+            return Response.status(204).build();
 
-      return Response.status(200).entity(
-              post
-      ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end unlikePost
 
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
-    }
-  } // end getPost
+    @GET
+    @Path("/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPost(@PathParam("postId") Long postId) {
+        try {
+
+            Post post = postSBLocal.getPostById(postId);
+
+            return Response.status(200).entity(post).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPost
 }

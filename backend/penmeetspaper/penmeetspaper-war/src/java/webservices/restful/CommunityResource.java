@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Community;
+import entity.personEntities.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -25,6 +26,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.CommunitySessionBeanLocal;
@@ -166,4 +169,59 @@ public class CommunityResource {
         }
     }
 
+    @PUT
+    @Path("/{communityId}/person/{personId}/follow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response followCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
+        try {
+
+            communitySB.followCommunity(communityId, personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{communityId}/person/{personId}/unfollow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unfollowCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
+        try {
+
+            communitySB.unfollowCommunity(communityId, personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{communityId}/members")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCommunityMembers(@PathParam("communityId") Long communityId) {
+        try {
+            List<Person> results = communitySB.getMembers(communityId);
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchCommunityByName(@QueryParam("username") String name) {
+        List<Community> results = communitySB.searchCommunityByName(name);
+        GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+        };
+
+        return Response.status(200).entity(entity).build();
+
+    }
 }
