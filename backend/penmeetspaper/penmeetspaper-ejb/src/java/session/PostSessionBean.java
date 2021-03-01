@@ -246,7 +246,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             }
 
         }
-
+        
         return p;
     } // end getPostById
 

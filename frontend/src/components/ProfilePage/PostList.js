@@ -7,7 +7,6 @@ import ProfilePostCard from "./ProfilePostCard";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostList({ personId, refresh, setRefresh}) {
+export default function PostList({ personId, refresh, setRefresh }) {
   const classes = useStyles();
   const alert = useAlert();
 
@@ -46,13 +45,25 @@ export default function PostList({ personId, refresh, setRefresh}) {
       {dataList.map((data) => (
         <div>
           <ListItem alignItems="flex-start">
-            <ProfilePostCard key={data.id} data={data} refresh={refresh}
-                setRefresh={setRefresh} />
+            <ProfilePostCard
+              key={data.id}
+              data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-      <p>No posts yet</p>
-    );
+    <h3
+      style={{
+        color: "gray",
+        textAlign: "center",
+        margin: "auto",
+      }}
+    >
+      No posts yet...
+    </h3>
+  );
 }

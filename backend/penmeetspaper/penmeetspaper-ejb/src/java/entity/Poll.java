@@ -34,9 +34,6 @@ public class Poll implements Serializable {
     @Column(nullable = false)
     private String question;
 
-    @Column(nullable = false)
-    private String description;
-
     public Long getId() {
         return id;
     }
@@ -51,14 +48,6 @@ public class Poll implements Serializable {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Map<String, PersonAnswer> getOptions() {
@@ -78,7 +67,7 @@ public class Poll implements Serializable {
     }
 
     @ManyToMany
-    @MapKeyColumn(name = "option")
+    @MapKeyColumn(name = "options")
     private Map<String, PersonAnswer> options = new HashMap();
 
     @ManyToMany

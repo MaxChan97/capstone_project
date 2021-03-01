@@ -32,6 +32,8 @@ public class PersonAnswer implements Serializable {
     @OneToMany
     @JoinColumn(name = "person_answer")
     private List<Person> answeredBy = new ArrayList<>();
+    
+    private Long numAnswered = new Long(0);
 
     public Long getId() {
         return id;
@@ -72,6 +74,20 @@ public class PersonAnswer implements Serializable {
     @Override
     public String toString() {
         return "entity.PersonAnswer[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the numAnswered
+     */
+    public Long getNumAnswered() {
+        return numAnswered;
+    }
+
+    /**
+     * @param numAnswered the numAnswered to set
+     */
+    public void setNumAnswered(Long numAnswered) {
+        this.numAnswered = numAnswered;
     }
 
 }

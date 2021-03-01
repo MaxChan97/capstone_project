@@ -10,6 +10,7 @@ import { storage } from "../../../firebase";
 import FileTypes from "../../../components/FileTypes.js";
 import chatPaperClip from "../../../assets/chatPaperClip.png";
 import postPoll from "../../../assets/postPoll.png";
+import CreatePollCard from "./CreatePollCard";
 
 var uuid = require("uuid");
 
@@ -41,13 +42,32 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
   const [fileType, setFileType] = useState("");
   const [progress, setProgress] = useState(0);
 
+  const [showPollInput, setShowPollInput] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState("");
+  const [pollOptions, setPollOptions] = useState(["", ""]);
+
   const handlePost = (event) => {
     setPost(event.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Api.createPostForPerson(personId, post, fileName, fileUrl, fileType)
+    if (post.trim() === "") {
+      alert.show("Post cannot be empty");
+    } else if (showPollInput === true && pollQuestion.trim() === "") {
+      alert.show("Poll question cannot be empty");
+    } else if (showPollInput === true && pollOptions.indexOf("") !== -1) {
+      alert.show("One of your poll options is empty");
+    }
+    Api.createPostForPerson(
+      personId,
+      post,
+      fileName,
+      fileUrl,
+      fileType,
+      pollQuestion,
+      pollOptions
+    )
       .done(() => {
         alert.show("Post successfully created!");
         setPost("");
@@ -55,6 +75,9 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
         setFileUrl("");
         setFileType("");
         setProgress(0);
+        setPollQuestion("");
+        setPollOptions(["", ""]);
+        setShowPollInput(false);
         setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
@@ -96,6 +119,12 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
       );
     }
   };
+
+  function handleClosePollInput() {
+    setPollQuestion("");
+    setPollOptions(["", ""]);
+    setShowPollInput(false);
+  }
 
   return (
     <div className="container">
@@ -150,9 +179,23 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                 />
               </div>
             </div>
+            {showPollInput === true ? (
+              <div className="row" style={{ marginBottom: "10px" }}>
+                <CreatePollCard
+                  handleClosePollInput={handleClosePollInput}
+                  pollQuestion={pollQuestion}
+                  setPollQuestion={setPollQuestion}
+                  pollOptions={pollOptions}
+                  setPollOptions={setPollOptions}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+
             <div className="row">
               <div className="col-6">
-                <label for="pic" className="btn">
+                <label style={{ paddingTop: "13px" }} for="pic" className="btn">
                   <img
                     style={{ height: "25px" }}
                     src={chatPaperClip}
@@ -167,7 +210,14 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                   />
                 </label>
                 <button
-                  style={{ padding: "0px", border: "none", background: "none" }}
+                  type="button"
+                  style={{
+                    outline: "none",
+                    padding: "0px",
+                    border: "none",
+                    background: "none",
+                  }}
+                  onClick={() => setShowPollInput(true)}
                 >
                   <img
                     style={{ height: "25px" }}
