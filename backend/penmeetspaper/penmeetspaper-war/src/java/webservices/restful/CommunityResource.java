@@ -175,7 +175,7 @@ public class CommunityResource {
     public Response followCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
         try {
 
-            communitySB.followCommunity(communityId, communityId);
+            communitySB.followCommunity(communityId, personId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -190,7 +190,7 @@ public class CommunityResource {
     public Response unfollowCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
         try {
 
-            communitySB.unfollowCommunity(communityId, communityId);
+            communitySB.unfollowCommunity(communityId, personId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {

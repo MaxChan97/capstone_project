@@ -12,6 +12,7 @@ import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -171,7 +172,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         if (members.contains(person) && followingCommunity.contains(community)) {
             // Person already following the community
-            return;
+            throw new NotValidException(CommunitySessionBeanLocal.ALREADY_FOLLOWING);
         }
 
         members.add(person);
@@ -188,8 +189,8 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         List<Community> followingCommunity = person.getFollowingCommunities();
 
         if (!members.contains(person) && !followingCommunity.contains(community)) {
-            // Person already following the community
-            return;
+            // Person already unfollowed the community
+            throw new NotValidException(CommunitySessionBeanLocal.ALREADY_UNFOLLOWING);
         }
 
         members.remove(person);
@@ -208,5 +209,33 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         return members;
 
+    }
+
+    @Override
+    public void banPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        if (!Objects.equals(community.getOwner().getId(), ownerId)) {
+            throw new NotValidException(CommunitySessionBeanLocal.INVALID_CREDENTIALS);
+        }
+
+        Ban ban = community.getBan();
+
+        List<Person> banList = ban.getBanList();
+
+        if (banList.contains(person)) {
+            throw new NotValidException(CommunitySessionBeanLocal.ALREADY_BANNED);
+        }
+
+        banList.add(person);
+        int numBan = ban.getNumBan();
+        ban.setNumBan(numBan++);
+    } // end banPerson
+
+    public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException {
+    }
+
+    public void getBannedUsers(Long communityId) throws NoResultException, NotValidException {
     }
 }
