@@ -50,7 +50,15 @@ export default {
     });
   },
 
-  createPostForPerson(id, postBody, fileName, fileUrl, fileType) {
+  createPostForPerson(
+    id,
+    postBody,
+    fileName,
+    fileUrl,
+    fileType,
+    postPollQuestion,
+    postPollOptions
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + id,
       headers: {
@@ -63,6 +71,8 @@ export default {
         fileName: fileName,
         fileUrl: fileUrl,
         fileType: fileType,
+        postPollQuestion: postPollQuestion,
+        postPollOptions: postPollOptions,
       }),
     });
   },
@@ -636,4 +646,17 @@ export default {
     });
   },
 
+  voteOnPoll(personId, pollId, optionVoted) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/poll/" + pollId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        optionVoted: optionVoted,
+      }),
+    });
+  },
 };

@@ -14,12 +14,69 @@ import moment from "moment";
 import EditPostModal from "./EditPostModal";
 import DeletePostModal from "./DeletePostModal";
 import FileTypes from "../../components/FileTypes.js";
+import Poll from "react-polls";
+import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
+  const alert = useAlert();
+
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const [pollAnswers, setPollAnswers] = useState([]);
+  const [votedAnswer, setVotedAnswer] = useState();
+
+  useEffect(() => {
+    if (data.poll != undefined) {
+      let hasVoted = false;
+      for (var i = 0; i < data.poll.pollers.length; i++) {
+        if (currentUser === data.poll.pollers[i].id) {
+          hasVoted = true;
+        }
+      }
+
+      if (hasVoted === false) {
+        let tempPollAnswer = [];
+        for (const [key, value] of Object.entries(data.poll.options)) {
+          const pollAnswer = {
+            option: key,
+            votes: value.numAnswered,
+          };
+          tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+        }
+        setPollAnswers(tempPollAnswer);
+      } else {
+        // this user has voted alrdy
+        let tempPollAnswer = [];
+        for (const [key, value] of Object.entries(data.poll.options)) {
+          const pollAnswer = {
+            option: key,
+            votes: value.numAnswered,
+          };
+          tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+          for (var i = 0; i < value.answeredBy.length; i++) {
+            if (value.answeredBy[i].id === currentUser) {
+              console.log(key);
+              setVotedAnswer(key);
+            }
+          }
+        }
+        setPollAnswers(tempPollAnswer);
+      }
+    }
+  }, [data, refresh]);
+
+  function handleVote(voteAnswer) {
+    Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
+      .done(() => {
+        setRefresh(!refresh);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,15 +122,17 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
-    Api.likeProfilePost(data.id, currentUser);
-    setRefresh(!refresh);
-    setLiked(true);
+    Api.likeProfilePost(data.id, currentUser).done(() => {
+      setRefresh(!refresh);
+      setLiked(true);
+    });
   };
 
   const handleUnlike = (event) => {
-    Api.unlikeProfilePost(data.id, currentUser);
-    setRefresh(!refresh);
-    setLiked(false);
+    Api.unlikeProfilePost(data.id, currentUser).done(() => {
+      setRefresh(!refresh);
+      setLiked(false);
+    });
   };
 
   function checkedLiked() {
@@ -83,13 +142,12 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }
     });
   }
-  
+
   const [formatDate, setFormatDate] = useState();
   function changeDateFormat() {
     //remove [UTC] suffix
-    var changedDate = data.datePosted.substring(
-      0,data.datePosted.length - 5);
-      setFormatDate(changedDate);
+    var changedDate = data.datePosted.substring(0, data.datePosted.length - 5);
+    setFormatDate(changedDate);
   }
 
   useEffect(() => {
@@ -202,6 +260,42 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   </div>
                 ))}
               <p>{data.body}</p>
+              {data.poll != undefined && pollAnswers != [] ? (
+                votedAnswer == undefined ? (
+                  <div>
+                    <Poll
+                      customStyles={{
+                        theme: "purple",
+                        questionSeparator: true,
+                        align: "center",
+                        questionColor: "#8f858e",
+                      }}
+                      question={data.poll.question}
+                      answers={pollAnswers}
+                      noStorage={true}
+                      onVote={handleVote}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <Poll
+                      customStyles={{
+                        theme: "purple",
+                        questionSeparator: true,
+                        align: "center",
+                        questionColor: "#8f858e",
+                      }}
+                      question={data.poll.question}
+                      answers={pollAnswers}
+                      noStorage={true}
+                      vote={votedAnswer}
+                    />
+                  </div>
+                )
+              ) : (
+                ""
+              )}
+
               <p>
                 {liked == true ? (
                   <Link onClick={handleUnlike}>

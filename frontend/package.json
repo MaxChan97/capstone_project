@@ -18,6 +18,7 @@
     "react-chat-elements": "^10.14.0",
     "react-dom": "^17.0.1",
     "react-horizontal-scrolling-menu": "^0.7.9",
+    "react-polls": "^1.2.0",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",

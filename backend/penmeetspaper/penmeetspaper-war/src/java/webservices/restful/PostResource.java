@@ -6,6 +6,8 @@
 package webservices.restful;
 
 import entity.Comment;
+import entity.PersonAnswer;
+import entity.Poll;
 import entity.Post;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -14,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
@@ -28,6 +31,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.CommentSessionBeanLocal;
+import session.PersonAnswerSessionBeanLocal;
+import session.PollSessionBeanLocal;
 import session.PostSessionBeanLocal;
 
 /**
@@ -41,6 +46,10 @@ public class PostResource {
   private PostSessionBeanLocal postSBLocal;
   @EJB
   private CommentSessionBeanLocal commentSBLocal;
+  @EJB
+  private PollSessionBeanLocal pollSBLocal;
+  @EJB
+  private PersonAnswerSessionBeanLocal personAnswerSBLocal;
 
   private JsonObject createJsonObject(String jsonString) {
     JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -74,6 +83,23 @@ public class PostResource {
     p.setFileUrl(fileUrl);
     p.setFileType(fileType);
     p.setDatePosted(new Date());
+    
+    String postPollQuestion = jsonObject.getString("postPollQuestion");
+    JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
+    
+    if (!postPollQuestion.equals("")) {
+        // means got poll need create poll
+        Poll postPoll = new Poll();
+        postPoll.setQuestion(postPollQuestion);
+        for (int i = 0; i < postPollOptions.size(); i++) {
+            String pollOption = postPollOptions.getString(i);
+            PersonAnswer personAnswer = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer = personAnswerSBLocal.createPersonAnswer(personAnswer);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer);
+        }
+        Poll persistedPoll = pollSBLocal.createPoll(postPoll);
+        p.setPoll(persistedPoll);
+    }
 
     try {
       postSBLocal.createPostForPerson(personId, p);
