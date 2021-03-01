@@ -85,6 +85,8 @@ public class PostResource {
         String fileName = jsonObject.getString("fileName");
         String fileUrl = jsonObject.getString("fileUrl");
         String fileType = jsonObject.getString("fileType");
+        String postPollQuestion = jsonObject.getString("postPollQuestion");
+        JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
 
         Post p = new Post();
         p.setBody(postBody);
@@ -92,9 +94,6 @@ public class PostResource {
         p.setFileUrl(fileUrl);
         p.setFileType(fileType);
         p.setDatePosted(new Date());
-
-        String postPollQuestion = jsonObject.getString("postPollQuestion");
-        JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
 
         if (!postPollQuestion.equals("")) {
             // means got poll need create poll
@@ -122,6 +121,8 @@ public class PostResource {
         String fileName = jsonObject.getString("fileName");
         String fileUrl = jsonObject.getString("fileUrl");
         String fileType = jsonObject.getString("fileType");
+        String postPollQuestion = jsonObject.getString("postPollQuestion");
+        JsonArray postPollOptions = jsonObject.getJsonArray("postPollOptions");
 
         Post p = new Post();
         p.setBody(postBody);
@@ -129,6 +130,11 @@ public class PostResource {
         p.setFileUrl(fileUrl);
         p.setFileType(fileType);
         p.setDatePosted(new Date());
+
+        if (!postPollQuestion.equals("")) {
+            // means got poll need create poll
+            p.setPoll(createPoll(postPollQuestion, postPollOptions));
+        }
 
         try {
             postSBLocal.createPostForCommunity(p, personId, communityId);
