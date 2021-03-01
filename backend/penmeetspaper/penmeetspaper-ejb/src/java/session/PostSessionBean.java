@@ -7,6 +7,8 @@ package session;
 
 import entity.Comment;
 import entity.Community;
+import entity.PersonAnswer;
+import entity.Poll;
 import entity.Post;
 import entity.Reply;
 import entity.personEntities.Person;
@@ -14,6 +16,7 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -246,7 +249,24 @@ public class PostSessionBean implements PostSessionBeanLocal {
             }
 
         }
-        
+
+        Poll poll = p.getPoll();
+        if (poll != null) {
+            // detachPosts
+            Set<Person> pollers = poll.getPollers();
+
+            for (Person person : pollers) {
+                person = getDetachedPerson(person);
+            }
+
+            for (PersonAnswer pa : poll.getOptions().values()) {
+                List<Person> answeredBy = pa.getAnsweredBy();
+                for (Person person : answeredBy) {
+                    person = getDetachedPerson(person);
+                }
+            }
+        }
+
         return p;
     } // end getPostById
 
