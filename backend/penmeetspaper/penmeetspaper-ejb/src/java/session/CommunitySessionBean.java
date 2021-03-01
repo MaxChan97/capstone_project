@@ -196,4 +196,17 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         followingCommunity.remove(community);
     }
     // Delete Community
+
+    @Override
+    public List<Person> getMembers(Long communityId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        List<Person> members = community.getMembers();
+
+        for (Person m : members) {
+            m = getDetachedPerson(m);
+        }
+
+        return members;
+
+    }
 }

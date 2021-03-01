@@ -6,6 +6,7 @@
 package session;
 
 import entity.Community;
+import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -39,5 +40,7 @@ public interface CommunitySessionBeanLocal {
     public void unfollowCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
 
     public void updateCommunity(Community community) throws NoResultException, NotValidException;
+
+    public List<Person> getMembers(Long communityId) throws NoResultException, NotValidException;
 
 }
