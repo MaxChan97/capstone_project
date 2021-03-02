@@ -163,7 +163,16 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     }
 
     @Override
+    public Community getCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        checkBanned(communityId, personId);
+
+        return getCommunityById(communityId);
+    }
+
+    @Override
     public void followCommunity(Long communityId, Long personId) throws NoResultException, NotValidException {
+        checkBanned(communityId, personId);
+
         Community community = emGetCommunity(communityId);
         Person person = emGetPerson(personId);
 
@@ -228,6 +237,8 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.ALREADY_BANNED);
         }
 
+        unfollowCommunity(communityId, personId);
+
         banList.add(person);
         int numBan = ban.getNumBan();
         ban.setNumBan(numBan++);
@@ -237,5 +248,15 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     }
 
     public void getBannedUsers(Long communityId) throws NoResultException, NotValidException {
+    }
+
+    public void checkBanned(Long communityId, Long personId) throws NotValidException, NoResultException {
+        Community c = emGetCommunity(communityId);
+        Person p = emGetPerson(personId);
+
+        List<Person> banList = c.getBan().getBanList();
+        if (banList.contains(p)) {
+            throw new NotValidException(CommunitySessionBeanLocal.BANNED);
+        }
     }
 }

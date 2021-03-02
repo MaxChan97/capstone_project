@@ -123,12 +123,12 @@ public class CommunityResource {
     }
 
     @GET
-    @Path("/{communityId}")
+    @Path("/{communityId}/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCommunity(@PathParam("communityId") Long communityId) {
+    public Response getCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
         try {
 
-            Community community = communitySB.getCommunityById(communityId);
+            Community community = communitySB.getCommunity(communityId, personId);
             return Response.status(200).entity(
                     community
             ).type(MediaType.APPLICATION_JSON).build();

@@ -52,4 +52,8 @@ public interface CommunitySessionBeanLocal {
 
     public void banPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException;
 
+    public void checkBanned(Long communityId, Long personId) throws NotValidException, NoResultException;
+
+    public Community getCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
+
 }
