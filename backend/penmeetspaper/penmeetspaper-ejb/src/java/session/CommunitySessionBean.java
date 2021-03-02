@@ -251,6 +251,28 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     } // end banPerson
 
     public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+        Person person = emGetPerson(personId);
+
+        if (!Objects.equals(community.getOwner().getId(), ownerId)) {
+            throw new NotValidException(CommunitySessionBeanLocal.INVALID_CREDENTIALS);
+        }
+
+        if (Objects.equals(personId, ownerId)) {
+            throw new NotValidException(CommunitySessionBeanLocal.CANNOT_BAN_OWNER);
+        }
+
+        Ban ban = community.getBan();
+
+        List<Person> banList = ban.getBanList();
+
+        if (!banList.contains(person)) {
+            throw new NotValidException(CommunitySessionBeanLocal.ALREADY_UNBANNED);
+        }
+
+        banList.remove(person);
+        int numBan = ban.getNumBan();
+        ban.setNumBan(numBan--);
     }
 
     public void getBannedUsers(Long communityId) throws NoResultException, NotValidException {

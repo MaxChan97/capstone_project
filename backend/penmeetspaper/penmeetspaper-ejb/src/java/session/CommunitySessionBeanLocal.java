@@ -33,6 +33,7 @@ public interface CommunitySessionBeanLocal {
     public final static String ALREADY_FOLLOWING = "Person already following community";
     public final static String ALREADY_UNFOLLOWING = "Person already unfollowed community";
     public final static String ALREADY_BANNED = "Person already banned";
+    public final static String ALREADY_UNBANNED = "Person already unbanned";
 
     public final static String BANNED = "You are banned from the community";
     public final static String CANNOT_BAN_OWNER = "The owner of the community cannot be banned";
