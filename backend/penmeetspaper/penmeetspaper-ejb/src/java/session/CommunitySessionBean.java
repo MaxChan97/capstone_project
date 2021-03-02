@@ -250,6 +250,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         ban.setNumBan(numBan++);
     } // end banPerson
 
+    @Override
     public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
         Person person = emGetPerson(personId);
@@ -275,9 +276,16 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         ban.setNumBan(numBan--);
     }
 
+    @Override
     public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException {
         Community c = emGetCommunity(communityId);
-        return c.getBan().getBanList();
+        List<Person> banList = c.getBan().getBanList();
+
+        for (Person p : banList) {
+            p = getDetachedPerson(p);
+        }
+
+        return banList;
     }
 
     @Override

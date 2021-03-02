@@ -60,4 +60,6 @@ public interface CommunitySessionBeanLocal {
 
     public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException;
 
+    public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException;
+
 }

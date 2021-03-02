@@ -257,4 +257,19 @@ public class CommunityResource {
         }
     }
 
+    @GET
+    @Path("/{communityId}/banlist")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBanList(@PathParam("communityId") Long communityId) {
+        try {
+            List<Person> results = communitySB.getBannedUsers(communityId);
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }
