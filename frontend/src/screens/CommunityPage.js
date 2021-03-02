@@ -17,7 +17,7 @@ export default function CommunityPage() {
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const currentUser = useSelector((state) => state.currentUser);
-
+  const [refresh, setRefresh] = useState(true);
   useEffect(() => {
     if (currentUser) {
       loadData(communityId);
@@ -41,14 +41,13 @@ export default function CommunityPage() {
 
 
   const handleTabView = (tabValue) => {
-    if (tabValue === 0) {
+    if (currentCommunity.members !== undefined && tabValue === 0) {
       return (
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
-              <CreatePostCard />
-              <ProfilePostCard />
-              <PostList />
+              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
+              <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
               <SearchCard />
