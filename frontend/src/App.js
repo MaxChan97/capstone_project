@@ -23,6 +23,8 @@ import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithCom
 import CreateCommunity from "./screens/CreateCommunityPage";
 import ManageCommunityDetails from "./screens/ManageCommunityDetails";
 import ResetPassword from "./screens/ResetPassword";
+import ChangePassword from "./screens/ChangePassword";
+import NewPassword from "./screens/NewPassword";
 
 function App() {
   let location = useLocation();
@@ -51,6 +53,7 @@ function App() {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/newPassword/:resetId" component={NewPassword} />
         <Route exact path="/resetPassword" component={ResetPassword} />
         <div className="layout-navbar-fixed">
           <div className="wrapper">
@@ -72,6 +75,8 @@ function App() {
             <Route exact path="/userSettings" component={UserSettings} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
+            <Route exact path="/changePassword" component={ChangePassword} />
+
             <Route
               exact
               path="/community/:communityId/manageDetails"
