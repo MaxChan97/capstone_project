@@ -58,4 +58,8 @@ public interface CommunitySessionBeanLocal {
 
     public Community getCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
 
+    public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException;
+
+    public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException;
+
 }
