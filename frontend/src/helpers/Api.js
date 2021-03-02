@@ -721,4 +721,28 @@ export default {
       }),
     });
   },
+
+  createCommunityPost(communityId, personId, postBody,
+    fileName,
+    fileUrl,
+    fileType,
+    postPollQuestion,
+    postPollOptions) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/community/" + communityId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        postBody: postBody,
+        fileName: fileName,
+        fileUrl: fileUrl,
+        fileType: fileType,
+        postPollQuestion: postPollQuestion,
+        postPollOptions: postPollOptions,
+      }),
+    });
+  },
 };

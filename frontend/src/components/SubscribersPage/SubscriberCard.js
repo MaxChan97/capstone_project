@@ -10,7 +10,7 @@ export default function SubscriberCard({ subscriberList,searchTerm }) {
       subscriber["subscriber"].username.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
-  }, [searchTerm]);
+  }, [subscriberList, searchTerm]);
 
   return (
     subscriberList !== undefined ? (

@@ -32,7 +32,7 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function OwnProfileTopBar({
+export default function FollowingPageTopBar({
   tabValue,
   setTabValue,
   username,

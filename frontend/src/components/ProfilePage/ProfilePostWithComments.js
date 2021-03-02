@@ -128,18 +128,23 @@ export default function ProfilePostWithComments() {
           flexDirection: "column",
           textAlign: "left",
           width: "max-content",
+          margin:"auto",
         }}
       >
-        <div class="col-md-9">
+        <div class="col-md-9" style={{marginTop:"20px"}}>
           <DeletePostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
             data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
           />
           <EditPostModal
             show={showEditPostModal}
             handleClose={closeEditPostModal}
             data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
           />
           <div
             class="card"
@@ -167,7 +172,7 @@ export default function ProfilePostWithComments() {
                     </span>
                   </div>
                   {data.author.id == currentUser ? (
-                    <div style={{ textAlign: "right" }}>
+                    <div style={{ textAlign: "right"}}>
                       <IconButton
                         style={{ outline: "none" }}
                         aria-label="more"
