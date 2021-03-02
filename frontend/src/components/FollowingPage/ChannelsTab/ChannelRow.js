@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import defaultDP from "../../assets/Default Dp logo.svg";
-import Api from "../../helpers/Api";
+import defaultDP from "../../../assets/Default Dp logo.svg";
+import Api from "../../../helpers/Api";
 
 
 export default function FollowingRow({ channel }) {
