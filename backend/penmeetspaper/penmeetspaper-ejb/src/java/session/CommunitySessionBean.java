@@ -256,6 +256,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     public void getBannedUsers(Long communityId) throws NoResultException, NotValidException {
     }
 
+    @Override
     public void checkBanned(Long communityId, Long personId) throws NotValidException, NoResultException {
         Community c = emGetCommunity(communityId);
         Person p = emGetPerson(personId);
