@@ -87,7 +87,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         alert.show("Something went wrong, please try again!");
       });
   };
-
+/*
   const changeFileHandler = (event) => {
     if (event.target.files[0] != undefined) {
       var oldName = event.target.files[0].name;
@@ -128,7 +128,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
     setPollOptions(["", ""]);
     setShowPollInput(false);
   }
-
+*/
   return (
     <div className="container">
       <form
@@ -151,6 +151,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                 <img src={defaultDP} />
               </div>
               <div className="col-11">
+                {/*
                 {fileUrl &&
                   fileName &&
                   fileType &&
@@ -172,6 +173,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                         </p>
                       </div>
                     ))}
+                  */}
                 <TextField
                   id="standard-textarea"
                   placeholder="What's new?"
@@ -202,12 +204,14 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
               */}
             <div className="row">
               <div className="col-6">
+                {/*
                 <label style={{ paddingTop: "13px" }} for="pic" className="btn">
                   <img
                     style={{ height: "25px" }}
                     src={chatPaperClip}
                     alt="chatPaperClip"
                   />
+                  
                   <input
                     id="pic"
                     type="file"
@@ -216,6 +220,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     onChange={changeFileHandler}
                   />
                 </label>
+               
                 <button
                   type="button"
                   style={{
@@ -226,12 +231,14 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                   }}
                   onClick={() => setShowPollInput(true)}
                 >
+                
                   <img
                     style={{ height: "25px" }}
                     src={postPoll}
                     alt="postPoll"
                   />
                 </button>
+                 */}
               </div>
               <div className="col-6">
                 <div style={{ textAlign: "right" }}>

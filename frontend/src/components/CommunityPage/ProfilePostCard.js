@@ -242,6 +242,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   <span></span>
                 )}
               </div>
+              {/*
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
@@ -260,7 +261,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   </div>
                 ))}
               <p>{data.body}</p>
-              {/*
+              
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
