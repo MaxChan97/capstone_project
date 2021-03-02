@@ -275,7 +275,9 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         ban.setNumBan(numBan--);
     }
 
-    public void getBannedUsers(Long communityId) throws NoResultException, NotValidException {
+    public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException {
+        Community c = emGetCommunity(communityId);
+        return c.getBan().getBanList();
     }
 
     @Override
