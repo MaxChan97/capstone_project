@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
-import FollowerRow from "./FollowerRow";
+import ChannelRow from "./ChannelRow";
 
-export default function FollowerCard({ followerList, searchTerm}) {
+export default function FollowingCard({ followingList, searchTerm}) {
 
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    console.log(followerList)
-    const results = followerList.filter(follower =>
-      follower["follower"].username.toLowerCase().includes(searchTerm)
+    console.log(followingList)
+    const results = followingList.filter(channel =>
+      channel["publisher"].username.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
-  }, [followerList, searchTerm]);
+  }, [searchTerm]);
 
   return (
-    followerList !== undefined ? (
+    followingList !== undefined ? (
     <div className="card card-primary">
       <div className="card-body">
-        <p className="font-weight-bold">Followers</p>
+        <p className="font-weight-bold">Channels you follow</p>
 
-          <p className="font-weight-light"> Number of followers: {followerList.length}</p>
+          <p className="font-weight-light"> You follow {followingList.length} channels</p>
         
         <ul class="list-group list-group-flush">
           {searchResults.map((row, index) => {
             return (
               <li key={index} class="list-group-item">
-                <FollowerRow follower={row} />
+                <ChannelRow channel={row} />
               </li>
             );
           })}
