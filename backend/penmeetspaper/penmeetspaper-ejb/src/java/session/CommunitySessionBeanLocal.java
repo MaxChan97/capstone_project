@@ -35,6 +35,7 @@ public interface CommunitySessionBeanLocal {
     public final static String ALREADY_BANNED = "Person already banned";
 
     public final static String BANNED = "You are banned from the community";
+    public final static String CANNOT_BAN_OWNER = "The owner of the community cannot be banned";
 
     public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException;
 

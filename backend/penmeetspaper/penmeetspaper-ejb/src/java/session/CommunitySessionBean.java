@@ -229,6 +229,10 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.INVALID_CREDENTIALS);
         }
 
+        if (Objects.equals(personId, ownerId)) {
+            throw new NotValidException(CommunitySessionBeanLocal.CANNOT_BAN_OWNER);
+        }
+
         Ban ban = community.getBan();
 
         List<Person> banList = ban.getBanList();
@@ -237,7 +241,9 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.ALREADY_BANNED);
         }
 
-        unfollowCommunity(communityId, personId);
+        if (community.getMembers().contains(person)) {
+            unfollowCommunity(communityId, personId);
+        }
 
         banList.add(person);
         int numBan = ban.getNumBan();
