@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ChannelsTab() {
     const classes = useStyles();
 
-    const [currentPerson, setCurrentPerson] = useState({});
+    // const [currentPerson, setCurrentPerson] = useState({});
+
     const [followingList, setFollowingList] = useState([]);
     const [searchTerm, setSearchTerm] = useState([]);
     const currentUser = useSelector((state) => state.currentUser);
@@ -46,13 +47,10 @@ export default function ChannelsTab() {
     }
 
     function loadData(currentUser) {
-        Api.getPersonById(currentUser)
-            .done((currentPerson) => {
-                setCurrentPerson(currentPerson);
-                setFollowingList(followingList);
-                // setAbout(currentPerson.description);
-                // setTopicInterests(currentPerson.topicInterests);
-                console.log(currentPerson);
+        Api.getFollowing(currentUser)
+            .done((data) => {
+                setFollowingList(data);
+                console.log(followingList);
             })
             .fail((xhr, status, error) => {
                 if ((xhr, status, error === "Cannot find person")) {
@@ -63,22 +61,21 @@ export default function ChannelsTab() {
             });
     }
 
-    function toTitleCase(str) {
-        var i,
-            frags = str.split("_");
-        for (i = 0; i < frags.length; i++) {
-            frags[i] =
-                frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
-        }
-        return frags.join(" ");
-    }
+    // function toTitleCase(str) {
+    //     var i,
+    //         frags = str.split("_");
+    //     for (i = 0; i < frags.length; i++) {
+    //         frags[i] =
+    //             frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
+    //     }
+    //     return frags.join(" ");
+    // }
 
     return (
         <div className="content-wrapper">
-            <div className="container">
-                <strong>Live now</strong>
-                <div className="container">
-                    <div className="row row-no-gutters">
+            <div className="container-fluid">
+                {/* <p className="font-weight-bold">Channels you follow</p> */}
+                    <div className="row">
                         <div className="col-md-8 mt-9" style={{ textAlign: "left" }}>
                             <FollowingCard followingList={followingList} searchTerm={searchTerm} />
                         </div>
@@ -86,7 +83,6 @@ export default function ChannelsTab() {
                             <SearchCard searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     );

@@ -1,8 +1,9 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function FollowingRow({ followingChannel }) {
-  const channel = followingChannel["publisher"]
+export default function FollowingRow({ channel }) {
+  console.log(channel)
+  const publisher = channel["publisher"]
 
   return (
     <div className="container">
@@ -11,10 +12,10 @@ export default function FollowingRow({ followingChannel }) {
           <p className="text-left"> {person.username} </p>
         </div> */}
         <div className="col-md-3">
-          <img className="img-fluid" src={channel.profilePicture} alt="defaultDP" />
+          <img className="img-fluid" src={publisher.profilePicture} alt="defaultDP" />
         </div>
         <div className="col-md-7">
-          <p className="text-left">{channel.username}</p>
+          <p className="text-left">{publisher.username}</p>
         </div>
         // insert channel follower count here
       </div>

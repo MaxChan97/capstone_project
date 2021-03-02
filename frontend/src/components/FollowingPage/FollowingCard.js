@@ -11,7 +11,8 @@ export default function FollowingCard({ followingList, searchTerm}) {
       channel["publisher"].username.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
-  }, [searchTerm]);
+  }, [followingList, searchTerm]);
+
 
   return (
     followingList !== undefined ? (

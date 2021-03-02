@@ -21,19 +21,21 @@ export default function FollowingPage() {
     return <Redirect to="/login" />;
   }
 
-  function loadData(currentUser) {
-    Api.getFollowing(currentUser)
-      .done((data) => {
-        setFollowingList(data);
-      })
-      .fail((xhr, status, error) => {
-        if (xhr, status, error === "Cannot find person") {
-          alert.show("Person not found");
-        } else if (xhr, status, error === "Missing person id") {
-          alert.show("The person ID is missing");
-        }
-      });
-  }
+  // function loadData(currentUser) {
+  //   Api.getFollowing(currentUser)
+  //     .done((data) => {
+  //       setFollowingList(data);
+  //       console.log(currentUser)
+  //       console.log(followingList)
+  //     })
+  //     .fail((xhr, status, error) => {
+  //       if (xhr, status, error === "Cannot find person") {
+  //         alert.show("Person not found");
+  //       } else if (xhr, status, error === "Missing person id") {
+  //         alert.show("The person ID is missing");
+  //       }
+  //     });
+  // }
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
@@ -55,43 +57,13 @@ export default function FollowingPage() {
     if (tabValue === 2) {
       return (
         <div style={{ marginTop: "20px" }}>
-          <ChannelsTab />
+          <ChannelsTab currentUser = {currentUser}/>
         </div>
       );
     } else {
       return "";
     }
   };
-
-  // return (
-  //    <div className="content-wrapper">
-
-  //      <div
-  //        style={{
-  //          display: "flex",
-  //          flexDirection: "column",
-  //          alignItems: "center",
-  //        }}
-  //      >
-  //        <h1>Following Page</h1>
-  //      </div>
-  //    </div>
-  //    <div className="content-wrapper">
-  //    {currentUser != {} ? (
-  //      <div>
-  //        <OwnProfileTopBar
-  //          tabValue={tabValue}
-  //          setTabValue={setTabValue}
-  //          username={currentUser.username}
-
-  //        />
-  //        {handleTabView(tabValue)}
-  //      </div>
-  //    ) : (
-  //        ""
-  //      )}
-  //  </div>
-  // );
 
   return (
     <div className="content-wrapper">
