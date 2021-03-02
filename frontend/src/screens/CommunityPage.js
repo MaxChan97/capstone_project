@@ -29,7 +29,7 @@ export default function CommunityPage() {
   }
 
   function loadData(communityId) {
-    Api.getCommunityById(communityId)
+    Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
@@ -41,7 +41,7 @@ export default function CommunityPage() {
 
 
   const handleTabView = (tabValue) => {
-    if (currentCommunity.members !== undefined && tabValue === 0) {
+    if (currentCommunity.id !== undefined && tabValue === 0) {
       return (
         <div className="container mt-3 ">
           <div className="row">

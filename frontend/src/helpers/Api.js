@@ -555,9 +555,9 @@ export default {
     });
   },
 
-  getCommunityById(id) {
+  getCommunityById(communityId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/community/" + id,
+      url: this.SERVER_PREFIX + "/community/" + communityId + '/' + personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
