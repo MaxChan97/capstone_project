@@ -224,4 +224,20 @@ public class CommunityResource {
         return Response.status(200).entity(entity).build();
 
     }
+
+    @PUT
+    @Path("/{communityId}/ban/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response banPerson(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId, String jsonString) {
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+        Long ownerId = Long.parseLong(jsonObject.getString("ownerId"));
+        try {
+            communitySB.banPerson(communityId, personId, ownerId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }
