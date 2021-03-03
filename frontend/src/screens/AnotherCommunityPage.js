@@ -47,7 +47,6 @@ export default function AnotherCommunityPage({communityId}) {
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
-              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
               <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
