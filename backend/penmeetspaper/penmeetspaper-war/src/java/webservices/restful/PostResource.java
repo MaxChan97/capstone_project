@@ -106,8 +106,7 @@ public class PostResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-
-    }
+    } // end createPostForPerson
 
     @POST
     @Path("/community/{communityId}/person/{personId}")
@@ -178,7 +177,8 @@ public class PostResource {
 
         try {
 
-            postSBLocal.updatePost(p, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.updatePost(p);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -193,13 +193,30 @@ public class PostResource {
     public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
         try {
 
-            postSBLocal.deletePostForPerson(postId, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+
+            postSBLocal.deletePostForPerson(postId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     } // end deletePersonsPost
+
+    @DELETE
+    @Path("/community/{personId}/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunityPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
+        try {
+
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.deletePostForCommunity(postId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
     @POST
     @Path("/{postId}/person/{personId}")
@@ -272,4 +289,5 @@ public class PostResource {
             return buildError(e, 400);
         }
     } // end getPost
+
 }
