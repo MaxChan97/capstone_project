@@ -123,6 +123,7 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
         subscription.setIsTerminated(true);
     }
 
+    @Override
     public String isSubscribed(Long subscriberId, Long publisherId) throws NotValidException {
 
         try {
