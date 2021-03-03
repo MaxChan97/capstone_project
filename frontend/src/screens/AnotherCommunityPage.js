@@ -74,6 +74,8 @@ export default function AnotherCommunityPage({communityId}) {
       communityBanner = {currentCommunity.communityBanner}
       numMembers = {currentCommunity.members.length}
       communityId = {communityId} 
+      refresh = {refresh}
+      setRefresh = {setRefresh}
       />
       {handleTabView(tabValue)}
     </div>
