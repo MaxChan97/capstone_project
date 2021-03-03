@@ -58,31 +58,32 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
       alert.show("Poll question cannot be empty");
     } else if (showPollInput === true && pollOptions.indexOf("") !== -1) {
       alert.show("One of your poll options is empty");
+    } else {
+      Api.createPostForPerson(
+        personId,
+        post,
+        fileName,
+        fileUrl,
+        fileType,
+        pollQuestion,
+        pollOptions
+      )
+        .done(() => {
+          alert.show("Post successfully created!");
+          setPost("");
+          setFileName("");
+          setFileUrl("");
+          setFileType("");
+          setProgress(0);
+          setPollQuestion("");
+          setPollOptions(["", ""]);
+          setShowPollInput(false);
+          setRefresh(!refresh);
+        })
+        .fail((xhr, status, error) => {
+          alert.show("Something went wrong, please try again!");
+        });
     }
-    Api.createPostForPerson(
-      personId,
-      post,
-      fileName,
-      fileUrl,
-      fileType,
-      pollQuestion,
-      pollOptions
-    )
-      .done(() => {
-        alert.show("Post successfully created!");
-        setPost("");
-        setFileName("");
-        setFileUrl("");
-        setFileType("");
-        setProgress(0);
-        setPollQuestion("");
-        setPollOptions(["", ""]);
-        setShowPollInput(false);
-        setRefresh(!refresh);
-      })
-      .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again!");
-      });
   };
 
   const changeFileHandler = (event) => {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -33,14 +34,25 @@ export default function ProfileManagementButtonGroup() {
         variant="contained"
         color="primary"
       >
-        Customise
+        <Link
+          style={{ color: "inherit", textDecoration: "none" }}
+          to="/customiseProfile"
+        >
+          Customise
+        </Link>
       </ColorButton>
+
       <Button
         style={{ height: "40px", width: "160px", outline: "none" }}
         variant="outlined"
         color="primary"
       >
-        Manage
+        <Link
+          style={{ color: "inherit", textDecoration: "none" }}
+          to="/userSettings"
+        >
+          Manage
+        </Link>
       </Button>
     </div>
   );

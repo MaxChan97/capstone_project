@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -123,7 +124,7 @@ export default function ChatBox({
           position: data.sender.id === currentUser ? "right" : "left",
           type: "text",
           text: data.body,
-          date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+          date: dayjs(data.dateTime.slice(0, -5)).toDate(),
         };
         messageList.push(message);
       } else {
@@ -239,9 +240,16 @@ export default function ChatBox({
     return (
       <AppBar position="static" color="#EAECEF">
         <Toolbar className="ToolBar">
-          <Typography variant="h6" color="inherit">
-            {getChatOtherPerson(selectedChat.chatParticipants).username}
-          </Typography>
+          <Link
+            style={{ color: "inherit" }}
+            to={
+              "/profile/" + getChatOtherPerson(selectedChat.chatParticipants).id
+            }
+          >
+            <Typography variant="h6" color="inherit">
+              {getChatOtherPerson(selectedChat.chatParticipants).username}
+            </Typography>
+          </Link>
         </Toolbar>
       </AppBar>
     );
@@ -387,6 +395,12 @@ export default function ChatBox({
     );
   }
 
+  function handleEnterKeyPress(event) {
+    if (event.key === "Enter") {
+      handleSend();
+    }
+  }
+
   function renderChatInput() {
     return (
       <div>
@@ -462,7 +476,7 @@ export default function ChatBox({
   }
 
   return (
-    <div>
+    <div onKeyPress={handleEnterKeyPress}>
       <div>{renderChatHeader()}</div>
       <div
         style={{

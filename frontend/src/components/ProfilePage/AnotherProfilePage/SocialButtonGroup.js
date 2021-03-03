@@ -24,12 +24,18 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default function SocialButtonGroup({ id, username }) {
+export default function SocialButtonGroup({
+  id,
+  username,
+  pricingPlan,
+  refresh,
+  setRefresh,
+}) {
   const alert = useAlert();
 
-  const [refresh, setRefresh] = useState(true);
   const [following, setFollowing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [subscription, setSubscription] = useState();
 
   const [confirmUnfollowDialogOpen, setConfirmUnfollowDialogOpen] = useState(
     false
@@ -64,6 +70,7 @@ export default function SocialButtonGroup({ id, username }) {
       });
   }, [refresh]);
 
+  // wait for Shawns endpoint
   useEffect(() => {
     Api.getSubscribers(id)
       .done((subscriptionObjects) => {
@@ -71,11 +78,14 @@ export default function SocialButtonGroup({ id, username }) {
         for (var i = 0; i < subscriptionObjects.length; i++) {
           if (subscriptionObjects[i].subscriber.id === currentUser) {
             subscribedFlag = true;
+            console.log("subscribed");
             setSubscribed(true);
+            setSubscription(subscriptionObjects[i]);
             break;
           }
         }
         if (subscribedFlag === false) {
+          console.log("not subscribed");
           setSubscribed(false);
         }
       })
@@ -132,7 +142,19 @@ export default function SocialButtonGroup({ id, username }) {
   function handleSubscribe() {
     Api.subscribeToPerson(currentUser, id)
       .done(() => {
-        setRefresh(!refresh);
+        if (following === false) {
+          Api.followPerson(currentUser, id)
+            .done(() => {
+              setRefresh(!refresh);
+              handleSubscribeDialogClose();
+            })
+            .fail((xhr, status, error) => {
+              alert.show(xhr.responseJSON.error);
+            });
+        } else {
+          setRefresh(!refresh);
+          handleSubscribeDialogClose();
+        }
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -143,6 +165,7 @@ export default function SocialButtonGroup({ id, username }) {
     Api.unsubscribeFromPerson(currentUser, id)
       .done(() => {
         setRefresh(!refresh);
+        handleUnsubscribeDialogClose();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -201,6 +224,7 @@ export default function SocialButtonGroup({ id, username }) {
           style={{ height: "40px", width: "160px", outline: "none" }}
           variant="outlined"
           color="primary"
+          onClick={handleSubscribeDialogOpen}
         >
           Subscribe
         </Button>
@@ -208,6 +232,7 @@ export default function SocialButtonGroup({ id, username }) {
         <Button
           style={{ height: "40px", width: "160px", outline: "none" }}
           variant="contained"
+          onClick={handleUnsubscribeDialogOpen}
         >
           Subscribed
         </Button>
@@ -241,6 +266,94 @@ export default function SocialButtonGroup({ id, username }) {
             autoFocus
           >
             Unfollow
+          </ColorButton>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={confirmSubscribeDialogOpen}
+        onClose={handleSubscribeDialogClose}
+        aria-labelledby="confirm-subscribe-dialog-title"
+        aria-describedby="confirm-subscribe-dialog-description"
+      >
+        <DialogTitle id="confirm-subscribe-dialog-title">
+          Subscribe to {username}
+        </DialogTitle>
+        <DialogContent>
+          <div style={{ minWidth: "450px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <p style={{ fontWeight: "bold" }}>Benefits</p>
+              {pricingPlan != undefined ? (
+                <p style={{ color: "#3B21CB", fontWeight: "bold" }}>
+                  SGD {pricingPlan.toFixed(2)}/month
+                </p>
+              ) : (
+                ""
+              )}
+            </div>
+            <p style={{ marginBottom: "2px" }}>
+              Ad-free viewing on {username}'s channel.
+            </p>
+            <p style={{ marginBottom: "2px" }}>
+              Chat during Subscriber-Only Mode.
+            </p>
+            <p>Access to exclusive content by {username}</p>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleSubscribeDialogClose}
+          >
+            Cancel
+          </Button>
+          <ColorButton
+            style={{ outline: "none" }}
+            onClick={handleSubscribe}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            Subscribe
+          </ColorButton>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={confirmUnsubscribeDialogOpen}
+        onClose={handleUnsubscribeDialogClose}
+        aria-labelledby="confirm-unsubscribe-dialog-title"
+        aria-describedby="confirm-unsubscribe-dialog-description"
+      >
+        <DialogTitle id="confirm-unsubscribe-dialog-title">
+          Unsubscribe from {username}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-unsubscribe-dialog-description">
+            Do you want to unsubscribe from {username}?
+          </DialogContentText>
+          <DialogContentText>
+            You will still be following {username} after unsubscribing.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleUnsubscribeDialogClose}
+          >
+            Cancel
+          </Button>
+          <ColorButton
+            style={{ outline: "none" }}
+            onClick={handleUnsubscribe}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            Unsubscribe
           </ColorButton>
         </DialogActions>
       </Dialog>

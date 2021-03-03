@@ -46,6 +46,10 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         return postSB.getPostById(p.getId());
     }
 
+    private Post getDetachedCommunityPost(Post p, boolean withCommuinity) throws NoResultException, NotValidException {
+        return postSB.getPostById(p.getId(), withCommuinity);
+    }
+
     private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
         if (communityId == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY_ID);
@@ -138,6 +142,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
 
+        em.detach(community);
         em.detach(community.getOwner());
 
         Person owner = community.getOwner();
@@ -148,7 +153,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         for (Post p : posts) {
 
-            p = getDetachedPost(p);
+            p = getDetachedCommunityPost(p, false);
 
         }
 
@@ -160,6 +165,18 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         return community;
 
+    }
+
+    @Override
+    public Community getCommunityByIdForPost(Long communityId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+
+        em.detach(community);
+        community.setOwner(null);
+        community.setPosts(null);
+        community.setMembers(null);
+
+        return community;
     }
 
     @Override
