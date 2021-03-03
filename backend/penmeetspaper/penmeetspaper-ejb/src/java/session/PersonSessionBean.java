@@ -390,17 +390,17 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             results.addAll(posts);
         }
 
-        Collections.sort(results);
+        Collections.sort(results, Collections.reverseOrder());
+
+        List<Post> filterResults = new ArrayList();
 
         for (Post p : results) {
             if (p.getPostCommunity() == null) {
-                p = getDetachedPost(p);
-            } else {
-                p = getDetachedCommunityPost(p);
+                filterResults.add(getDetachedPost(p));
             }
         }
 
-        return results;
+        return filterResults;
 
     }
 
