@@ -27,9 +27,8 @@ export default function PostList({ community, refresh, setRefresh }) {
   useEffect(() => {
     if (community) {
       loadData(community);
-      console.log(community);
     }
-  }, [community, refresh]);
+  }, [community]);
 
   function loadData(community) {
    

@@ -27,6 +27,7 @@ import ChannelDashboardSidebar from "./components/ChannelDashboardSidebar";
 import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
 import MyCommunities from "./screens/MyCommunitiesPage";
+import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
 
 function App() {
   let location = useLocation();
@@ -106,6 +107,11 @@ function App() {
               exact
               path="/post/:postId"
               component={ProfilePostWithComments}
+            />
+             <Route
+              exact
+              path="/community/post/:postId"
+              component={CommunityPostWithComments}
             />
           </div>
         </div>

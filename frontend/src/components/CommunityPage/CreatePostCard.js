@@ -60,7 +60,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
       alert.show("Poll question cannot be empty");
     } else if (showPollInput === true && pollOptions.indexOf("") !== -1) {
       alert.show("One of your poll options is empty");
-    }
+    } else {
     Api.createCommunityPost(
       community.id,
       currentUser,
@@ -86,8 +86,9 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
       .fail((xhr, status, error) => {
         alert.show("Something went wrong, please try again!");
       });
+    }
   };
-/*
+
   const changeFileHandler = (event) => {
     if (event.target.files[0] != undefined) {
       var oldName = event.target.files[0].name;
@@ -122,7 +123,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
       );
     }
   };
-
+/*
   function handleClosePollInput() {
     setPollQuestion("");
     setPollOptions(["", ""]);
@@ -151,7 +152,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                 <img src={defaultDP} />
               </div>
               <div className="col-11">
-                {/*
+                
                 {fileUrl &&
                   fileName &&
                   fileType &&
@@ -173,7 +174,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                         </p>
                       </div>
                     ))}
-                  */}
+                  
                 <TextField
                   id="standard-textarea"
                   placeholder="What's new?"
@@ -204,7 +205,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
               */}
             <div className="row">
               <div className="col-6">
-                {/*
+                
                 <label style={{ paddingTop: "13px" }} for="pic" className="btn">
                   <img
                     style={{ height: "25px" }}
@@ -220,7 +221,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     onChange={changeFileHandler}
                   />
                 </label>
-               
+               {/*
                 <button
                   type="button"
                   style={{
