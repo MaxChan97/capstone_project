@@ -99,7 +99,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     }
 
     private Community getDetachCommunity(Community c) throws NoResultException, NotValidException {
-        return cSB.getCommunityById(c.getId());
+        return cSB.getCommunityByIdForPost(c.getId());
     }
 
     // Main logic ---------------------------------------------------------------------
@@ -221,6 +221,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @Override
     public Post getPostById(Long postId) throws NoResultException, NotValidException {
         Post p = emGetPost(postId);
+        em.detach(p);
         em.detach(p.getAuthor());
 
         Person postAuthor = p.getAuthor();
@@ -284,10 +285,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Community c = p.getPostCommunity();
 
         if (c != null) {
+            System.out.println(c.getId());
             if (withCommunity) {
-                c = getDetachCommunity(c);
+                p.setPostCommunity(getDetachCommunity(c));
             } else {
-                em.detach(p.getPostCommunity());
                 p.setPostCommunity(null);
             }
         } else {
