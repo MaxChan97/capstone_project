@@ -403,4 +403,19 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return results;
 
     }
+
+    @Override
+    public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+
+        List<Post> posts = person.getPosts();
+        for (Post p : posts) {
+            if (p.getPostCommunity() == null) {
+                p = getDetachedPost(p);
+            } else {
+                p = getDetachedCommunityPost(p);
+            }
+        }
+        return posts;
+    }
 }

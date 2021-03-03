@@ -472,4 +472,21 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
+
+    @GET
+    @Path("/{id}/posts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsPost(@PathParam("id") Long personId) {
+        try {
+
+            List<Post> results = personSB.getPersonsPost(personId);
+            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonsPost
 }
