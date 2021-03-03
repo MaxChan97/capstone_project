@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
-import TopBar from "../components/CommunityPage/TopBar";
-import CreatePostCard from "../components/CommunityPage/CreatePostCard";
-import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
-import AboutMe from "../components/CommunityPage/AboutMe";
-import PostList from "../components/CommunityPage/PostList";
-import SearchCard from "../components/CommunityPage/SearchCard";
+import OwnCommunityPage from "./OwnCommunityPage";
+import AnotherCommunityPage from "./AnotherCommunityPage";
 import Api from "../helpers/Api";
-import { useAlert } from "react-alert";
 
-export default function CommunityPage() {
-  const alert = useAlert();
+export default function ProfilePage() {
   const { communityId } = useParams();
 
-  const [currentCommunity, setCurrentCommunity] = useState({});
-  const [tabValue, setTabValue] = useState(0);
   const currentUser = useSelector((state) => state.currentUser);
+  const [currentCommunity, setCurrentCommunity] = useState({});
+  const [ownedCommunities, setOwnedCommunities] = useState({});
 
   useEffect(() => {
     if (currentUser) {
-      loadData(communityId);
+      loadData(communityId, currentUser);
     }
   }, [communityId]);
 
@@ -28,53 +22,48 @@ export default function CommunityPage() {
     return <Redirect to="/login" />;
   }
 
-  function loadData(communityId) {
-    Api.getCommunityById(communityId)
+  function loadData(communityId, currentUser) {      
+      Api.getOwnedCommunities(currentUser)
+      .done((ownedCommunities) => {
+        setOwnedCommunities(ownedCommunities);
+      })
+      .fail((xhr, status, error) => {
+      alert.show("This user does not exist!");
+      });
+
+      Api.getCommunityById(communityId)
       .done((currentCommunity) => {
-        console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
       })
       .fail((xhr, status, error) => {
-        alert.show("This community does not exist!");
+      alert.show("This community does not exist!");
       });
   }
+  console.log(ownedCommunities);
+  console.log(currentCommunity);
 
-
-  const handleTabView = (tabValue) => {
-    if (tabValue === 0) {
-      return (
-        <div className="container mt-3 ">
-          <div className="row">
-            <div className="col-md-8">
-              <CreatePostCard />
-              <ProfilePostCard />
-              <PostList />
-            </div>
-            <div className="col-md-4" style={{ textAlign: "left" }}>
-              <SearchCard />
-            </div>
-          </div>
-        </div>
-      );
+  function searchForMatch(currentCommunity, ownedCommunities) {
+    var i, owner = false;
+    if(ownedCommunities !== undefined){
+      for (i = 0; i < ownedCommunities.length; i++) {
+        if(ownedCommunities[i].id === currentCommunity.id){
+          owner = true;
+          console.log(owner);
+          break;
+        }
+      }
     }
-    if (tabValue === 1) {
-      return <AboutMe />;
-    }
-    return "";
-  };
+    console.log(owner);
+    return owner;
+  }
 
   return (
-    currentCommunity.members !== undefined ? (
-      <div className="content-wrapper">
-      <TopBar 
-      tabValue={tabValue} 
-      setTabValue={setTabValue} 
-      communityName={currentCommunity.name}
-      communityPicture= {currentCommunity.communityProfilePicture}
-      communityBanner = {currentCommunity.communityBanner}
-      numMembers = {currentCommunity.members.length} 
-      />
-      {handleTabView(tabValue)}
+    <div>
+      {searchForMatch(currentCommunity, ownedCommunities) === true ? (
+        <OwnCommunityPage communityId={communityId} />
+      ) : (
+        <AnotherCommunityPage communityId={communityId} />
+      )}
     </div>
-    ) : (null));
+  );
 }
