@@ -48,8 +48,9 @@ export default function MakeCommentCard({data, refresh, setRefresh}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         //replace with actual api when done
-    
-        Api.createCommentForProfilePosts(data.id,currentUser,comment)
+        if (comment.trim() === "") {
+            alert.show("Comment cannot be empty");
+        } else {Api.createCommentForProfilePosts(data.id,currentUser,comment)
           .done(() => {
             alert.show("Comment successfully created!");
             setComment("");
@@ -58,7 +59,7 @@ export default function MakeCommentCard({data, refresh, setRefresh}) {
           .fail((xhr, status, error) => {
             alert.show("Something went wrong, please try again!");
           });
-
+        }
     };
 
     const [comment, setComment] = React.useState("");

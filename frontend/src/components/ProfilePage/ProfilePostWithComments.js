@@ -80,7 +80,7 @@ export default function ProfilePostWithComments() {
   }, [postId, refresh]);
 
   function loadData(postId) {
-    Api.getPost(postId)
+    Api.getPost(postId, false)
       .done((post) => {
         setData(post);
         checkedLiked(post);
