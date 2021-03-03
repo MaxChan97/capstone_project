@@ -28,4 +28,6 @@ public interface SubscriptionSessionBeanLocal {
 
     public void unsubscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException;
 
+    public String isSubscribed(Long subscriberId, Long publisherId) throws NotValidException;
+
 }

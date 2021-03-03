@@ -123,4 +123,20 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
         subscription.setIsTerminated(true);
     }
 
+    public String isSubscribed(Long subscriberId, Long publisherId) throws NotValidException {
+
+        try {
+            Subscription subscription = getSubscription(subscriberId, publisherId);
+
+            if (subscription.isIsTerminated()) {
+                return "ReSubscribe";
+            } else {
+                return "Subscribed";
+            }
+
+        } catch (NoResultException e) {
+            return "NotSubscribed";
+        }
+
+    }
 }
