@@ -46,6 +46,10 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         return postSB.getPostById(p.getId());
     }
 
+    private Post getDetachedCommunityPost(Post p, boolean withCommuinity) throws NoResultException, NotValidException {
+        return postSB.getPostById(p.getId(), withCommuinity);
+    }
+
     private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
         if (communityId == null) {
             throw new NotValidException(CommunitySessionBeanLocal.MISSING_COMMUNITY_ID);
@@ -148,7 +152,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         for (Post p : posts) {
 
-            p = getDetachedPost(p);
+            p = getDetachedCommunityPost(p, false);
 
         }
 
