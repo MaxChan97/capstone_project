@@ -193,6 +193,23 @@ public class PostSessionBean implements PostSessionBeanLocal {
     }
 
     @Override
+    public void deletePostForCommunity(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
+        Community c = post.getPostCommunity();
+
+        checkPostCredentials(post, personId);
+
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        c.getPosts().remove(post);
+        post.setPostCommunity(null);
+
+        em.remove(post);
+    }
+
+    @Override
     public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
         Person person = emGetPerson(personId);

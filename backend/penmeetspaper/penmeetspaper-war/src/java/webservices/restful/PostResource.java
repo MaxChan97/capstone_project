@@ -201,6 +201,20 @@ public class PostResource {
         }
     } // end deletePersonsPost
 
+    @DELETE
+    @Path("/community/{personId}/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunityPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
+        try {
+
+            postSBLocal.deletePostForCommunity(postId, personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
     @POST
     @Path("/{postId}/person/{personId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -272,4 +286,5 @@ public class PostResource {
             return buildError(e, 400);
         }
     } // end getPost
+
 }

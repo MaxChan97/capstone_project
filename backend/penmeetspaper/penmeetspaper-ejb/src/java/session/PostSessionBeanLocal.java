@@ -50,4 +50,6 @@ public interface PostSessionBeanLocal {
 
     public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException;
 
+    public void deletePostForCommunity(Long postId, Long personId) throws NoResultException, NotValidException;
+
 }
