@@ -177,7 +177,8 @@ public class PostResource {
 
         try {
 
-            postSBLocal.updatePost(p, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.updatePost(p);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
