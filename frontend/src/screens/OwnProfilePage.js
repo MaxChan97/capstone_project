@@ -16,6 +16,7 @@ export default function OwnProfilePage({ personId }) {
   const [tabValue, setTabValue] = useState(0);
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);
+  const [numFollowers, setNumFollowers] = useState(0);
 
   useEffect(() => {
     if (personId) {
@@ -31,22 +32,32 @@ export default function OwnProfilePage({ personId }) {
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+    Api.getFollowers(personId)
+      .done((followObjects) => {
+        setNumFollowers(followObjects.length);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
   }
 
   const handleTabView = (tabValue) => {
     if (tabValue === 1) {
       if (currentPerson != {}) {
         return (
-          <div style={{ marginTop: "20px"}}>
-            <div style={{margin:"auto"}}>
-              <CreatePostCard 
+          <div style={{ marginTop: "20px" }}>
+            <div style={{ margin: "auto" }}>
+              <CreatePostCard
                 personId={personId}
                 refresh={refresh}
                 setRefresh={setRefresh}
               />
-              <PostList personId={personId} refresh={refresh} setRefresh={setRefresh}/>
+              <PostList
+                personId={personId}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </div>
-            
           </div>
         );
       } else {
@@ -71,13 +82,13 @@ export default function OwnProfilePage({ personId }) {
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={currentPerson.username}
-            
+            numFollowers={numFollowers}
           />
           {handleTabView(tabValue)}
         </div>
       ) : (
-          ""
-        )}
+        ""
+      )}
     </div>
   );
 }

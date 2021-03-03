@@ -23,6 +23,7 @@ import ProfilePostWithComments from "./components/ProfilePage/ProfilePostWithCom
 import CreateCommunity from "./screens/CreateCommunityPage";
 import ManageCommunityDetails from "./screens/ManageCommunityDetails";
 import ResetPassword from "./screens/ResetPassword";
+import ChannelDashboardSidebar from "./components/ChannelDashboardSidebar";
 import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
 
@@ -36,6 +37,17 @@ function App() {
       return (
         <div>
           <Navbar />
+        </div>
+      );
+    } else if (
+      location.pathname === "/customiseProfile" ||
+      location.pathname === "/subscribers" ||
+      location.pathname === "/userSettings"
+    ) {
+      return (
+        <div>
+          <Navbar />
+          <ChannelDashboardSidebar />
         </div>
       );
     } else {

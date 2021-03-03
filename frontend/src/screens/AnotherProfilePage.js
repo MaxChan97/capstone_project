@@ -12,6 +12,7 @@ export default function AnotherProfilePage({ personId }) {
   const alert = useAlert();
 
   const [anotherPerson, setAnotherPerson] = useState({});
+  const [numFollowers, setNumFollowers] = useState(0);
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
 
@@ -19,7 +20,7 @@ export default function AnotherProfilePage({ personId }) {
     if (personId) {
       loadData(personId);
     }
-  }, [personId]);
+  }, [personId, refresh]);
 
   function loadData(personId) {
     Api.getPersonById(personId)
@@ -28,6 +29,13 @@ export default function AnotherProfilePage({ personId }) {
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
+      });
+    Api.getFollowers(personId)
+      .done((followObjects) => {
+        setNumFollowers(followObjects.length);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
       });
   }
 
@@ -66,6 +74,10 @@ export default function AnotherProfilePage({ personId }) {
             setTabValue={setTabValue}
             username={anotherPerson.username}
             id={personId}
+            numFollowers={numFollowers}
+            pricingPlan={anotherPerson.pricingPlan}
+            refresh={refresh}
+            setRefresh={setRefresh}
           />
           {handleTabView(tabValue)}
         </div>
