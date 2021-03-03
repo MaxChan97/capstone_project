@@ -316,7 +316,13 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         }
     }
 
-    public void deleteCommunity(Long community, Long personId) throws NotValidException, NoResultException {
+    /*
+    public void deleteCommunity(Long communityId) throws NotValidException, NoResultException {
+        Community c = emGetCommunity(communityId);
+
+        List<Post> posts = c.getPosts();
+        for (Post p)
 
     }
+     */
 }

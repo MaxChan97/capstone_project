@@ -192,7 +192,9 @@ public class PostResource {
     public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
         try {
 
-            postSBLocal.deletePostForPerson(postId, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+
+            postSBLocal.deletePostForPerson(postId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -206,7 +208,8 @@ public class PostResource {
     public Response deleteCommunityPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
         try {
 
-            postSBLocal.deletePostForCommunity(postId, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.deletePostForCommunity(postId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
