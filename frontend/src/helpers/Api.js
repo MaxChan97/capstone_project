@@ -143,9 +143,9 @@ export default {
     });
   },
 
-  getPost(id) {
+  getPost(postId, isCommunityPost) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/" + id,
+      url: this.SERVER_PREFIX + "/post/" + postId + "/" + isCommunityPost,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
