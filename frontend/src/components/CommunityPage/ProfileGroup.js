@@ -1,10 +1,10 @@
 import React from "react";
 
-
 export default function ProfileGroup({
-  communityName, 
-  numMembers, 
-  communityPicture}) {
+  communityName,
+  numMembers,
+  communityPicture,
+}) {
   return (
     <div
       style={{
@@ -15,12 +15,16 @@ export default function ProfileGroup({
         width: "30%",
       }}
     >
-      <img style={{  
-        height: 110,
-        width: 110,
-        borderRadius: "50%",
-        display: "block"}} 
-        src={communityPicture} alt="communityPicture" />
+      <img
+        style={{
+          height: 110,
+          width: 110,
+          borderRadius: "50%",
+          display: "block",
+        }}
+        src={communityPicture}
+        alt="communityPicture"
+      />
       <div
         style={{
           display: "flex",
@@ -41,7 +45,7 @@ export default function ProfileGroup({
           {communityName}
         </p>
         <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
-          {numMembers} members
+          {numMembers !== 1 ? numMembers + " Members" : numMembers + " Member"}
         </p>
       </div>
     </div>
