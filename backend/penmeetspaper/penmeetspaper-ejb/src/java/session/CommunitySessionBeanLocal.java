@@ -64,4 +64,6 @@ public interface CommunitySessionBeanLocal {
 
     public Community getCommunityByIdForPost(Long communityId) throws NoResultException, NotValidException;
 
+    public void deleteCommunity(Long communityId) throws NotValidException, NoResultException;
+
 }

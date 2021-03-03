@@ -316,13 +316,30 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         }
     }
 
-    /*
     public void deleteCommunity(Long communityId) throws NotValidException, NoResultException {
         Community c = emGetCommunity(communityId);
 
         List<Post> posts = c.getPosts();
-        for (Post p)
+        for (Post p : posts) {
+            postSB.deletePostForCommunity(p.getId());
+        }
+
+        c.setPosts(null);
+
+        List<Person> members = c.getMembers();
+
+        for (Person p : members) {
+            p.getFollowingCommunities().remove(c);
+        }
+
+        c.setMembers(null);
+
+        Person owner = c.getOwner();
+        owner.getOwnedCommunities().remove(c);
+        c.setOwner(null);
+
+        em.remove(c);
 
     }
-     */
+
 }
