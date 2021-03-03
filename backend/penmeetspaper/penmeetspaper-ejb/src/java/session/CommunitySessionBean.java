@@ -315,4 +315,8 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.BANNED);
         }
     }
+
+    public void deleteCommunity(Long community, Long personId) throws NotValidException, NoResultException {
+
+    }
 }
