@@ -409,13 +409,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Person person = emGetPerson(personId);
 
         List<Post> posts = person.getPosts();
+
+        List<Post> results = new ArrayList();
+
         for (Post p : posts) {
             if (p.getPostCommunity() == null) {
-                p = getDetachedPost(p);
-            } else {
-                p = getDetachedCommunityPost(p);
+                results.add(getDetachedPost(p));
             }
         }
-        return posts;
+        return results;
     }
 }
