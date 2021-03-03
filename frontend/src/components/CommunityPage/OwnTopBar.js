@@ -4,6 +4,7 @@ import ProfileGroup from "./ProfileGroup";
 import SocialButtonGroup from "./SocialButtonGroup";
 import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
+import CommunityManagementButton from "./CommunityManagementButton";
 
 const StyledTabs = withStyles({
   indicator: {
@@ -40,6 +41,7 @@ export default function TopBar({
   numMembers,
   communityPicture,
   communityBanner,
+  communityId
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -70,7 +72,7 @@ export default function TopBar({
         numMembers={numMembers}
         communityPicture={communityPicture}
         />
-        <SocialButtonGroup />
+        <CommunityManagementButton communityId = {communityId}/>
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%", paddingLeft:"5%"}}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
