@@ -253,10 +253,16 @@ public class PostResource {
     } // end unlikePost
 
     @GET
-    @Path("/{postId}")
+    @Path("/{postId}/{isCommunityPost}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPost(@PathParam("postId") Long postId) {
+    public Response getPost(@PathParam("postId") Long postId, @PathParam("isCommunityPost") boolean isCommunityPost) {
         try {
+
+            if (isCommunityPost) {
+                Post post = postSBLocal.getPostById(postId, true);
+                return Response.status(200).entity(post).type(MediaType.APPLICATION_JSON).build();
+            }
 
             Post post = postSBLocal.getPostById(postId);
 

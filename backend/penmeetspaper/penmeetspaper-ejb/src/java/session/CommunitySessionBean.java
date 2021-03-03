@@ -142,6 +142,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException {
         Community community = emGetCommunity(communityId);
 
+        em.detach(community);
         em.detach(community.getOwner());
 
         Person owner = community.getOwner();
@@ -164,6 +165,18 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         return community;
 
+    }
+
+    @Override
+    public Community getCommunityByIdForPost(Long communityId) throws NoResultException, NotValidException {
+        Community community = emGetCommunity(communityId);
+
+        em.detach(community);
+        community.setOwner(null);
+        community.setPosts(null);
+        community.setMembers(null);
+
+        return community;
     }
 
     @Override
