@@ -106,8 +106,7 @@ public class PostResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-
-    }
+    } // end createPostForPerson
 
     @POST
     @Path("/community/{communityId}/person/{personId}")
