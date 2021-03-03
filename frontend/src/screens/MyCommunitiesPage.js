@@ -14,92 +14,103 @@ import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { storage } from "../firebase";
 import MyCommunitiesCard from "../components/CommunityPage/MyCommunitiesCard";
+import TopCommunitiesCard from "../components/CommunityPage/TopCommunitiesCard";
 var uuid = require("uuid");
 
-
 const ColorButton = withStyles((theme) => ({
-    root: {
-      color: theme.palette.getContrastText("#3B21CB"),
-      backgroundColor: "#3B21CB",
-      "&:hover": {
-        backgroundColor: "#260eab",
-      },
+  root: {
+    color: theme.palette.getContrastText("#3B21CB"),
+    backgroundColor: "#3B21CB",
+    "&:hover": {
+      backgroundColor: "#260eab",
     },
-  }))(Button);
-
+  },
+}))(Button);
 
 export default function CreateCommunity() {
+  const leaderboardList = [
+    { name: "WallStreetBets", rank: "1" },
+    { name: "HUATHUAT", rank: "2" },
+    { name: "STONKS", rank: "3" },
+    { name: "Bullish", rank: "4" },
+    { name: "Cryptocurrency101", rank: "5" },
+    { name: "ETFs", rank: "6" },
+    { name: "Bitcoin", rank: "7" },
+    { name: "Finance1010", rank: "8" },
+    { name: "AngPao", rank: "9" },
+  ];
 
-    const currentUser = useSelector((state) => state.currentUser);
-    const [followingAndOwnedCommunities, setFollowingAndOwnedCommunityList] = useState([]);
+  const [leaderboard, setLeaderboard] = useState(leaderboardList);
 
-    const [currentPerson, setCurrentPerson] = useState({});
+  const currentUser = useSelector((state) => state.currentUser);
+  const [
+    followingAndOwnedCommunities,
+    setFollowingAndOwnedCommunityList,
+  ] = useState([]);
 
-    useEffect(() => {
+  const [currentPerson, setCurrentPerson] = useState({});
+
+  useEffect(() => {
     if (currentUser) {
-        loadData(currentUser);
-        console.log(currentUser);
+      loadData(currentUser);
+      console.log(currentUser);
     }
-    }, [currentUser]);
+  }, [currentUser]);
 
-    if (currentUser === null) {
+  if (currentUser === null) {
     return <Redirect to="/login" />;
-    }
+  }
 
-    function loadData(currentUser) {
+  function loadData(currentUser) {
     Api.getFollowingAndOwnedCommunities(currentUser)
-        .done((followingAndOwnedCommunities) => {
+      .done((followingAndOwnedCommunities) => {
         setFollowingAndOwnedCommunityList(followingAndOwnedCommunities);
         console.log(currentPerson);
-        })
-        .fail((xhr, status, error) => {
+      })
+      .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
-        });
-    }   
-
+      });
+  }
 
   return (
     <div className="content-wrapper">
       <div className="container">
         <div className="row">
-            <div className="col-md-8 mt-4">
-                <MyCommunitiesCard communityList={followingAndOwnedCommunities}/>
-            </div>
-            <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-                <div className="card card-primary">
-                    <div className="card-body">
-                        <div
-                            style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center"
-                            }}>
-                            <ColorButton
-                                style={{
-                                height: "35px",
-                                width: "300px",
-                                outline: "none",
-                                float: "right",
-                                fontWeight: "600",
-                                }}
-                                href="/createCommunity"
-                                variant="contained"
-                                color="primary"
-                                type="button"
-                            >
-                                Create Community
-                            </ColorButton>
-                        </div>
-                    </div>
+          <div className="col-md-8 mt-4">
+            <MyCommunitiesCard communityList={followingAndOwnedCommunities} />
+          </div>
+          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
+            <div className="card card-primary">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <ColorButton
+                    style={{
+                      height: "35px",
+                      width: "300px",
+                      outline: "none",
+                      float: "right",
+                      fontWeight: "600",
+                    }}
+                    href="/createCommunity"
+                    variant="contained"
+                    color="primary"
+                    type="button"
+                  >
+                    Create Community
+                  </ColorButton>
                 </div>
-                <div className="card card-primary">
-                    <div className="card-body">
-                        <Box fontWeight="500" fontSize={18} m={1}>
-                        Top Communities
-                        </Box>
-                    </div>
-                </div>
+              </div>
             </div>
+            <div className="card card-primary">
+              <TopCommunitiesCard data={leaderboard} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

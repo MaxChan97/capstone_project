@@ -26,6 +26,7 @@ import ResetPassword from "./screens/ResetPassword";
 import ChannelDashboardSidebar from "./components/ChannelDashboardSidebar";
 import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
+import MyCommunities from "./screens/MyCommunitiesPage";
 
 function App() {
   let location = useLocation();
@@ -88,6 +89,7 @@ function App() {
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
             <Route exact path="/changePassword" component={ChangePassword} />
+            <Route exact path="/myCommunities" component={MyCommunities} />
 
             <Route
               exact

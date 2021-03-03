@@ -13,13 +13,15 @@ export default function MyCommunitiesCard({ communityList }) {
         >
           My Communities
         </p>
-        {communityList.map((row, index) => {
-          return (
-            <li key={index} class="list-group-item">
-              <MyCommunitiesRow community={row} />
-            </li>
-          );
-        })}
+        <ul class="list-group list-group-flush">
+          {communityList.map((row, index) => {
+            return (
+              <li key={index} class="list-group-item">
+                <MyCommunitiesRow community={row} />
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   ) : null;
