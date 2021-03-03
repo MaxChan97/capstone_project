@@ -813,6 +813,17 @@ export default {
     });
   },
 
+  getFollowingAndOwnedCommunities(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/followingandowned",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
 
 
 
