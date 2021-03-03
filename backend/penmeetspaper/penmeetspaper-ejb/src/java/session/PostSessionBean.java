@@ -36,6 +36,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @EJB
     private PersonSessionBeanLocal personSB;
 
+    @EJB
+    private CommunitySessionBeanLocal cSB;
+
     // Helper methods to check and retrieve entities
     private Post emGetPost(Long postId) throws NoResultException, NotValidException {
         if (postId == null) {
@@ -93,6 +96,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
         for (Person person : likes) {
             person = getDetachedPerson(person);
         }
+    }
+
+    private Community getDetachCommunity(Community c) throws NoResultException, NotValidException {
+        return cSB.getCommunityById(c.getId());
     }
 
     // Main logic ---------------------------------------------------------------------
@@ -270,4 +277,22 @@ public class PostSessionBean implements PostSessionBeanLocal {
         return p;
     } // end getPostById
 
+    @Override
+    public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException {
+        Post p = getPostById(postId);
+
+        Community c = p.getPostCommunity();
+
+        if (c != null) {
+            if (withCommunity) {
+                c = getDetachCommunity(c);
+            } else {
+                em.detach(p.getPostCommunity());
+                p.setPostCommunity(null);
+            }
+        } else {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+        return p;
+    }
 }
