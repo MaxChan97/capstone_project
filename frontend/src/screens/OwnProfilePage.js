@@ -16,6 +16,7 @@ export default function OwnProfilePage({ personId }) {
   const [tabValue, setTabValue] = useState(0);
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);
+  const [numFollowers, setNumFollowers] = useState(0);
 
   useEffect(() => {
     if (personId) {
@@ -31,6 +32,13 @@ export default function OwnProfilePage({ personId }) {
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+    Api.getFollowers(personId)
+      .done((followObjects) => {
+        setNumFollowers(followObjects.length);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
   }
 
   const handleTabView = (tabValue) => {
@@ -44,12 +52,15 @@ export default function OwnProfilePage({ personId }) {
                 refresh={refresh}
                 setRefresh={setRefresh}
               />
-              <div style={{ textAlign: "right", marginLeft:"30px"}}>
+              <div style={{ textAlign: "right", marginLeft: "30px" }}>
                 <PostsSortdropdown></PostsSortdropdown>
               </div>
-
             </div>
-            <PostList personId={personId} refresh={refresh} setRefresh={setRefresh} />
+            <PostList
+              personId={personId}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
           </div>
         );
       } else {
@@ -74,13 +85,13 @@ export default function OwnProfilePage({ personId }) {
             tabValue={tabValue}
             setTabValue={setTabValue}
             username={currentPerson.username}
-            
+            numFollowers={numFollowers}
           />
           {handleTabView(tabValue)}
         </div>
       ) : (
-          ""
-        )}
+        ""
+      )}
     </div>
   );
 }

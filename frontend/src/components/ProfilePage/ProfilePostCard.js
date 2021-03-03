@@ -24,6 +24,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
+  const [pollRefresh, setPollRefresh] = useState(true);
 
   useEffect(() => {
     if (data.poll != undefined) {
@@ -55,7 +56,6 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
           for (var i = 0; i < value.answeredBy.length; i++) {
             if (value.answeredBy[i].id === currentUser) {
-              console.log(key);
               setVotedAnswer(key);
             }
           }
@@ -63,7 +63,11 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         setPollAnswers(tempPollAnswer);
       }
     }
-  }, [data, refresh]);
+  }, [data]);
+
+  useEffect(() => {
+    setPollRefresh(!pollRefresh);
+  }, [pollAnswers]);
 
   function handleVote(voteAnswer) {
     Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
@@ -268,8 +272,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                         questionColor: "#8f858e",
                       }}
                       question={data.poll.question}
-                      answers={pollAnswers}
                       noStorage={true}
+                      answers={pollAnswers}
                       onVote={handleVote}
                     />
                   </div>
