@@ -139,7 +139,7 @@ export default function ManageCommunityDetails() {
 
 
   function loadData(communityId) {
-    Api.getCommunityById(communityId)
+    Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
