@@ -12,7 +12,6 @@ export default function ProfilePage() {
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [ownedCommunities, setOwnedCommunities] = useState({});
 
-  const [refresh, setRefresh] = useState(true);
   useEffect(() => {
     if (currentUser) {
       loadData(communityId, currentUser);
@@ -24,24 +23,22 @@ export default function ProfilePage() {
   }
 
   function loadData(communityId, currentUser) {      
-      Api.getOwnedCommunities(currentUser)
-      .done((ownedCommunities) => {
-        setOwnedCommunities(ownedCommunities);
-      })
-      .fail((xhr, status, error) => {
-      alert.show("This user does not exist!");
-      });
+    Api.getOwnedCommunities(currentUser)
+    .done((ownedCommunities) => {
+      setOwnedCommunities(ownedCommunities);
+    })
+    .fail((xhr, status, error) => {
+    alert.show("This user does not exist!");
+    });
 
-      Api.getCommunityById(communityId)
-  function loadData(communityId) {
     Api.getCommunityById(communityId, currentUser)
-      .done((currentCommunity) => {
-        setCurrentCommunity(currentCommunity);
-      })
-      .fail((xhr, status, error) => {
-      alert.show("This community does not exist!");
-      });
-  }
+    .done((currentCommunity) => {
+      setCurrentCommunity(currentCommunity);
+    })
+    .fail((xhr, status, error) => {
+    alert.show("This community does not exist!");
+    });
+}
   console.log(ownedCommunities);
   console.log(currentCommunity);
 
@@ -55,24 +52,7 @@ export default function ProfilePage() {
           break;
         }
       }
-
-  const handleTabView = (tabValue) => {
-    if (currentCommunity.id !== undefined && tabValue === 0) {
-      return (
-        <div className="container mt-3 ">
-          <div className="row">
-            <div className="col-md-8">
-              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
-              <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
-            </div>
-            <div className="col-md-4" style={{ textAlign: "left" }}>
-              <SearchCard />
-            </div>
-          </div>
-        </div>
-      );
     }
-    console.log(owner);
     return owner;
   }
 
