@@ -142,18 +142,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end createPostForCommunity
 
     @Override
-    public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
-        Person person = emGetPerson(personId);
-
-        List<Post> posts = person.getPosts();
-        for (Post p : posts) {
-            p = getPostById(p.getId());
-        }
-        return posts;
-
-    } // end getPersonsPost
-
-    @Override
     public List<Person> searchPostByTitle(String title) {
         Query q;
         if (title != null) {

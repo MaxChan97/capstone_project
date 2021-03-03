@@ -274,12 +274,9 @@ public class CommunityResource {
     }
 
     @DELETE
-    @Path("/{communityId}")
+    @Path("/{communityId}/person/{ownerId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteCommunity(@PathParam("communityId") Long communityId, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-        Long ownerId = Long.parseLong(jsonObject.getString("ownerId"));
-
+    public Response deleteCommunity(@PathParam("communityId") Long communityId, @PathParam("ownerId") Long ownerId) {
         try {
             communitySB.deleteCommunity(communityId);
             return Response.status(204).build();

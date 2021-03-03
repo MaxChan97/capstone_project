@@ -11,6 +11,7 @@ import entity.personEntities.Person;
 import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
@@ -320,9 +321,17 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
     public void deleteCommunity(Long communityId) throws NotValidException, NoResultException {
         Community c = emGetCommunity(communityId);
 
+        System.out.println(c.getId());
+
         List<Post> posts = c.getPosts();
+        List<Long> copy = new ArrayList();
+
         for (Post p : posts) {
-            postSB.deletePostForCommunity(p.getId());
+            copy.add(p.getId());
+        }
+
+        for (Long postId : copy) {
+            postSB.deletePostForCommunity(postId);
         }
 
         c.setPosts(null);
@@ -340,7 +349,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         c.setOwner(null);
 
         em.remove(c);
-
+        em.flush();
     }
 
 }

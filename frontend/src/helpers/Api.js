@@ -134,7 +134,7 @@ export default {
   //get a list of posts
   getPersonsPost(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/person/" + id,
+      url: this.SERVER_PREFIX + "/person/" + id + "/posts",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
