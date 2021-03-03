@@ -33,6 +33,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.PersonSessionBeanLocal;
+import session.SubscriptionSessionBeanLocal;
 
 /**
  * REST Web Service
@@ -44,6 +45,9 @@ public class PersonResource {
 
     @EJB
     private PersonSessionBeanLocal personSB;
+
+    @EJB
+    private SubscriptionSessionBeanLocal subscriptionSB;
 
     private JsonObject createJsonObject(String jsonString) {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -137,17 +141,73 @@ public class PersonResource {
         }
     } // end getPersonByEmail
 
-    @GET
-    @Path("/resetPassword/{email}")
+    @PUT
+    @Path("/saveResetId/{email}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response resetPassword(@PathParam("email") String email) {
+    public Response saveResetId(@PathParam("email") String email, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String resetId = jsonObject.getString("resetId");
         try {
-            Person p = personSB.resetPassword(email);
+            Person p = personSB.getPersonByEmail(email);
+            p.setResetId(resetId);
+            personSB.updatePerson(p);
+            p = personSB.getPersonById(p.getId());
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end saveResetId
+
+    @PUT
+    @Path("/resetPassword/{resetId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@PathParam("resetId") String resetId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String newPassword = jsonObject.getString("newPassword");
+
+        try {
+            if (newPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            Person p = personSB.getPersonByResetId(resetId);
+            p.setPassword(newPassword);
+            personSB.updatePerson(p);
+            p = personSB.getPersonById(p.getId());
             return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     } // end resetPassword
+
+    @PUT
+    @Path("/changePassword/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changePassword(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+
+        try {
+            if (oldPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            if (newPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            Person p = personSB.getPersonById(id);
+            if (!p.getPassword().equals(oldPassword)) {
+                throw new NotValidException(PersonSessionBeanLocal.WRONG_PASSWORD);
+            }
+            p.setPassword(newPassword);
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end changePassword
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -400,4 +460,16 @@ public class PersonResource {
         }
     }
 
+    @GET
+    @Path("/{personId}/isSubscribedTo/{publisherId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response isSubscribed(@PathParam("personId") Long personId, @PathParam("publisherId") Long publisherId) {
+
+        try {
+            String result = subscriptionSB.isSubscribed(personId, publisherId);
+            return Response.status(200).entity(result).build();
+        } catch (NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import LiveTab from "../components/FollowingPage/LiveTab";
-import ChannelsTab from "../components/FollowingPage/ChannelsTab.js"
-import VideosTab from "../components/FollowingPage/VideosTab";
+import LiveTab from "../components/FollowingPage/LiveTab/LiveTab.js";
+import ChannelsTab from "../components/FollowingPage/ChannelsTab/ChannelsTab.js"
+import SearchCard from "../components/FollowingPage/SearchCard";
+import VideosTab from "../components/FollowingPage/VideosTab/VideosTab";
 import FollowingPageTopBar from "../components/FollowingPage/FollowingPageTopBar";
 import FollowingGroup from "../components/FollowingPage/FollowingGroup";
 import Api from "../helpers/Api";
@@ -20,79 +21,49 @@ export default function FollowingPage() {
     return <Redirect to="/login" />;
   }
 
-  function loadData(currentUser) {
-    Api.getFollowing(currentUser)
-      .done((data) => {
-        setFollowingList(data);
-      })
-      .fail((xhr, status, error) => {
-        if (xhr, status, error === "Cannot find person") {
-          alert.show("You are not logged in");
-        } else if (xhr, status, error === "Missing person id") {
-          alert.show("The person ID is missing");
-        }
-      });
-  }
+  // function loadData(currentUser) {
+  //   Api.getFollowing(currentUser)
+  //     .done((data) => {
+  //       setFollowingList(data);
+  //       console.log(currentUser)
+  //       console.log(followingList)
+  //     })
+  //     .fail((xhr, status, error) => {
+  //       if (xhr, status, error === "Cannot find person") {
+  //         alert.show("Person not found");
+  //       } else if (xhr, status, error === "Missing person id") {
+  //         alert.show("The person ID is missing");
+  //       }
+  //     });
+  // }
 
   const handleTabView = (tabValue) => {
-    if (tabValue === 1) {
-      if (currentUser != {}) {
-        return (
-          <div style={{ marginTop: "20px" }}>
-            <LiveTab />
-          </div>
-        );
-      } else {
-        return "";
-      }
+    if (tabValue === 0) {
+
+      return (
+        <div style={{ marginTop: "20px" }}>
+          <LiveTab />
+        </div>
+      );
+
     }
-    if (tabValue === 2) {
+    if (tabValue === 1) {
       return (
         <div style={{ marginTop: "20px" }}>
           <VideosTab />
         </div>
       );
     }
-    if (tabValue === 3) {
+    if (tabValue === 2) {
       return (
         <div style={{ marginTop: "20px" }}>
-          <ChannelsTab />
+          <ChannelsTab currentUser = {currentUser}/>
         </div>
       );
     } else {
       return "";
     }
   };
-
-  // return (
-  //    <div className="content-wrapper">
-
-  //      <div
-  //        style={{
-  //          display: "flex",
-  //          flexDirection: "column",
-  //          alignItems: "center",
-  //        }}
-  //      >
-  //        <h1>Following Page</h1>
-  //      </div>
-  //    </div>
-  //    <div className="content-wrapper">
-  //    {currentUser != {} ? (
-  //      <div>
-  //        <OwnProfileTopBar
-  //          tabValue={tabValue}
-  //          setTabValue={setTabValue}
-  //          username={currentUser.username}
-
-  //        />
-  //        {handleTabView(tabValue)}
-  //      </div>
-  //    ) : (
-  //        ""
-  //      )}
-  //  </div>
-  // );
 
   return (
     <div className="content-wrapper">

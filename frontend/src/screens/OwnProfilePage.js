@@ -46,21 +46,18 @@ export default function OwnProfilePage({ personId }) {
       if (currentPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <div style={{ display: "flex", alignItems: "normal" }}>
+            <div style={{ margin: "auto" }}>
               <CreatePostCard
                 personId={personId}
                 refresh={refresh}
                 setRefresh={setRefresh}
               />
-              <div style={{ textAlign: "right", marginLeft: "30px" }}>
-                <PostsSortdropdown></PostsSortdropdown>
-              </div>
+              <PostList
+                personId={personId}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </div>
-            <PostList
-              personId={personId}
-              refresh={refresh}
-              setRefresh={setRefresh}
-            />
           </div>
         );
       } else {

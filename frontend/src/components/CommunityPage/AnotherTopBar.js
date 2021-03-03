@@ -40,6 +40,7 @@ export default function TopBar({
   numMembers,
   communityPicture,
   communityBanner,
+  communityId
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -70,7 +71,9 @@ export default function TopBar({
         numMembers={numMembers}
         communityPicture={communityPicture}
         />
-        <SocialButtonGroup />
+        <SocialButtonGroup 
+        communityId = {communityId} 
+        communityName={communityName}/>
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%", paddingLeft:"5%"}}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

@@ -140,6 +140,7 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
           style={{
             minWidth: "82ch",
             maxWidth: "82ch",
+            margin: "auto",
           }}
         >
           <div className="card-body">
@@ -155,20 +156,20 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                     progress < 100 ? (
                       <progress value={progress} max="100" />
                     ) : (
-                      <img
-                        className="mx-auto d-block"
-                        width="300"
-                        src={fileUrl}
-                      />
-                    )
+                        <img
+                          className="mx-auto d-block"
+                          width="300"
+                          src={fileUrl}
+                        />
+                      )
                   ) : (
-                    <div>
-                      <FileTypes data={fileName.split(".")[1]}></FileTypes>
-                      <p className="text-center font-weight-bold">
-                        {fileName.split(".")[0]}
-                      </p>
-                    </div>
-                  ))}
+                      <div>
+                        <FileTypes data={fileName.split(".")[1]}></FileTypes>
+                        <p className="text-center font-weight-bold">
+                          {fileName.split(".")[0]}
+                        </p>
+                      </div>
+                    ))}
                 <TextField
                   id="standard-textarea"
                   placeholder="What's new?"
@@ -191,8 +192,8 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                 />
               </div>
             ) : (
-              ""
-            )}
+                ""
+              )}
 
             <div className="row">
               <div className="col-6">
@@ -247,7 +248,7 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
             </div>
           </div>
         </div>
-      </form>
+      </form>      
     </div>
   );
 }

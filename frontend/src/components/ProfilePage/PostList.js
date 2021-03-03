@@ -10,7 +10,8 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "82ch",
+    maxWidth: "86ch",
+    margin: "auto",
   },
   inline: {
     display: "inline",

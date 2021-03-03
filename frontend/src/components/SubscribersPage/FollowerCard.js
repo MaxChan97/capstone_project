@@ -11,7 +11,7 @@ export default function FollowerCard({ followerList, searchTerm}) {
       follower["follower"].username.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
-  }, [searchTerm]);
+  }, [followerList, searchTerm]);
 
   return (
     followerList !== undefined ? (

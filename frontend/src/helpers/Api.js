@@ -61,14 +61,46 @@ export default {
     });
   },
 
-  resetPassword(email) {
+  saveResetId(email, resetId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/resetPassword/" + email,
+      url: this.SERVER_PREFIX + "/person/saveResetId/" + email,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "PUT",
+      data: JSON.stringify({
+        resetId: resetId,
+      }),
+    });
+  },
+
+  resetPassword(resetId, newPassword) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/resetPassword/" + resetId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        newPassword: newPassword,
+      }),
+    });
+  },
+
+  changePassword(id, oldPassword, newPassword) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/changePassword/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
     });
   },
 
@@ -523,9 +555,9 @@ export default {
     });
   },
 
-  getCommunityById(id) {
+  getCommunityById(communityId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/community/" + id,
+      url: this.SERVER_PREFIX + "/community/" + communityId + '/' + personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -689,4 +721,99 @@ export default {
       }),
     });
   },
+
+  createCommunityPost(communityId, personId, postBody,
+    fileName,
+    fileUrl,
+    fileType,
+    postPollQuestion,
+    postPollOptions) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/community/" + communityId + "/person/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        postBody: postBody,
+        fileName: fileName,
+        fileUrl: fileUrl,
+        fileType: fileType,
+        postPollQuestion: postPollQuestion,
+        postPollOptions: postPollOptions,
+      }),
+    });
+  },
+
+  followCommunity(communityId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/person/" +
+        personId +
+        "/follow",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  unfollowCommunity(communityId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/person/" +
+        personId +
+        "/unfollow",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  getCommunityMembers(CommunityId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/" + CommunityId + "/members",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getOwnedCommunities(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/ownedCommunities",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getFollowingCommunities(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/followingCommunities",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+
+
+
 };

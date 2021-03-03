@@ -1,21 +1,16 @@
 import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { useHistory, Redirect, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import { logIn } from "../redux/actions/index";
-import emailjs from "emailjs-com";
-var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
@@ -75,53 +70,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ResetPassword() {
+export default function NewPassword() {
   const alert = useAlert();
   const classes = useStyles();
+  let { resetId } = useParams();
 
-  const [email, setEmail] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
 
   const history = useHistory();
-  const dispatch = useDispatch();
 
   function handleResetPassword(e) {
     e.preventDefault();
-    var resetId = uuid.v4().toString();
-    Api.saveResetId(email, resetId)
-      .done((person) => {
-        let template_params = {
-          to_email: person.email,
-          to_name: person.username,
-          reset_link: "http://localhost:3000/newPassword/" + person.resetId,
-        };
-        emailjs
-          .send(
-            "service_uxmtj2w",
-            "template_nzo4tcx",
-            template_params,
-            "user_VLkMjCcfGXgz2IkAs0sAL"
-          )
-          .then(
-            function (response) {
-              console.log(response.status, response.text);
-            },
-            function (err) {
-              console.log(err);
-            }
-          );
-        alert.show("Reset Link has been sent to your email!");
-        history.push("/");
-      })
-      .fail((xhr, status, error) => {
-        if (xhr.responseJSON.error === "Missing person email") {
-          setEmail("");
-          alert.show("Email is empty");
-        }
-        if (xhr.responseJSON.error === "Cannot find person") {
-          setEmail("");
-          alert.show("Email is not under a registered account");
-        }
-      });
+    if (newPassword1 == "") {
+      alert.show("Please enter a password");
+    } else if (newPassword2 == "") {
+      alert.show("Please enter a password");
+    } else if (newPassword1 === newPassword2) {
+      Api.resetPassword(resetId, newPassword1)
+        .done((person) => {
+          alert.show("Password has been resetted!");
+          history.push("/");
+          Api.saveResetId(person.email, "");
+        })
+        .fail((xhr, status, error) => {
+          if (xhr.responseJSON.error === "Missing person email") {
+            alert.show("Email is empty");
+          }
+          if (xhr.responseJSON.error === "Cannot find person") {
+            alert.show("Email is not under a registered account");
+          }
+        });
+    } else {
+      alert.show("Passwords do not match");
+    }
   }
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -169,7 +151,7 @@ export default function ResetPassword() {
             }}
             className={classes.register}
           >
-            Reset Password
+            New Password
           </h1>
           <form className={classes.form} onSubmit={handleResetPassword}>
             <TextField
@@ -177,17 +159,29 @@ export default function ResetPassword() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
+              name="password1"
+              label="New Password"
+              type="password"
+              id="password1"
+              value={newPassword1}
               onChange={(e) => {
-                setEmail(e.target.value);
+                setNewPassword1(e.target.value);
               }}
             />
-
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password2"
+              label="Confirm Password"
+              type="password"
+              id="password2"
+              value={newPassword2}
+              onChange={(e) => {
+                setNewPassword2(e.target.value);
+              }}
+            />
             <Button
               type="submit"
               fullWidth

@@ -185,8 +185,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         <div
           class="card"
           style={{
-            minWidth: "80ch",
-            maxWidth: "80ch",
+            minWidth: "82ch",
+            maxWidth: "82ch",
           }}
         >
           <div class="card-body">

@@ -48,4 +48,6 @@ public interface PostSessionBeanLocal {
 
     public Post getPostById(Long postId) throws NoResultException, NotValidException;
 
+    public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException;
+
 }

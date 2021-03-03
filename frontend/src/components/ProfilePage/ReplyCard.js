@@ -155,7 +155,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                 </span>
               </div>
               {data.author.id == currentUser ? (
-                <div style={{ textAlign: "right" }}>
+                <div style={{ textAlign: "right", marginRight: "3%" }}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"

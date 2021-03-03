@@ -15,7 +15,6 @@ export default function SubscriberPage() {
   const [subscriberList, setSubscriberList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   const alert = useAlert();
 
 

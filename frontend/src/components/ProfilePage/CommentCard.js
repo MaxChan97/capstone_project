@@ -159,7 +159,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
               </div>
               {data.author.id == currentUser ? (
-                <div style={{ textAlign: "right" }}>
+                <div style={{ textAlign: "right",  marginRight: "3%"}}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"
