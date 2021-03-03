@@ -12,6 +12,7 @@ export default function ProfilePage() {
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [ownedCommunities, setOwnedCommunities] = useState({});
 
+  const [refresh, setRefresh] = useState(true);
   useEffect(() => {
     if (currentUser) {
       loadData(communityId, currentUser);
@@ -32,6 +33,8 @@ export default function ProfilePage() {
       });
 
       Api.getCommunityById(communityId)
+  function loadData(communityId) {
+    Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
         setCurrentCommunity(currentCommunity);
       })
@@ -52,6 +55,22 @@ export default function ProfilePage() {
           break;
         }
       }
+
+  const handleTabView = (tabValue) => {
+    if (currentCommunity.id !== undefined && tabValue === 0) {
+      return (
+        <div className="container mt-3 ">
+          <div className="row">
+            <div className="col-md-8">
+              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
+              <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
+            </div>
+            <div className="col-md-4" style={{ textAlign: "left" }}>
+              <SearchCard />
+            </div>
+          </div>
+        </div>
+      );
     }
     console.log(owner);
     return owner;

@@ -33,8 +33,10 @@ public interface CommunitySessionBeanLocal {
     public final static String ALREADY_FOLLOWING = "Person already following community";
     public final static String ALREADY_UNFOLLOWING = "Person already unfollowed community";
     public final static String ALREADY_BANNED = "Person already banned";
+    public final static String ALREADY_UNBANNED = "Person already unbanned";
 
     public final static String BANNED = "You are banned from the community";
+    public final static String CANNOT_BAN_OWNER = "The owner of the community cannot be banned";
 
     public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException;
 
@@ -51,5 +53,13 @@ public interface CommunitySessionBeanLocal {
     public List<Person> getMembers(Long communityId) throws NoResultException, NotValidException;
 
     public void banPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException;
+
+    public void checkBanned(Long communityId, Long personId) throws NotValidException, NoResultException;
+
+    public Community getCommunity(Long communityId, Long personId) throws NoResultException, NotValidException;
+
+    public void unbanPerson(Long communityId, Long personId, Long ownerId) throws NoResultException, NotValidException;
+
+    public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException;
 
 }

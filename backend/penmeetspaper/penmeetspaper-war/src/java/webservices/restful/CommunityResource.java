@@ -123,12 +123,12 @@ public class CommunityResource {
     }
 
     @GET
-    @Path("/{communityId}")
+    @Path("/{communityId}/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCommunity(@PathParam("communityId") Long communityId) {
+    public Response getCommunity(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId) {
         try {
 
-            Community community = communitySB.getCommunityById(communityId);
+            Community community = communitySB.getCommunity(communityId, personId);
             return Response.status(200).entity(
                     community
             ).type(MediaType.APPLICATION_JSON).build();
@@ -224,4 +224,52 @@ public class CommunityResource {
         return Response.status(200).entity(entity).build();
 
     }
+
+    @PUT
+    @Path("/{communityId}/ban/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response banPerson(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId, String jsonString) {
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+        Long ownerId = Long.parseLong(jsonObject.getString("ownerId"));
+        try {
+            communitySB.banPerson(communityId, personId, ownerId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{communityId}/unban/person/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response unbanPerson(@PathParam("communityId") Long communityId, @PathParam("personId") Long personId, String jsonString) {
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+        Long ownerId = Long.parseLong(jsonObject.getString("ownerId"));
+        try {
+            communitySB.unbanPerson(communityId, personId, ownerId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{communityId}/banlist")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBanList(@PathParam("communityId") Long communityId) {
+        try {
+            List<Person> results = communitySB.getBannedUsers(communityId);
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }

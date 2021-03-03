@@ -61,14 +61,46 @@ export default {
     });
   },
 
-  resetPassword(email) {
+  saveResetId(email, resetId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/resetPassword/" + email,
+      url: this.SERVER_PREFIX + "/person/saveResetId/" + email,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      type: "GET",
+      type: "PUT",
+      data: JSON.stringify({
+        resetId: resetId,
+      }),
+    });
+  },
+
+  resetPassword(resetId, newPassword) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/resetPassword/" + resetId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        newPassword: newPassword,
+      }),
+    });
+  },
+
+  changePassword(id, oldPassword, newPassword) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/changePassword/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
     });
   },
 
@@ -523,9 +555,9 @@ export default {
     });
   },
 
-  getCommunityById(id) {
+  getCommunityById(communityId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/community/" + id,
+      url: this.SERVER_PREFIX + "/community/" + communityId + '/' + personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
