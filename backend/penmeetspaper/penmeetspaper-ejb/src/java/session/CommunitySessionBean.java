@@ -316,6 +316,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         }
     }
 
+    @Override
     public void deleteCommunity(Long communityId) throws NotValidException, NoResultException {
         Community c = emGetCommunity(communityId);
 

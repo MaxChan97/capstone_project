@@ -20,6 +20,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -267,6 +268,21 @@ public class CommunityResource {
             };
 
             return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @DELETE
+    @Path("/{communityId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunity(@PathParam("communityId") Long communityId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        Long ownerId = Long.parseLong(jsonObject.getString("ownerId"));
+
+        try {
+            communitySB.deleteCommunity(communityId);
+            return Response.status(204).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
