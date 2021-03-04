@@ -37,7 +37,9 @@ export default function FollowingRow({ channel }) {
         <div className="col-md-7">
           <dl>
             <dt className="text-left">{publisher.username}</dt>
-            <dd class="text-secondary">{followerList.length} followers</dd>
+            <dd class="text-secondary">
+            {followerList.length !== 1 ? followerList.length + " followers" : followerList.length + " follower"}
+            </dd>
           </dl>
         </div>
       </div>
