@@ -71,6 +71,7 @@ export default function TopBar({
         communityName={communityName}
         numMembers={numMembers}
         communityPicture={communityPicture}
+        communityId={communityId}
         />
         <CommunityManagementButton communityId = {communityId}/>
       </div>
