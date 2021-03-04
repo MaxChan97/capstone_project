@@ -216,7 +216,7 @@ function Sidebar() {
             <li className="nav-item">
               {location.pathname === "/community" ? (
                 <Link
-                  to="/community"
+                  to="/communityFeed"
                   className="nav-link"
                   style={{ backgroundColor: "#EAECEF" }}
                 >
@@ -236,7 +236,7 @@ function Sidebar() {
                   </div>
                 </Link>
               ) : (
-                <Link to="/community" className="nav-link">
+                <Link to="/communityFeed" className="nav-link">
                   <div
                     style={{
                       display: "flex",

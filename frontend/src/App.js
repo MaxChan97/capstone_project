@@ -31,7 +31,7 @@ import MyCommunities from "./screens/MyCommunitiesPage";
 import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
 import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 import ViewCommunityMembers from "./screens/ViewCommunityMembers";
-
+import CommunityFeed from "./screens/CommunityFeed";
 
 function App() {
   let location = useLocation();
@@ -127,6 +127,11 @@ function App() {
               exact
               path="/community/post/:postId"
               component={CommunityPostWithComments}
+            />
+            <Route
+              exact
+              path="/communityFeed"
+              component={CommunityFeed}
             />
           </div>
         </div>

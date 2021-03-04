@@ -144,7 +144,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
                 <span class="username">
 
-                  <Link to={"/profile/" + data.author.id}>
+                  <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
                     {data.author.username}
                   </Link>
 
@@ -204,7 +204,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
             <p style={{ marginLeft: 10 }}>
               {liked == true ? (
-                <Link onClick={handleUnlike}>
+                <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
                   <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </Link>
               ) : (
@@ -222,13 +222,13 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
             </p>
             {showReplies == true ? (
               <div>
-                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>Hide replies</Link>
+                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies} style={{color: "#3B21CB",fontSize: "14px"}}>Hide replies</Link>
                 <Divider variant="middle" />
                 <ReplyCommentCard commentData={data} refresh={refresh}
                   setRefresh={setRefresh}></ReplyCommentCard>
               </div>
             ) : (
-                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>Reply/View replies</Link>
+                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies} style={{color: "#3B21CB", fontSize: "14px"}}>Reply/View replies</Link>
               )}
 
             <Divider variant="middle" />

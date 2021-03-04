@@ -195,7 +195,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
                 <div class="user-block">
                   <img src={defaultDP} alt="User profile picture" />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id}>
+                    <Link to={"/profile/" + data.author.id}  style={{color: "#3B21CB",}}>
                       {data.author.username}
                     </Link>
                   </span>
@@ -303,7 +303,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
             */}
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike}>
+                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
