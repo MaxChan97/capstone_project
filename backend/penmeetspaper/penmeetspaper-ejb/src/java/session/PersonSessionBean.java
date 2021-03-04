@@ -140,6 +140,11 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Ban ban = banSB.createBan();
 
         person.setBan(ban);
+        person.setDescription("");
+        person.setProfilePicture(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
+        person.setProfileBanner(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         em.persist(person);
 
         return person;
