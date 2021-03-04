@@ -144,7 +144,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end createPostForCommunity
 
     @Override
-    public List<Person> searchPostByTitle(String title) {
+    public List<Post> searchPostByTitle(String title) throws NoResultException, NotValidException {
         Query q;
         if (title != null) {
             q = em.createQuery("SELECT p FROM Post p WHERE " + "LOWER(p.title) LIKE :title");
@@ -152,7 +152,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
         } else {
             q = em.createQuery("SELECT p FROM Post p");
         }
-        return q.getResultList();
+        List<Post> posts = q.getResultList();
+
+        for (Post p : posts) {
+            p = getPostById(p.getId());
+        }
+
+        return posts;
 
     } // end searchPostByTitle
 
