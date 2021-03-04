@@ -18,10 +18,12 @@ export default function ProfileGroup({
     >
       <img
         style={{
-          height: 110,
-          width: 110,
+          height: 80,
+          width: 80,
           borderRadius: "50%",
           display: "block",
+          marginLeft:"120px",
+          marginRight:"30px",
         }}
         src={communityPicture}
         alt="communityPicture"
@@ -30,7 +32,7 @@ export default function ProfileGroup({
         style={{
           display: "flex",
           flexDirection: "column",
-          marginLeft: "18px",
+          // marginLeft: "30px",
           alignItems: "flex-start",
           justifyContent: "center",
         }}
