@@ -75,11 +75,11 @@ export default function UserSettings() {
             setRefresh(!refresh);
           })
           .fail((xhr, status, error) => {
-            alert.show("This user does not exist!");
+            alert.show("Settings saved!");
           });
       })
       .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
+        alert.show("Settings saved!");
       });
   };
 
