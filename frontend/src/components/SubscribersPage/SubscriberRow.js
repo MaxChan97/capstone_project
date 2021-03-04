@@ -11,7 +11,10 @@ export default function SubscriberRow({ subscriber }) {
           <p className="text-left">{subscriber.username}</p>
         </div> */}
         <div className="col-md-3">
-          <img className="img-fluid" src={person.profilePicture || defaultDP} />
+          <img
+            className="img-fluid rounded-circle"
+            src={person.profilePicture || defaultDP}
+          />
         </div>
         <div className="col-md-7">
           <p className="text-left">{person.username}</p>
