@@ -181,39 +181,17 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     } // end getPersonById
 
     @Override
-    // Detach methods will be here
     public Person getPersonByEmail(String email) throws NoResultException, NotValidException {
         Person person = emGetPersonByEmail(email);
+        return getPersonById(person.getId());
 
-        em.detach(person);
-        person.setPosts(null);
-        person.setChats(null);
-        person.setFollowers(null);
-        person.setFollowing(null);
-        person.setSubscriptions(null);
-        person.setPublications(null);
-        person.setOwnedCommunities(null);
-        person.setFollowingCommunities(null);
-
-        return person;
     } // end getPersonByEmail
 
     @Override
-    // Detach methods will be here
     public Person getPersonByResetId(String resetId) throws NoResultException, NotValidException {
         Person person = emGetPersonByResetId(resetId);
+        return getPersonById(person.getId());
 
-        em.detach(person);
-        person.setPosts(null);
-        person.setChats(null);
-        person.setFollowers(null);
-        person.setFollowing(null);
-        person.setSubscriptions(null);
-        person.setPublications(null);
-        person.setOwnedCommunities(null);
-        person.setFollowingCommunities(null);
-
-        return person;
     } // end getPersonByResetId
 
     @Override
