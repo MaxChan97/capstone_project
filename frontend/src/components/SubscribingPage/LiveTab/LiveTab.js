@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Api from "../../../helpers/Api";
 import LiveCard from "./LiveCard"
-import SearchCard from "../SearchCard"
+import SearchCard from ".SearchCard"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,7 +65,6 @@ export default function LiveTab() {
     return (
         <div className="content-wrapper">
             <div className="container-fluid">
-                {/* <p className="font-weight-bold">Channels you follow</p> */}
                     <div className="row">
                         <div className="col-md-8 mt-9" style={{ textAlign: "left" }}>
                             <LiveCard liveList={liveList} searchTerm={searchTerm} />
