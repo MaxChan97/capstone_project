@@ -36,7 +36,7 @@ public class Post implements Serializable, Comparable<Post> {
 
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     private String body;
 
     @Column(nullable = false)
