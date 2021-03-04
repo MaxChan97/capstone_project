@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import defaultDP from "../assets/Default Dp logo.svg";
@@ -13,6 +12,14 @@ import Select from "react-select";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { storage } from "../firebase";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
 var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 
 const topics = [
   { value: "REAL_ESTATE", label: "Real Estate" },
@@ -38,6 +44,7 @@ export default function ManageCommunityDetails() {
   const { communityId } = useParams();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
+  const [refresh, setRefresh] = useState(true);
 
   const [communityName, setCommunityName] = useState("");
   const handleCommunityNameChange = (event) => {
@@ -58,9 +65,25 @@ export default function ManageCommunityDetails() {
     setTopicInterests(tempSelectedOptions);
   };
 
+  const history = useHistory();
+
+  const handleDelete = () => {
+    openDeleteCommunityModal();
+  };
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = React.useState(
+    false
+  );
+
+  function openDeleteCommunityModal() {
+    setConfirmDeleteDialogOpen(true);
+  }
+
+  function closeDeleteCommunityModal() {
+    setConfirmDeleteDialogOpen(false);
+  }
+
   const [communityPicture, setCommunityPicture] = useState("");
   const [communityBanner, setCommunityBanner] = useState("");
-  
 
   const changeCommunityPictureHandler = (event) => {
     var oldName = event.target.files[0].name;
@@ -123,7 +146,6 @@ export default function ManageCommunityDetails() {
   };
 
   const [currentPerson, setCurrentPerson] = useState({});
-  const [refresh, setRefresh] = useState(true);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -131,12 +153,11 @@ export default function ManageCommunityDetails() {
     if (currentUser) {
       loadData(communityId);
     }
-  }, [communityId]);
+  }, [communityId, refresh]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
-
 
   function loadData(communityId) {
     Api.getCommunityById(communityId, currentUser)
@@ -180,13 +201,14 @@ export default function ManageCommunityDetails() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    
+
     Api.editCommunityDetails(
-        communityId, 
-        description, 
-        topicInterests, 
-        communityPicture, 
-        communityBanner)
+      communityId,
+      description,
+      topicInterests,
+      communityPicture,
+      communityBanner
+    )
       .done(() => {
         console.log(communityBanner);
         alert.show("Community Updated Successfully!");
@@ -203,6 +225,27 @@ export default function ManageCommunityDetails() {
           alert.show("Please fill in the community name");
         }
       });
+  }
+
+  function handleDeleteCommunity() {
+    if (currentCommunity.owner.id === currentUser) {
+      Api.deleteCommunity(communityId, currentUser)
+        .done(() => {
+          alert.show("Delete success!");
+          setRefresh(!refresh);
+          closeDeleteCommunityModal();
+          history.push("/community");
+        })
+        .fail((xhr, status, error) => {
+          console.log(xhr.responseJSON.error);
+          if (xhr.responseJSON.error === "Missing Community parameter") {
+            setCommunityName("");
+            alert.show("Please include the community id");
+          }
+        });
+    } else {
+      alert.show("Invalid Request by non-owner!");
+    }
   }
 
   return (
@@ -224,7 +267,7 @@ export default function ManageCommunityDetails() {
                           height: 130,
                           width: 130,
                           borderRadius: "50%",
-                          display: "block"
+                          display: "block",
                         }}
                         src={communityPicture || defaultDP}
                         alt="Community Picture"
@@ -254,8 +297,9 @@ export default function ManageCommunityDetails() {
                         />
                       </label>
                       <Box fontWeight="fontWeightRegular" m={1}>
-                        JPEG or PNG only and cannot exceed 10MB. It’s recommended
-                        to use a picture that’s at least 100 x 100 pixels
+                        JPEG or PNG only and cannot exceed 10MB. It’s
+                        recommended to use a picture that’s at least 100 x 100
+                        pixels
                       </Box>
                     </div>
                   </div>
@@ -313,10 +357,19 @@ export default function ManageCommunityDetails() {
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputDescription">Description</label>
-                    <textarea className="form-control" value={description} maxLength={1000} onChange={handleDescriptionChange} />
-                        {description !== undefined ? (
-                        <p style={{textAlign: "right"}}>{description.length}/1000</p>) : 
-                        (<p style={{textAlign: "right"}}>0/1000</p>)}
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      maxLength={1000}
+                      onChange={handleDescriptionChange}
+                    />
+                    {description !== undefined ? (
+                      <p style={{ textAlign: "right" }}>
+                        {description.length}/1000
+                      </p>
+                    ) : (
+                      <p style={{ textAlign: "right" }}>0/1000</p>
+                    )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputInterests">Related Topics</label>
@@ -363,6 +416,65 @@ export default function ManageCommunityDetails() {
                   </div>
                 </div>
               </form>
+              <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
+                Delete Community
+              </Box>
+              <Box fontWeight="fontWeightRegular" m={1}>
+                Deleting this community will delete all the posts, members and
+                details of the group.
+              </Box>
+              <Box fontWeight="fontWeightRegular" m={1}>
+                This action cannot be undone.
+              </Box>
+              <ColorButton
+                style={{
+                  height: "35px",
+                  width: "100px",
+                  outline: "none",
+                  float: "left",
+                  fontWeight: "600",
+                  marginTop: "20px",
+                  marginLeft: "10px",
+                  marginBottom: "20px",
+                }}
+                variant="contained"
+                color="primary"
+                onClick={handleDelete}
+              >
+                Delete
+              </ColorButton>
+              <Dialog
+                open={confirmDeleteDialogOpen}
+                onClose={closeDeleteCommunityModal}
+                aria-labelledby="confirm-delete-dialog-title"
+                aria-describedby="confirm-delete-dialog-description"
+              >
+                <DialogTitle id="confirm-delete-dialog-title">
+                  Delete {communityName}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="confirm-delete-dialog-description">
+                    Are you sure you want to delete {communityName}?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    style={{ outline: "none" }}
+                    onClick={closeDeleteCommunityModal}
+                  >
+                    Cancel
+                  </Button>
+                  <ColorButton
+                    style={{ outline: "none" }}
+                    onClick={handleDeleteCommunity}
+                    color="primary"
+                    variant="contained"
+                    autoFocus
+                  >
+                    Delete
+                  </ColorButton>
+                </DialogActions>
+              </Dialog>
             </div>
           </div>
         </div>

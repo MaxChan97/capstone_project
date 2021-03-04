@@ -824,6 +824,22 @@ export default {
     });
   },
 
+  deleteCommunity(communityId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/person/" +
+        ownerId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
 
 
 
