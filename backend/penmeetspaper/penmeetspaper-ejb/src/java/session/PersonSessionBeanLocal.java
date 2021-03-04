@@ -72,4 +72,6 @@ public interface PersonSessionBeanLocal {
 
     public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException;
 
+    public void updatePersonInfo(Person person) throws NoResultException, NotValidException;
+
 }

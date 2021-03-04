@@ -409,7 +409,7 @@ public class PersonResource {
             person.setHasExplicitLanguage(explicit);
             person.setChatIsPaid(subscriberOnly);
 
-            personSB.updatePerson(person);
+            personSB.updatePersonInfo(person);
 
             return Response.status(204).build();
 
