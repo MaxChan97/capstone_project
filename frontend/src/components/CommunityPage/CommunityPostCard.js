@@ -9,13 +9,19 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Api from "../../helpers/Api";
 import moment from "moment";
 import EditPostModal from "../../components/ProfilePage/EditPostModal";
-import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal"
+import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal";
 import FileTypes from "../../components/FileTypes.js";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
-export default function CommunityPostCard({ key, data, refresh, setRefresh, community }) {
+export default function CommunityPostCard({
+  key,
+  data,
+  refresh,
+  setRefresh,
+  community,
+}) {
   const alert = useAlert();
 
   //for menu button
@@ -25,7 +31,8 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
 
-  {/*}
+  {
+    /*}
   useEffect(() => {
     if (data.poll != undefined) {
       let hasVoted = false;
@@ -75,7 +82,8 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
         alert.show(xhr.responseJSON.error);
       });
   }
-*/}
+*/
+  }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -165,14 +173,13 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
       }}
     >
       <div class="col-md-9">
-        
         <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
           data={data}
           refresh={refresh}
           setRefresh={setRefresh}
-          community ={community}
+          community={community}
         />
         <EditPostModal
           show={showEditPostModal}
@@ -181,7 +188,7 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        
+
         <div
           class="card"
           style={{
@@ -193,16 +200,22 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
                 <div class="user-block">
-                  <img src={defaultDP} alt="User profile picture" />
+                  <img src={community.communityProfilePicture || defaultDP} />
                   <span class="username">
-                    <Link to={"/community/" + community.id} style={{color: "#3B21CB", fontSize:"18px"}} >
+                    <Link
+                      to={"/community/" + community.id}
+                      style={{ color: "#3B21CB", fontSize: "18px" }}
+                    >
                       {community.name}
                     </Link>
                     <span>&nbsp;</span>
                     <span>&nbsp;</span>
                     <span>&nbsp;</span>
-                    <Link to={"/profile/" + data.author.id} style={{color: "gray", fontSize:"13px"}}>
-                     Posted by @ {data.author.username}
+                    <Link
+                      to={"/profile/" + data.author.id}
+                      style={{ color: "gray", fontSize: "13px" }}
+                    >
+                      Posted by @ {data.author.username}
                     </Link>
                   </span>
 
@@ -212,9 +225,8 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
                     <span>&nbsp; </span>
                     {moment.utc(formatDate).fromNow()}
                   </span>
-                  
                 </div>
-                
+
                 {data.author.id == currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <IconButton
@@ -251,7 +263,7 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
                   <span></span>
                 )}
               </div>
-              
+
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
@@ -269,9 +281,9 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
                     </p>
                   </div>
                 ))}
-               
+
               <p>{data.body}</p>
-             
+
               {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
@@ -313,7 +325,7 @@ export default function CommunityPostCard({ key, data, refresh, setRefresh, comm
             */}
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                  <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
