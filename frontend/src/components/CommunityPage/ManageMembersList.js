@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import SearchMembersRow from "./SearchMembersRow";
+import ManageMembersRow from "./ManageMembersRow";
 
-export default function SearchMembersList({
+export default function ManageMembersList({
   communityMembers,
   searchTerm,
   refresh,
@@ -23,7 +23,7 @@ export default function SearchMembersList({
         {searchResults.map((row, index) => {
           return (
             <li key={index} class="list-group-item">
-              <SearchMembersRow
+              <ManageMembersRow
                 member={row}
                 refresh={refresh}
                 setRefresh={setRefresh}

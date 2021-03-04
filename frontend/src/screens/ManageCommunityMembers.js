@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Api from "../helpers/Api";
 import Box from "@material-ui/core/Box";
 import SearchMembersBar from "../components/CommunityPage/SearchMembersBar";
-import SearchMembersList from "../components/CommunityPage/SearchMembersList";
+import ManageMembersList from "../components/CommunityPage/ManageMembersList";
 
 export default function ManageCommunityMembers() {
   const currentUser = useSelector((state) => state.currentUser);
@@ -60,7 +60,7 @@ export default function ManageCommunityMembers() {
               <div className="row">
                 <div className="col-md-5 mt-4" style={{ textAlign: "left" }}>
                   {communityMembers !== undefined ? (
-                    <SearchMembersList
+                    <ManageMembersList
                       communityMembers={communityMembers}
                       searchTerm={searchTerm}
                       refresh ={refresh}
