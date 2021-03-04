@@ -14,7 +14,7 @@ import {
   } from "@material-ui/core";
   import { withStyles } from "@material-ui/core/styles";
 
-export default function SearchMembersRow({ member , refresh, setRefresh}) {
+export default function ManageMembersRow({ member , refresh, setRefresh}) {
   const alert = useAlert();
   const { communityId } = useParams();
 
@@ -133,11 +133,11 @@ export default function SearchMembersRow({ member , refresh, setRefresh}) {
                 aria-describedby="confirm-delete-dialog-description"
               >
                 <DialogTitle id="confirm-delete-dialog-title">
-                  Remove {member.username}
+                  Ban {member.username}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="confirm-delete-dialog-description">
-                    Are you sure you want to remove user {member.username}?
+                    Are you sure you want to ban user {member.username}?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -154,7 +154,7 @@ export default function SearchMembersRow({ member , refresh, setRefresh}) {
                     variant="contained"
                     autoFocus
                   >
-                    Remove
+                    Ban
                   </ColorButton>
                 </DialogActions>
               </Dialog>
