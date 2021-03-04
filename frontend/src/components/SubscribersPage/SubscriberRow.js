@@ -2,7 +2,7 @@ import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
 export default function SubscriberRow({ subscriber }) {
-  const person = subscriber["subscriber"]
+  const person = subscriber["subscriber"];
 
   return (
     <div className="container">
@@ -11,7 +11,7 @@ export default function SubscriberRow({ subscriber }) {
           <p className="text-left">{subscriber.username}</p>
         </div> */}
         <div className="col-md-3">
-          <img className="img-fluid" src={person.profilePicture} alt="defaultDP" />
+          <img className="img-fluid" src={person.profilePicture || defaultDP} />
         </div>
         <div className="col-md-7">
           <p className="text-left">{person.username}</p>
