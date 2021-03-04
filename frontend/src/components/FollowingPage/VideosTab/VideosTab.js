@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Api from "../../../helpers/Api";
+import SearchCard from "./SearchCard"
 
 
 const useStyles = makeStyles((theme) => ({
