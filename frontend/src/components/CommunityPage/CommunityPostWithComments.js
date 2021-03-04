@@ -168,7 +168,7 @@ export default function CommunityPostWithComments() {
                     />
                     <Link
                       to={"/profile/" + data.author.id}
-                      style={{ marginLeft: 10 }}
+                      style={{ marginLeft: 10, color: "#3B21CB"}}
                     >
                       {data.author.username}
                     </Link>
@@ -236,7 +236,7 @@ export default function CommunityPostWithComments() {
                 <p>{data.body}</p>
                 <p>
                   {liked == true ? (
-                    <Link onClick={handleUnlike}>
+                    <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
                   ) : (

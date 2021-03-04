@@ -70,12 +70,7 @@ export default function TopBar({
           communityName={communityName}
           numMembers={numMembers}
           communityPicture={communityPicture}
-        />
-        <SocialButtonGroup
           communityId={communityId}
-          communityName={communityName}
-          refresh={refresh}
-          setRefresh={setRefresh}
         />
       </div>
       <div

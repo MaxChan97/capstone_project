@@ -871,4 +871,28 @@ export default {
     });
   },
 
+  //get posts of people that current user is following
+  getFollowingPosts(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followingPosts",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  //get posts of people that current user is following
+  getFollowingCommunityPosts(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followingCommunityPosts",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
 };

@@ -198,7 +198,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     src={data.author.profilePicture || defaultDP}
                   />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id}>
+                    <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
                       {data.author.username}
                     </Link>
                   </span>
@@ -302,7 +302,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike}>
+                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
