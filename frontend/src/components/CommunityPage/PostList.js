@@ -27,9 +27,8 @@ export default function PostList({ community, refresh, setRefresh }) {
   useEffect(() => {
     if (community) {
       loadData(community);
-      console.log(community);
     }
-  }, [community, refresh]);
+  }, [community]);
 
   function loadData(community) {
    
@@ -47,20 +46,23 @@ export default function PostList({ community, refresh, setRefresh }) {
               data={data}
               refresh={refresh}
               setRefresh={setRefresh}
+              community = {community}
             />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-    <h3
-      style={{
-        color: "gray",
-        textAlign: "center",
-        margin: "auto",
-      }}
-    >
-      No posts yet...
-    </h3>
+    <div style={{marginTop: "30px"}}>
+      <h3
+        style={{
+          color: "gray",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        No posts yet...
+      </h3>
+    </div>
   );
 }

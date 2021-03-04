@@ -54,6 +54,7 @@ function Sidebar() {
                 </Link>
               )}
             </li>
+
             <li className="nav-item">
               {location.pathname === "/following" ? (
                 <Link
@@ -95,6 +96,49 @@ function Sidebar() {
                 </Link>
               )}
             </li>
+
+            <li className="nav-item">
+              {location.pathname === "/subscribing" ? (
+                <Link
+                  to="/subscribing"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={followingLogo}
+                      className="nav-icon"
+                      alt="followingLogo"
+                    />
+                    <p className="ml-2">Subscribing</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/subscribing" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={followingLogo}
+                      className="nav-icon"
+                      alt="followingLogo"
+                    />
+                    <p className="ml-2">Subscribing</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+
             <li className="nav-item">
               {location.pathname === "/liked" ? (
                 <Link

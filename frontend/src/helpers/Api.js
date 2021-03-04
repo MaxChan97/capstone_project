@@ -134,7 +134,7 @@ export default {
   //get a list of posts
   getPersonsPost(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/person/" + id,
+      url: this.SERVER_PREFIX + "/person/" + id + "/posts",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -700,7 +700,7 @@ export default {
 
   editCommunityDetails(
     communityId,
-    description,
+    communityDescription,
     topicEnums,
     communityProfilePicture,
     communityBanner
@@ -714,7 +714,7 @@ export default {
       },
       type: "PUT",
       data: JSON.stringify({
-        description: description,
+        communityDescription: communityDescription,
         topicEnums: topicEnums,
         communityProfilePicture: communityProfilePicture,
         communityBanner: communityBanner,
@@ -824,7 +824,51 @@ export default {
     });
   },
 
+  deleteCommunity(communityId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/person/" +
+        ownerId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
 
+  deleteCommunityPost(personId, postId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/community/" + personId + "/" + postId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
 
+  banPersonFromCommunity(communityId, personId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/ban/" +
+        "person/" +
+        personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        ownerId: ownerId,
+      }),
+    });
+  },
 
 };

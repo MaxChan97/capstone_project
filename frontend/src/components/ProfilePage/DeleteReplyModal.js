@@ -99,6 +99,7 @@ export default function DeleteReplyModal({ show, handleClose, data, setDeleted }
             <Card className={styles.cardContainer}>
                 <CardContent className={styles.cardContent}>
                     <h5>Do you want to delete this reply?</h5>
+                    <p>Reply deletion is permanent and cannot be undone</p>
                     <br></br>
                     <div style={{ display: "flex", alignItems: "baseline" }}>
                         <ColorButton

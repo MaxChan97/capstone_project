@@ -10,11 +10,15 @@ import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -79,7 +83,51 @@ public class PersonResource {
         return topicInterests;
     }
 
+    private IncomeRangeEnum convertToIncomeRangeEnum(String str) throws NotValidException {
+        if (str.equals("NOT_EARNING")) {
+            return IncomeRangeEnum.NOT_EARNING;
+        } else if (str.equals("LOW")) {
+            return IncomeRangeEnum.LOW;
+        } else if (str.equals("MIDDLE_LOW")) {
+            return IncomeRangeEnum.MIDDLE_LOW;
+        } else if (str.equals("MIDDLE")) {
+            return IncomeRangeEnum.MIDDLE;
+        } else if (str.equals("MIDDLE_HIGH")) {
+            return IncomeRangeEnum.MIDDLE_HIGH;
+        } else if (str.equals("HIGH")) {
+            return IncomeRangeEnum.HIGH;
+        } else if (str.equals("CRA")) {
+            return IncomeRangeEnum.CRA;
+        }
+
+        throw new NotValidException("could not match income range");
+    }
+
     // Main Business logic -------------------------------------
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPerson(String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String email = jsonObject.getString("email");
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
+        Person p = new Person();
+        p.setEmail(email);
+        p.setUsername(username);
+        // Might want to hash password, see how
+        p.setPassword(password);
+
+        try {
+            Person addedPerson = personSB.createPerson(p);
+            return Response.status(200).entity(addedPerson).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end createPerson
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPerson() {
@@ -95,6 +143,18 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getAllPerson
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonById(@PathParam("id") String id) {
+        try {
+            Person p = personSB.getPersonById(Long.valueOf(id));
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonById
 
     @GET
     @Path("/query")
@@ -118,18 +178,6 @@ public class PersonResource {
     } // end searchPersonByUsername
 
     @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonById(@PathParam("id") String id) {
-        try {
-            Person p = personSB.getPersonById(Long.valueOf(id));
-            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end getPersonById
-
-    @GET
     @Path("/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonByEmail(@PathParam("email") String email) {
@@ -140,201 +188,6 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonByEmail
-
-    @PUT
-    @Path("/saveResetId/{email}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response saveResetId(@PathParam("email") String email, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-        String resetId = jsonObject.getString("resetId");
-        try {
-            Person p = personSB.getPersonByEmail(email);
-            p.setResetId(resetId);
-            personSB.updatePerson(p);
-            p = personSB.getPersonById(p.getId());
-            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end saveResetId
-
-    @PUT
-    @Path("/resetPassword/{resetId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response resetPassword(@PathParam("resetId") String resetId, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-        String newPassword = jsonObject.getString("newPassword");
-
-        try {
-            if (newPassword == null) {
-                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
-            }
-            Person p = personSB.getPersonByResetId(resetId);
-            p.setPassword(newPassword);
-            personSB.updatePerson(p);
-            p = personSB.getPersonById(p.getId());
-            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end resetPassword
-
-    @PUT
-    @Path("/changePassword/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response changePassword(@PathParam("id") Long id, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-        String oldPassword = jsonObject.getString("oldPassword");
-        String newPassword = jsonObject.getString("newPassword");
-
-        try {
-            if (oldPassword == null) {
-                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
-            }
-            if (newPassword == null) {
-                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
-            }
-            Person p = personSB.getPersonById(id);
-            if (!p.getPassword().equals(oldPassword)) {
-                throw new NotValidException(PersonSessionBeanLocal.WRONG_PASSWORD);
-            }
-            p.setPassword(newPassword);
-            personSB.updatePerson(p);
-            return Response.status(204).build();
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end changePassword
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createPerson(String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-
-        String email = jsonObject.getString("email");
-        String username = jsonObject.getString("username");
-        String password = jsonObject.getString("password");
-        Person p = new Person();
-        p.setEmail(email);
-        p.setUsername(username);
-        // Might want to hash password, see how
-        p.setPassword(password);
-        p.setDescription("");
-        p.setProfilePicture(
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
-        p.setProfileBanner(
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
-        try {
-            Person addedPerson = personSB.createPerson(p);
-            return Response.status(200).entity(addedPerson).type(MediaType.APPLICATION_JSON).build();
-
-        } catch (NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end createPerson
-
-    /*
-     * @PUT
-     *
-     * @Path("/{id}")
-     *
-     * @Consumes(MediaType.APPLICATION_JSON)
-     *
-     * @Produces(MediaType.APPLICATION_JSON) public Response
-     * updatePerson(@PathParam("id") String id, Person p) {
-     * p.setId(Long.valueOf(id)); try { personSessionLocal.updatePerson(p); return
-     * Response.status(204).build(); } catch (NoResultException | NotValidException
-     * e) { JsonObject exception = Json.createObjectBuilder() .add("error",
-     * e.getMessage()) .build();
-     *
-     * return Response.status(404).entity(exception)
-     * .type(MediaType.APPLICATION_JSON).build(); } } //end updatePerson
-     */
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonProfileInformation(@PathParam("id") Long personId, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-
-        String username = jsonObject.getString("username");
-        String description = jsonObject.getString("description");
-        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
-        String profilePicture = jsonObject.getString("profilePicture");
-        String profileBanner = jsonObject.getString("profileBanner");
-
-        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
-
-        try {
-            Person p = personSB.getPersonById(personId);
-            p.setUsername(username);
-            p.setDescription(description);
-            p.setTopicInterests(topicInterests);
-            p.setProfilePicture(profilePicture);
-            p.setProfileBanner(profileBanner);
-
-            personSB.updatePerson(p);
-            return Response.status(204).build();
-
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-
-    }
-
-    @PUT
-    @Path("/{id}/settings")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonSettings(@PathParam("id") Long id, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-
-        Boolean explicit = jsonObject.getBoolean("explicit");
-        Boolean subscriberOnly = jsonObject.getBoolean("subscriberOnly");
-
-        try {
-            Person person = personSB.getPersonById(id);
-            person.setHasExplicitLanguage(explicit);
-            person.setChatIsPaid(subscriberOnly);
-
-            personSB.updatePerson(person);
-
-            return Response.status(204).build();
-
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-
-    }
-
-    @PUT
-    @Path("/{id}/pricingPlan")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
-        JsonObject jsonObject = createJsonObject(jsonString);
-
-        Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
-
-        try {
-            Person person = personSB.getPersonById(id);
-            person.setPricingPlan(pricingPlan);
-
-            personSB.updatePricingPlan(person);
-
-            return Response.status(204).build();
-
-        } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
-
-            return Response.status(400).entity(exception).type(MediaType.APPLICATION_JSON).build();
-        }
-
-    }
 
     @GET
     @Path("/{id}/followers")
@@ -489,4 +342,178 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonsPost
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonProfileInformation(@PathParam("id") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String username = jsonObject.getString("username");
+        String description = jsonObject.getString("description");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+        String profilePicture = jsonObject.getString("profilePicture");
+        String profileBanner = jsonObject.getString("profileBanner");
+
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
+
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setUsername(username);
+            p.setDescription(description);
+            p.setTopicInterests(topicInterests);
+            p.setProfilePicture(profilePicture);
+            p.setProfileBanner(profileBanner);
+
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+
+    }
+
+    @PUT
+    @Path("/{id}/settings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonSettings(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Boolean explicit = jsonObject.getBoolean("explicit");
+        Boolean subscriberOnly = jsonObject.getBoolean("subscriberOnly");
+
+        try {
+            Person person = personSB.getPersonById(id);
+            person.setHasExplicitLanguage(explicit);
+            person.setChatIsPaid(subscriberOnly);
+
+            personSB.updatePerson(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/pricingPlan")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
+
+        try {
+            Person person = personSB.getPersonById(id);
+            person.setPricingPlan(pricingPlan);
+
+            personSB.updatePricingPlan(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/onboarding")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response onboarding(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String incomeRangeStr = jsonObject.getString("incomeRangeEnum");
+        String dobStr = jsonObject.getString("dob");
+
+        try {
+            IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
+            Date dob = new SimpleDateFormat("dd/MM/yyyy").parse(dobStr);
+
+            Person person = personSB.getPersonById(id);
+            person.setIncomeRange(incomeRange);
+            person.setDob(dob);
+
+            personSB.onboarding(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException | ParseException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/saveResetId/{email}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveResetId(@PathParam("email") String email, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String resetId = jsonObject.getString("resetId");
+        try {
+            Person p = personSB.getPersonByEmail(email);
+            p.setResetId(resetId);
+            personSB.updatePerson(p);
+            p = personSB.getPersonById(p.getId());
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end saveResetId
+
+    @PUT
+    @Path("/resetPassword/{resetId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(@PathParam("resetId") String resetId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String newPassword = jsonObject.getString("newPassword");
+
+        try {
+            if (newPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            Person p = personSB.getPersonByResetId(resetId);
+            p.setPassword(newPassword);
+            personSB.updatePerson(p);
+            p = personSB.getPersonById(p.getId());
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end resetPassword
+
+    @PUT
+    @Path("/changePassword/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changePassword(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+
+        try {
+            if (oldPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            if (newPassword == null) {
+                throw new NotValidException(PersonSessionBeanLocal.MISSING_PASSWORD);
+            }
+            Person p = personSB.getPersonById(id);
+            if (!p.getPassword().equals(oldPassword)) {
+                throw new NotValidException(PersonSessionBeanLocal.WRONG_PASSWORD);
+            }
+            p.setPassword(newPassword);
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end changePassword
+
 }

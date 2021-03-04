@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import LivePage from "./screens/LivePage";
 import FollowingPage from "./screens/FollowingPage";
+import SubscribingPage from "./screens/SubscribingPage";
 import LikedPage from "./screens/LikedPage";
 import LibraryPage from "./screens/LibraryPage";
 import CommunityPage from "./screens/CommunityPage";
@@ -27,6 +28,8 @@ import ChannelDashboardSidebar from "./components/ChannelDashboardSidebar";
 import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
 import MyCommunities from "./screens/MyCommunitiesPage";
+import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
+import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 
 function App() {
   let location = useLocation();
@@ -73,6 +76,7 @@ function App() {
             {renderNavSide()}
             <Route exact path="/" component={LivePage} />
             <Route exact path="/following" component={FollowingPage} />
+            <Route exact path="/subscribing" component={SubscribingPage} />
             <Route exact path="/liked" component={LikedPage} />
             <Route exact path="/library" component={LibraryPage} />
             <Route
@@ -98,6 +102,11 @@ function App() {
             />
             <Route
               exact
+              path="/community/:communityId/manageMembers"
+              component={ManageCommunityMembers}
+            />
+            <Route
+              exact
               path="/customiseProfile"
               component={CustomiseProfile}
             />
@@ -106,6 +115,11 @@ function App() {
               exact
               path="/post/:postId"
               component={ProfilePostWithComments}
+            />
+             <Route
+              exact
+              path="/community/post/:postId"
+              component={CommunityPostWithComments}
             />
           </div>
         </div>

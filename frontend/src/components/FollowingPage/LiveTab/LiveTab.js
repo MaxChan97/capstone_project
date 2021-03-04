@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Api from "../../../helpers/Api";
 import LiveCard from "./LiveCard"
-import SearchCard from "../SearchCard"
+import SearchCard from "./SearchCard"
 
 const useStyles = makeStyles((theme) => ({
     root: {

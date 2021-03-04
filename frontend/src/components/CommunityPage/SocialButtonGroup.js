@@ -23,10 +23,10 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 
-export default function SocialButtonGroup({communityId, communityName}) {
+export default function SocialButtonGroup({communityId, communityName, refresh, setRefresh}) {
   const alert = useAlert();
 
-  const [refresh, setRefresh] = useState(true);
+  //const [refresh, setRefresh] = useState(true);
   const [followingCommunities, setFollowingCommunities] = useState();
   const [joined, setJoined] = useState(false);
   const [confirmLeaveDialogOpen, setConfirmLeaveDialogOpen] = useState(

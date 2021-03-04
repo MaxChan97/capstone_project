@@ -19,8 +19,8 @@ export default function LiveCard({ liveList, searchTerm }) {
       <div className="card card-primary">
         <div className="card-body">
           <dl>
-            <dt className="font-weight-bold" class="text-large">Currently live</dt>
-            <dd className="font-weight-normal"> [insert no.] live now</dd>
+            <dt className="font-weight-bold" class="text-large">Followed channels now live</dt>
+            <dd className="font-weight-normal"> 0 live now</dd>
           </dl>
           <ul class="list-group list-group-flush">
             {searchResults.map((row, index) => {

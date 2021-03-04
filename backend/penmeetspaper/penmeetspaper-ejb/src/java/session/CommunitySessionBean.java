@@ -12,6 +12,7 @@ import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
@@ -102,16 +103,17 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         community.setOwner(owner);
         community.getMembers().add(owner);
         community.setBan(ban);
+        community.setDateCreated(new Date());
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);
-
+        em.flush();
         return community;
     }
 
     // Search Community
     @Override
-    public List<Community> searchCommunityByName(String name) {
+    public List<Community> searchCommunityByName(String name) throws NoResultException, NotValidException {
         Query q;
         if (name != null) {
             q = em.createQuery("SELECT c FROM Community c WHERE "
@@ -121,7 +123,13 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             q = em.createQuery("SELECT c FROM Community c");
         }
 
-        return q.getResultList();
+        List<Community> comms = q.getResultList();
+
+        for (Community c : comms) {
+            c = getCommunityById(c.getId());
+        }
+
+        return comms;
     } // end of searchCommunityByName
 
     // Edit Community
@@ -164,6 +172,11 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             p = getDetachedPerson(p);
         }
 
+        Ban ban = community.getBan();
+        em.detach(ban);
+
+        community.setBan(banSB.getDetachedBan(ban.getId()));
+
         return community;
 
     }
@@ -176,6 +189,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         community.setOwner(null);
         community.setPosts(null);
         community.setMembers(null);
+        community.setBan(null);
 
         return community;
     }
@@ -266,6 +280,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         banList.add(person);
         int numBan = ban.getNumBan();
         ban.setNumBan(numBan++);
+        em.flush();
     } // end banPerson
 
     @Override
@@ -292,6 +307,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         banList.remove(person);
         int numBan = ban.getNumBan();
         ban.setNumBan(numBan--);
+        em.flush();
     }
 
     @Override
