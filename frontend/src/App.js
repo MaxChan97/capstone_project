@@ -33,6 +33,7 @@ import SearchPage from "./screens/SearchPage";
 import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 import ViewCommunityMembers from "./screens/ViewCommunityMembers";
 import CommunityFeed from "./screens/CommunityFeed";
+import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 
 function App() {
   let location = useLocation();
@@ -57,7 +58,8 @@ function App() {
     } else if (
       location.pathname === "/customiseProfile" ||
       location.pathname === "/subscribers" ||
-      location.pathname === "/userSettings"
+      location.pathname === "/userSettings" ||
+      location.pathname === "/changePassword"
     ) {
       return (
         <div>
@@ -68,6 +70,23 @@ function App() {
             setSearchRefresh={setSearchRefresh}
           />
           <ChannelDashboardSidebar />
+        </div>
+      );
+    } else if (
+      location.pathname.split("/")[location.pathname.split("/").length - 1] ===
+        "manageDetails" ||
+      location.pathname.split("/")[location.pathname.split("/").length - 1] ===
+        "manageMembers"
+    ) {
+      return (
+        <div>
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <CommunityDashboardSidebar />
         </div>
       );
     } else {
