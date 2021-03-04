@@ -70,4 +70,6 @@ public interface PersonSessionBeanLocal {
 
     public void onboarding(Person person) throws NoResultException, NotValidException;
 
+    public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException;
+
 }
