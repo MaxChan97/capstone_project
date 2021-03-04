@@ -157,7 +157,7 @@ public class DataInitSessionBean {
         communitySB.createCommunity(comm1, new Long(1));
         communitySB.createCommunity(comm2, new Long(1));
         communitySB.createCommunity(comm3, new Long(1));
-        communitySB.createCommunity(comm3, new Long(2));
+        communitySB.createCommunity(comm4, new Long(2));
     }
 
     private void createFollows() throws NotValidException, NoResultException {

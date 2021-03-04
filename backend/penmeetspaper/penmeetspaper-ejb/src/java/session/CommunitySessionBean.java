@@ -12,6 +12,7 @@ import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
@@ -102,6 +103,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         community.setOwner(owner);
         community.getMembers().add(owner);
         community.setBan(ban);
+        community.setDateCreated(new Date());
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);
