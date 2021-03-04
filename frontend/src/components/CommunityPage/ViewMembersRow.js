@@ -70,7 +70,9 @@ export default function ViewMembersRow({ member, refresh, setRefresh }) {
           />
         </div>
         <div className="col-md-7 mb-1" style={{ fontSize: "18px" }}>
-          {member.username}
+          <a href={"/profile/" + member.id} class="link text-dark">
+            {member.username}
+          </a>
         </div>
         {/* <div className="col-md-2">
           <img
