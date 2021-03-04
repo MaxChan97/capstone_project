@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import profileLogo from "../assets/channelDashboardSidebar/profile.png";
 import subscribersLogo from "../assets/channelDashboardSidebar/subscribers.png";
 import settingsLogo from "../assets/channelDashboardSidebar/settings.svg";
+import changePasswordLogo from "../assets/channelDashboardSidebar/changePassword.png";
 
 export default function ChannelDashboardSidebar() {
   let location = useLocation();
@@ -146,6 +147,47 @@ export default function ChannelDashboardSidebar() {
                       alt="settingsLogo"
                     />
                     <p className="ml-2">Settings</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
+              {location.pathname === "/changePassword" ? (
+                <Link
+                  to="/changePassword"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={changePasswordLogo}
+                      className="nav-icon"
+                      alt="passwordLogo"
+                    />
+                    <p className="ml-2">Change Password</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/changePassword" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={changePasswordLogo}
+                      className="nav-icon"
+                      alt="passwordLogo"
+                    />
+                    <p className="ml-2">Change Password</p>
                   </div>
                 </Link>
               )}

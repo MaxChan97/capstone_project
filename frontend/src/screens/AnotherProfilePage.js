@@ -80,6 +80,7 @@ export default function AnotherProfilePage({ personId }) {
             setRefresh={setRefresh}
             profilePicture={anotherPerson.profilePicture}
             profileBanner={anotherPerson.profileBanner}
+            anotherPerson={anotherPerson}
           />
           {handleTabView(tabValue)}
         </div>

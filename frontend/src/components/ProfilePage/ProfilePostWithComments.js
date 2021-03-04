@@ -15,6 +15,7 @@ import EditPostModal from "./EditPostModal";
 import DeletePostModal from "./DeletePostModal";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
+import Poll from "react-polls";
 
 const ITEM_HEIGHT = 30;
 
@@ -25,6 +26,90 @@ export default function ProfilePostWithComments() {
   const { postId } = useParams();
   const alert = useAlert();
   const [refresh, setRefresh] = useState(true);
+
+  const [pollAnswers, setPollAnswers] = useState([]);
+  const [votedAnswer, setVotedAnswer] = useState();
+  const [pollRefresh, setPollRefresh] = useState(true);
+
+  useEffect(() => {
+    if (postId) {
+      loadData(postId);
+      /*
+      data.likes.includes(currentUser) ?(
+        setLiked(true)
+      ): (setLiked(false))
+      */
+    }
+  }, [postId, refresh]);
+
+  const [data, setData] = useState();
+
+  function loadData(postId) {
+    Api.getPost(postId, false)
+      .done((post) => {
+        setData(post);
+        checkedLiked(post);
+        changeDateFormat(post);
+      })
+      .fail(() => {
+        alert.show("Unable to load post/Post deleted!");
+      });
+  }
+
+  useEffect(() => {
+    if (data != undefined) {
+      if (data.poll != undefined) {
+        let hasVoted = false;
+        for (var i = 0; i < data.poll.pollers.length; i++) {
+          if (currentUser === data.poll.pollers[i].id) {
+            hasVoted = true;
+          }
+        }
+
+        if (hasVoted === false) {
+          let tempPollAnswer = [];
+          for (const [key, value] of Object.entries(data.poll.options)) {
+            const pollAnswer = {
+              option: key,
+              votes: value.numAnswered,
+            };
+            tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+          }
+          setPollAnswers(tempPollAnswer);
+        } else {
+          // this user has voted alrdy
+          let tempPollAnswer = [];
+          for (const [key, value] of Object.entries(data.poll.options)) {
+            const pollAnswer = {
+              option: key,
+              votes: value.numAnswered,
+            };
+            tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+            for (var i = 0; i < value.answeredBy.length; i++) {
+              if (value.answeredBy[i].id === currentUser) {
+                setVotedAnswer(key);
+              }
+            }
+          }
+          setPollAnswers(tempPollAnswer);
+        }
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setPollRefresh(!pollRefresh);
+  }, [pollAnswers]);
+
+  function handleVote(voteAnswer) {
+    Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
+      .done(() => {
+        setRefresh(!refresh);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,31 +150,8 @@ export default function ProfilePostWithComments() {
     setRefresh(!refresh);
     setAnchorEl(null);
   }
-  const [data, setData] = useState();
+
   const [liked, setLiked] = useState();
-
-  useEffect(() => {
-    if (postId) {
-      loadData(postId);
-      /*
-      data.likes.includes(currentUser) ?(
-        setLiked(true)
-      ): (setLiked(false))
-      */
-    }
-  }, [postId, refresh]);
-
-  function loadData(postId) {
-    Api.getPost(postId, false)
-      .done((post) => {
-        setData(post);
-        checkedLiked(post);
-        changeDateFormat(post);
-      })
-      .fail(() => {
-        alert.show("Unable to load post/Post deleted!");
-      });
-  }
 
   function checkedLiked(post) {
     post.likes.forEach(function (arrayItem) {
@@ -163,7 +225,7 @@ export default function ProfilePostWithComments() {
                     />
                     <Link
                       to={"/profile/" + data.author.id}
-                      style={{ marginLeft: 10, color: "#3B21CB",}}
+                      style={{ marginLeft: 10, color: "#3B21CB" }}
                     >
                       {data.author.username}
                     </Link>
@@ -228,9 +290,44 @@ export default function ProfilePostWithComments() {
                     </div>
                   ))}
                 <p>{data.body}</p>
+                {data.poll != undefined && pollAnswers != [] ? (
+                  votedAnswer == undefined ? (
+                    <div>
+                      <Poll
+                        customStyles={{
+                          theme: "purple",
+                          questionSeparator: true,
+                          align: "center",
+                          questionColor: "#8f858e",
+                        }}
+                        question={data.poll.question}
+                        noStorage={true}
+                        answers={pollAnswers}
+                        onVote={handleVote}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <Poll
+                        customStyles={{
+                          theme: "purple",
+                          questionSeparator: true,
+                          align: "center",
+                          questionColor: "#8f858e",
+                        }}
+                        question={data.poll.question}
+                        answers={pollAnswers}
+                        noStorage={true}
+                        vote={votedAnswer}
+                      />
+                    </div>
+                  )
+                ) : (
+                  ""
+                )}
                 <p>
                   {liked == true ? (
-                    <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                    <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
                   ) : (

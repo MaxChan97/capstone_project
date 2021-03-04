@@ -363,6 +363,7 @@ export default function ChatBox({
 
   function handleMessageFileDownload(messageObject) {
     if (messageObject.data != undefined) {
+      console.log("download");
       let httpsReference = storage.refFromURL(messageObject.data.uri);
       httpsReference
         .getDownloadURL()

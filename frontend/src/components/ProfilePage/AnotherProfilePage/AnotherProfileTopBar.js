@@ -43,6 +43,7 @@ export default function AnotherProfileTopBar({
   setRefresh,
   profilePicture,
   profileBanner,
+  anotherPerson,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -79,6 +80,7 @@ export default function AnotherProfileTopBar({
           pricingPlan={pricingPlan}
           refresh={refresh}
           setRefresh={setRefresh}
+          anotherPerson={anotherPerson}
         />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
