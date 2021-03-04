@@ -150,7 +150,13 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
   }
 */
   return (
-    <div className="container">
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "left",
+      width: "max-content",
+      marginTop:"20px",
+      marginBottom:"20px"}}>
       <form
         onSubmit={handleSubmit}
         className={classes.root}

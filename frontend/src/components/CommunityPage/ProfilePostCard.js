@@ -170,6 +170,8 @@ export default function ProfilePostCard({
         flexDirection: "column",
         textAlign: "left",
         width: "max-content",
+        justify:"left",
+        marginLeft:"-53px"
       }}
     >
       <div class="col-md-9">
@@ -194,6 +196,7 @@ export default function ProfilePostCard({
           style={{
             minWidth: "72ch",
             maxWidth: "72ch",
+            
           }}
         >
           <div class="card-body">
