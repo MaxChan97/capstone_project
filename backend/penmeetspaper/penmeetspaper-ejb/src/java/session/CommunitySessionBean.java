@@ -189,6 +189,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         community.setOwner(null);
         community.setPosts(null);
         community.setMembers(null);
+        community.setBan(null);
 
         return community;
     }
@@ -279,6 +280,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         banList.add(person);
         int numBan = ban.getNumBan();
         ban.setNumBan(numBan++);
+        em.flush();
     } // end banPerson
 
     @Override
@@ -305,6 +307,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         banList.remove(person);
         int numBan = ban.getNumBan();
         ban.setNumBan(numBan--);
+        em.flush();
     }
 
     @Override

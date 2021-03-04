@@ -343,6 +343,18 @@ public class DataInitSessionBean {
         replySB.likeReply(new Long(1), new Long(3));
     }
 
+    private void addFollowing() throws NoResultException, NotValidException {
+        communitySB.followCommunity(new Long(1), new Long(2));
+        communitySB.followCommunity(new Long(1), new Long(3));
+        communitySB.followCommunity(new Long(1), new Long(4));
+        communitySB.followCommunity(new Long(1), new Long(5));
+        communitySB.followCommunity(new Long(1), new Long(6));
+    }
+
+    private void ban() throws NoResultException, NotValidException {
+        communitySB.banPerson(new Long(1), new Long(7), new Long(1));
+    }
+
     private void initData() {
 
         try {
@@ -361,6 +373,9 @@ public class DataInitSessionBean {
             likePost();
             likeComment();
             likeReply();
+
+            addFollowing();
+            ban();
 
         } catch (NotValidException | NoResultException ex) {
             ex.printStackTrace();
