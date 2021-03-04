@@ -160,11 +160,39 @@ public class DataInitSessionBean {
         communitySB.createCommunity(comm3, new Long(2));
     }
 
+    private void createFollows() throws NotValidException, NoResultException {
+        followSB.followPerson(new Long(2), new Long(1));
+        followSB.followPerson(new Long(3), new Long(1));
+        followSB.followPerson(new Long(4), new Long(1));
+        followSB.followPerson(new Long(5), new Long(1));
+        followSB.followPerson(new Long(6), new Long(1));
+        followSB.followPerson(new Long(7), new Long(1));
+
+        followSB.followPerson(new Long(1), new Long(2));
+        followSB.followPerson(new Long(1), new Long(3));
+        followSB.followPerson(new Long(1), new Long(4));
+        followSB.followPerson(new Long(1), new Long(5));
+    }
+
+    private void createSubs() throws NotValidException, NoResultException {
+        subSB.subscribeToPerson(new Long(1), new Long(2));
+        subSB.subscribeToPerson(new Long(1), new Long(3));
+        subSB.subscribeToPerson(new Long(1), new Long(4));
+        subSB.subscribeToPerson(new Long(1), new Long(5));
+        subSB.unsubscribeToPerson(new Long(1), new Long(2));
+
+        subSB.subscribeToPerson(new Long(5), new Long(1));
+        subSB.subscribeToPerson(new Long(6), new Long(1));
+        subSB.subscribeToPerson(new Long(7), new Long(1));
+    }
+
     private void initData() {
 
         try {
             createPersons();
             createCommunities();
+            createFollows();
+            createSubs();
         } catch (NotValidException | NoResultException ex) {
             ex.printStackTrace();
         }
