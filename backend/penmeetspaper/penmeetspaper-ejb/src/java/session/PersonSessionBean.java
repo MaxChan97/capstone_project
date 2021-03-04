@@ -46,10 +46,6 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return postSB.getPostById(p.getId());
     }
 
-    private Post getDetachedCommunityPost(Post p) throws NoResultException, NotValidException {
-        return postSB.getPostById(p.getId(), true);
-    }
-
     private Community getDetachedCommunity(Community c) throws NoResultException, NotValidException {
         return communitySB.getCommunityById(c.getId());
     }
