@@ -182,6 +182,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setProfileBanner(
                 "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         em.persist(person);
+        em.flush();
 
         return person;
     } // end createPerson
@@ -258,6 +259,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
+
+        em.flush();
     } // end updatePerson
 
     @Override
