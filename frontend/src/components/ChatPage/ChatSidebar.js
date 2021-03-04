@@ -158,7 +158,7 @@ export default function ChatSidebar({
       return (
         <div>
           <ChatItem
-            avatar={DefaultDPLogo}
+            avatar={data.chatParticipants.profilePicture || DefaultDPLogo}
             alt={"Profile Picture"}
             title={getChatOtherPerson(data.chatParticipants).username}
             subtitle={getMessagePreview(data)}
@@ -171,7 +171,7 @@ export default function ChatSidebar({
       return (
         <div>
           <ChatItem
-            avatar={DefaultDPLogo}
+            avatar={data.chatParticipants.profilePicture || DefaultDPLogo}
             alt={"Profile Picture"}
             title={getChatOtherPerson(data.chatParticipants).username}
             subtitle={getMessagePreview(data)}
@@ -189,7 +189,7 @@ export default function ChatSidebar({
       return (
         <div>
           <ChatItem
-            avatar={DefaultDPLogo}
+            avatar={data.chatParticipants.profilePicture || DefaultDPLogo}
             alt={"Profile Picture"}
             title={getChatOtherPerson(data.chatParticipants).username}
           />
@@ -199,7 +199,7 @@ export default function ChatSidebar({
       return (
         <div>
           <ChatItem
-            avatar={DefaultDPLogo}
+            avatar={data.chatParticipants.profilePicture || DefaultDPLogo}
             alt={"Profile Picture"}
             title={getChatOtherPerson(data.chatParticipants).username}
             onClick={() => setSelectedChat(data)}

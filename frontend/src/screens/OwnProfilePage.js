@@ -51,6 +51,7 @@ export default function OwnProfilePage({ personId }) {
                 personId={personId}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                profilePicture={currentPerson.profilePicture}
               />
               <PostList
                 personId={personId}
@@ -83,6 +84,8 @@ export default function OwnProfilePage({ personId }) {
             setTabValue={setTabValue}
             username={currentPerson.username}
             numFollowers={numFollowers}
+            profilePicture={currentPerson.profilePicture}
+            profileBanner={currentPerson.profileBanner}
           />
           {handleTabView(tabValue)}
         </div>

@@ -37,6 +37,8 @@ export default function OwnProfileTopBar({
   setTabValue,
   username,
   numFollowers,
+  profilePicture,
+  profileBanner,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -44,9 +46,16 @@ export default function OwnProfileTopBar({
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <div
-        style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
-      ></div>
+      {profileBanner ? (
+        <div>
+          <img className="img-fluid" src={profileBanner} />
+        </div>
+      ) : (
+        <div
+          style={{ backgroundColor: "#EBE8FF", height: "200px", width: "100%" }}
+        ></div>
+      )}
+
       <div
         style={{
           display: "flex",
@@ -56,7 +65,11 @@ export default function OwnProfileTopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <ProfileGroup username={username} numFollowers={numFollowers} />
+        <ProfileGroup
+          username={username}
+          numFollowers={numFollowers}
+          profilePicture={profilePicture}
+        />
         <ProfileManagementButtonGroup />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>

@@ -14,7 +14,12 @@ import CreatePollCard from "./CreatePollCard";
 
 var uuid = require("uuid");
 
-export default function CreatePostCard({ personId, refresh, setRefresh }) {
+export default function CreatePostCard({
+  personId,
+  refresh,
+  setRefresh,
+  profilePicture,
+}) {
   const useStyles = makeStyles((theme) => ({
     root: {
       "& .MuiTextField-root": {
@@ -146,7 +151,7 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
           <div className="card-body">
             <div className="row">
               <div className="col-1">
-                <img src={defaultDP} />
+                <img className="img-fluid" src={profilePicture || defaultDP} />
               </div>
               <div className="col-11">
                 {fileUrl &&
@@ -156,20 +161,20 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                     progress < 100 ? (
                       <progress value={progress} max="100" />
                     ) : (
-                        <img
-                          className="mx-auto d-block"
-                          width="300"
-                          src={fileUrl}
-                        />
-                      )
+                      <img
+                        className="mx-auto d-block"
+                        width="300"
+                        src={fileUrl}
+                      />
+                    )
                   ) : (
-                      <div>
-                        <FileTypes data={fileName.split(".")[1]}></FileTypes>
-                        <p className="text-center font-weight-bold">
-                          {fileName.split(".")[0]}
-                        </p>
-                      </div>
-                    ))}
+                    <div>
+                      <FileTypes data={fileName.split(".")[1]}></FileTypes>
+                      <p className="text-center font-weight-bold">
+                        {fileName.split(".")[0]}
+                      </p>
+                    </div>
+                  ))}
                 <TextField
                   id="standard-textarea"
                   placeholder="What's new?"
@@ -192,8 +197,8 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
                 />
               </div>
             ) : (
-                ""
-              )}
+              ""
+            )}
 
             <div className="row">
               <div className="col-6">
@@ -248,7 +253,7 @@ export default function CreatePostCard({ personId, refresh, setRefresh }) {
             </div>
           </div>
         </div>
-      </form>      
+      </form>
     </div>
   );
 }

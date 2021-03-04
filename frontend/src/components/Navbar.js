@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import searchLogo from "../assets/Search logo.svg";
 import { makeStyles } from "@material-ui/core/styles";
 import { InputBase, IconButton, Paper } from "@material-ui/core";
@@ -11,6 +11,7 @@ import defaultDP from "../assets/Default Dp logo.svg";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import { useLocation } from "react-router-dom";
+import Api from "../helpers/Api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +37,29 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   let location = useLocation();
   const classes = useStyles();
-  const [searchString, setSearchString] = useState("");
+
+  const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
+  const [searchString, setSearchString] = useState("");
+
+  useEffect(() => {
+    if (currentUser) {
+      loadData(currentUser);
+    }
+  }, [currentUser]);
+
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  function loadData(currentUser) {
+    Api.getPersonById(currentUser)
+      .done((currentPerson) => {
+        setCurrentPerson(currentPerson);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
   }
 
   return (
@@ -115,7 +135,10 @@ function Navbar() {
           <img src={notificationLogo} alt="notificationLogo" />
         </Link>
         <Link to={"/profile/" + currentUser}>
-          <img src={defaultDP} alt="defaultDP" />
+          <img
+            style={{ height: "3vh" }}
+            src={currentPerson.profilePicture || defaultDP}
+          />
         </Link>
       </div>
     </nav>
