@@ -8,10 +8,12 @@ import uploadLogo from "../assets/Upload logo.svg";
 import chatLogo from "../assets/Chat logo.svg";
 import notificationLogo from "../assets/Notification Logo.svg";
 import defaultDP from "../assets/Default Dp logo.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import Api from "../helpers/Api";
+import logout from "../assets/logout 1.svg";
+import { logOut } from "../redux/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +45,7 @@ function Navbar({
   let location = useLocation();
   const history = useHistory();
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -81,6 +83,11 @@ function Navbar({
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+  }
+
+  function handleLogOut(e) {
+    e.preventDefault();
+    dispatch(logOut());
   }
 
   return (
@@ -156,6 +163,9 @@ function Navbar({
         </Link>
         <Link to="/">
           <img src={notificationLogo} alt="notificationLogo" />
+        </Link>
+        <Link onClick={handleLogOut}>
+          <img src={logout} alt="log out" />
         </Link>
         <Link to={"/profile/" + currentUser}>
           <img
