@@ -40,6 +40,7 @@ export default function CreateCommunity() {
     { name: "AngPao", rank: "9" },
   ];
 
+  const alert = useAlert();
   const [leaderboard, setLeaderboard] = useState(leaderboardList);
 
   const currentUser = useSelector((state) => state.currentUser);

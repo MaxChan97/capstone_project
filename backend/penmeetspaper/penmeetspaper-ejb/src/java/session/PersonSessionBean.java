@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -108,6 +109,50 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return personList.get(0);
     }
 
+    private void checkUsernameTaken(String username, Long personId) throws NotValidException {
+        Query q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
+        q.setParameter("username", username);
+        List<Person> persons = q.getResultList();
+
+        if (persons.size() > 0) {
+            for (Person p : persons) {
+                if (p.getId() != personId) {
+                    throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
+                }
+            }
+        }
+    }
+
+    private void checkUsernameTaken(String username) throws NotValidException {
+        Query q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
+        q.setParameter("username", username);
+        if (q.getResultList().size() > 0) {
+            throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
+        }
+    }
+
+    private void generateRandomProfilePicture(Person person) {
+
+        String[] profilePicArray = {
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb"
+        };
+
+        Random rand = new Random();
+        int randomNum = rand.nextInt(profilePicArray.length);
+
+        person.setProfilePicture(profilePicArray[randomNum]);
+
+    }
+
     @Override
     public Person createPerson(Person person) throws NotValidException {
         if (person == null) {
@@ -125,18 +170,19 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.EMAIL_TAKEN);
         }
 
-        q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
-        q.setParameter("username", person.getUsername());
-        if (q.getResultList().size() > 0) {
-            throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
-        }
+        checkUsernameTaken(person.getUsername());
 
         person.setCreatedDate(new Date());
 
         Ban ban = banSB.createBan();
 
         person.setBan(ban);
+        person.setDescription("");
+        generateRandomProfilePicture(person);
+        person.setProfileBanner(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         em.persist(person);
+        em.flush();
 
         return person;
     } // end createPerson
@@ -196,7 +242,10 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
         }
 
+        checkUsernameTaken(person.getUsername(), person.getId());
+
         Person oldPerson = em.find(Person.class, person.getId());
+
         if (oldPerson != null) {
             oldPerson.setUsername(person.getUsername());
             oldPerson.setPassword(person.getPassword());
@@ -210,6 +259,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
+
+        em.flush();
     } // end updatePerson
 
     @Override
@@ -218,13 +269,24 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.remove(p);
     } // end deletePerson
 
+    @Override
     public void updatePricingPlan(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 
-        // NEED TO ADD MORE SHIT
+        // NEED TO ADD MORE
         oldPerson.setPricingPlan(person.getPricingPlan());
-
+        em.flush();
     } // end updatePricingPlan
+
+    @Override
+    public void onboarding(Person person) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(person.getId());
+
+        // NEED TO ADD MORE
+        oldPerson.setIncomeRange(person.getIncomeRange());
+        oldPerson.setDob(person.getDob());
+        em.flush();
+    }
 
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
@@ -364,8 +426,6 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             results.addAll(posts);
         }
 
-        Collections.sort(results, Collections.reverseOrder());
-
         List<Post> filterResults = new ArrayList();
 
         for (Post p : results) {
@@ -373,6 +433,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 filterResults.add(getDetachedPost(p));
             }
         }
+
+        Collections.sort(filterResults, Collections.reverseOrder());
 
         return filterResults;
 
@@ -391,6 +453,24 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 results.add(getDetachedPost(p));
             }
         }
+        return results;
+    }
+
+    @Override
+    public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        List<Community> followingCommunities = person.getFollowingCommunities();
+        List<Post> results = new ArrayList();
+
+        for (Community c : followingCommunities) {
+            List<Post> posts = c.getPosts();
+            for (Post p : posts) {
+                results.add(postSB.getPostById(p.getId(), true));
+            }
+        }
+
+        Collections.sort(results, Collections.reverseOrder());
+
         return results;
     }
 }

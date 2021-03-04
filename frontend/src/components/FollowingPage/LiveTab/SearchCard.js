@@ -31,14 +31,14 @@ export default function SearchCard( {searchTerm, setSearchTerm} ) {
     <div className="card card-primary mx-2">
       <div className="card-body">
         <p className="font-weight-light">
-          Search channels you subscribe to
+          Search followed channels now live
         </p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
             <InputBase
               value={searchTerm}
               className={classes.input}
-              placeholder="Search channels"
+              placeholder="Search"
               onChange={(e) => {
                 setSearchTerm(e.target.value);
               }}

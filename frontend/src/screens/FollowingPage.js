@@ -3,10 +3,8 @@ import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import LiveTab from "../components/FollowingPage/LiveTab/LiveTab.js";
 import ChannelsTab from "../components/FollowingPage/ChannelsTab/ChannelsTab.js"
-import SearchCard from "../components/FollowingPage/SearchCard";
 import VideosTab from "../components/FollowingPage/VideosTab/VideosTab";
 import FollowingPageTopBar from "../components/FollowingPage/FollowingPageTopBar";
-import FollowingGroup from "../components/FollowingPage/FollowingGroup";
 import Api from "../helpers/Api";
 
 

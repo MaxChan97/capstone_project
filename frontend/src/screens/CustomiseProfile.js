@@ -187,6 +187,7 @@ export default function CustomiseProfile() {
         setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
+        console.log(xhr);
         alert.show("Something went wrong, please try again!");
       });
   };
@@ -210,7 +211,7 @@ export default function CustomiseProfile() {
                           height: 130,
                           width: 130,
                           borderRadius: "50%",
-                          display: "block"
+                          display: "block",
                         }}
                         src={profilePicture || defaultDP}
                         alt="Profile Picture"
@@ -240,8 +241,9 @@ export default function CustomiseProfile() {
                         />
                       </label>
                       <Box fontWeight="fontWeightRegular" m={1}>
-                        JPEG or PNG only and cannot exceed 10MB. It’s recommended
-                        to use a picture that’s at least 100 x 100 pixels
+                        JPEG or PNG only and cannot exceed 10MB. It’s
+                        recommended to use a picture that’s at least 100 x 100
+                        pixels
                       </Box>
                     </div>
                   </div>
@@ -314,11 +316,21 @@ export default function CustomiseProfile() {
                       value={description}
                       onChange={handleAboutChange}
                     /> */}
-                    <textarea className="form-control" value={description} maxLength={255} onChange={(e) => {
-                        setAbout(e.target.value);}} />
-                        {description !== undefined ? (
-                        <p style={{textAlign: "right"}}>{description.length}/255</p>) : 
-                        (<p style={{textAlign: "right"}}>0/255</p>)}
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      maxLength={255}
+                      onChange={(e) => {
+                        setAbout(e.target.value);
+                      }}
+                    />
+                    {description !== undefined ? (
+                      <p style={{ textAlign: "right" }}>
+                        {description.length}/255
+                      </p>
+                    ) : (
+                      <p style={{ textAlign: "right" }}>0/255</p>
+                    )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputInterests">Interests</label>

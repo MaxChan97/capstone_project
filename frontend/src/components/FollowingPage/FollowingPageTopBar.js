@@ -36,7 +36,6 @@ export default function FollowingPageTopBar({
   tabValue,
   setTabValue,
   username,
-  numFollowing
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -53,7 +52,7 @@ export default function FollowingPageTopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <FollowingGroup username={username} numFollowing={numFollowing} />
+        <FollowingGroup username={username}/>
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

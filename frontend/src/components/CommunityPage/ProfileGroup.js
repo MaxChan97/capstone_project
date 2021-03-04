@@ -4,6 +4,7 @@ export default function ProfileGroup({
   communityName,
   numMembers,
   communityPicture,
+  communityId
 }) {
   return (
     <div
@@ -44,9 +45,12 @@ export default function ProfileGroup({
         >
           {communityName}
         </p>
-        <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
+
+        <a href={"/community/" + communityId + "/viewMembers"} class="link">
+        {/* <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}> */}
           {numMembers !== 1 ? numMembers + " Members" : numMembers + " Member"}
-        </p>
+        {/* </p> */}
+        </a>
       </div>
     </div>
   );

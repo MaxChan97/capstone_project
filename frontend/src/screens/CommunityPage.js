@@ -40,7 +40,7 @@ export default function ProfilePage() {
       setCurrentCommunity(currentCommunity);
     })
     .fail((xhr, status, error) => {
-    alert.show("This community does not exist!");
+    alert.show(xhr.responseJSON.error);
     history.push("/community");
     });
 }

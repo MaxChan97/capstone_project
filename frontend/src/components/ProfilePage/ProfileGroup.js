@@ -1,7 +1,11 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function ProfileGroup({ username, numFollowers }) {
+export default function ProfileGroup({
+  username,
+  numFollowers,
+  profilePicture,
+}) {
   return (
     <div
       style={{
@@ -12,7 +16,7 @@ export default function ProfileGroup({ username, numFollowers }) {
         width: "30%",
       }}
     >
-      <img style={{ height: "10vh" }} src={defaultDP} alt="defaultDP" />
+      <img style={{ height: "10vh" }} src={profilePicture || defaultDP} />
       <div
         style={{
           display: "flex",

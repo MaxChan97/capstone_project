@@ -25,7 +25,8 @@ export default function CustomiseProfile() {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const [isOldPasswordVisible, setIsOldPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
 
   const currentUser = useSelector((state) => state.currentUser);
   if (currentUser === null) {
@@ -50,8 +51,12 @@ export default function CustomiseProfile() {
     setNewPassword(event.target.value);
   };
 
-  const handleVisibleChange = (event) => {
-    setIsVisible(!isVisible);
+  const handleOldPasswordVisibleChange = (event) => {
+    setIsOldPasswordVisible(!isOldPasswordVisible);
+  };
+
+  const handleNewPasswordVisibleChange = (event) => {
+    setIsNewPasswordVisible(!isNewPasswordVisible);
   };
 
   const handleSubmit = (e) => {
@@ -97,13 +102,21 @@ export default function CustomiseProfile() {
                     </label>
                     <div class="col-sm-7">
                       <input
-                        type="text"
+                        type={isOldPasswordVisible ? "text" : "password"}
                         class="form-control"
                         id="oldPassword"
                         required
                         value={oldPassword}
                         onChange={handleOldPasswordChange}
                       ></input>
+                    </div>
+                    <div className="col-2">
+                      <button
+                        className="btn"
+                        onClick={handleOldPasswordVisibleChange}
+                      >
+                        <i className="far fa-eye text-secondary"></i>
+                      </button>
                     </div>
                   </div>
                   <div className="form-group row">
@@ -112,7 +125,7 @@ export default function CustomiseProfile() {
                     </label>
                     <div className="col-7">
                       <input
-                        type={isVisible ? "text" : "password"}
+                        type={isNewPasswordVisible ? "text" : "password"}
                         className="form-control"
                         id="newPassword"
                         required
@@ -121,7 +134,10 @@ export default function CustomiseProfile() {
                       ></input>
                     </div>
                     <div className="col-2">
-                      <button className="btn" onClick={handleVisibleChange}>
+                      <button
+                        className="btn"
+                        onClick={handleNewPasswordVisibleChange}
+                      >
                         <i className="far fa-eye text-secondary"></i>
                       </button>
                     </div>

@@ -856,6 +856,17 @@ export default {
     });
   },
 
+  deleteCommunityPost(personId, postId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/community/" + personId + "/" + postId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
   searchCommunityByName(searchString) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/community/query?name=" + searchString,
@@ -864,6 +875,22 @@ export default {
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  banPersonFromCommunity(communityId, personId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/ban/" +
+        "person/" +
+        personId,
+      type: "PUT",
+      data: JSON.stringify({
+        ownerId: ownerId,
+      }),
     });
   },
 };

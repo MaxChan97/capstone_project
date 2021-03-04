@@ -57,14 +57,16 @@ export default function PostList({ personId, refresh, setRefresh }) {
       ))}
     </List>
   ) : (
-    <h3
-      style={{
-        color: "gray",
-        textAlign: "center",
-        margin: "auto",
-      }}
-    >
-      No posts yet...
-    </h3>
+    <div style={{marginTop: "30px"}}>
+      <h3
+        style={{
+          color: "gray",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        No posts yet...
+      </h3>
+    </div>
   );
 }

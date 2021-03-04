@@ -10,11 +10,15 @@ import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -79,6 +83,26 @@ public class PersonResource {
         return topicInterests;
     }
 
+    private IncomeRangeEnum convertToIncomeRangeEnum(String str) throws NotValidException {
+        if (str.equals("NOT_EARNING")) {
+            return IncomeRangeEnum.NOT_EARNING;
+        } else if (str.equals("LOW")) {
+            return IncomeRangeEnum.LOW;
+        } else if (str.equals("MIDDLE_LOW")) {
+            return IncomeRangeEnum.MIDDLE_LOW;
+        } else if (str.equals("MIDDLE")) {
+            return IncomeRangeEnum.MIDDLE;
+        } else if (str.equals("MIDDLE_HIGH")) {
+            return IncomeRangeEnum.MIDDLE_HIGH;
+        } else if (str.equals("HIGH")) {
+            return IncomeRangeEnum.HIGH;
+        } else if (str.equals("CRA")) {
+            return IncomeRangeEnum.CRA;
+        }
+
+        throw new NotValidException("could not match income range");
+    }
+
     // Main Business logic -------------------------------------
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -94,11 +118,7 @@ public class PersonResource {
         p.setUsername(username);
         // Might want to hash password, see how
         p.setPassword(password);
-        p.setDescription("");
-        p.setProfilePicture(
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
-        p.setProfileBanner(
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
+
         try {
             Person addedPerson = personSB.createPerson(p);
             return Response.status(200).entity(addedPerson).type(MediaType.APPLICATION_JSON).build();
@@ -323,6 +343,23 @@ public class PersonResource {
         }
     } // end getPersonsPost
 
+    @GET
+    @Path("/{id}/followingCommunityPosts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingCommunityPost(@PathParam("id") Long personId) {
+        try {
+
+            List<Post> results = personSB.getFollowingCommunityPosts(personId);
+            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonsPost
+
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -397,9 +434,34 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return buildError(e, 400);
+        }
+    }
 
-            return Response.status(400).entity(exception).type(MediaType.APPLICATION_JSON).build();
+    @PUT
+    @Path("/{id}/onboarding")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response onboarding(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String incomeRangeStr = jsonObject.getString("incomeRangeEnum");
+        String dobStr = jsonObject.getString("dob");
+
+        try {
+            IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
+            Date dob = new SimpleDateFormat("dd/MM/yyyy").parse(dobStr);
+
+            Person person = personSB.getPersonById(id);
+            person.setIncomeRange(incomeRange);
+            person.setDob(dob);
+
+            personSB.onboarding(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException | ParseException e) {
+            return buildError(e, 400);
         }
     }
 
@@ -470,5 +532,4 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changePassword
-
 }

@@ -2,7 +2,7 @@ import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
 export default function FollowerRow({ follower }) {
-  const person = follower["follower"]
+  const person = follower["follower"];
 
   return (
     <div className="container">
@@ -11,7 +11,7 @@ export default function FollowerRow({ follower }) {
           <p className="text-left"> {person.username} </p>
         </div> */}
         <div className="col-md-3">
-          <img className="img-fluid" src={person.profilePicture} alt="defaultDP" />
+          <img className="img-fluid" src={person.profilePicture || defaultDP} />
         </div>
         <div className="col-md-7">
           <p className="text-left">{person.username}</p>
