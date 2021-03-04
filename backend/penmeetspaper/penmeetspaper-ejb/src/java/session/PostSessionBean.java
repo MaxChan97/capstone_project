@@ -119,6 +119,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
+        em.flush();
 
     } // end createPostForPerson
 
@@ -138,6 +139,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.persist(post);
         person.getPosts().add(post);
         community.getPosts().add(post);
+        em.flush();
 
     } // end createPostForCommunity
 
@@ -164,6 +166,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
+        em.flush();
 
     } // end updatePost
 

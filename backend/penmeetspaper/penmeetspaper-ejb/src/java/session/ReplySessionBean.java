@@ -95,6 +95,8 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         em.persist(reply);
 
         comment.getReplies().add(reply);
+
+        em.flush();
     }
 
     @Override

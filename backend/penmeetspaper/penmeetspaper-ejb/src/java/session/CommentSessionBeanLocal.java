@@ -26,7 +26,7 @@ public interface CommentSessionBeanLocal {
     public final static String MISSING_COMMENT_ID = "Missing comment id";
 
     public final static String CANNOT_FIND_PERSON = "Cannot find person";
-    public final static String CANNOT_FIND_POST = "Cannot find person";
+    public final static String CANNOT_FIND_POST = "Cannot find post";
     public final static String CANNOT_FIND_COMMENT = "Cannot find comment";
 
     public Comment getComment(Long commentId) throws NoResultException, NotValidException;
