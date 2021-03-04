@@ -344,7 +344,7 @@ public class PersonResource {
     } // end getPersonsPost
 
     @GET
-    @Path("/{id}/follwingCommunityPosts")
+    @Path("/{id}/followingCommunityPosts")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFollowingCommunityPost(@PathParam("id") Long personId) {
         try {
