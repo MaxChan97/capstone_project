@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import LiveRow from "./LiveRow";
+import VideoRow from "./VideoRow";
 
-export default function LiveCard({ liveList, searchTerm }) {
+export default function VideosCard({ videoList, searchTerm }) {
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -11,22 +11,22 @@ export default function LiveCard({ liveList, searchTerm }) {
     //   channel["publisher"].username.toLowerCase().includes(searchTerm)
     // );
     // setSearchResults(results);
-  }, [liveList, searchTerm]);
+  }, [videoList, searchTerm]);
 
 
   return (
-    liveList !== undefined ? (
+    videoList !== undefined ? (
       <div className="card card-primary">
         <div className="card-body">
           <dl>
-            <dt className="font-weight-bold" class="text-large">Followed channels now live</dt>
-            <dd className="font-weight-normal"> 0 live now</dd>
+            <dt className="font-weight-bold" class="text-large">Videos from followed channels</dt>
+            <dd className="font-weight-normal"> 0 videos</dd>
           </dl>
           <ul class="list-group list-group-flush">
             {searchResults.map((row, index) => {
               return (
                 <li key={index} class="list-group-item">
-                  <LiveRow liveVid={row} />
+                  <VideoRow video={row} />
                 </li>
               );
             })}

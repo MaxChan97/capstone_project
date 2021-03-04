@@ -19,8 +19,8 @@ export default function VideoCard({ videoList, searchTerm }) {
       <div className="card card-primary">
         <div className="card-body">
           <dl>
-            <dt className="font-weight-bold" class="text-large">Currently live</dt>
-            <dd className="font-weight-normal"> 0 live now</dd>
+            <dt className="font-weight-bold" class="text-large">Videos from subscriptions</dt>
+            <dd className="font-weight-normal"> 0 videos</dd>
           </dl>
           <ul class="list-group list-group-flush">
             {searchResults.map((row, index) => {
