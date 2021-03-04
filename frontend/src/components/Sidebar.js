@@ -7,6 +7,8 @@ import libraryLogo from "../assets/Library Logo.svg";
 import communityLogo from "../assets/Community Logo.svg";
 import categoriesLogo from "../assets/Categories Logo.svg";
 import feedLogo from "../assets/Feed Logo.svg";
+import subscribeLogo from "../assets/subscribeLogo.svg";
+
 
 function Sidebar() {
   let location = useLocation();
@@ -112,9 +114,9 @@ function Sidebar() {
                     }}
                   >
                     <img
-                      src={followingLogo}
+                      src={subscribeLogo}
                       className="nav-icon"
-                      alt="followingLogo"
+                      alt="subscribeLogo"
                     />
                     <p className="ml-2">Subscribing</p>
                   </div>
@@ -129,9 +131,9 @@ function Sidebar() {
                     }}
                   >
                     <img
-                      src={followingLogo}
+                      src={subscribeLogo}
                       className="nav-icon"
-                      alt="followingLogo"
+                      alt="subscribeLogo"
                     />
                     <p className="ml-2">Subscribing</p>
                   </div>
