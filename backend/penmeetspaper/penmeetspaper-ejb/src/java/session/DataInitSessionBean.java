@@ -133,20 +133,20 @@ public class DataInitSessionBean {
         List<TopicEnum> topicEnums = new ArrayList();
 
         Community comm1 = new Community();
-        comm1.setDescription("Bacon ipsum dolor amet shank landjaeger ham porchetta, buffalo pork ribeye leberkas meatball ground round tenderloin shankle. Chuck doner short ribs, kevin drumstick shank pork loin burgdoggen. Shank beef ribs chislic chicken.");
-        comm1.setName("WallStreetBets");
+        comm1.setDescription("Pork belly tongue pork drumstick cupim, jerky pastrami porchetta beef ribs pork chop chicken biltong.");
+        comm1.setName("CryptoCurrencies");
         comm1.setCommunityProfilePicture(defaultCommunityPicture);
         comm1.setCommunityBanner(defaultCommunityBanner);
-        topicEnums.add(TopicEnum.STOCKS);
+        topicEnums.add(TopicEnum.CRYPTOCURRENCY);
         comm1.setTopicEnums(topicEnums);
 
         topicEnums = new ArrayList();
         Community comm2 = new Community();
-        comm2.setDescription("Pork belly tongue pork drumstick cupim, jerky pastrami porchetta beef ribs pork chop chicken biltong.");
-        comm2.setName("CryptoCurrencies");
+        comm2.setDescription("Bacon ipsum dolor amet shank landjaeger ham porchetta, buffalo pork ribeye leberkas meatball ground round tenderloin shankle. Chuck doner short ribs, kevin drumstick shank pork loin burgdoggen. Shank beef ribs chislic chicken.");
+        comm2.setName("WallStreetBets");
         comm2.setCommunityProfilePicture(defaultCommunityPicture);
         comm2.setCommunityBanner(defaultCommunityBanner);
-        topicEnums.add(TopicEnum.CRYPTOCURRENCY);
+        topicEnums.add(TopicEnum.STOCKS);
         comm2.setTopicEnums(topicEnums);
 
         topicEnums = new ArrayList();
@@ -225,6 +225,17 @@ public class DataInitSessionBean {
         postSB.createPostForPerson(personId, post1);
     }
 
+    private void createCommunityPost(Long personId, Long communityId) throws NotValidException, NoResultException {
+        Post post1 = new Post();
+        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setFileName("");
+        post1.setFileUrl("");
+        post1.setFileType("");
+        post1.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post1, personId, communityId);
+    }
+
     private void createPersonPostWithPoll(Long personId) throws NotValidException, NoResultException {
         Post post2 = new Post();
         post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
@@ -235,6 +246,18 @@ public class DataInitSessionBean {
         post2.setDatePosted(new Date());
 
         postSB.createPostForPerson(personId, post2);
+    }
+
+    private void createCommunityPostWithPoll(Long personId, Long communityId) throws NotValidException, NoResultException {
+        Post post2 = new Post();
+        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setFileName("");
+        post2.setFileUrl("");
+        post2.setFileType("");
+        post2.setPoll(createPoll());
+        post2.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post2, personId, communityId);
     }
 
     private void createComment(Long personId, Long postId) throws NotValidException, NoResultException {
@@ -262,6 +285,8 @@ public class DataInitSessionBean {
         createComment(new Long(4), new Long(1));
         createComment(new Long(5), new Long(1));
         createComment(new Long(6), new Long(1));
+        createComment(new Long(5), new Long(3));
+        createComment(new Long(6), new Long(3));
 
     }
 
@@ -284,23 +309,33 @@ public class DataInitSessionBean {
     }
 
     private void createReplies() throws NotValidException, NoResultException {
-        for (int j = 1; j < 2; j++) {
-            for (int i = 1; i < 3; i++) {
-                createReply(new Long(i), new Long(j));
-            }
-        }
+        createReply(new Long(2), new Long(1));
+        createReply(new Long(3), new Long(1));
+        createReply(new Long(4), new Long(1));
+        createReply(new Long(2), new Long(2));
+        createReply(new Long(3), new Long(2));
+        createReply(new Long(4), new Long(2));
+
+        createReply(new Long(2), new Long(7));
+        createReply(new Long(3), new Long(7));
+        createReply(new Long(4), new Long(8));
+
     }
 
     private void likePost() throws NoResultException, NotValidException {
         postSB.likePost(new Long(1), new Long(2));
         postSB.likePost(new Long(1), new Long(3));
         postSB.likePost(new Long(1), new Long(4));
+
+        postSB.likePost(new Long(3), new Long(2));
     }
 
     private void likeComment() throws NoResultException, NotValidException {
         commentSB.likeComment(new Long(1), new Long(2));
         commentSB.likeComment(new Long(1), new Long(3));
         commentSB.likeComment(new Long(1), new Long(4));
+
+        commentSB.likeComment(new Long(7), new Long(4));
     }
 
     private void likeReply() throws NoResultException, NotValidException {
@@ -317,6 +352,9 @@ public class DataInitSessionBean {
             createSubs();
             createPersonPost(new Long(2));
             createPersonPostWithPoll(new Long(3));
+
+            createCommunityPost(new Long(2), new Long(1));
+            createCommunityPostWithPoll(new Long(2), new Long(1));
 
             createComments();
             createReplies();

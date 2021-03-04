@@ -107,7 +107,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
         em.persist(community);
         owner.getOwnedCommunities().add(community);
-
+        em.flush();
         return community;
     }
 
