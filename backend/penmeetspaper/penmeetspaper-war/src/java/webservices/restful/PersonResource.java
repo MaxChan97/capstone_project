@@ -343,6 +343,23 @@ public class PersonResource {
         }
     } // end getPersonsPost
 
+    @GET
+    @Path("/{id}/follwingCommunityPosts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowingCommunityPost(@PathParam("id") Long personId) {
+        try {
+
+            List<Post> results = personSB.getFollowingCommunityPosts(personId);
+            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonsPost
+
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -515,5 +532,4 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changePassword
-
 }

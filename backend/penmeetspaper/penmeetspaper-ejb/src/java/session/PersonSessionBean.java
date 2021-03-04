@@ -426,8 +426,6 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             results.addAll(posts);
         }
 
-        Collections.sort(results, Collections.reverseOrder());
-
         List<Post> filterResults = new ArrayList();
 
         for (Post p : results) {
@@ -435,6 +433,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 filterResults.add(getDetachedPost(p));
             }
         }
+
+        Collections.sort(filterResults, Collections.reverseOrder());
 
         return filterResults;
 
@@ -453,6 +453,24 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 results.add(getDetachedPost(p));
             }
         }
+        return results;
+    }
+
+    @Override
+    public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        List<Community> followingCommunities = person.getFollowingCommunities();
+        List<Post> results = new ArrayList();
+
+        for (Community c : followingCommunities) {
+            List<Post> posts = c.getPosts();
+            for (Post p : posts) {
+                results.add(postSB.getPostById(p.getId(), true));
+            }
+        }
+
+        Collections.sort(results, Collections.reverseOrder());
+
         return results;
     }
 }
