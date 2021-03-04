@@ -134,7 +134,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         Random rand = new Random();
         int randomNum = rand.nextInt(profilePicArray.length);
-        
+
         person.setProfilePicture(profilePicArray[randomNum]);
 
     }
@@ -252,13 +252,24 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.remove(p);
     } // end deletePerson
 
+    @Override
     public void updatePricingPlan(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 
-        // NEED TO ADD MORE SHIT
+        // NEED TO ADD MORE
         oldPerson.setPricingPlan(person.getPricingPlan());
-
+        em.flush();
     } // end updatePricingPlan
+
+    @Override
+    public void onboarding(Person person) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(person.getId());
+
+        // NEED TO ADD MORE
+        oldPerson.setIncomeRange(person.getIncomeRange());
+        oldPerson.setDob(person.getDob());
+        em.flush();
+    }
 
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {

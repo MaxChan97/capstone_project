@@ -68,4 +68,6 @@ public interface PersonSessionBeanLocal {
 
     public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException;
 
+    public void onboarding(Person person) throws NoResultException, NotValidException;
+
 }

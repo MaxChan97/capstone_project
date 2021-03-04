@@ -10,11 +10,15 @@ import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -77,6 +81,26 @@ public class PersonResource {
         }
 
         return topicInterests;
+    }
+
+    private IncomeRangeEnum convertToIncomeRangeEnum(String str) throws NotValidException {
+        if (str.equals("NOT_EARNING")) {
+            return IncomeRangeEnum.NOT_EARNING;
+        } else if (str.equals("LOW")) {
+            return IncomeRangeEnum.LOW;
+        } else if (str.equals("MIDDLE_LOW")) {
+            return IncomeRangeEnum.MIDDLE_LOW;
+        } else if (str.equals("MIDDLE")) {
+            return IncomeRangeEnum.MIDDLE;
+        } else if (str.equals("MIDDLE_HIGH")) {
+            return IncomeRangeEnum.MIDDLE_HIGH;
+        } else if (str.equals("HIGH")) {
+            return IncomeRangeEnum.HIGH;
+        } else if (str.equals("CRA")) {
+            return IncomeRangeEnum.CRA;
+        }
+
+        throw new NotValidException("could not match income range");
     }
 
     // Main Business logic -------------------------------------
@@ -393,9 +417,34 @@ public class PersonResource {
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return buildError(e, 400);
+        }
+    }
 
-            return Response.status(400).entity(exception).type(MediaType.APPLICATION_JSON).build();
+    @PUT
+    @Path("/{id}/onboarding")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response onboarding(@PathParam("id") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String incomeRangeStr = jsonObject.getString("incomeRangeEnum");
+        String dobStr = jsonObject.getString("dob");
+
+        try {
+            IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
+            Date dob = new SimpleDateFormat("dd/MM/yyyy").parse(dobStr);
+
+            Person person = personSB.getPersonById(id);
+            person.setIncomeRange(incomeRange);
+            person.setDob(dob);
+
+            personSB.onboarding(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException | ParseException e) {
+            return buildError(e, 400);
         }
     }
 
