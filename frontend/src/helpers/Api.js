@@ -700,7 +700,7 @@ export default {
 
   editCommunityDetails(
     communityId,
-    description,
+    communityDescription,
     topicEnums,
     communityProfilePicture,
     communityBanner
@@ -714,7 +714,7 @@ export default {
       },
       type: "PUT",
       data: JSON.stringify({
-        description: description,
+        communityDescription: communityDescription,
         topicEnums: topicEnums,
         communityProfilePicture: communityProfilePicture,
         communityBanner: communityBanner,
