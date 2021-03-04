@@ -1,5 +1,6 @@
 import React from "react";
 import MyCommunitiesRowForFeed from "./MyCommunitiesRowForFeed";
+import { Link } from "react-router-dom";
 
 export default function MyCommunitiesCardForFeed({ communityList }) {
   return communityList !== undefined ? (
@@ -22,6 +23,10 @@ export default function MyCommunitiesCardForFeed({ communityList }) {
             );
           })}
         </ul>
+        <Link to ={"/myCommunities"}>
+        <p style={{color:"#3B21CB", fontWeight:"600", textAlign:"center", marginTop:"20px"}}
+        >See More</p>
+      </Link>
       </div>
     </div>
   ) : null;

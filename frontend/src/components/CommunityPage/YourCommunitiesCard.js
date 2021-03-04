@@ -28,8 +28,6 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 export default function YourCommunitiesCard() {
- 
-
   const alert = useAlert();
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -63,15 +61,8 @@ export default function YourCommunitiesCard() {
   }
 
   return (
-    <div className="content-wrapper">
-      <div className="container">
-        <div className="row">
-          <div className=" mt-4">
-            <MyCommunitiesCardForFeed communityList={followingAndOwnedCommunities} />
-          </div>
-          
-        </div>
-      </div>
+    <div className="mt-3">
+      <MyCommunitiesCardForFeed communityList={followingAndOwnedCommunities} />
     </div>
   );
 }
