@@ -29,6 +29,7 @@ import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
 import MyCommunities from "./screens/MyCommunitiesPage";
 import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
+import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 
 function App() {
   let location = useLocation();
@@ -98,6 +99,11 @@ function App() {
               exact
               path="/community/:communityId/manageDetails"
               component={ManageCommunityDetails}
+            />
+            <Route
+              exact
+              path="/community/:communityId/manageMembers"
+              component={ManageCommunityMembers}
             />
             <Route
               exact
