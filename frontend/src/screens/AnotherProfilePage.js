@@ -40,7 +40,7 @@ export default function AnotherProfilePage({ personId }) {
   }
 
   const handleTabView = (tabValue) => {
-    if (tabValue === 1) {
+    if (tabValue === 0) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>

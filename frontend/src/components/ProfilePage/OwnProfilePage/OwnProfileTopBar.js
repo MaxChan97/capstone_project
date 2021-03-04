@@ -74,8 +74,8 @@ export default function OwnProfileTopBar({
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
-          <StyledTab label="Streams" />
           <StyledTab label="Feed" />
+          <StyledTab label="Streams" />
           <StyledTab label="About" />
         </StyledTabs>
       </div>

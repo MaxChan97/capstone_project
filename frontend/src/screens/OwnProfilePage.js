@@ -42,7 +42,7 @@ export default function OwnProfilePage({ personId }) {
   }
 
   const handleTabView = (tabValue) => {
-    if (tabValue === 1) {
+    if (tabValue === 0) {
       if (currentPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
