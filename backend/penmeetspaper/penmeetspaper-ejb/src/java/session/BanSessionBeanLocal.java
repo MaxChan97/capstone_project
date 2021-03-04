@@ -36,4 +36,6 @@ public interface BanSessionBeanLocal {
 
     public Ban createBan();
 
+    public Ban getDetachedBan(Long banId) throws NoResultException, NotValidException;
+
 }

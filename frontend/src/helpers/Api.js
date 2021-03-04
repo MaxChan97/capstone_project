@@ -840,6 +840,17 @@ export default {
     });
   },
 
+  deleteCommunityPost(personId, postId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/community/" + personId + "/" + postId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
   banPersonFromCommunity(communityId, personId, ownerId) {
     return jQuery.ajax({
       url:
@@ -859,8 +870,5 @@ export default {
       }),
     });
   },
-
-
-
 
 };

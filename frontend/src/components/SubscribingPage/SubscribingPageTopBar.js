@@ -36,7 +36,6 @@ export default function SubscribingPageTopBar({
   tabValue,
   setTabValue,
   username,
-  numSubscribing
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -53,7 +52,7 @@ export default function SubscribingPageTopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <SubscribingGroup username={username} numSubscribing={numSubscribing} />
+        <SubscribingGroup username={username} />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

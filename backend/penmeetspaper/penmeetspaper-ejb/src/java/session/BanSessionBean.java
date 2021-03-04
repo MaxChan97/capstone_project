@@ -11,6 +11,7 @@ import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +25,9 @@ public class BanSessionBean implements BanSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private PersonSessionBeanLocal personSB;
 
     private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
         if (personId == null) {
@@ -115,5 +119,19 @@ public class BanSessionBean implements BanSessionBeanLocal {
         }
 
         banList.remove(personToUnBan);
+    }
+
+    @Override
+    public Ban getDetachedBan(Long banId) throws NoResultException, NotValidException {
+        Ban b = em.find(Ban.class, banId);
+        em.detach(b);
+        List<Person> banList = b.getBanList();
+
+        for (Person p : banList) {
+            p = personSB.getPersonById(p.getId());
+        }
+
+        return b;
+
     }
 }

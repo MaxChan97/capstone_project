@@ -170,6 +170,11 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             p = getDetachedPerson(p);
         }
 
+        Ban ban = community.getBan();
+        em.detach(ban);
+
+        community.setBan(banSB.getDetachedBan(ban.getId()));
+
         return community;
 
     }

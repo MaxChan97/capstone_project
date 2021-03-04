@@ -108,6 +108,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return personList.get(0);
     }
 
+    private void checkUsernameTaken(String username) throws NotValidException {
+        Query q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
+        q.setParameter("username", username);
+        if (q.getResultList().size() > 0) {
+            throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
+        }
+    }
+
     @Override
     public Person createPerson(Person person) throws NotValidException {
         if (person == null) {
@@ -125,17 +133,18 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.EMAIL_TAKEN);
         }
 
-        q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
-        q.setParameter("username", person.getUsername());
-        if (q.getResultList().size() > 0) {
-            throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
-        }
+        checkUsernameTaken(person.getUsername());
 
         person.setCreatedDate(new Date());
 
         Ban ban = banSB.createBan();
 
         person.setBan(ban);
+        person.setDescription("");
+        person.setProfilePicture(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb");
+        person.setProfileBanner(
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         em.persist(person);
 
         return person;
@@ -196,7 +205,10 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
         }
 
+        checkUsernameTaken(person.getUsername());
+
         Person oldPerson = em.find(Person.class, person.getId());
+
         if (oldPerson != null) {
             oldPerson.setUsername(person.getUsername());
             oldPerson.setPassword(person.getPassword());

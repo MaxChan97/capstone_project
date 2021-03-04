@@ -8,14 +8,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Api from "../../helpers/Api";
 import moment from "moment";
-//import EditPostModal from "./EditPostModal";
-//import DeletePostModal from "./DeletePostModal";
+import EditPostModal from "../../components/ProfilePage/EditPostModal";
+import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal"
 import FileTypes from "../../components/FileTypes.js";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
+export default function ProfilePostCard({ key, data, refresh, setRefresh, community }) {
   const alert = useAlert();
 
   //for menu button
@@ -165,13 +165,14 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div class="col-md-9">
-        {/*
-        <DeletePostModal
+        
+        <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
           data={data}
           refresh={refresh}
           setRefresh={setRefresh}
+          community ={community}
         />
         <EditPostModal
           show={showEditPostModal}
@@ -180,7 +181,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        */}
+        
         <div
           class="card"
           style={{

@@ -3,7 +3,6 @@ import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import LiveTab from "../components/FollowingPage/LiveTab/LiveTab.js";
 import ChannelsTab from "../components/SubscribingPage/ChannelsTab/ChannelsTab.js"
-import SearchCard from "../components/SubscribingPage/SearchCard";
 import VideosTab from "../components/SubscribingPage/VideosTab/VideosTab";
 import SubscribingPageTopBar from "../components/SubscribingPage/SubscribingPageTopBar";
 import SubscribingGroup from "../components/SubscribingPage/SubscribingGroup";
