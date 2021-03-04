@@ -9,13 +9,19 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Api from "../../helpers/Api";
 import moment from "moment";
 import EditPostModal from "../../components/ProfilePage/EditPostModal";
-import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal"
+import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal";
 import FileTypes from "../../components/FileTypes.js";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard({ key, data, refresh, setRefresh, community }) {
+export default function ProfilePostCard({
+  key,
+  data,
+  refresh,
+  setRefresh,
+  community,
+}) {
   const alert = useAlert();
 
   //for menu button
@@ -25,7 +31,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
 
-  {/*}
+  {
+    /*}
   useEffect(() => {
     if (data.poll != undefined) {
       let hasVoted = false;
@@ -75,7 +82,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
         alert.show(xhr.responseJSON.error);
       });
   }
-*/}
+*/
+  }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -162,17 +170,18 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
         flexDirection: "column",
         textAlign: "left",
         width: "max-content",
+        justify:"left",
+        marginLeft:"-53px"
       }}
     >
       <div class="col-md-9">
-        
         <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
           data={data}
           refresh={refresh}
           setRefresh={setRefresh}
-          community ={community}
+          community={community}
         />
         <EditPostModal
           show={showEditPostModal}
@@ -181,21 +190,25 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        
+
         <div
           class="card"
           style={{
             minWidth: "72ch",
             maxWidth: "72ch",
+            
           }}
         >
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
                 <div class="user-block">
-                  <img src={defaultDP} alt="User profile picture" />
+                  <img
+                    className="rounded-circle"
+                    src={data.author.profilePicture || defaultDP}
+                  />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id}>
+                    <Link to={"/profile/" + data.author.id}  style={{color: "#3B21CB",}}>
                       {data.author.username}
                     </Link>
                   </span>
@@ -243,7 +256,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
                   <span></span>
                 )}
               </div>
-              
+
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
@@ -303,7 +316,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh, commun
             */}
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike}>
+                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (

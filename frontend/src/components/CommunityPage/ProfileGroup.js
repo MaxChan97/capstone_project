@@ -1,10 +1,11 @@
 import React from "react";
+import defaultDP from "../../assets/Default Dp logo.svg";
 
 export default function ProfileGroup({
   communityName,
   numMembers,
   communityPicture,
-  communityId
+  communityId,
 }) {
   return (
     <div
@@ -18,19 +19,20 @@ export default function ProfileGroup({
     >
       <img
         style={{
-          height: 110,
-          width: 110,
+          height: 80,
+          width: 80,
           borderRadius: "50%",
           display: "block",
+          marginLeft:"120px",
+          marginRight:"30px",
         }}
-        src={communityPicture}
-        alt="communityPicture"
+        src={communityPicture || defaultDP}
       />
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          marginLeft: "18px",
+          // marginLeft: "30px",
           alignItems: "flex-start",
           justifyContent: "center",
         }}
@@ -47,9 +49,9 @@ export default function ProfileGroup({
         </p>
 
         <a href={"/community/" + communityId + "/viewMembers"} class="link">
-        {/* <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}> */}
+          {/* <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}> */}
           {numMembers !== 1 ? numMembers + " Members" : numMembers + " Member"}
-        {/* </p> */}
+          {/* </p> */}
         </a>
       </div>
     </div>

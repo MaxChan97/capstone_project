@@ -8,14 +8,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Api from "../../helpers/Api";
 import moment from "moment";
-import EditPostModal from "./EditPostModal";
-import DeletePostModal from "./DeletePostModal";
+import EditPostModal from "../../components/ProfilePage/EditPostModal";
+import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal"
 import FileTypes from "../../components/FileTypes.js";
-import Poll from "react-polls";
+//import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
+export default function CommunityPostCard({ key, data, refresh, setRefresh, community }) {
   const alert = useAlert();
 
   //for menu button
@@ -24,8 +24,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
-  const [pollRefresh, setPollRefresh] = useState(true);
 
+  {/*}
   useEffect(() => {
     if (data.poll != undefined) {
       let hasVoted = false;
@@ -56,6 +56,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
           for (var i = 0; i < value.answeredBy.length; i++) {
             if (value.answeredBy[i].id === currentUser) {
+              console.log(key);
               setVotedAnswer(key);
             }
           }
@@ -63,11 +64,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         setPollAnswers(tempPollAnswer);
       }
     }
-  }, [data]);
-
-  useEffect(() => {
-    setPollRefresh(!pollRefresh);
-  }, [pollAnswers]);
+  }, [data, refresh]);
 
   function handleVote(voteAnswer) {
     Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
@@ -78,7 +75,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         alert.show(xhr.responseJSON.error);
       });
   }
-
+*/}
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -168,12 +165,14 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div class="col-md-9">
-        <DeletePostModal
+        
+        <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
           data={data}
           refresh={refresh}
           setRefresh={setRefresh}
+          community ={community}
         />
         <EditPostModal
           show={showEditPostModal}
@@ -182,24 +181,28 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           refresh={refresh}
           setRefresh={setRefresh}
         />
+        
         <div
           class="card"
           style={{
-            minWidth: "82ch",
-            maxWidth: "82ch",
+            minWidth: "72ch",
+            maxWidth: "72ch",
           }}
         >
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
                 <div class="user-block">
-                  <img
-                    className="rounded-circle"
-                    src={data.author.profilePicture || defaultDP}
-                  />
+                  <img src={defaultDP} alt="User profile picture" />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
-                      {data.author.username}
+                    <Link to={"/community/" + community.id} style={{color: "#3B21CB", fontSize:"18px"}} >
+                      {community.name}
+                    </Link>
+                    <span>&nbsp;</span>
+                    <span>&nbsp;</span>
+                    <span>&nbsp;</span>
+                    <Link to={"/profile/" + data.author.id} style={{color: "gray", fontSize:"13px"}}>
+                     Posted by @ {data.author.username}
                     </Link>
                   </span>
 
@@ -209,7 +212,9 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     <span>&nbsp; </span>
                     {moment.utc(formatDate).fromNow()}
                   </span>
+                  
                 </div>
+                
                 {data.author.id == currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <IconButton
@@ -246,6 +251,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   <span></span>
                 )}
               </div>
+              
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
@@ -263,10 +269,14 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     </p>
                   </div>
                 ))}
+               
               <p>{data.body}</p>
+             
+              {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
+                    
                     <Poll
                       customStyles={{
                         theme: "purple",
@@ -275,8 +285,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                         questionColor: "#8f858e",
                       }}
                       question={data.poll.question}
-                      noStorage={true}
                       answers={pollAnswers}
+                      noStorage={true}
                       onVote={handleVote}
                     />
                   </div>
@@ -294,12 +304,13 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                       noStorage={true}
                       vote={votedAnswer}
                     />
+                    
                   </div>
                 )
               ) : (
                 ""
               )}
-
+            */}
               <p>
                 {liked == true ? (
                   <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
@@ -313,7 +324,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
                 <span>
                   <Link
-                    to={"/post/" + data.id}
+                    to={"/community/post/" + data.id}
                     style={{ marginLeft: 10, color: "black" }}
                   >
                     <i class="fas fa-comments mr-1"></i> {data.comments.length}

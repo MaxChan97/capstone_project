@@ -32,7 +32,7 @@ export default function ChannelRow({ channel }) {
       <div className="row">
         <div className="col-md-2">
           <img
-            className="img-fluid"
+            className="img-fluid rounded-circle"
             src={publisher.profilePicture || defaultDP}
           />
         </div>
