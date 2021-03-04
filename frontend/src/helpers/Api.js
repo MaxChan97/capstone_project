@@ -557,7 +557,7 @@ export default {
 
   getCommunityById(communityId, personId) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/community/" + communityId + '/' + personId,
+      url: this.SERVER_PREFIX + "/community/" + communityId + "/" + personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -722,14 +722,23 @@ export default {
     });
   },
 
-  createCommunityPost(communityId, personId, postBody,
+  createCommunityPost(
+    communityId,
+    personId,
+    postBody,
     fileName,
     fileUrl,
     fileType,
     postPollQuestion,
-    postPollOptions) {
+    postPollOptions
+  ) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/community/" + communityId + "/person/" + personId,
+      url:
+        this.SERVER_PREFIX +
+        "/post/community/" +
+        communityId +
+        "/person/" +
+        personId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -827,11 +836,7 @@ export default {
   deleteCommunity(communityId, ownerId) {
     return jQuery.ajax({
       url:
-        this.SERVER_PREFIX +
-        "/community/" +
-        communityId +
-        "/person/" +
-        ownerId,
+        this.SERVER_PREFIX + "/community/" + communityId + "/person/" + ownerId,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -840,7 +845,25 @@ export default {
     });
   },
 
+  searchPersonByUsername(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/query?username=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 
-
-
+  searchCommunityByName(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/query?name=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

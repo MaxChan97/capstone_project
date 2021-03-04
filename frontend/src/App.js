@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
@@ -29,9 +29,13 @@ import ChangePassword from "./screens/ChangePassword";
 import NewPassword from "./screens/NewPassword";
 import MyCommunities from "./screens/MyCommunitiesPage";
 import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
+import SearchPage from "./screens/SearchPage";
 
 function App() {
   let location = useLocation();
+
+  const [searchString, setSearchString] = useState("");
+  const [searchRefresh, setSearchRefresh] = useState(true);
 
   function renderNavSide() {
     if (location.pathname === "/login" || location.pathname === "/register") {
@@ -39,7 +43,12 @@ function App() {
     } else if (location.pathname === "/chat") {
       return (
         <div>
-          <Navbar />
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
         </div>
       );
     } else if (
@@ -49,14 +58,24 @@ function App() {
     ) {
       return (
         <div>
-          <Navbar />
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
           <ChannelDashboardSidebar />
         </div>
       );
     } else {
       return (
         <div>
-          <Navbar />
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
           <Sidebar />
         </div>
       );
@@ -110,10 +129,20 @@ function App() {
               path="/post/:postId"
               component={ProfilePostWithComments}
             />
-             <Route
+            <Route
               exact
               path="/community/post/:postId"
               component={CommunityPostWithComments}
+            />
+            <Route
+              exact
+              path="/search"
+              render={() => (
+                <SearchPage
+                  searchString={searchString}
+                  searchRefresh={searchRefresh}
+                />
+              )}
             />
           </div>
         </div>
