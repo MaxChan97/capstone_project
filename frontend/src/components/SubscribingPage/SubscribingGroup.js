@@ -1,7 +1,7 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function SubscribingGroup({ username, numSubscribing}) {
+export default function SubscribingGroup({ username}) {
   return (
     <div
       style={{
@@ -29,11 +29,11 @@ export default function SubscribingGroup({ username, numSubscribing}) {
             fontSize: "30px",
           }}
         >
-          {"Subscriptions"}
+          {"Subscribing"}
         </p>
-        <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
-          You subscribe to {numSubscribing} channels
-        </p>
+        {/* <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
+          {numSubscribing} subscriptions
+        </p> */}
       </div>
     </div>
   );

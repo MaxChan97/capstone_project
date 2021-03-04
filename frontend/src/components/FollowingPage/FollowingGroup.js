@@ -1,7 +1,7 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function FollowingGroup({ username, numFollowing}) {
+export default function FollowingGroup({ username}) {
   return (
     <div
       style={{
@@ -31,9 +31,9 @@ export default function FollowingGroup({ username, numFollowing}) {
         >
           {"Following"}
         </p>
-        <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
+        {/* <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
           {numFollowing} following
-        </p>
+        </p> */}
       </div>
     </div>
   );
