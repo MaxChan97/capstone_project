@@ -96,6 +96,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         em.persist(comment);
 
         post.getComments().add(comment);
+        em.flush();
     }
 
     @Override

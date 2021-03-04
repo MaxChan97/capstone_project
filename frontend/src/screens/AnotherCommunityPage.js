@@ -18,10 +18,28 @@ export default function AnotherCommunityPage({communityId}) {
   const [refresh, setRefresh] = useState(true);
 
   const currentUser = useSelector((state) => state.currentUser);
+  const [joined, setJoined] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
       loadData(communityId);
+      Api.getFollowingCommunities(currentUser)
+      .done((followObjects) => {
+        let followingFlag = false;
+        for (var i = 0; i < followObjects.length; i++) {
+          if (Number(followObjects[i].id) === Number(communityId)) {
+            followingFlag = true;
+            setJoined(true);
+            break;
+          }
+        }
+        if (followingFlag === false) {
+          setJoined(false);
+        }
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
     }
   }, [communityId, refresh]);
 
@@ -32,7 +50,6 @@ export default function AnotherCommunityPage({communityId}) {
   function loadData(communityId) {
     Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
-        console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
       })
       .fail((xhr, status, error) => {
@@ -47,6 +64,8 @@ export default function AnotherCommunityPage({communityId}) {
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
+              {joined == true ? (<CreatePostCard community = {currentCommunity}
+               refresh= {refresh} setRefresh={setRefresh}></CreatePostCard>) : ("")}
               <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
