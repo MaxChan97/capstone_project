@@ -146,7 +146,7 @@ public class CommunityResource {
     public Response editCommunity(@PathParam("communityId") Long communityId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        String description = jsonObject.getString("description");
+        String description = jsonObject.getString("communityDescription");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
         String communityProfilePicture = jsonObject.getString("communityProfilePicture");
         String communityBanner = jsonObject.getString("communityBanner");
