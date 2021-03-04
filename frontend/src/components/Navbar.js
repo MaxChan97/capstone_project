@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import Api from "../helpers/Api";
 import logout from "../assets/logout 1.svg";
 import { logOut } from "../redux/actions/index";
+import BNBLogo from "../assets/BNB Logo.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,6 +122,12 @@ function Navbar({
             )}
           </li>
         </ul>
+      </div>
+
+      <div>
+        <Link to="/feed">
+          <img style={{ height: "40px", display: "flex",}} src={BNBLogo} alt="BNB Logo" />
+        </Link>
       </div>
 
       <div>
