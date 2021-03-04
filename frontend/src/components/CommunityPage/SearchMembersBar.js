@@ -27,7 +27,7 @@ export default function SearchCard({ searchTerm, setSearchTerm }) {
         <InputBase
           value={searchTerm}
           className={classes.input}
-          placeholder="Search users"
+          placeholder="Search members"
           onChange={(e) => {
             setSearchTerm(e.target.value);
           }}
