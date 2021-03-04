@@ -34,10 +34,9 @@ export default function AnotherCommunityPage({communityId}) {
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
-        //setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
-        alert.show("This community does not exist!");
+        alert.show(xhr.responseJSON.error);
       });
   }
 

@@ -851,5 +851,24 @@ export default {
     });
   },
 
+  banPersonFromCommunity(communityId, personId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/ban/" +
+        "person/" +
+        personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        ownerId: ownerId,
+      }),
+    });
+  },
 
 };

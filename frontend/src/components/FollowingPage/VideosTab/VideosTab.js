@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Api from "../../../helpers/Api";
 import SearchCard from "./SearchCard"
+import VideosCard from "./VideosCard"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,12 +69,12 @@ export default function VideosTab() {
             <div className="container-fluid">
                 {/* <p className="font-weight-bold">Channels you follow</p> */}
                     <div className="row">
-                        {/* <div className="col-md-8 mt-9" style={{ textAlign: "left" }}>
-                            <FollowingCard followingList={followingList} searchTerm={searchTerm} />
+                        <div className="col-md-8 mt-9" style={{ textAlign: "left" }}>
+                            <VideosCard videoList={videoList} searchTerm={searchTerm} />
                         </div>
                         <div className="col-md-4 mt-9" style={{ textAlign: "left" }}>
                             <SearchCard searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                        </div> */}
+                        </div>
                     </div>
             </div>
         </div>
