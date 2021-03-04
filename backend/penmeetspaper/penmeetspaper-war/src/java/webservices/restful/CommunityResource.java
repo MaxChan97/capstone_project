@@ -218,11 +218,15 @@ public class CommunityResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchCommunityByName(@QueryParam("username") String name) {
-        List<Community> results = communitySB.searchCommunityByName(name);
-        GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
-        };
+        try {
+            List<Community> results = communitySB.searchCommunityByName(name);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
 
-        return Response.status(200).entity(entity).build();
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
 
     }
 

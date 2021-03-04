@@ -111,7 +111,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     // Search Community
     @Override
-    public List<Community> searchCommunityByName(String name) {
+    public List<Community> searchCommunityByName(String name) throws NoResultException, NotValidException {
         Query q;
         if (name != null) {
             q = em.createQuery("SELECT c FROM Community c WHERE "
@@ -121,7 +121,13 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             q = em.createQuery("SELECT c FROM Community c");
         }
 
-        return q.getResultList();
+        List<Community> comms = q.getResultList();
+
+        for (Community c : comms) {
+            c = getCommunityById(c.getId());
+        }
+
+        return comms;
     } // end of searchCommunityByName
 
     // Edit Community
