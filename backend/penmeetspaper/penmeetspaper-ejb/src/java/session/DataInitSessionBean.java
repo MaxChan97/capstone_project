@@ -24,7 +24,33 @@ import javax.ejb.Startup;
 public class DataInitSessionBean {
 
     @EJB
+    private BanSessionBeanLocal banSB;
+
+    @EJB
+    private ChatSessionBeanLocal chatSB;
+
+    @EJB
+    private CommentSessionBeanLocal commentSB;
+
+    @EJB
+    private CommunitySessionBeanLocal communitySB;
+
+    @EJB
+    private FollowerSessionBeanLocal followSB;
+    @EJB
     private PersonSessionBeanLocal personSB;
+
+    @EJB
+    private MessageSessionBeanLocal messageSB;
+
+    @EJB
+    private PostSessionBean postSB;
+
+    @EJB
+    private ReplySessionBean replySB;
+
+    @EJB
+    private SubscriptionSessionBean subSB;
 
     public DataInitSessionBean() {
     }
