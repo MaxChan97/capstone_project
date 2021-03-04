@@ -32,13 +32,17 @@ export default function FollowingRow({ channel }) {
       <div className="row">
         <div className="col-md-2">
           <img
-            className="img-fluid"
+            className="img-fluid rounded-circle"
             src={publisher.profilePicture || defaultDP}
           />
         </div>
         <div className="col-md-7">
           <dl>
-            <dt className="text-left">{publisher.username}</dt>
+            <dt className="text-left">
+            <a href={"/profile/" + publisher.id} class="link text-dark">
+            {publisher.username}
+            </a>
+            </dt>
             <dd class="text-secondary">
               {followerList.length !== 1
                 ? followerList.length + " followers"

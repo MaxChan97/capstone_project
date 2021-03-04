@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Divider from "@material-ui/core/Divider";
 import Api from "../../helpers/Api";
-import moment from 'moment';
+import moment from "moment";
 import EditReplyModal from "./EditReplyModal";
 import DeleteReplyModal from "./DeleteReplyModal";
 import { useAlert } from "react-alert";
@@ -41,7 +41,6 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     openDeleteCommentModal();
   };
 
-
   const [showEditCommentModal, setShowEditCommentModal] = React.useState(false);
 
   function openEditCommentModal() {
@@ -70,13 +69,13 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
-    Api.likeProfilePostReply(data.id, currentUser)
+    Api.likeProfilePostReply(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(true);
   };
 
   const handleUnlike = (event) => {
-    Api.unlikeProfilePostReply(data.id, currentUser)
+    Api.unlikeProfilePostReply(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(false);
   };
@@ -92,9 +91,8 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
   const [formatDate, setFormatDate] = useState();
   function changeDateFormat() {
     //remove [UTC] suffix
-    var changedDate = data.datePosted.substring(
-      0,data.datePosted.length - 5);
-      setFormatDate(changedDate);
+    var changedDate = data.datePosted.substring(0, data.datePosted.length - 5);
+    setFormatDate(changedDate);
   }
 
   useEffect(() => {
@@ -128,30 +126,36 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
           handleClose={closeEditCommentModal}
           data={data}
         />
-        <div class="card-body" style={{
-          minWidth: "72ch",
-          maxWidth: "72ch",
-        }}>
+        <div
+          class="card-body"
+          style={{
+            minWidth: "72ch",
+            maxWidth: "72ch",
+          }}
+        >
           <div class="post">
             <Divider variant="middle" />
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
-                <img src={defaultDP} alt="User profile picture" />
-
+                <img
+                  className="rounded-circle"
+                  src={data.author.profilePicture || defaultDP}
+                />
 
                 <span class="username">
-
-                  <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
+                  <Link
+                    to={"/profile/" + data.author.id}
+                    style={{ color: "#3B21CB" }}
+                  >
                     {data.author.username}
                   </Link>
-
                 </span>
 
                 <span class="description">
-                    {" "}
-                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                    <span>&nbsp; </span>
-                    {moment.utc(formatDate).fromNow()}
+                  {" "}
+                  {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                  <span>&nbsp; </span>
+                  {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
               {data.author.id == currentUser ? (
@@ -178,49 +182,50 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                       },
                     }}
                   >
-                    <MenuItem
-                      value={1}
-                      onClick={handleEdit}
-                    >
+                    <MenuItem value={1} onClick={handleEdit}>
                       <div>Edit Reply</div>
                     </MenuItem>
-                    <MenuItem
-                      value={2}
-                      onClick={handleDelete}
-                    >
+                    <MenuItem value={2} onClick={handleDelete}>
                       <div>Delete Reply</div>
                     </MenuItem>
                   </Menu>
-                </div>) : (
-                  <span></span>
-                )}
+                </div>
+              ) : (
+                <span></span>
+              )}
             </div>
 
             <p style={{ marginLeft: 10 }}>{data.body}</p>
-            <p style={{ marginLeft: 10, }}>
+            <p style={{ marginLeft: 10 }}>
               {liked == true ? (
-                <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                   <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </Link>
               ) : (
-                  <Link onClick={handleLike} style={{ color: "black" }}>
-                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                  </Link>
-                )}
+                <Link onClick={handleLike} style={{ color: "black" }}>
+                  <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                </Link>
+              )}
             </p>
           </div>
         </div>
-
       </div>
     </div>
   ) : (
-      <div class="card-body" style={{
+    <div
+      class="card-body"
+      style={{
         minWidth: "80ch",
         maxWidth: "80ch",
-      }}>
-         <Divider variant="middle" style={{
-         width:"65ch"}}/>
-        <p>[Reply does not exist/deleted!]</p>
-      </div>
-    );
+      }}
+    >
+      <Divider
+        variant="middle"
+        style={{
+          width: "65ch",
+        }}
+      />
+      <p>[Reply does not exist/deleted!]</p>
+    </div>
+  );
 }

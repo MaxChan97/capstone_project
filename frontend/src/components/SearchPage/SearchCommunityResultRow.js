@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from "react";
 import owner from "../../assets/Owned.svg";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { colors } from "@material-ui/core";
 
-export default function MyCommunitiesRow({ community }) {
+export default function SearchCommunityResultRow({ community }) {
   const currentUser = useSelector((state) => state.currentUser);
 
   return (
@@ -23,6 +21,7 @@ export default function MyCommunitiesRow({ community }) {
               }}
               className="img-fluid"
               src={community.communityProfilePicture}
+              alt="Community Picture"
             />
           </div>
           <div className="col-md-2">
@@ -32,7 +31,6 @@ export default function MyCommunitiesRow({ community }) {
             >
               {community.name}
               <br />
-              {/* <small>{community.members.length} Members</small> */}
               <small>
                 {community.members.length !== 1
                   ? community.members.length + " Members"

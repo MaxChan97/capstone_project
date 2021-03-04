@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -35,7 +35,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
 
   const classes = useStyles();
   const alert = useAlert();
-  
+
   const [post, setPost] = React.useState("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -47,6 +47,23 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
   const [pollOptions, setPollOptions] = useState(["", ""]);
 
   const currentUser = useSelector((state) => state.currentUser);
+  const [currentPerson, setCurrentPerson] = useState({});
+
+  useEffect(() => {
+    if (currentUser) {
+      loadData(currentUser);
+    }
+  }, [currentUser]);
+
+  function loadData(currentUser) {
+    Api.getPersonById(currentUser)
+      .done((currentPerson) => {
+        setCurrentPerson(currentPerson);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+  }
 
   const handlePost = (event) => {
     setPost(event.target.value);
@@ -61,31 +78,33 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
     } else if (showPollInput === true && pollOptions.indexOf("") !== -1) {
       alert.show("One of your poll options is empty");
     } else {
-    Api.createCommunityPost(
-      community.id,
-      currentUser,
-      post,
-      fileName,
-      fileUrl,
-      fileType,
-      pollQuestion,
-      pollOptions
-    )
-      .done(() => {
-        alert.show("Post successfully created!");
-        setPost("");
-        setFileName("");
-        setFileUrl("");
-        setFileType("");
-        setProgress(0);
-        setPollQuestion("");
-        setPollOptions(["", ""]);
-        setShowPollInput(false);
-        setRefresh(!refresh);
-      })
-      .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again! / Exceed character limit!");
-      });
+      Api.createCommunityPost(
+        community.id,
+        currentUser,
+        post,
+        fileName,
+        fileUrl,
+        fileType,
+        pollQuestion,
+        pollOptions
+      )
+        .done(() => {
+          alert.show("Post successfully created!");
+          setPost("");
+          setFileName("");
+          setFileUrl("");
+          setFileType("");
+          setProgress(0);
+          setPollQuestion("");
+          setPollOptions(["", ""]);
+          setShowPollInput(false);
+          setRefresh(!refresh);
+        })
+        .fail((xhr, status, error) => {
+          alert.show(
+            "Something went wrong, please try again! / Exceed character limit!"
+          );
+        });
     }
   };
 
@@ -123,7 +142,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
       );
     }
   };
-/*
+  /*
   function handleClosePollInput() {
     setPollQuestion("");
     setPollOptions(["", ""]);
@@ -155,10 +174,12 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
           <div className="card-body">
             <div className="row">
               <div className="col-1">
-                <img src={defaultDP} />
+                <img
+                  className="img-fluid rounded-circle"
+                  src={currentPerson.profilePicture || defaultDP}
+                />
               </div>
               <div className="col-11">
-                
                 {fileUrl &&
                   fileName &&
                   fileType &&
@@ -166,21 +187,21 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     progress < 100 ? (
                       <progress value={progress} max="100" />
                     ) : (
-                        <img
-                          className="mx-auto d-block"
-                          width="300"
-                          src={fileUrl}
-                        />
-                      )
+                      <img
+                        className="mx-auto d-block"
+                        width="300"
+                        src={fileUrl}
+                      />
+                    )
                   ) : (
-                      <div>
-                        <FileTypes data={fileName.split(".")[1]}></FileTypes>
-                        <p className="text-center font-weight-bold">
-                          {fileName.split(".")[0]}
-                        </p>
-                      </div>
-                    ))}
-                  
+                    <div>
+                      <FileTypes data={fileName.split(".")[1]}></FileTypes>
+                      <p className="text-center font-weight-bold">
+                        {fileName.split(".")[0]}
+                      </p>
+                    </div>
+                  ))}
+
                 <TextField
                   id="standard-textarea"
                   placeholder="What's new?"
@@ -192,8 +213,10 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                   autoFocus
                 />
                 {post !== "" ? (
-                        <p style={{textAlign: "right"}}>{post.length}/2048</p>) : 
-                        (<p style={{textAlign: "right"}}>0/2048</p>)}
+                  <p style={{ textAlign: "right" }}>{post.length}/2048</p>
+                ) : (
+                  <p style={{ textAlign: "right" }}>0/2048</p>
+                )}
               </div>
             </div>
             {/* 
@@ -215,14 +238,13 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
               */}
             <div className="row">
               <div className="col-6">
-                
                 <label style={{ paddingTop: "13px" }} for="pic" className="btn">
                   <img
                     style={{ height: "25px" }}
                     src={chatPaperClip}
                     alt="chatPaperClip"
                   />
-                  
+
                   <input
                     id="pic"
                     type="file"
@@ -231,7 +253,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     onChange={changeFileHandler}
                   />
                 </label>
-               {/*
+                {/*
                 <button
                   type="button"
                   style={{
@@ -271,7 +293,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
             </div>
           </div>
         </div>
-      </form>      
+      </form>
     </div>
   );
 }

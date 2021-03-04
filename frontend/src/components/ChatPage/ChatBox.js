@@ -135,7 +135,7 @@ export default function ChatBox({
             position: data.sender.id === currentUser ? "right" : "left",
             type: "photo",
             text: data.body,
-            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            date: dayjs(data.dateTime.slice(0, -5)).toDate(),
             data: {
               uri: data.fileUrl,
               status: { click: false, loading: 0 },
@@ -148,7 +148,7 @@ export default function ChatBox({
             position: data.sender.id === currentUser ? "right" : "left",
             type: "video",
             text: data.body,
-            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            date: dayjs(data.dateTime.slice(0, -5)).toDate(),
             data: {
               uri: data.fileUrl,
               status: { click: false, loading: 0 },
@@ -161,7 +161,7 @@ export default function ChatBox({
             position: data.sender.id === currentUser ? "right" : "left",
             type: "audio",
             text: data.body,
-            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            date: dayjs(data.dateTime.slice(0, -5)).toDate(),
             data: {
               uri: data.fileUrl,
               status: { click: false, loading: 0 },
@@ -174,7 +174,7 @@ export default function ChatBox({
             position: data.sender.id === currentUser ? "right" : "left",
             type: "file",
             text: data.body,
-            date: dayjs(data.dateTime.slice(0, 24)).toDate(),
+            date: dayjs(data.dateTime.slice(0, -5)).toDate(),
             data: {
               uri: data.fileUrl,
               status: { click: false, loading: 0 },

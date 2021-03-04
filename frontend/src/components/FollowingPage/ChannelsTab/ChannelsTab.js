@@ -73,8 +73,9 @@ export default function ChannelsTab() {
 
     return (
         <div className="content-wrapper">
-            <div className="container-fluid">
-                {/* <p className="font-weight-bold">Channels you follow</p> */}
+            <div className="row">
+                <div className="container-fluid">
+                    {/* <p className="font-weight-bold">Channels you follow</p> */}
                     <div className="row">
                         <div className="col-md-8 mt-9" style={{ textAlign: "left" }}>
                             <FollowingCard followingList={followingList} searchTerm={searchTerm} />
@@ -83,6 +84,7 @@ export default function ChannelsTab() {
                             <SearchCard searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     );

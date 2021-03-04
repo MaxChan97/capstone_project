@@ -9,7 +9,7 @@ import chatLogo from "../assets/Chat logo.svg";
 import notificationLogo from "../assets/Notification Logo.svg";
 import defaultDP from "../assets/Default Dp logo.svg";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import Api from "../helpers/Api";
 import BNBLogo from "../assets/BNB Logo.png";
@@ -35,13 +35,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Navbar() {
+function Navbar({
+  searchString,
+  setSearchString,
+  searchRefresh,
+  setSearchRefresh,
+}) {
   let location = useLocation();
+  const history = useHistory();
   const classes = useStyles();
 
   const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
-  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     if (currentUser) {
@@ -51,6 +56,22 @@ function Navbar() {
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  function handleSearch(event) {
+    if (searchString != null && searchString != "") {
+      if (location.pathname === "/search") {
+        setSearchRefresh(!searchRefresh);
+      }
+      history.push("/search");
+    }
+  }
+
+  function handleEnterKeyPress(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearch();
+    }
   }
 
   function loadData(currentUser) {
@@ -108,6 +129,7 @@ function Navbar() {
             style={{ outline: "none" }}
             className={classes.iconButton}
             aria-label="search"
+            onClick={handleSearch}
           >
             <img src={searchLogo} alt="searchLogo" />
           </IconButton>
@@ -118,6 +140,7 @@ function Navbar() {
             onChange={(e) => {
               setSearchString(e.target.value);
             }}
+            onKeyPress={handleEnterKeyPress}
           />
         </Paper>
       </div>
@@ -143,6 +166,7 @@ function Navbar() {
         </Link>
         <Link to={"/profile/" + currentUser}>
           <img
+            className="rounded-circle"
             style={{ height: "3vh" }}
             src={currentPerson.profilePicture || defaultDP}
           />

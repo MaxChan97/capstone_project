@@ -7,6 +7,7 @@ import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/CommunityPage/PostListOfFollowing";
+import YourCommunitiesCard from "../components/CommunityPage/YourCommunitiesCard";
 
 export default function CommunityFeedPage() {
 
@@ -26,7 +27,7 @@ export default function CommunityFeedPage() {
           </div>
           
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            
+            <YourCommunitiesCard></YourCommunitiesCard>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Api from "../../../helpers/Api";
 import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -36,6 +37,7 @@ export default function SocialButtonGroup({
   const [following, setFollowing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [subscription, setSubscription] = useState();
+  const [subscriptionStatus, setSubscriptionStatus] = useState("NotSubscribed");
 
   const [confirmUnfollowDialogOpen, setConfirmUnfollowDialogOpen] = useState(
     false
@@ -46,6 +48,10 @@ export default function SocialButtonGroup({
   const [
     confirmUnsubscribeDialogOpen,
     setConfirmUnsubscribeDialogOpen,
+  ] = useState(false);
+  const [
+    confirmResubscribeDialogOpen,
+    setConfirmResubscribeDialogOpen,
   ] = useState(false);
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -78,16 +84,25 @@ export default function SocialButtonGroup({
         for (var i = 0; i < subscriptionObjects.length; i++) {
           if (subscriptionObjects[i].subscriber.id === currentUser) {
             subscribedFlag = true;
-            console.log("subscribed");
-            setSubscribed(true);
+            //setSubscribed(true);
+            console.log(subscriptionObjects[i]);
             setSubscription(subscriptionObjects[i]);
             break;
           }
         }
         if (subscribedFlag === false) {
-          console.log("not subscribed");
-          setSubscribed(false);
+          //setSubscribed(false);
         }
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, [refresh]);
+
+  useEffect(() => {
+    Api.isSubscribed(currentUser, id)
+      .done((status) => {
+        setSubscriptionStatus(status.subscriptionStatus);
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -116,6 +131,14 @@ export default function SocialButtonGroup({
 
   function handleUnsubscribeDialogClose() {
     setConfirmUnsubscribeDialogOpen(false);
+  }
+
+  function handleResubscribeDialogOpen() {
+    setConfirmResubscribeDialogOpen(true);
+  }
+
+  function handleResubscribeDialogClose() {
+    setConfirmResubscribeDialogOpen(false);
   }
 
   function handleFollow() {
@@ -147,6 +170,7 @@ export default function SocialButtonGroup({
             .done(() => {
               setRefresh(!refresh);
               handleSubscribeDialogClose();
+              handleResubscribeDialogClose();
             })
             .fail((xhr, status, error) => {
               alert.show(xhr.responseJSON.error);
@@ -154,6 +178,7 @@ export default function SocialButtonGroup({
         } else {
           setRefresh(!refresh);
           handleSubscribeDialogClose();
+          handleResubscribeDialogClose();
         }
       })
       .fail((xhr, status, error) => {
@@ -170,6 +195,43 @@ export default function SocialButtonGroup({
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
+  }
+
+  function renderSubscribe() {
+    if (subscriptionStatus === "Subscribed") {
+      return (
+        <Button
+          style={{ height: "40px", width: "160px", outline: "none" }}
+          variant="contained"
+          onClick={handleUnsubscribeDialogOpen}
+        >
+          Subscribed
+        </Button>
+      );
+    } else if (subscriptionStatus === "NotSubscribed") {
+      return (
+        <Button
+          style={{ height: "40px", width: "160px", outline: "none" }}
+          variant="outlined"
+          color="primary"
+          onClick={handleSubscribeDialogOpen}
+        >
+          Subscribe
+        </Button>
+      );
+    } else {
+      // this case is ReSubscribe
+      return (
+        <Button
+          style={{ height: "40px", width: "160px", outline: "none" }}
+          variant="outlined"
+          color="primary"
+          onClick={handleResubscribeDialogOpen}
+        >
+          Subscribe
+        </Button>
+      );
+    }
   }
 
   return (
@@ -219,24 +281,7 @@ export default function SocialButtonGroup({
           Following
         </Button>
       )}
-      {subscribed === false ? (
-        <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
-          variant="outlined"
-          color="primary"
-          onClick={handleSubscribeDialogOpen}
-        >
-          Subscribe
-        </Button>
-      ) : (
-        <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
-          variant="contained"
-          onClick={handleUnsubscribeDialogOpen}
-        >
-          Subscribed
-        </Button>
-      )}
+      {renderSubscribe()}
       <Dialog
         open={confirmUnfollowDialogOpen}
         onClose={handleUnfollowDialogClose}
@@ -322,41 +367,99 @@ export default function SocialButtonGroup({
           </ColorButton>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={confirmUnsubscribeDialogOpen}
-        onClose={handleUnsubscribeDialogClose}
-        aria-labelledby="confirm-unsubscribe-dialog-title"
-        aria-describedby="confirm-unsubscribe-dialog-description"
-      >
-        <DialogTitle id="confirm-unsubscribe-dialog-title">
-          Unsubscribe from {username}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirm-unsubscribe-dialog-description">
-            Do you want to unsubscribe from {username}?
-          </DialogContentText>
-          <DialogContentText>
-            You will still be following {username} after unsubscribing.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            style={{ outline: "none" }}
-            onClick={handleUnsubscribeDialogClose}
+      {subscription != undefined ? (
+        <div>
+          <Dialog
+            open={confirmUnsubscribeDialogOpen}
+            onClose={handleUnsubscribeDialogClose}
+            aria-labelledby="confirm-unsubscribe-dialog-title"
+            aria-describedby="confirm-unsubscribe-dialog-description"
           >
-            Cancel
-          </Button>
-          <ColorButton
-            style={{ outline: "none" }}
-            onClick={handleUnsubscribe}
-            color="primary"
-            variant="contained"
-            autoFocus
+            <DialogTitle id="confirm-unsubscribe-dialog-title">
+              Unsubscribe from {username}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="confirm-unsubscribe-dialog-description">
+                Do you want to unsubscribe from {username}?
+              </DialogContentText>
+              <DialogContentText>
+                Your subscription benefits will expire on{" "}
+                {moment(subscription.endDate.slice(0, -5)).format(
+                  "DD/MM/YYYY hh:mm:ss a"
+                )}
+              </DialogContentText>
+              <DialogContentText>
+                You will still be following {username} after unsubscribing.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                style={{ outline: "none" }}
+                onClick={handleUnsubscribeDialogClose}
+              >
+                Cancel
+              </Button>
+              <ColorButton
+                style={{ outline: "none" }}
+                onClick={handleUnsubscribe}
+                color="primary"
+                variant="contained"
+                autoFocus
+              >
+                Unsubscribe
+              </ColorButton>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={confirmResubscribeDialogOpen}
+            onClose={handleResubscribeDialogClose}
+            aria-labelledby="confirm-resubscribe-dialog-title"
+            aria-describedby="confirm-resubscribe-dialog-description"
           >
-            Unsubscribe
-          </ColorButton>
-        </DialogActions>
-      </Dialog>
+            <DialogTitle id="confirm-resubscribe-dialog-title">
+              Resubscribe to {username}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="confirm-resubscribe-dialog-description">
+                Do you want to resubscribe to {username}?
+              </DialogContentText>
+              <DialogContentText>
+                Your subscription benefits will expire on{" "}
+                {moment(subscription.endDate.slice(0, -5)).format(
+                  "DD/MM/YYYY hh:mm:ss a"
+                )}
+              </DialogContentText>
+              {pricingPlan != undefined ? (
+                <DialogContentText>
+                  You will continue to be charged SGD {pricingPlan.toFixed(2)}
+                  /month when your subscription expires
+                </DialogContentText>
+              ) : (
+                ""
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button
+                style={{ outline: "none" }}
+                onClick={handleResubscribeDialogClose}
+              >
+                Cancel
+              </Button>
+              <ColorButton
+                style={{ outline: "none" }}
+                onClick={handleSubscribe}
+                color="primary"
+                variant="contained"
+                autoFocus
+              >
+                Resubscribe
+              </ColorButton>
+            </DialogActions>
+          </Dialog>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

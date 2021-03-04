@@ -193,7 +193,10 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
                 <div class="user-block">
-                  <img src={data.author.profilePicture || defaultDP} />
+                  <img
+                    className="rounded-circle"
+                    src={data.author.profilePicture || defaultDP}
+                  />
                   <span class="username">
                     <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
                       {data.author.username}

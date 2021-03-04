@@ -22,15 +22,69 @@ export default function FeedPage() {
   ];
 
   const horizontalList = [
-    { name: "item1", viewers: "20000", category: "Stocks" },
-    { name: "item2", viewers: "20000", category: "Stocks" },
-    { name: "item3", viewers: "20000", category: "Stocks" },
-    { name: "item4", viewers: "20000", category: "Stocks" },
-    { name: "item5", viewers: "20000", category: "Stocks" },
-    { name: "item6", viewers: "20000", category: "Stocks" },
-    { name: "item7", viewers: "20000", category: "Stocks" },
-    { name: "item8", viewers: "20000", category: "Stocks" },
-    { name: "item9", viewers: "20000", category: "Stocks" },
+    {
+      name: "Carl",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/7.png?alt=media&token=947053da-100e-45e8-9d04-4cb3308a6752",
+    },
+    {
+      name: "Max",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/4.jpg?alt=media&token=69f3a6ad-2760-44a1-8cef-71cc5afa83de",
+    },
+    {
+      name: "Shawn",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/6.png?alt=media&token=eb821955-61df-4541-a24b-fc5fdcf73fc1",
+    },
+    {
+      name: "Megan",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/5.jpg?alt=media&token=83ca539e-7ecc-49aa-b963-f01534f015fe",
+    },
+    {
+      name: "Xin Yi",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/3.png?alt=media&token=2f08d223-83f6-4ca4-92be-f520d2fdbe3b",
+    },
+    {
+      name: "Sing Jie",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/2.jpg?alt=media&token=ae0cd3a5-2a21-4175-b486-d312ef9b3f9b",
+    },
+    {
+      name: "LHH",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/1.jpeg?alt=media&token=b7a7f029-7934-42cc-8117-4ed9434c9e63",
+    },
+    {
+      name: "TWK",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/7.png?alt=media&token=947053da-100e-45e8-9d04-4cb3308a6752",
+    },
+    {
+      name: "LHL",
+      viewers: "20000",
+      category: "Stocks",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/7.png?alt=media&token=947053da-100e-45e8-9d04-4cb3308a6752",
+    },
   ];
 
   const [leaderboard, setLeaderboard] = useState(leaderboardList);

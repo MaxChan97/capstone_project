@@ -67,7 +67,7 @@ export default function CommunityPostWithComments() {
     setRefresh(!refresh);
     setAnchorEl(null);
   }
-  
+
   const [data, setData] = useState();
   const [liked, setLiked] = useState();
 
@@ -131,11 +131,10 @@ export default function CommunityPostWithComments() {
           flexDirection: "column",
           textAlign: "left",
           width: "max-content",
-          margin:"auto",
+          margin: "auto",
         }}
       >
-        <div class="col-md-9" style={{marginTop:"20px"}}>
-            
+        <div class="col-md-9" style={{ marginTop: "20px" }}>
           <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -151,7 +150,7 @@ export default function CommunityPostWithComments() {
             refresh={refresh}
             setRefresh={setRefresh}
           />
-            
+
           <div
             class="card"
             style={{
@@ -163,7 +162,10 @@ export default function CommunityPostWithComments() {
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
                   <div class="user-block">
-                    <img src={defaultDP} alt="User profile picture" />
+                    <img
+                      className="rounded-circle"
+                      src={data.author.profilePicture || defaultDP}
+                    />
                     <Link
                       to={"/profile/" + data.author.id}
                       style={{ marginLeft: 10, color: "#3B21CB"}}
@@ -178,7 +180,7 @@ export default function CommunityPostWithComments() {
                     </span>
                   </div>
                   {data.author.id == currentUser ? (
-                    <div style={{ textAlign: "right"}}>
+                    <div style={{ textAlign: "right" }}>
                       <IconButton
                         style={{ outline: "none" }}
                         aria-label="more"
@@ -188,7 +190,7 @@ export default function CommunityPostWithComments() {
                       >
                         <MoreVertIcon />
                       </IconButton>
-                      
+
                       <Menu
                         id="long-menu"
                         anchorEl={anchorEl}
@@ -205,11 +207,10 @@ export default function CommunityPostWithComments() {
                         <MenuItem value={1} onClick={handleEdit}>
                           <div>Edit Post</div>
                         </MenuItem>
-                        <MenuItem value={2} onClick={handleDelete} >
+                        <MenuItem value={2} onClick={handleDelete}>
                           <div>Delete Post</div>
                         </MenuItem>
                       </Menu>
-                    
                     </div>
                   ) : (
                     <span></span>
@@ -245,35 +246,32 @@ export default function CommunityPostWithComments() {
                   )}
                 </p>
               </div>
-              
             </div>
-            
+
             <MakeCommentCard
               data={data}
               refresh={refresh}
               setRefresh={setRefresh}
             ></MakeCommentCard>
-            
+
             <CommentList
               comments={data.comments}
               refresh={refresh}
               setRefresh={setRefresh}
             ></CommentList>
-            
           </div>
-              
         </div>
       </div>
     </div>
   ) : (
     <h3
-    style={{
-      color: "gray",
-      textAlign: "center",
-      margin: "auto",
-    }}
-  >
-    Post does not exist
-  </h3>
+      style={{
+        color: "gray",
+        textAlign: "center",
+        margin: "auto",
+      }}
+    >
+      Post does not exist
+    </h3>
   );
 }
