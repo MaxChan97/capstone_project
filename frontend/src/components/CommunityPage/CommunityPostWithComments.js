@@ -11,6 +11,8 @@ import { useParams } from "react-router";
 import Api from "../../helpers/Api";
 import MakeCommentCard from "../../components/ProfilePage/MakeCommentCard";
 import CommentList from "../../components/ProfilePage/CommentList";
+import EditPostModal from "../../components/ProfilePage/EditPostModal";
+import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal";
 import moment from "moment";
 
 import { useAlert } from "react-alert";
@@ -33,7 +35,7 @@ export default function CommunityPostWithComments() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-/*
+
   const handleEdit = () => {
     openEditPostModal();
   };
@@ -65,7 +67,7 @@ export default function CommunityPostWithComments() {
     setRefresh(!refresh);
     setAnchorEl(null);
   }
-  */
+  
   const [data, setData] = useState();
   const [liked, setLiked] = useState();
 
@@ -133,13 +135,14 @@ export default function CommunityPostWithComments() {
         }}
       >
         <div class="col-md-9" style={{marginTop:"20px"}}>
-            {/*
-          <DeletePostModal
+            
+          <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
             data={data}
             refresh={refresh}
             setRefresh={setRefresh}
+            community={data.postCommunity}
           />
           <EditPostModal
             show={showEditPostModal}
@@ -148,7 +151,7 @@ export default function CommunityPostWithComments() {
             refresh={refresh}
             setRefresh={setRefresh}
           />
-            */}
+            
           <div
             class="card"
             style={{
@@ -185,7 +188,7 @@ export default function CommunityPostWithComments() {
                       >
                         <MoreVertIcon />
                       </IconButton>
-                      {/*
+                      
                       <Menu
                         id="long-menu"
                         anchorEl={anchorEl}
@@ -206,7 +209,7 @@ export default function CommunityPostWithComments() {
                           <div>Delete Post</div>
                         </MenuItem>
                       </Menu>
-                    */}
+                    
                     </div>
                   ) : (
                     <span></span>

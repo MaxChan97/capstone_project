@@ -57,12 +57,13 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default function DeletePostModal({
+export default function DeleteCommPostModal({
   show,
   handleClose,
   data,
   refresh,
   setRefresh,
+  community,
 }) {
   const styles = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
@@ -70,7 +71,7 @@ export default function DeletePostModal({
   const alert = useAlert();
 
   async function handleSubmit() {
-    Api.deleteProfilePost(currentUser, data.id)
+    Api.deleteCommunityPost(currentUser, data.id)
       .done(() => {
         alert.show("Delete success!");
         setRefresh(!refresh);
@@ -86,7 +87,7 @@ export default function DeletePostModal({
     handleClose();
   }
 
-  return (
+  return  data ? (
     <Modal
       open={show}
       onClose={handleClose}
@@ -104,7 +105,7 @@ export default function DeletePostModal({
     >
       <Card className={styles.cardContainer}>
         <CardContent className={styles.cardContent}>
-          <h5>Do you want to delete this post from your profile?</h5>
+          <h5>Confirm Delete Post from Community {community.name} ?</h5>
           <p>Post deletion is permanent and cannot be undone</p>
           <br></br>
           <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -142,5 +143,7 @@ export default function DeletePostModal({
         </CardContent>
       </Card>
     </Modal>
+  ) : (
+      ""
   );
 }
