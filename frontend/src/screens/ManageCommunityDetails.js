@@ -51,7 +51,7 @@ export default function ManageCommunityDetails() {
     setCommunityName(event.target.value);
   };
 
-  const [description, setDescription] = useState("");
+  const [communityDescription, setDescription] = useState("");
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
@@ -165,7 +165,7 @@ export default function ManageCommunityDetails() {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
         setCommunityName(currentCommunity.name);
-        setDescription(currentCommunity.description);
+        setDescription(currentCommunity.communityDescription);
         setTopicInterests(currentCommunity.topicEnums);
         setCommunityPicture(currentCommunity.communityProfilePicture);
         setCommunityBanner(currentCommunity.communityBanner);
@@ -204,7 +204,7 @@ export default function ManageCommunityDetails() {
 
     Api.editCommunityDetails(
       communityId,
-      description,
+      communityDescription,
       topicInterests,
       communityPicture,
       communityBanner
@@ -359,13 +359,13 @@ export default function ManageCommunityDetails() {
                     <label htmlFor="inputDescription">Description</label>
                     <textarea
                       className="form-control"
-                      value={description}
+                      value={communityDescription}
                       maxLength={1000}
                       onChange={handleDescriptionChange}
                     />
-                    {description !== undefined ? (
+                    {communityDescription !== undefined ? (
                       <p style={{ textAlign: "right" }}>
-                        {description.length}/1000
+                        {communityDescription.length}/1000
                       </p>
                     ) : (
                       <p style={{ textAlign: "right" }}>0/1000</p>
