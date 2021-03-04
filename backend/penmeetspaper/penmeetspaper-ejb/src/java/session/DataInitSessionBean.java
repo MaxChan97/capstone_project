@@ -5,9 +5,13 @@
  */
 package session;
 
+import entity.Community;
 import entity.personEntities.Person;
+import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -64,7 +68,7 @@ public class DataInitSessionBean {
         }
     }
 
-    private void initData() {
+    private void createPersons() throws NotValidException {
         Person user1 = new Person();
         user1.setUsername("user1");
         user1.setEmail("user1@email.com");
@@ -100,15 +104,68 @@ public class DataInitSessionBean {
         user7.setEmail("user7@email.com");
         user7.setPassword("password");
 
+        personSB.createPerson(user1);
+        personSB.createPerson(user2);
+        personSB.createPerson(user3);
+        personSB.createPerson(user4);
+        personSB.createPerson(user5);
+        personSB.createPerson(user6);
+        personSB.createPerson(user7);
+    }
+
+    private void createCommunities() throws NotValidException, NoResultException {
+        String defaultCommunityPicture = "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb";
+        String defaultCommunityBanner = "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897";
+
+        List<TopicEnum> topicEnums = new ArrayList();
+
+        Community comm1 = new Community();
+        comm1.setDescription("Bacon ipsum dolor amet shank landjaeger ham porchetta, buffalo pork ribeye leberkas meatball ground round tenderloin shankle. Chuck doner short ribs, kevin drumstick shank pork loin burgdoggen. Shank beef ribs chislic chicken.");
+        comm1.setName("WallStreetBets");
+        comm1.setCommunityProfilePicture(defaultCommunityPicture);
+        comm1.setCommunityBanner(defaultCommunityBanner);
+        topicEnums.add(TopicEnum.STOCKS);
+        comm1.setTopicEnums(topicEnums);
+
+        topicEnums = new ArrayList();
+        Community comm2 = new Community();
+        comm2.setDescription("Pork belly tongue pork drumstick cupim, jerky pastrami porchetta beef ribs pork chop chicken biltong.");
+        comm2.setName("CryptoCurrencies");
+        comm2.setCommunityProfilePicture(defaultCommunityPicture);
+        comm2.setCommunityBanner(defaultCommunityBanner);
+        topicEnums.add(TopicEnum.CRYPTOCURRENCY);
+        comm2.setTopicEnums(topicEnums);
+
+        topicEnums = new ArrayList();
+        Community comm3 = new Community();
+        comm3.setDescription("Porchetta venison ball tip, filet mignon boudin landjaeger prosciutto tongue ribeye.");
+        comm3.setName("Soybeans");
+        comm3.setCommunityProfilePicture(defaultCommunityPicture);
+        comm3.setCommunityBanner(defaultCommunityBanner);
+        topicEnums.add(TopicEnum.FUTURES);
+        comm3.setTopicEnums(topicEnums);
+
+        topicEnums = new ArrayList();
+        Community comm4 = new Community();
+        comm4.setDescription("Chuck alcatra capicola, fatback prosciutto kevin tri-tip pig ground round.");
+        comm4.setName("HDB");
+        comm4.setCommunityProfilePicture(defaultCommunityPicture);
+        comm4.setCommunityBanner(defaultCommunityBanner);
+        topicEnums.add(TopicEnum.REAL_ESTATE);
+        comm4.setTopicEnums(topicEnums);
+
+        communitySB.createCommunity(comm1, new Long(1));
+        communitySB.createCommunity(comm2, new Long(1));
+        communitySB.createCommunity(comm3, new Long(1));
+        communitySB.createCommunity(comm3, new Long(2));
+    }
+
+    private void initData() {
+
         try {
-            personSB.createPerson(user1);
-            personSB.createPerson(user2);
-            personSB.createPerson(user3);
-            personSB.createPerson(user4);
-            personSB.createPerson(user5);
-            personSB.createPerson(user6);
-            personSB.createPerson(user7);
-        } catch (NotValidException ex) {
+            createPersons();
+            createCommunities();
+        } catch (NotValidException | NoResultException ex) {
             ex.printStackTrace();
         }
     }
