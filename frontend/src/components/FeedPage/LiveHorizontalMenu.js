@@ -7,11 +7,15 @@ import defaultDP from "../../assets/Default Dp logo.svg";
 // selected prop will be passed
 const MenuItem = ({ data, selected }) => {
   return (
-    <div className={`menu-item ${selected ? 'active' : ''}`}>
-      <div className="container" >
+    <div className={`menu-item ${selected ? "active" : ""}`}>
+      <div className="container">
         <div className="row">
           <div className="col-6 align-self-center">
-            <img className="img-fluid" src={defaultDP} alt="defaultDP" />
+            <img
+              className="rounded-circle"
+              height="50"
+              src={data.profilePicture}
+            />
           </div>
           <div className="col-6">
             <p className="m-0">
@@ -54,7 +58,7 @@ export default function LiveHorizontalMenu({ data }) {
   return (
     <div>
       <ScrollMenu
-        itemStyle={{outline: "none", border: "none"}}
+        itemStyle={{ outline: "none", border: "none" }}
         data={Menu(data, selection)}
         arrowLeft={ArrowLeft}
         arrowRight={ArrowRight}

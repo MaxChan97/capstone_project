@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { InputBase, IconButton, Paper } from "@material-ui/core";
 import searchLogo from "../../assets/Search logo.svg";
+import * as dayjs from "dayjs";
+import { useAlert } from "react-alert";
+import Api from "../../helpers/Api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +32,34 @@ export default function SearchCard() {
   const classes = useStyles();
   const [searchString, setSearchString] = useState("");
   const currentUser = useSelector((state) => state.currentUser);
+  const { communityId } = useParams();
+  const alert = useAlert();
+
+  const [currentCommunity, setCurrentCommunity] = useState({});
+
+  useEffect(() => {
+    if (currentUser) {
+      loadData(communityId);
+    }
+  }, [communityId]);
+
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
 
+  function loadData(communityId) {
+    Api.getCommunityById(communityId, currentUser)
+      .done((currentCommunity) => {
+        console.log(currentCommunity);
+        setCurrentCommunity(currentCommunity);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This community does not exist!");
+      });
+  }
+
   return (
-    <div className="card card-primary mx-2">
+    <div className="card card-primary mx-2 mt-3">
       <div className="card-body">
         <p className="font-weight-normal">
           Search in <b>React is Fun</b>
@@ -88,15 +113,21 @@ export default function SearchCard() {
             </li>
           </ul>
         </div>
-        <p className="font-weight-normal my-3">
-          A community for all ages and experience levels to learn React code in
-          a fun and colaborative way!
+        <p className="font-weight-light">
+          <i class="fas fa-users"></i>{" "}
+          {currentCommunity.members !== undefined
+            ? currentCommunity.members.length !== 1
+              ? currentCommunity.members.length + " Members"
+              : currentCommunity.members.length + " Member"
+            : null}
         </p>
         <p className="font-weight-light">
-          <i class="fas fa-users"></i> 8.9K members
-        </p>
-        <p className="font-weight-light">
-          <i class="fas fa-birthday-cake"></i> Created 3 January 2021
+          <i class="fas fa-birthday-cake"></i> Created{" "}
+          {currentCommunity.dateCreated !== undefined
+            ? dayjs(currentCommunity.dateCreated.slice(0, -5)).format(
+                "DD MMMM YYYY"
+              )
+            : null}
         </p>
       </div>
     </div>

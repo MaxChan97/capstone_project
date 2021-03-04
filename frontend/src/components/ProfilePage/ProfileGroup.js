@@ -16,7 +16,11 @@ export default function ProfileGroup({
         width: "30%",
       }}
     >
-      <img style={{ height: "10vh" }} src={profilePicture || defaultDP} />
+      <img
+        className="rounded-circle"
+        style={{ height: "10vh" }}
+        src={profilePicture || defaultDP}
+      />
       <div
         style={{
           display: "flex",

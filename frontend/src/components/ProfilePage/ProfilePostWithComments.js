@@ -128,10 +128,10 @@ export default function ProfilePostWithComments() {
           flexDirection: "column",
           textAlign: "left",
           width: "max-content",
-          margin:"auto",
+          margin: "auto",
         }}
       >
-        <div class="col-md-9" style={{marginTop:"20px"}}>
+        <div class="col-md-9" style={{ marginTop: "20px" }}>
           <DeletePostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -157,7 +157,10 @@ export default function ProfilePostWithComments() {
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
                   <div class="user-block">
-                    <img src={defaultDP} alt="User profile picture" />
+                    <img
+                      className="rounded-circle"
+                      src={data.author.profilePicture || defaultDP}
+                    />
                     <Link
                       to={"/profile/" + data.author.id}
                       style={{ marginLeft: 10, color: "#3B21CB",}}
@@ -172,7 +175,7 @@ export default function ProfilePostWithComments() {
                     </span>
                   </div>
                   {data.author.id == currentUser ? (
-                    <div style={{ textAlign: "right"}}>
+                    <div style={{ textAlign: "right" }}>
                       <IconButton
                         style={{ outline: "none" }}
                         aria-label="more"

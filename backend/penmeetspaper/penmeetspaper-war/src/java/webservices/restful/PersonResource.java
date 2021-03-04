@@ -320,7 +320,9 @@ public class PersonResource {
 
         try {
             String result = subscriptionSB.isSubscribed(personId, publisherId);
-            return Response.status(200).entity(result).build();
+            JsonObject returnJson = Json.createObjectBuilder().add("subscriptionStatus", result).build();
+
+            return Response.status(200).entity(returnJson).type(MediaType.APPLICATION_JSON).build();
         } catch (NotValidException e) {
             return buildError(e, 400);
         }

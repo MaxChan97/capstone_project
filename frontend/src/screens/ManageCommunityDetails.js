@@ -270,7 +270,6 @@ export default function ManageCommunityDetails() {
                           display: "block",
                         }}
                         src={communityPicture || defaultDP}
-                        alt="Community Picture"
                       />
                     </div>
                     <div className="col-sm-8">

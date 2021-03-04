@@ -40,7 +40,7 @@ export default function PostList({ community, refresh, setRefresh }) {
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-          <ListItem alignItems="flex-start">
+          <ListItem alignItems="left">
             <ProfilePostCard
               key={data.id}
               data={data}
