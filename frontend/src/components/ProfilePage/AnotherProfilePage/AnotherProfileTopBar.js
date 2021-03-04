@@ -41,6 +41,8 @@ export default function AnotherProfileTopBar({
   pricingPlan,
   refresh,
   setRefresh,
+  profilePicture,
+  profileBanner,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -48,9 +50,15 @@ export default function AnotherProfileTopBar({
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <div
-        style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
-      ></div>
+      {profileBanner ? (
+        <div>
+          <img className="img-fluid" src={profileBanner} />
+        </div>
+      ) : (
+        <div
+          style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
+        ></div>
+      )}
       <div
         style={{
           display: "flex",
@@ -60,7 +68,11 @@ export default function AnotherProfileTopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <ProfileGroup username={username} numFollowers={numFollowers} />
+        <ProfileGroup
+          username={username}
+          numFollowers={numFollowers}
+          profilePicture={profilePicture}
+        />
         <SocialButtonGroup
           id={id}
           username={username}

@@ -136,6 +136,7 @@ function Navbar() {
         </Link>
         <Link to={"/profile/" + currentUser}>
           <img
+            className="rounded-circle"
             style={{ height: "3vh" }}
             src={currentPerson.profilePicture || defaultDP}
           />

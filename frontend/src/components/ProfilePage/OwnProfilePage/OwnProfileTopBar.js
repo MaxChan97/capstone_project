@@ -52,7 +52,7 @@ export default function OwnProfileTopBar({
         </div>
       ) : (
         <div
-          style={{ backgroundColor: "#EBE8FF", height: "200px", width: "100%" }}
+          style={{ backgroundColor: "#EBE8FF", height: "250px", width: "100%" }}
         ></div>
       )}
 

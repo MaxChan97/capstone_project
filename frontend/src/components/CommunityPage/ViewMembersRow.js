@@ -5,20 +5,19 @@ import ban from "../../assets/ban.svg";
 import { useAlert } from "react-alert";
 import Api from "../../helpers/Api";
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-  } from "@material-ui/core";
-  import { withStyles } from "@material-ui/core/styles";
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
-export default function ViewMembersRow({ member , refresh, setRefresh}) {
+export default function ViewMembersRow({ member, refresh, setRefresh }) {
   const alert = useAlert();
   const { communityId } = useParams();
   const [currentCommunity, setCurrentCommunity] = useState({});
-
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -66,9 +65,8 @@ export default function ViewMembersRow({ member , refresh, setRefresh}) {
       >
         <div className="col-md-3">
           <img
-            className="img-fluid"
+            className="img-fluid rounded-circle"
             src={member.profilePicture}
-            alt="defaultDP"
           />
         </div>
         <div className="col-md-7 mb-1" style={{ fontSize: "18px" }}>

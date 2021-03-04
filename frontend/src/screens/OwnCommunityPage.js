@@ -10,13 +10,13 @@ import SearchCard from "../components/CommunityPage/SearchCard";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 
-export default function OwnCommunityPage({communityId}) {
+export default function OwnCommunityPage({ communityId }) {
   const alert = useAlert();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
-  
+
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -41,15 +41,22 @@ export default function OwnCommunityPage({communityId}) {
       });
   }
 
-
   const handleTabView = (tabValue) => {
     if (currentCommunity.id !== undefined && tabValue === 0) {
       return (
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
-              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
-              <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
+              <CreatePostCard
+                community={currentCommunity}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
+              <PostList
+                community={currentCommunity}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
               <SearchCard />
@@ -64,19 +71,18 @@ export default function OwnCommunityPage({communityId}) {
     return "";
   };
 
-  return (
-    currentCommunity.members !== undefined ? (
-      <div className="content-wrapper">
-      <TopBar 
-      tabValue={tabValue} 
-      setTabValue={setTabValue} 
-      communityName={currentCommunity.name}
-      communityPicture= {currentCommunity.communityProfilePicture}
-      communityBanner = {currentCommunity.communityBanner}
-      numMembers = {currentCommunity.members.length} 
-      communityId = {communityId} 
+  return currentCommunity.members !== undefined ? (
+    <div className="content-wrapper">
+      <TopBar
+        tabValue={tabValue}
+        setTabValue={setTabValue}
+        communityName={currentCommunity.name}
+        communityPicture={currentCommunity.communityProfilePicture}
+        communityBanner={currentCommunity.communityBanner}
+        numMembers={currentCommunity.members.length}
+        communityId={communityId}
       />
       {handleTabView(tabValue)}
     </div>
-    ) : (null));
+  ) : null;
 }

@@ -33,16 +33,16 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function TopBar({ 
-  tabValue, 
-  setTabValue, 
+export default function TopBar({
+  tabValue,
+  setTabValue,
   communityName,
   numMembers,
   communityPicture,
   communityBanner,
   communityId,
   refresh,
-  setRefresh
+  setRefresh,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -50,15 +50,13 @@ export default function TopBar({
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-    
       <img
         style={{
-          width:"100%"
+          width: "100%",
         }}
         src={communityBanner}
-        alt="Community Banner"
       />
-     
+
       <div
         style={{
           display: "flex",
@@ -68,19 +66,25 @@ export default function TopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <ProfileGroup 
-        communityName={communityName}
-        numMembers={numMembers}
-        communityPicture={communityPicture}
+        <ProfileGroup
+          communityName={communityName}
+          numMembers={numMembers}
+          communityPicture={communityPicture}
         />
-        <SocialButtonGroup 
-        communityId = {communityId} 
-        communityName={communityName}
-        refresh = {refresh}
-        setRefresh = {setRefresh}/>
-        
+        <SocialButtonGroup
+          communityId={communityId}
+          communityName={communityName}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
       </div>
-      <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%", paddingLeft:"5%"}}>
+      <div
+        style={{
+          backgroundColor: "#FDFDFD",
+          paddingTop: "1%",
+          paddingLeft: "5%",
+        }}
+      >
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
           <StyledTab label="Posts" />
           <StyledTab label="About" />

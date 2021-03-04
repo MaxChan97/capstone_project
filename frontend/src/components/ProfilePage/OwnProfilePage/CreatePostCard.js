@@ -86,7 +86,9 @@ export default function CreatePostCard({
           setRefresh(!refresh);
         })
         .fail((xhr, status, error) => {
-          alert.show("Something went wrong, please try again! / Exceed character limit");
+          alert.show(
+            "Something went wrong, please try again! / Exceed character limit"
+          );
         });
     }
   };
@@ -151,7 +153,10 @@ export default function CreatePostCard({
           <div className="card-body">
             <div className="row">
               <div className="col-1">
-                <img className="img-fluid" src={profilePicture || defaultDP} />
+                <img
+                  className="img-fluid rounded-circle"
+                  src={profilePicture || defaultDP}
+                />
               </div>
               <div className="col-11">
                 {fileUrl &&
@@ -186,8 +191,10 @@ export default function CreatePostCard({
                   autoFocus
                 />
                 {post !== "" ? (
-                        <p style={{textAlign: "right"}}>{post.length}/2048</p>) : 
-                        (<p style={{textAlign: "right"}}>0/2048</p>)}
+                  <p style={{ textAlign: "right" }}>{post.length}/2048</p>
+                ) : (
+                  <p style={{ textAlign: "right" }}>0/2048</p>
+                )}
               </div>
             </div>
             {showPollInput === true ? (
@@ -236,7 +243,6 @@ export default function CreatePostCard({
                     alt="postPoll"
                   />
                 </button>
-             
               </div>
               <div className="col-6">
                 <div style={{ textAlign: "right" }}>

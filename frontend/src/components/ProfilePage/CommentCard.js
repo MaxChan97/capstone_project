@@ -11,7 +11,7 @@ import MakeCommentCard from "./MakeCommentCard";
 import ReplyCommentCard from "./ReplyCommentCard";
 import Divider from "@material-ui/core/Divider";
 import Api from "../../helpers/Api";
-import moment from 'moment';
+import moment from "moment";
 import EditCommentModal from "./EditCommentModal";
 import DeleteCommentModal from "./DeleteCommentModal";
 import { useAlert } from "react-alert";
@@ -40,7 +40,6 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   const handleDelete = () => {
     openDeleteCommentModal();
   };
-
 
   const [showEditCommentModal, setShowEditCommentModal] = React.useState(false);
 
@@ -76,13 +75,13 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
-    Api.likeProfilePostComment(data.id, currentUser)
+    Api.likeProfilePostComment(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(true);
   };
 
   const handleUnlike = (event) => {
-    Api.unlikeProfilePostComment(data.id, currentUser)
+    Api.unlikeProfilePostComment(data.id, currentUser);
     setRefresh(!refresh);
     setLiked(false);
   };
@@ -97,9 +96,8 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   const [formatDate, setFormatDate] = useState();
   function changeDateFormat() {
     //remove [UTC] suffix
-    var changedDate = data.datePosted.substring(
-      0,data.datePosted.length - 5);
-      setFormatDate(changedDate);
+    var changedDate = data.datePosted.substring(0, data.datePosted.length - 5);
+    setFormatDate(changedDate);
   }
 
   useEffect(() => {
@@ -108,7 +106,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
     } else {
       setDeleted(false);
       checkedLiked();
-      changeDateFormat()
+      changeDateFormat();
     }
   }, [refresh]);
 
@@ -133,33 +131,36 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
           handleClose={closeEditCommentModal}
           data={data}
         />
-        <div class="card-body" style={{
-          minWidth: "80ch",
-          maxWidth: "80ch",
-        }}>
+        <div
+          class="card-body"
+          style={{
+            minWidth: "80ch",
+            maxWidth: "80ch",
+          }}
+        >
           <div class="post">
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
-                <img src={defaultDP} alt="User profile picture" />
+                <img
+                  className="rounded-circle"
+                  src={data.author.profilePicture || defaultDP}
+                />
 
                 <span class="username">
-
                   <Link to={"/profile/" + data.author.id}>
                     {data.author.username}
                   </Link>
-
                 </span>
 
                 <span class="description">
-                    {" "}
-                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                    <span>&nbsp; </span>
-                    {moment.utc(formatDate).fromNow()}
+                  {" "}
+                  {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
+                  <span>&nbsp; </span>
+                  {moment.utc(formatDate).fromNow()}
                 </span>
-
               </div>
               {data.author.id == currentUser ? (
-                <div style={{ textAlign: "right",  marginRight: "3%"}}>
+                <div style={{ textAlign: "right", marginRight: "3%" }}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"
@@ -182,22 +183,17 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                       },
                     }}
                   >
-                    <MenuItem
-                      value={1}
-                      onClick={handleEdit}
-                    >
+                    <MenuItem value={1} onClick={handleEdit}>
                       <div>Edit Comment</div>
                     </MenuItem>
-                    <MenuItem
-                      value={2}
-                      onClick={handleDelete}
-                    >
+                    <MenuItem value={2} onClick={handleDelete}>
                       <div>Delete Comment</div>
                     </MenuItem>
                   </Menu>
-                </div>) : (
-                  <span></span>
-                )}
+                </div>
+              ) : (
+                <span></span>
+              )}
             </div>
 
             <p style={{ marginLeft: 10 }}>{data.body}</p>
@@ -208,42 +204,51 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                   <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </Link>
               ) : (
-                  <Link onClick={handleLike} style={{ color: "black" }}>
-                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                  </Link>
-                )}
-
+                <Link onClick={handleLike} style={{ color: "black" }}>
+                  <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                </Link>
+              )}
 
               <span>
-
-                <i class="fas fa-comments mr-1" style={{ color: "black", marginLeft: 10 }}></i> {data.replies.length}
-
+                <i
+                  class="fas fa-comments mr-1"
+                  style={{ color: "black", marginLeft: 10 }}
+                ></i>{" "}
+                {data.replies.length}
               </span>
             </p>
             {showReplies == true ? (
               <div>
-                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>Hide replies</Link>
+                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>
+                  Hide replies
+                </Link>
                 <Divider variant="middle" />
-                <ReplyCommentCard commentData={data} refresh={refresh}
-                  setRefresh={setRefresh}></ReplyCommentCard>
+                <ReplyCommentCard
+                  commentData={data}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                ></ReplyCommentCard>
               </div>
             ) : (
-                <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>Reply/View replies</Link>
-              )}
+              <Link style={{ fontSize: 15 }} onClick={handleViewHideReplies}>
+                Reply/View replies
+              </Link>
+            )}
 
             <Divider variant="middle" />
           </div>
-
         </div>
-
       </div>
     </div>
   ) : (
-      <div class="card-body" style={{
+    <div
+      class="card-body"
+      style={{
         minWidth: "80ch",
         maxWidth: "80ch",
-      }}>
-        <p>[Comment does not exist/deleted!]</p>
-      </div>
-    );
+      }}
+    >
+      <p>[Comment does not exist/deleted!]</p>
+    </div>
+  );
 }
