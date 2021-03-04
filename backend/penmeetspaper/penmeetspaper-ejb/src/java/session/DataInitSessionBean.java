@@ -44,13 +44,13 @@ public class DataInitSessionBean {
     private MessageSessionBeanLocal messageSB;
 
     @EJB
-    private PostSessionBean postSB;
+    private PostSessionBeanLocal postSB;
 
     @EJB
-    private ReplySessionBean replySB;
+    private ReplySessionBeanLocal replySB;
 
     @EJB
-    private SubscriptionSessionBean subSB;
+    private SubscriptionSessionBeanLocal subSB;
 
     public DataInitSessionBean() {
     }
