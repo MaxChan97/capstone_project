@@ -5,13 +5,20 @@
  */
 package session;
 
+import entity.Comment;
 import entity.Community;
+import entity.PersonAnswer;
+import entity.Poll;
+import entity.Post;
+import entity.Reply;
 import entity.personEntities.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -43,6 +50,12 @@ public class DataInitSessionBean {
     private FollowerSessionBeanLocal followSB;
     @EJB
     private PersonSessionBeanLocal personSB;
+
+    @EJB
+    private PersonAnswerSessionBeanLocal paSB;
+
+    @EJB
+    private PollSessionBeanLocal pollSB;
 
     @EJB
     private MessageSessionBeanLocal messageSB;
@@ -186,6 +199,115 @@ public class DataInitSessionBean {
         subSB.subscribeToPerson(new Long(7), new Long(1));
     }
 
+    private Poll createPoll() throws NotValidException, NoResultException {
+        Poll postPoll = new Poll();
+        postPoll.setQuestion("What do you think the price of bitcoin will reach in 2021?");
+
+        String[] option = {"50k-75k", "75k-100k", "100k-200k", "200k-500k", "500k+"};
+
+        for (int i = 0; i < option.length; i++) {
+            String pollOption = option[i];
+            PersonAnswer personAnswer1 = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer1 = paSB.createPersonAnswer(personAnswer1);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer1);
+        }
+        return pollSB.createPoll(postPoll);
+    }
+
+    private void createPersonPost(Long personId) throws NotValidException, NoResultException {
+        Post post1 = new Post();
+        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setFileName("");
+        post1.setFileUrl("");
+        post1.setFileType("");
+        post1.setDatePosted(new Date());
+
+        postSB.createPostForPerson(personId, post1);
+    }
+
+    private void createPersonPostWithPoll(Long personId) throws NotValidException, NoResultException {
+        Post post2 = new Post();
+        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setFileName("");
+        post2.setFileUrl("");
+        post2.setFileType("");
+        post2.setPoll(createPoll());
+        post2.setDatePosted(new Date());
+
+        postSB.createPostForPerson(personId, post2);
+    }
+
+    private void createComment(Long personId, Long postId) throws NotValidException, NoResultException {
+        String[] comments = {
+            "wow very cool",
+            "never thought of that before",
+            "i think this is an interesting post",
+            "cool cool cool...",
+            "i'm a big fan of your content"
+        };
+
+        Comment comment = new Comment();
+        Random rand = new Random();
+        int randomNum = rand.nextInt(comments.length);
+        comment.setBody(comments[randomNum]);
+        comment.setDatePosted(new Date());
+
+        commentSB.createCommentForPost(personId, postId, comment);
+    }
+
+    private void createComments() throws NotValidException, NoResultException {
+        createComment(new Long(1), new Long(1));
+        createComment(new Long(2), new Long(1));
+        createComment(new Long(3), new Long(1));
+        createComment(new Long(4), new Long(1));
+        createComment(new Long(5), new Long(1));
+        createComment(new Long(6), new Long(1));
+
+    }
+
+    private void createReply(Long personId, Long commentId) throws NotValidException, NoResultException {
+        String[] replies = {
+            "wow very cool",
+            "never thought of that before",
+            "i think this is an interesting post",
+            "cool cool cool...",
+            "i'm a big fan of your content"
+        };
+
+        Reply reply = new Reply();
+        Random rand = new Random();
+        int randomNum = rand.nextInt(replies.length);
+        reply.setBody(replies[randomNum]);
+        reply.setDatePosted(new Date());
+
+        replySB.createReplyForComment(personId, commentId, reply);
+    }
+
+    private void createReplies() throws NotValidException, NoResultException {
+        for (int j = 1; j < 2; j++) {
+            for (int i = 1; i < 3; i++) {
+                createReply(new Long(i), new Long(j));
+            }
+        }
+    }
+
+    private void likePost() throws NoResultException, NotValidException {
+        postSB.likePost(new Long(1), new Long(2));
+        postSB.likePost(new Long(1), new Long(3));
+        postSB.likePost(new Long(1), new Long(4));
+    }
+
+    private void likeComment() throws NoResultException, NotValidException {
+        commentSB.likeComment(new Long(1), new Long(2));
+        commentSB.likeComment(new Long(1), new Long(3));
+        commentSB.likeComment(new Long(1), new Long(4));
+    }
+
+    private void likeReply() throws NoResultException, NotValidException {
+        replySB.likeReply(new Long(1), new Long(2));
+        replySB.likeReply(new Long(1), new Long(3));
+    }
+
     private void initData() {
 
         try {
@@ -193,6 +315,15 @@ public class DataInitSessionBean {
             createCommunities();
             createFollows();
             createSubs();
+            createPersonPost(new Long(2));
+            createPersonPostWithPoll(new Long(3));
+
+            createComments();
+            createReplies();
+            likePost();
+            likeComment();
+            likeReply();
+
         } catch (NotValidException | NoResultException ex) {
             ex.printStackTrace();
         }
