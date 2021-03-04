@@ -176,7 +176,7 @@ function App() {
                 />
               )}
             />
-            <Route exact path="/communityFeed" component={CommunityFeed} />
+            <Route exact path="/community" component={CommunityFeed} />
           </div>
         </div>
       </Switch>
