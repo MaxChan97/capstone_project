@@ -109,6 +109,20 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return personList.get(0);
     }
 
+    private void checkUsernameTaken(String username, Long personId) throws NotValidException {
+        Query q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
+        q.setParameter("username", username);
+        List<Person> persons = q.getResultList();
+
+        if (persons.size() > 0) {
+            for (Person p : persons) {
+                if (p.getId() != personId) {
+                    throw new NotValidException(PersonSessionBeanLocal.USERNAME_TAKEN);
+                }
+            }
+        }
+    }
+
     private void checkUsernameTaken(String username) throws NotValidException {
         Query q = em.createQuery("SELECT p from Person p WHERE p.username =:username");
         q.setParameter("username", username);
@@ -227,7 +241,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
         }
 
-        checkUsernameTaken(person.getUsername());
+        checkUsernameTaken(person.getUsername(), person.getId());
 
         Person oldPerson = em.find(Person.class, person.getId());
 

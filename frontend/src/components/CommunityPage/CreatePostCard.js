@@ -84,7 +84,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again!");
+        alert.show("Something went wrong, please try again! / Exceed character limit!");
       });
     }
   };
@@ -185,6 +185,9 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                   onChange={handlePost}
                   autoFocus
                 />
+                {post !== "" ? (
+                        <p style={{textAlign: "right"}}>{post.length}/2048</p>) : 
+                        (<p style={{textAlign: "right"}}>0/2048</p>)}
               </div>
             </div>
             {/* 
