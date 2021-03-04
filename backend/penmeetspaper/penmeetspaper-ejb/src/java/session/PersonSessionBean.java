@@ -259,6 +259,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }
+
+        em.flush();
     } // end updatePerson
 
     @Override

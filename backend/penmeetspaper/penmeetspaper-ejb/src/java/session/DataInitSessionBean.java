@@ -126,6 +126,36 @@ public class DataInitSessionBean {
         personSB.createPerson(user7);
     }
 
+    private void updateProfilePictures() throws NotValidException, NoResultException {
+        Person person = personSB.getPersonById(new Long(1));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/1.jpeg?alt=media&token=b7a7f029-7934-42cc-8117-4ed9434c9e63");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(2));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/2.jpg?alt=media&token=ae0cd3a5-2a21-4175-b486-d312ef9b3f9b");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(3));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/3.png?alt=media&token=2f08d223-83f6-4ca4-92be-f520d2fdbe3b");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(4));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/4.jpg?alt=media&token=69f3a6ad-2760-44a1-8cef-71cc5afa83de");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(5));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/5.jpg?alt=media&token=83ca539e-7ecc-49aa-b963-f01534f015fe");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(6));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/6.png?alt=media&token=eb821955-61df-4541-a24b-fc5fdcf73fc1");
+        personSB.updatePerson(person);
+
+        person = personSB.getPersonById(new Long(7));
+        person.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/7.png?alt=media&token=947053da-100e-45e8-9d04-4cb3308a6752");
+        personSB.updatePerson(person);
+    }
+
     private void createCommunities() throws NotValidException, NoResultException {
         String defaultCommunityPicture = "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb";
         String defaultCommunityBanner = "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897";
@@ -359,6 +389,7 @@ public class DataInitSessionBean {
 
         try {
             createPersons();
+            updateProfilePictures();
             createCommunities();
             createFollows();
             createSubs();
