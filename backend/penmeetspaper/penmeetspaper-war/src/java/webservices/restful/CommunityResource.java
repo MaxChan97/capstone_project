@@ -214,8 +214,9 @@ public class CommunityResource {
     }
 
     @GET
+    @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchCommunityByName(@QueryParam("username") String name) {
+    public Response searchCommunityByName(@QueryParam("name") String name) {
         try {
             List<Community> results = communitySB.searchCommunityByName(name);
             GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
