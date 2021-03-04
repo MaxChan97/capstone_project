@@ -179,6 +179,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                   id="standard-textarea"
                   placeholder="What's new?"
                   multiline
+                  fullWidth
                   InputProps={{ disableUnderline: true }}
                   value={post}
                   onChange={handlePost}
