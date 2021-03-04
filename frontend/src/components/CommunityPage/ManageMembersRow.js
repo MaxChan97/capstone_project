@@ -77,6 +77,7 @@ export default function ManageMembersRow({ member , refresh, setRefresh}) {
         })
         .fail((xhr, status, error) => {
           console.log(xhr.responseJSON.error);
+          closeBanPersonModal();
           if (xhr.responseJSON.error === "Missing Community parameter") {
             alert.show("Please include the community id");
           }
