@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from "react";
-import ProfileGroup from "./ProfileGroup";
-import SocialButtonGroup from "./SocialButtonGroup";
 import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
+import SubscribingGroup from "./SubscribingGroup";
+
 
 const StyledTabs = withStyles({
   indicator: {
@@ -24,7 +23,7 @@ const StyledTab = withStyles((theme) => ({
     color: "#4A5056",
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(-5),
+    marginLeft: theme.spacing(1),
     "&:focus": {
       opacity: 1,
       color: "#3B21CB",
@@ -33,16 +32,11 @@ const StyledTab = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function TopBar({ 
-  tabValue, 
-  setTabValue, 
-  communityName,
-  numMembers,
-  communityPicture,
-  communityBanner,
-  communityId,
-  refresh,
-  setRefresh
+export default function SubscribingPageTopBar({
+  tabValue,
+  setTabValue,
+  username,
+  numSubscribing
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -50,15 +44,6 @@ export default function TopBar({
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-    
-      <img
-        style={{
-          width:"100%"
-        }}
-        src={communityBanner}
-        alt="Community Banner"
-      />
-     
       <div
         style={{
           display: "flex",
@@ -68,22 +53,13 @@ export default function TopBar({
           backgroundColor: "#FDFDFD",
         }}
       >
-        <ProfileGroup 
-        communityName={communityName}
-        numMembers={numMembers}
-        communityPicture={communityPicture}
-        />
-        <SocialButtonGroup 
-        communityId = {communityId} 
-        communityName={communityName}
-        refresh = {refresh}
-        setRefresh = {setRefresh}/>
-        
+        <SubscribingGroup username={username} numSubscribing={numSubscribing} />
       </div>
-      <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%", paddingLeft:"5%"}}>
+      <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
-          <StyledTab label="Posts" />
-          <StyledTab label="About" />
+          <StyledTab label="Live" />
+          <StyledTab label="Videos" />
+          <StyledTab label="Channel" />
         </StyledTabs>
       </div>
     </div>

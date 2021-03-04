@@ -13,7 +13,6 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
 import java.util.Date;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -27,7 +26,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.CommentSessionBeanLocal;
@@ -106,8 +104,7 @@ public class PostResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-
-    }
+    } // end createPostForPerson
 
     @POST
     @Path("/community/{communityId}/person/{personId}")
@@ -144,23 +141,6 @@ public class PostResource {
         }
     } // end createPostForPerson
 
-    @GET
-    @Path("/person/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonsPost(@PathParam("id") Long personId) {
-        try {
-
-            List<Post> results = postSBLocal.getPersonsPost(personId);
-            GenericEntity<List<Post>> entity = new GenericEntity<List<Post>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end getPersonsPost
-
     @PUT
     @Path("/person/{personId}/edit/{postId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -178,7 +158,8 @@ public class PostResource {
 
         try {
 
-            postSBLocal.updatePost(p, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.updatePost(p);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
@@ -193,13 +174,30 @@ public class PostResource {
     public Response deletePersonsPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
         try {
 
-            postSBLocal.deletePostForPerson(postId, personId);
+            postSBLocal.checkPostCredentials(postId, personId);
+
+            postSBLocal.deletePostForPerson(postId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     } // end deletePersonsPost
+
+    @DELETE
+    @Path("/community/{personId}/{postId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunityPost(@PathParam("personId") Long personId, @PathParam("postId") Long postId) {
+        try {
+
+            postSBLocal.checkPostCredentials(postId, personId);
+            postSBLocal.deletePostForCommunity(postId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
     @POST
     @Path("/{postId}/person/{personId}")
@@ -272,4 +270,5 @@ public class PostResource {
             return buildError(e, 400);
         }
     } // end getPost
+
 }

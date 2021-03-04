@@ -1,10 +1,7 @@
 import React from "react";
+import defaultDP from "../../assets/Default Dp logo.svg";
 
-export default function ProfileGroup({
-  communityName,
-  numMembers,
-  communityPicture,
-}) {
+export default function SubscribingGroup({ username, numSubscribing}) {
   return (
     <div
       style={{
@@ -15,16 +12,6 @@ export default function ProfileGroup({
         width: "30%",
       }}
     >
-      <img
-        style={{
-          height: 110,
-          width: 110,
-          borderRadius: "50%",
-          display: "block",
-        }}
-        src={communityPicture}
-        alt="communityPicture"
-      />
       <div
         style={{
           display: "flex",
@@ -42,10 +29,10 @@ export default function ProfileGroup({
             fontSize: "30px",
           }}
         >
-          {communityName}
+          {"Subscriptions"}
         </p>
         <p style={{ paddingTop: "2px", color: "#6E757C", fontSize: "15px" }}>
-          {numMembers !== 1 ? numMembers + " Members" : numMembers + " Member"}
+          You subscribe to {numSubscribing} channels
         </p>
       </div>
     </div>

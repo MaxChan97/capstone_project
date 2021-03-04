@@ -6,19 +6,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import MakeCommentCard from "./MakeCommentCard";
-import CommentList from "./CommentList";
+
 import { useParams } from "react-router";
 import Api from "../../helpers/Api";
+import MakeCommentCard from "../../components/ProfilePage/MakeCommentCard";
+import CommentList from "../../components/ProfilePage/CommentList";
 import moment from "moment";
-import EditPostModal from "./EditPostModal";
-import DeletePostModal from "./DeletePostModal";
+
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 
 const ITEM_HEIGHT = 30;
 
-export default function ProfilePostWithComments() {
+export default function CommunityPostWithComments() {
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -33,7 +33,7 @@ export default function ProfilePostWithComments() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+/*
   const handleEdit = () => {
     openEditPostModal();
   };
@@ -65,6 +65,7 @@ export default function ProfilePostWithComments() {
     setRefresh(!refresh);
     setAnchorEl(null);
   }
+  */
   const [data, setData] = useState();
   const [liked, setLiked] = useState();
 
@@ -80,7 +81,7 @@ export default function ProfilePostWithComments() {
   }, [postId, refresh]);
 
   function loadData(postId) {
-    Api.getPost(postId, false)
+    Api.getPost(postId, true)
       .done((post) => {
         setData(post);
         checkedLiked(post);
@@ -132,6 +133,7 @@ export default function ProfilePostWithComments() {
         }}
       >
         <div class="col-md-9" style={{marginTop:"20px"}}>
+            {/*
           <DeletePostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -146,6 +148,7 @@ export default function ProfilePostWithComments() {
             refresh={refresh}
             setRefresh={setRefresh}
           />
+            */}
           <div
             class="card"
             style={{
@@ -182,6 +185,7 @@ export default function ProfilePostWithComments() {
                       >
                         <MoreVertIcon />
                       </IconButton>
+                      {/*
                       <Menu
                         id="long-menu"
                         anchorEl={anchorEl}
@@ -198,10 +202,11 @@ export default function ProfilePostWithComments() {
                         <MenuItem value={1} onClick={handleEdit}>
                           <div>Edit Post</div>
                         </MenuItem>
-                        <MenuItem value={2} onClick={handleDelete}>
+                        <MenuItem value={2} onClick={handleDelete} >
                           <div>Delete Post</div>
                         </MenuItem>
                       </Menu>
+                    */}
                     </div>
                   ) : (
                     <span></span>
@@ -237,22 +242,35 @@ export default function ProfilePostWithComments() {
                   )}
                 </p>
               </div>
+              
             </div>
+            
             <MakeCommentCard
               data={data}
               refresh={refresh}
               setRefresh={setRefresh}
             ></MakeCommentCard>
+            
             <CommentList
               comments={data.comments}
               refresh={refresh}
               setRefresh={setRefresh}
             ></CommentList>
+            
           </div>
+              
         </div>
       </div>
     </div>
   ) : (
-    <p>Post does not exist</p>
+    <h3
+    style={{
+      color: "gray",
+      textAlign: "center",
+      margin: "auto",
+    }}
+  >
+    Post does not exist
+  </h3>
   );
 }

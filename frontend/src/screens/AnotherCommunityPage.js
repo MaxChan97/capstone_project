@@ -23,7 +23,7 @@ export default function AnotherCommunityPage({communityId}) {
     if (currentUser) {
       loadData(communityId);
     }
-  }, [communityId]);
+  }, [communityId, refresh]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -34,6 +34,7 @@ export default function AnotherCommunityPage({communityId}) {
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
+        //setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
         alert.show("This community does not exist!");
@@ -47,7 +48,6 @@ export default function AnotherCommunityPage({communityId}) {
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
-              <CreatePostCard community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
               <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
@@ -74,6 +74,8 @@ export default function AnotherCommunityPage({communityId}) {
       communityBanner = {currentCommunity.communityBanner}
       numMembers = {currentCommunity.members.length}
       communityId = {communityId} 
+      refresh = {refresh}
+      setRefresh = {setRefresh}
       />
       {handleTabView(tabValue)}
     </div>

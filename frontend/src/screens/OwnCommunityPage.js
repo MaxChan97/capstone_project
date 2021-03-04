@@ -23,7 +23,7 @@ export default function OwnCommunityPage({communityId}) {
     if (currentUser) {
       loadData(communityId);
     }
-  }, [communityId]);
+  }, [communityId, refresh]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -34,6 +34,7 @@ export default function OwnCommunityPage({communityId}) {
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
+        //setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
         alert.show("This community does not exist!");

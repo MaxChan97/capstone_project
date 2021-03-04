@@ -40,7 +40,7 @@ public interface CommunitySessionBeanLocal {
 
     public Community createCommunity(Community community, Long ownerId) throws NotValidException, NoResultException;
 
-    public List<Community> searchCommunityByName(String name);
+    public List<Community> searchCommunityByName(String name) throws NoResultException, NotValidException;
 
     public Community getCommunityById(Long communityId) throws NoResultException, NotValidException;
 
@@ -63,5 +63,7 @@ public interface CommunitySessionBeanLocal {
     public List<Person> getBannedUsers(Long communityId) throws NoResultException, NotValidException;
 
     public Community getCommunityByIdForPost(Long communityId) throws NoResultException, NotValidException;
+
+    public void deleteCommunity(Long communityId) throws NotValidException, NoResultException;
 
 }

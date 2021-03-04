@@ -134,7 +134,7 @@ export default {
   //get a list of posts
   getPersonsPost(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/person/" + id,
+      url: this.SERVER_PREFIX + "/person/" + id + "/posts",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -143,9 +143,9 @@ export default {
     });
   },
 
-  getPost(id) {
+  getPost(postId, isCommunityPost) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/post/" + id,
+      url: this.SERVER_PREFIX + "/post/" + postId + "/" + isCommunityPost,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -700,7 +700,7 @@ export default {
 
   editCommunityDetails(
     communityId,
-    description,
+    communityDescription,
     topicEnums,
     communityProfilePicture,
     communityBanner
@@ -714,7 +714,7 @@ export default {
       },
       type: "PUT",
       data: JSON.stringify({
-        description: description,
+        communityDescription: communityDescription,
         topicEnums: topicEnums,
         communityProfilePicture: communityProfilePicture,
         communityBanner: communityBanner,
@@ -810,6 +810,33 @@ export default {
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  getFollowingAndOwnedCommunities(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/followingandowned",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  deleteCommunity(communityId, ownerId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/community/" +
+        communityId +
+        "/person/" +
+        ownerId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
     });
   },
 

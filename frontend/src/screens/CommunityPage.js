@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import OwnCommunityPage from "./OwnCommunityPage";
 import AnotherCommunityPage from "./AnotherCommunityPage";
 import Api from "../helpers/Api";
+import { useAlert } from "react-alert";
 
 export default function ProfilePage() {
   const { communityId } = useParams();
@@ -11,6 +12,9 @@ export default function ProfilePage() {
   const currentUser = useSelector((state) => state.currentUser);
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [ownedCommunities, setOwnedCommunities] = useState({});
+
+  const history = useHistory();
+  const alert = useAlert();
 
   useEffect(() => {
     if (currentUser) {
@@ -37,6 +41,7 @@ export default function ProfilePage() {
     })
     .fail((xhr, status, error) => {
     alert.show("This community does not exist!");
+    history.push("/community");
     });
 }
   console.log(ownedCommunities);

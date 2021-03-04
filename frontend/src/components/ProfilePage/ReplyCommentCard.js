@@ -47,7 +47,9 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-          
+        if (comment.trim() === "") {
+            alert.show("Reply cannot be empty");
+        } else {
         Api.createReplyForProfileComment(commentData.id, currentUser, comment)
           .done(() => {
             alert.show("Reply successfully created!");
@@ -57,6 +59,7 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
           .fail((xhr, status, error) => {
             alert.show("Something went wrong, please try again!");
           });
+        }
     };
 
     const [comment, setComment] = React.useState("");

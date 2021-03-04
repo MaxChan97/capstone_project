@@ -20,6 +20,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -145,7 +146,7 @@ public class CommunityResource {
     public Response editCommunity(@PathParam("communityId") Long communityId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        String description = jsonObject.getString("description");
+        String description = jsonObject.getString("communityDescription");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicEnums");
         String communityProfilePicture = jsonObject.getString("communityProfilePicture");
         String communityBanner = jsonObject.getString("communityBanner");
@@ -217,11 +218,15 @@ public class CommunityResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchCommunityByName(@QueryParam("username") String name) {
-        List<Community> results = communitySB.searchCommunityByName(name);
-        GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
-        };
+        try {
+            List<Community> results = communitySB.searchCommunityByName(name);
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
 
-        return Response.status(200).entity(entity).build();
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
 
     }
 
@@ -267,6 +272,18 @@ public class CommunityResource {
             };
 
             return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @DELETE
+    @Path("/{communityId}/person/{ownerId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunity(@PathParam("communityId") Long communityId, @PathParam("ownerId") Long ownerId) {
+        try {
+            communitySB.deleteCommunity(communityId);
+            return Response.status(204).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }

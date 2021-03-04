@@ -6,6 +6,7 @@ import Chip from "@material-ui/core/Chip";
 import Api from "../../helpers/Api";
 import Box from "@material-ui/core/Box";
 import * as dayjs from "dayjs";
+import { useAlert } from "react-alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,7 @@ function toTitleCase(str) {
 export default function AboutMe() {
   const classes = useStyles();
   const { communityId } = useParams();
+  const alert = useAlert();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [currentPerson, setCurrentPerson] = useState({});
@@ -53,7 +55,7 @@ export default function AboutMe() {
   }
 
   function loadData(communityId) {
-    Api.getCommunityById(communityId)
+    Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);

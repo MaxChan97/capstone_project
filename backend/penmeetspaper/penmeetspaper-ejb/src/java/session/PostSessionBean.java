@@ -82,7 +82,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
         return community;
     }
 
-    private void checkPostCredentials(Post post, Long personId) throws NotValidException {
+    @Override
+    public void checkPostCredentials(Long postId, Long personId) throws NotValidException, NoResultException {
+        Post post = emGetPost(postId);
+
         if (!Objects.equals(post.getAuthor().getId(), personId)) {
             throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
         }
@@ -139,18 +142,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end createPostForCommunity
 
     @Override
-    public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException {
-        Person person = emGetPerson(personId);
-
-        List<Post> posts = person.getPosts();
-        for (Post p : posts) {
-            p = getPostById(p.getId());
-        }
-        return posts;
-
-    } // end getPersonsPost
-
-    @Override
     public List<Person> searchPostByTitle(String title) {
         Query q;
         if (title != null) {
@@ -164,14 +155,12 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end searchPostByTitle
 
     @Override
-    public void updatePost(Post post, Long personId) throws NoResultException, NotValidException {
+    public void updatePost(Post post) throws NoResultException, NotValidException {
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
         }
 
         Post oldPost = emGetPost(post.getId());
-
-        checkPostCredentials(oldPost, personId);
 
         oldPost.setTitle(post.getTitle());
         oldPost.setBody(post.getBody());
@@ -179,15 +168,28 @@ public class PostSessionBean implements PostSessionBeanLocal {
     } // end updatePost
 
     @Override
-    public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException {
+    public void deletePostForPerson(Long postId) throws NoResultException, NotValidException {
         Post post = emGetPost(postId);
-        Person person = emGetPerson(personId);
-
-        checkPostCredentials(post, personId);
+        Person person = post.getAuthor();
 
         // unlinking
         person.getPosts().remove(post);
         post.setAuthor(null);
+
+        em.remove(post);
+    }
+
+    @Override
+    public void deletePostForCommunity(Long postId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+        Community c = post.getPostCommunity();
+
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        c.getPosts().remove(post);
+        post.setPostCommunity(null);
 
         em.remove(post);
     }

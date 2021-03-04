@@ -11,6 +11,7 @@ import entity.personEntities.Person;
 import entity.personToPersonEntities.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
@@ -110,7 +111,7 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
 
     // Search Community
     @Override
-    public List<Community> searchCommunityByName(String name) {
+    public List<Community> searchCommunityByName(String name) throws NoResultException, NotValidException {
         Query q;
         if (name != null) {
             q = em.createQuery("SELECT c FROM Community c WHERE "
@@ -120,7 +121,13 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             q = em.createQuery("SELECT c FROM Community c");
         }
 
-        return q.getResultList();
+        List<Community> comms = q.getResultList();
+
+        for (Community c : comms) {
+            c = getCommunityById(c.getId());
+        }
+
+        return comms;
     } // end of searchCommunityByName
 
     // Edit Community
@@ -162,6 +169,11 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
         for (Person p : members) {
             p = getDetachedPerson(p);
         }
+
+        Ban ban = community.getBan();
+        em.detach(ban);
+
+        community.setBan(banSB.getDetachedBan(ban.getId()));
 
         return community;
 
@@ -315,4 +327,40 @@ public class CommunitySessionBean implements CommunitySessionBeanLocal {
             throw new NotValidException(CommunitySessionBeanLocal.BANNED);
         }
     }
+
+    @Override
+    public void deleteCommunity(Long communityId) throws NotValidException, NoResultException {
+        Community c = emGetCommunity(communityId);
+
+        System.out.println(c.getId());
+
+        List<Post> posts = c.getPosts();
+        List<Long> copy = new ArrayList();
+
+        for (Post p : posts) {
+            copy.add(p.getId());
+        }
+
+        for (Long postId : copy) {
+            postSB.deletePostForCommunity(postId);
+        }
+
+        c.setPosts(null);
+
+        List<Person> members = c.getMembers();
+
+        for (Person p : members) {
+            p.getFollowingCommunities().remove(c);
+        }
+
+        c.setMembers(null);
+
+        Person owner = c.getOwner();
+        owner.getOwnedCommunities().remove(c);
+        c.setOwner(null);
+
+        em.remove(c);
+        em.flush();
+    }
+
 }

@@ -184,8 +184,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         <div
           class="card"
           style={{
-            minWidth: "73ch",
-            maxWidth: "73ch",
+            minWidth: "72ch",
+            maxWidth: "72ch",
           }}
         >
           <div class="card-body">
@@ -242,7 +242,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   <span></span>
                 )}
               </div>
-              {/*
+              
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
@@ -261,7 +261,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   </div>
                 ))}
               <p>{data.body}</p>
-              
+              {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
@@ -313,7 +313,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
                 <span>
                   <Link
-                    to={"/post/" + data.id}
+                    to={"/community/post/" + data.id}
                     style={{ marginLeft: 10, color: "black" }}
                   >
                     <i class="fas fa-comments mr-1"></i> {data.comments.length}

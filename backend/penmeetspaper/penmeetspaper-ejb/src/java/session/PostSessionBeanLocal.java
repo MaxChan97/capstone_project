@@ -32,13 +32,9 @@ public interface PostSessionBeanLocal {
 
     public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException;
 
-    public List<Post> getPersonsPost(Long personId) throws NoResultException, NotValidException;
-
     public List<Person> searchPostByTitle(String title);
 
-    public void updatePost(Post post, Long personId) throws NoResultException, NotValidException;
-
-    public void deletePostForPerson(Long postId, Long personId) throws NoResultException, NotValidException;
+    public void updatePost(Post post) throws NoResultException, NotValidException;
 
     public void createPostForCommunity(Post post, Long personId, Long communityId) throws NoResultException, NotValidException;
 
@@ -49,5 +45,11 @@ public interface PostSessionBeanLocal {
     public Post getPostById(Long postId) throws NoResultException, NotValidException;
 
     public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException;
+
+    public void checkPostCredentials(Long postId, Long personId) throws NotValidException, NoResultException;
+
+    public void deletePostForPerson(Long postId) throws NoResultException, NotValidException;
+
+    public void deletePostForCommunity(Long postId) throws NoResultException, NotValidException;
 
 }
