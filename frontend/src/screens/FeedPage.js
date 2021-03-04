@@ -6,6 +6,7 @@ import LiveHorizontalMenu from "../components/FeedPage/LiveHorizontalMenu";
 import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import PostList from "../components/CommunityPage/PostList";
+import PostListOfFollowing from "../components/FeedPage/PostListOfFollowing";
 
 export default function FeedPage() {
   const leaderboardList = [
@@ -54,10 +55,9 @@ export default function FeedPage() {
         </div>
         <div className="row">
           <div className="col-md-8 mt-4">
-            <CreatePostCard />
-            <ProfilePostCard />
-            <PostList />
+            <PostListOfFollowing></PostListOfFollowing>
           </div>
+          
           <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
             <LeaderboardCard data={leaderboard} />
           </div>

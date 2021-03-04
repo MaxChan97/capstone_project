@@ -893,4 +893,44 @@ export default {
       }),
     });
   },
+
+  //get posts of people that current user is following
+  getFollowingPosts(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followingPosts",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  //get posts of people that current user is following
+  getFollowingCommunityPosts(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + id + "/followingCommunityPosts",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  isSubscribed(subscriberId, publisherId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/person/" +
+        subscriberId +
+        "/isSubscribedTo/" +
+        publisherId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };
