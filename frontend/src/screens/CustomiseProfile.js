@@ -172,8 +172,6 @@ export default function CustomiseProfile() {
   }))(Button);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
     Api.editPersonProfileInformation(
       currentUser,
       username,
