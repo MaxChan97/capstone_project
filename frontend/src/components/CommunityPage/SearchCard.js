@@ -28,9 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchCard() {
+export default function SearchCard({ searchString, setSearchString }) {
   const classes = useStyles();
-  const [searchString, setSearchString] = useState("");
   const currentUser = useSelector((state) => state.currentUser);
   const { communityId } = useParams();
   const alert = useAlert();
@@ -62,7 +61,7 @@ export default function SearchCard() {
     <div className="card card-primary mx-2 mt-3">
       <div className="card-body">
         <p className="font-weight-normal">
-          Search in <b>React is Fun</b>
+          Search in <b>{currentCommunity.name}</b>
         </p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
@@ -113,14 +112,14 @@ export default function SearchCard() {
             </li>
           </ul>
         </div>
-        <p className="font-weight-light">
+        {/*<p className="font-weight-light">
           <i class="fas fa-users"></i>{" "}
           {currentCommunity.members !== undefined
             ? currentCommunity.members.length !== 1
               ? currentCommunity.members.length + " Members"
               : currentCommunity.members.length + " Member"
             : null}
-        </p>
+          </p>*/}
         <p className="font-weight-light">
           <i class="fas fa-birthday-cake"></i> Created{" "}
           {currentCommunity.dateCreated !== undefined

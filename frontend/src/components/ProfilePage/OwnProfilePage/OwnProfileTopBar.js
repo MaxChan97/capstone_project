@@ -48,7 +48,11 @@ export default function OwnProfileTopBar({
     <div style={{ display: "flex", flexDirection: "column" }}>
       {profileBanner ? (
         <div>
-          <img className="img-fluid" src={profileBanner} />
+          <img
+            className="img-fluid"
+            style={{ width: "100%" }}
+            src={profileBanner}
+          />
         </div>
       ) : (
         <div

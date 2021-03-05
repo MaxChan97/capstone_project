@@ -17,6 +17,8 @@ export default function OwnCommunityPage({ communityId }) {
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
 
+  const [searchString, setSearchString] = useState("");
+
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -56,10 +58,14 @@ export default function OwnCommunityPage({ communityId }) {
                 community={currentCommunity}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                searchString={searchString}
               />
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
-              <SearchCard />
+              <SearchCard
+                searchString={searchString}
+                setSearchString={setSearchString}
+              />
             </div>
           </div>
         </div>

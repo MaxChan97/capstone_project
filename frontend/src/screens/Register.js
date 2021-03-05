@@ -94,7 +94,7 @@ export default function Register() {
         setUsername("");
         setPassword("");
         dispatch(logIn(createdPerson.id));
-        history.push("/");
+        history.push("/feed");
       })
       .fail((xhr, status, error) => {
         if (xhr.responseJSON.error === "Email taken") {

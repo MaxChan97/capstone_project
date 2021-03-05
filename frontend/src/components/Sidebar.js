@@ -9,7 +9,6 @@ import categoriesLogo from "../assets/Categories Logo.svg";
 import feedLogo from "../assets/Feed Logo.svg";
 import subscribeLogo from "../assets/subscribeLogo.svg";
 
-
 function Sidebar() {
   let location = useLocation();
 
@@ -218,7 +217,7 @@ function Sidebar() {
             <li className="nav-item">
               {location.pathname === "/community" ? (
                 <Link
-                  to="/communityFeed"
+                  to="/community"
                   className="nav-link"
                   style={{ backgroundColor: "#EAECEF" }}
                 >
@@ -238,7 +237,7 @@ function Sidebar() {
                   </div>
                 </Link>
               ) : (
-                <Link to="/communityFeed" className="nav-link">
+                <Link to="/community" className="nav-link">
                   <div
                     style={{
                       display: "flex",
