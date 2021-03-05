@@ -31,9 +31,7 @@ export default function PostList({ community, refresh, setRefresh }) {
   }, [community]);
 
   function loadData(community) {
-   
     setDataList(community.posts.reverse());
-     
   }
 
   return dataList && dataList.length > 0 ? (
@@ -46,14 +44,14 @@ export default function PostList({ community, refresh, setRefresh }) {
               data={data}
               refresh={refresh}
               setRefresh={setRefresh}
-              community = {community}
+              community={community}
             />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-    <div style={{marginTop: "30px"}}>
+    <div style={{ marginTop: "30px" }}>
       <h3
         style={{
           color: "gray",
