@@ -18,7 +18,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostList({ community, refresh, setRefresh }) {
+export default function PostList({
+  community,
+  refresh,
+  setRefresh,
+  searchString,
+}) {
   const classes = useStyles();
   const alert = useAlert();
 
@@ -26,14 +31,20 @@ export default function PostList({ community, refresh, setRefresh }) {
 
   useEffect(() => {
     if (community) {
-      loadData(community);
+      loadData(community, searchString);
     }
-  }, [community]);
+  }, [community, searchString]);
 
-  function loadData(community) {
-   
-    setDataList(community.posts.reverse());
-     
+  function loadData(community, searchString) {
+    if (community != undefined && community.posts != undefined) {
+      let posts = community.posts.filter(
+        (post) =>
+          post.body != undefined &&
+          post.body.toLowerCase().includes(searchString.toLowerCase())
+      );
+
+      setDataList(posts.reverse());
+    }
   }
 
   return dataList && dataList.length > 0 ? (
@@ -46,14 +57,14 @@ export default function PostList({ community, refresh, setRefresh }) {
               data={data}
               refresh={refresh}
               setRefresh={setRefresh}
-              community = {community}
+              community={community}
             />
           </ListItem>
         </div>
       ))}
     </List>
   ) : (
-    <div style={{marginTop: "30px"}}>
+    <div style={{ marginTop: "30px" }}>
       <h3
         style={{
           color: "gray",

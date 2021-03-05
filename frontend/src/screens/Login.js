@@ -95,7 +95,7 @@ export default function Login() {
         setEmail("");
         setPassword("");
         dispatch(logIn(loggedInPerson.id));
-        history.push("/");
+        history.push("/feed");
       })
       .fail((xhr, status, error) => {
         if (xhr.responseJSON.error === "Invalid credentials") {

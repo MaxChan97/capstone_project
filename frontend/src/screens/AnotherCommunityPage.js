@@ -10,12 +10,14 @@ import SearchCard from "../components/CommunityPage/SearchCard";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 
-export default function AnotherCommunityPage({communityId}) {
+export default function AnotherCommunityPage({ communityId }) {
   const alert = useAlert();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
+
+  const [searchString, setSearchString] = useState("");
 
   const currentUser = useSelector((state) => state.currentUser);
   const [joined, setJoined] = useState(false);
@@ -24,22 +26,22 @@ export default function AnotherCommunityPage({communityId}) {
     if (currentUser) {
       loadData(communityId);
       Api.getFollowingCommunities(currentUser)
-      .done((followObjects) => {
-        let followingFlag = false;
-        for (var i = 0; i < followObjects.length; i++) {
-          if (Number(followObjects[i].id) === Number(communityId)) {
-            followingFlag = true;
-            setJoined(true);
-            break;
+        .done((followObjects) => {
+          let followingFlag = false;
+          for (var i = 0; i < followObjects.length; i++) {
+            if (Number(followObjects[i].id) === Number(communityId)) {
+              followingFlag = true;
+              setJoined(true);
+              break;
+            }
           }
-        }
-        if (followingFlag === false) {
-          setJoined(false);
-        }
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
+          if (followingFlag === false) {
+            setJoined(false);
+          }
+        })
+        .fail((xhr, status, error) => {
+          alert.show(xhr.responseJSON.error);
+        });
     }
   }, [communityId, refresh]);
 
@@ -57,19 +59,33 @@ export default function AnotherCommunityPage({communityId}) {
       });
   }
 
-
   const handleTabView = (tabValue) => {
     if (currentCommunity.id !== undefined && tabValue === 0) {
       return (
         <div className="container mt-3 ">
           <div className="row">
             <div className="col-md-8">
-              {joined == true ? (<CreatePostCard community = {currentCommunity}
-               refresh= {refresh} setRefresh={setRefresh}></CreatePostCard>) : ("")}
-              <PostList community = {currentCommunity} refresh= {refresh} setRefresh={setRefresh}/>
+              {joined == true ? (
+                <CreatePostCard
+                  community={currentCommunity}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                ></CreatePostCard>
+              ) : (
+                ""
+              )}
+              <PostList
+                community={currentCommunity}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                searchString={searchString}
+              />
             </div>
             <div className="col-md-4" style={{ textAlign: "left" }}>
-              <SearchCard />
+              <SearchCard
+                searchString={searchString}
+                setSearchString={setSearchString}
+              />
             </div>
           </div>
         </div>
@@ -81,21 +97,20 @@ export default function AnotherCommunityPage({communityId}) {
     return "";
   };
 
-  return (
-    currentCommunity.members !== undefined ? (
-      <div className="content-wrapper">
-      <TopBar 
-      tabValue={tabValue} 
-      setTabValue={setTabValue} 
-      communityName={currentCommunity.name}
-      communityPicture= {currentCommunity.communityProfilePicture}
-      communityBanner = {currentCommunity.communityBanner}
-      numMembers = {currentCommunity.members.length}
-      communityId = {communityId} 
-      refresh = {refresh}
-      setRefresh = {setRefresh}
+  return currentCommunity.members !== undefined ? (
+    <div className="content-wrapper">
+      <TopBar
+        tabValue={tabValue}
+        setTabValue={setTabValue}
+        communityName={currentCommunity.name}
+        communityPicture={currentCommunity.communityProfilePicture}
+        communityBanner={currentCommunity.communityBanner}
+        numMembers={currentCommunity.members.length}
+        communityId={communityId}
+        refresh={refresh}
+        setRefresh={setRefresh}
       />
       {handleTabView(tabValue)}
     </div>
-    ) : (null));
+  ) : null;
 }
