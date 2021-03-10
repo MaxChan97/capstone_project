@@ -13,6 +13,11 @@ import DeletePostModal from "./DeletePostModal";
 import FileTypes from "../../components/FileTypes.js";
 import Poll from "react-polls";
 import { useAlert } from "react-alert";
+import MakeCommentCardForFeed from "./MakeCommentCardForFeed";
+import Tooltip from '@material-ui/core/Tooltip';
+import CommentListForFeed from "./CommentListForFeed";
+import EditPost from "./EditPost";
+
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
@@ -26,6 +31,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   const [votedAnswer, setVotedAnswer] = useState();
   const [pollRefresh, setPollRefresh] = useState(true);
 
+  const [edit, setEdit] = useState(false);
   useEffect(() => {
     if (data.poll != undefined) {
       let hasVoted = false;
@@ -88,7 +94,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
   };
 
   const handleEdit = () => {
-    openEditPostModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -198,7 +205,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     src={data.author.profilePicture || defaultDP}
                   />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id} style={{color: "#3B21CB",}}>
+                    <Link to={"/profile/" + data.author.id} style={{ color: "#3B21CB", }}>
                       {data.author.username}
                     </Link>
                   </span>
@@ -263,7 +270,12 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     </p>
                   </div>
                 ))}
-              <p>{data.body}</p>
+              
+              {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditPost>}
+
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
@@ -302,7 +314,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                  <Link onClick={handleUnlike} style={{ color: "#3B21CB", }}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
@@ -312,15 +324,30 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                 )}
 
                 <span>
-                  <Link
-                    to={"/post/" + data.id}
-                    style={{ marginLeft: 10, color: "black" }}
-                  >
-                    <i class="fas fa-comments mr-1"></i> {data.comments.length}
-                  </Link>
+                  <Tooltip title="Click to view full post" aria-label="View full post">
+                    <Link
+                      to={"/post/" + data.id}
+                      style={{ marginLeft: 10, color: "black", }}
+                    >
+                      <i class="fas fa-comments mr-1"></i> {data.comments.length}
+
+                    </Link>
+                  </Tooltip>
                 </span>
+
               </p>
             </div>
+            <MakeCommentCardForFeed
+              data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            ></MakeCommentCardForFeed>
+            <CommentListForFeed
+              comments={data.comments}
+              refresh={refresh}
+              setRefresh={setRefresh}
+              post={data}
+            ></CommentListForFeed>
           </div>
         </div>
       </div>

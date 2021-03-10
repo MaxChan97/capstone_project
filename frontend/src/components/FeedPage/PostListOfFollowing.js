@@ -68,6 +68,15 @@ export default function PostListOfFollowing() {
       >
         No posts yet...
       </h3>
+      <p
+        style={{
+          color: "gray",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        Follow or subscribe to someone to view their posts here!
+      </p>
     </div>
   );
 }
