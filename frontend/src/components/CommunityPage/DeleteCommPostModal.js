@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
+import { Redirect, useHistory } from "react-router";
 
 const useStyles = makeStyles({
   cardContainer: {
@@ -69,6 +70,7 @@ export default function DeleteCommPostModal({
   const currentUser = useSelector((state) => state.currentUser);
   const theme = useTheme();
   const alert = useAlert();
+  const history = useHistory();
 
   async function handleSubmit() {
     Api.deleteCommunityPost(currentUser, data.id)
@@ -76,6 +78,7 @@ export default function DeleteCommPostModal({
         alert.show("Delete success!");
         setRefresh(!refresh);
         handleClose();
+        history.push("/community/" + community.id);
       })
       .fail((xhr, status, error) => {
         alert.show("Something went wrong, please try again!");

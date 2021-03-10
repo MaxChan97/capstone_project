@@ -40,7 +40,7 @@ export default function AnotherProfilePage({ personId }) {
   }
 
   const handleTabView = (tabValue) => {
-    if (tabValue === 1) {
+    if (tabValue === 0) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
@@ -80,6 +80,7 @@ export default function AnotherProfilePage({ personId }) {
             setRefresh={setRefresh}
             profilePicture={anotherPerson.profilePicture}
             profileBanner={anotherPerson.profileBanner}
+            anotherPerson={anotherPerson}
           />
           {handleTabView(tabValue)}
         </div>

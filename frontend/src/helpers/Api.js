@@ -887,6 +887,10 @@ export default {
         "/ban/" +
         "person/" +
         personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
       type: "PUT",
       data: JSON.stringify({
         ownerId: ownerId,

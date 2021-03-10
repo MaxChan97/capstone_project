@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
+import { Redirect, useHistory } from "react-router";
 
 const useStyles = makeStyles({
   cardContainer: {
@@ -68,13 +69,15 @@ export default function DeletePostModal({
   const currentUser = useSelector((state) => state.currentUser);
   const theme = useTheme();
   const alert = useAlert();
-
+  const history = useHistory();
+  
   async function handleSubmit() {
     Api.deleteProfilePost(currentUser, data.id)
       .done(() => {
         alert.show("Delete success!");
         setRefresh(!refresh);
         handleClose();
+        history.push("/profile/" + currentUser);
       })
       .fail((xhr, status, error) => {
         alert.show("Something went wrong, please try again!");

@@ -72,6 +72,11 @@ export default function TopBar({
           communityPicture={communityPicture}
           communityId={communityId}
         />
+        <SocialButtonGroup
+          communityId={communityId}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
       </div>
       <div
         style={{

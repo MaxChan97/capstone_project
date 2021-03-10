@@ -11,7 +11,10 @@ export default function FollowerRow({ follower }) {
           <p className="text-left"> {person.username} </p>
         </div> */}
         <div className="col-md-3">
-          <img className="img-fluid" src={person.profilePicture || defaultDP} />
+          <img
+            className="img-fluid rounded-circle"
+            src={person.profilePicture || defaultDP}
+          />
         </div>
         <div className="col-md-7">
           <a href={"/profile/" + person.id} class="link text-dark">

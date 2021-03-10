@@ -251,11 +251,31 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             oldPerson.setPassword(person.getPassword());
             oldPerson.setDescription(person.getDescription());
             oldPerson.setTopicInterests(person.getTopicInterests());
-            oldPerson.setChatIsPaid(person.isChatIsPaid());
-            oldPerson.setHasExplicitLanguage(person.isHasExplicitLanguage());
             oldPerson.setProfilePicture(person.getProfilePicture());
             oldPerson.setProfileBanner(person.getProfileBanner());
             oldPerson.setResetId(person.getResetId());
+        } else {
+            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        em.flush();
+    } // end updatePerson
+
+    @Override
+    public void updatePersonInfo(Person person) throws NoResultException, NotValidException {
+        if (person == null) {
+            throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);
+        }
+
+        checkUsernameTaken(person.getUsername(), person.getId());
+
+        Person oldPerson = em.find(Person.class, person.getId());
+
+        if (oldPerson != null) {
+
+            oldPerson.setChatIsPaid(person.isChatIsPaid());
+            oldPerson.setHasExplicitLanguage(person.isHasExplicitLanguage());
+
         } else {
             throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
         }

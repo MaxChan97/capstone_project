@@ -33,6 +33,8 @@ import SearchPage from "./screens/SearchPage";
 import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 import ViewCommunityMembers from "./screens/ViewCommunityMembers";
 import CommunityFeed from "./screens/CommunityFeed";
+import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
+import BannedPage from "./screens/BannedPage";
 
 function App() {
   let location = useLocation();
@@ -57,7 +59,8 @@ function App() {
     } else if (
       location.pathname === "/customiseProfile" ||
       location.pathname === "/subscribers" ||
-      location.pathname === "/userSettings"
+      location.pathname === "/userSettings" ||
+      location.pathname === "/changePassword"
     ) {
       return (
         <div>
@@ -68,6 +71,23 @@ function App() {
             setSearchRefresh={setSearchRefresh}
           />
           <ChannelDashboardSidebar />
+        </div>
+      );
+    } else if (
+      location.pathname.split("/")[location.pathname.split("/").length - 1] ===
+        "manageDetails" ||
+      location.pathname.split("/")[location.pathname.split("/").length - 1] ===
+        "manageMembers"
+    ) {
+      return (
+        <div>
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <CommunityDashboardSidebar />
         </div>
       );
     } else {
@@ -115,6 +135,7 @@ function App() {
             <Route exact path="/createCommunity" component={CreateCommunity} />
             <Route exact path="/changePassword" component={ChangePassword} />
             <Route exact path="/myCommunities" component={MyCommunities} />
+            <Route exact path="/community/:communityId/banned" component={BannedPage} />
 
             <Route
               exact
@@ -157,7 +178,7 @@ function App() {
                 />
               )}
             />
-            <Route exact path="/communityFeed" component={CommunityFeed} />
+            <Route exact path="/community" component={CommunityFeed} />
           </div>
         </div>
       </Switch>

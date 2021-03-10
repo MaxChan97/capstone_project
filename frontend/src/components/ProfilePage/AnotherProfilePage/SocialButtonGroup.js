@@ -31,6 +31,7 @@ export default function SocialButtonGroup({
   pricingPlan,
   refresh,
   setRefresh,
+  anotherPerson,
 }) {
   const alert = useAlert();
 
@@ -234,6 +235,36 @@ export default function SocialButtonGroup({
     }
   }
 
+  function renderChatButton() {
+    if (anotherPerson.chatIsPaid === true) {
+      if (subscriptionStatus !== "NotSubscribed") {
+        return (
+          <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
+            <Button
+              style={{ height: "40px", width: "25px", outline: "none" }}
+              variant="contained"
+            >
+              <img src={chatLogo} alt="chatLogo" />
+            </Button>
+          </Link>
+        );
+      } else {
+        return "";
+      }
+    } else {
+      return (
+        <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
+          <Button
+            style={{ height: "40px", width: "25px", outline: "none" }}
+            variant="contained"
+          >
+            <img src={chatLogo} alt="chatLogo" />
+          </Button>
+        </Link>
+      );
+    }
+  }
+
   return (
     <div
       style={{
@@ -245,14 +276,7 @@ export default function SocialButtonGroup({
         marginRight: "2.31%",
       }}
     >
-      <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
-        <Button
-          style={{ height: "40px", width: "25px", outline: "none" }}
-          variant="contained"
-        >
-          <img src={chatLogo} alt="chatLogo" />
-        </Button>
-      </Link>
+      {renderChatButton()}
       {following === false ? (
         <ColorButton
           style={{
