@@ -14,7 +14,9 @@ export default function FollowerRow({ follower }) {
           <img className="img-fluid" src={person.profilePicture || defaultDP} />
         </div>
         <div className="col-md-7">
-          <p className="text-left">{person.username}</p>
+          <a href={"/profile/" + person.id} class="link text-dark">
+            {person.username}
+          </a>
         </div>
       </div>
     </div>
