@@ -70,7 +70,7 @@ export default function AnotherCommunityPage({ communityId }) {
       return (
         <div className="container mt-3 ">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-9">
               {joined == true ? (
                 <CreatePostCard
                   community={currentCommunity}
@@ -87,7 +87,7 @@ export default function AnotherCommunityPage({ communityId }) {
                 searchString={searchString}
               />
             </div>
-            <div className="col-md-4" style={{ textAlign: "left" }}>
+            <div className="col-md-3" style={{ textAlign: "left" }}>
               <SearchCard
                 searchString={searchString}
                 setSearchString={setSearchString}

@@ -166,8 +166,8 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         <div
           className="card"
           style={{
-            minWidth: "73ch",
-            maxWidth: "73ch",
+            minWidth: "80ch",
+            maxWidth: "80ch",
             margin: "auto",
           }}
         >

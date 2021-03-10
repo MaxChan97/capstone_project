@@ -59,22 +59,7 @@ export default function CommentListForFeed({ comments, refresh, setRefresh, post
                     </div>
                 ))}
             </List>
-            <div style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-            }}>
-                 {comments.length > 2 ? (
-                <Tooltip title="Click to view full post and all comments" aria-label="View full post">
-                    <Link
-                        to={"/post/" + post.id}
-                        style={{ color: "#3B21CB", margin: "0, auto", textAlign: "center" }}
-                    >
-                        View all comments
-
-                </Link>
-                </Tooltip> ):("")}
-            </div>
+            
         </div>
     ) : (
         <p></p>
