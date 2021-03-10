@@ -7,9 +7,7 @@ import Button from "@material-ui/core/Button";
 import * as dayjs from "dayjs";
 import { MessageList, Input } from "react-chat-elements";
 import chatSendButton from "../../assets/chatSendButton.png";
-import chatSmile from "../../assets/chatSmile.png";
 import chatPaperClip from "../../assets/chatPaperClip.png";
-import chatMedia from "../../assets/chatMedia.png";
 import Api from "../../helpers/Api";
 import { db } from "../../firebase";
 import { animateScroll } from "react-scroll";
@@ -20,6 +18,8 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import FileTypes from "../../components/FileTypes.js";
+import CircularProgressWithLabel from "../../components/CircularProgressWithLabel.js";
+
 var uuid = require("uuid");
 
 const styles = {
@@ -443,14 +443,15 @@ export default function ChatBox({
           open={open}
         >
           <DialogContent dividers>
-            {fileUrl &&
-              fileName &&
+            {fileName &&
               fileType &&
               (fileType.split("/")[0] == "image" ? (
-                progress == 100 ? (
-                  <img className="img-fluid mx-auto d-block" src={fileUrl} />
+                progress < 100 ? (
+                  <div className="d-flex justify-content-center">
+                    <CircularProgressWithLabel value={progress} />
+                  </div>
                 ) : (
-                  <progress value={progress} max="100" />
+                  <img className="img-fluid mx-auto d-block" src={fileUrl} />
                 )
               ) : (
                 <FileTypes data={fileName.split(".")[1]}></FileTypes>

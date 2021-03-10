@@ -11,6 +11,7 @@ import FileTypes from "../../../components/FileTypes.js";
 import chatPaperClip from "../../../assets/chatPaperClip.png";
 import postPoll from "../../../assets/postPoll.png";
 import CreatePollCard from "./CreatePollCard";
+import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel.js";
 
 var uuid = require("uuid");
 
@@ -159,12 +160,13 @@ export default function CreatePostCard({
                 />
               </div>
               <div className="col-11">
-                {fileUrl &&
-                  fileName &&
+                {fileName &&
                   fileType &&
                   (fileType.split("/")[0] == "image" ? (
                     progress < 100 ? (
-                      <progress value={progress} max="100" />
+                      <div className="d-flex justify-content-center">
+                        <CircularProgressWithLabel value={progress} />
+                      </div>
                     ) : (
                       <img
                         className="mx-auto d-block"
