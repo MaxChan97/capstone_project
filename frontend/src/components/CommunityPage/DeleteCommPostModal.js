@@ -81,7 +81,7 @@ export default function DeleteCommPostModal({
         history.push("/community/" + community.id);
       })
       .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again!");
+        //alert.show("Something went wrong, please try again!");
         handleClose();
       });
   }

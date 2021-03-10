@@ -270,8 +270,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     </p>
                   </div>
                 ))}
-              
-              {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
+
+              {edit == false ? (<p>{data.body}</p>) : <EditPost autofocus data={data}
                 refresh={refresh}
                 setRefresh={setRefresh}
                 setEdit={setEdit}></EditPost>}
@@ -348,6 +348,25 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
               setRefresh={setRefresh}
               post={data}
             ></CommentListForFeed>
+            
+            <div style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}>
+
+
+              {data.comments.length > 2 ? (
+                <Tooltip title="Click to view full post and all comments" aria-label="View full post">
+                  <Link
+                    to={"/post/" + data.id}
+                    style={{ color: "#3B21CB", margin: "0, auto", textAlign: "center" }}
+                  >
+                    View all comments
+
+                </Link>
+                </Tooltip>) : ("")}
+            </div>
           </div>
         </div>
       </div>

@@ -69,7 +69,17 @@ export default function PostListOfFollowing() {
         }}
       >
         No posts yet...
+        
       </h3>
+      <p
+        style={{
+          color: "gray",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        Join a community to view their posts here!
+      </p>
     </div>
   );
 }
