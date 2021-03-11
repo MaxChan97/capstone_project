@@ -35,6 +35,7 @@ import ViewCommunityMembers from "./screens/ViewCommunityMembers";
 import CommunityFeed from "./screens/CommunityFeed";
 import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 import BannedPage from "./screens/BannedPage";
+import PageNotFound from "./screens/ErrorPage";
 
 function App() {
   let location = useLocation();
@@ -179,6 +180,7 @@ function App() {
               )}
             />
             <Route exact path="/community" component={CommunityFeed} />
+            <Route path="*" component={PageNotFound} />
           </div>
         </div>
       </Switch>
