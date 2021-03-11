@@ -16,6 +16,7 @@ import DeletePostModal from "./DeletePostModal";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 import Poll from "react-polls";
+import EditPost from "./EditPost";
 
 const ITEM_HEIGHT = 30;
 
@@ -30,6 +31,8 @@ export default function ProfilePostWithComments() {
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
   const [pollRefresh, setPollRefresh] = useState(true);
+
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     if (postId) {
@@ -52,7 +55,7 @@ export default function ProfilePostWithComments() {
         changeDateFormat(post);
       })
       .fail(() => {
-        alert.show("Unable to load post/Post deleted!");
+        //alert.show("Unable to load post/Post deleted!");
       });
   }
 
@@ -120,7 +123,8 @@ export default function ProfilePostWithComments() {
   };
 
   const handleEdit = () => {
-    openEditPostModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -289,7 +293,10 @@ export default function ProfilePostWithComments() {
                       </p>
                     </div>
                   ))}
-                <p>{data.body}</p>
+                {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditPost>}
                 {data.poll != undefined && pollAnswers != [] ? (
                   votedAnswer == undefined ? (
                     <div>

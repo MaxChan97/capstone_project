@@ -80,7 +80,7 @@ export default function DeletePostModal({
         history.push("/profile/" + currentUser);
       })
       .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again!");
+        //alert.show("Something went wrong, please try again!");
         handleClose();
       });
   }

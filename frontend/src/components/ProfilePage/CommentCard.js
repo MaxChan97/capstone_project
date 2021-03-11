@@ -15,6 +15,7 @@ import moment from "moment";
 import EditCommentModal from "./EditCommentModal";
 import DeleteCommentModal from "./DeleteCommentModal";
 import { useAlert } from "react-alert";
+import EditComment from "./EditComment";
 
 const ITEM_HEIGHT = 30;
 
@@ -25,6 +26,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   const [deleted, setDeleted] = React.useState(true);
   const open = Boolean(anchorEl);
   const alert = useAlert();
+  const [edit, setEdit] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,7 +36,8 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
   };
 
   const handleEdit = () => {
-    openEditCommentModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -199,7 +202,10 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               )}
             </div>
 
-            <p style={{ marginLeft: 10 }}>{data.body}</p>
+            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditComment  autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditComment>}
 
             <p style={{ marginLeft: 10 }}>
               {liked == true ? (

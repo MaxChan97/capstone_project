@@ -27,7 +27,7 @@ const ColorButton = withStyles((theme) => ({
     },
 }))(Button);
 
-export default function EditComment({
+export default function EditPost({
     data,
     refresh,
     setRefresh,
@@ -47,7 +47,7 @@ export default function EditComment({
     }
 
     async function handleSubmit() {
-        Api.editProfilePostComment(data.id, currentUser, post)
+        Api.editProfilePost(currentUser, data.id, post)
             .done(() => {
                 alert.show("Edit success!");
                 setRefresh(!refresh);
@@ -62,7 +62,7 @@ export default function EditComment({
         <div>
 
             <TextField
-                label="Edit Comment"
+                label="Edit Post"
                 multiline
                 value={post}
                 onChange={handleEdit}

@@ -13,6 +13,7 @@ import moment from "moment";
 import EditReplyModal from "./EditReplyModal";
 import DeleteReplyModal from "./DeleteReplyModal";
 import { useAlert } from "react-alert";
+import EditReply from "./EditReply";
 
 const options = ["Edit Reply", "Delete Reply"];
 
@@ -23,6 +24,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const alert = useAlert();
+  const [edit, setEdit] = useState(false);
   //set to true as it loads slow. will have error for deleted if default false
   const [deleted, setDeleted] = React.useState(true);
   const handleClick = (event) => {
@@ -34,7 +36,8 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
   };
 
   const handleEdit = () => {
-    openEditCommentModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -195,7 +198,11 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
               )}
             </div>
 
-            <p style={{ marginLeft: 10 }}>{data.body}</p>
+
+            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditReply  autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditReply>}
             <p style={{ marginLeft: 10 }}>
               {liked == true ? (
                 <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>

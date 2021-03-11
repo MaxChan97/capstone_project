@@ -22,12 +22,12 @@ export default function CommunityFeedPage() {
       <div className="container">
        
         <div className="row">
-          <div className="col-md-8 mt-4">
+          <div className="col-md-9 mt-4">
             <PostListOfFollowing></PostListOfFollowing>
           </div>
           
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <YourCommunitiesCard></YourCommunitiesCard>
+          <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
+           <YourCommunitiesCard></YourCommunitiesCard> 
           </div>
         </div>
       </div>
