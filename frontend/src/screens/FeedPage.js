@@ -108,11 +108,11 @@ export default function FeedPage() {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-8 mt-4">
+          <div className="col-md-9 mt-4">
             <PostListOfFollowing></PostListOfFollowing>
           </div>
           
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
+          <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
             <LeaderboardCard data={leaderboard} />
           </div>
         </div>

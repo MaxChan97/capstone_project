@@ -18,6 +18,8 @@ import moment from "moment";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 
+import EditPost from "../../components/ProfilePage/EditPost";
+
 const ITEM_HEIGHT = 30;
 
 export default function CommunityPostWithComments() {
@@ -27,7 +29,7 @@ export default function CommunityPostWithComments() {
   const { postId } = useParams();
   const alert = useAlert();
   const [refresh, setRefresh] = useState(true);
-
+  const [edit, setEdit] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,7 +39,8 @@ export default function CommunityPostWithComments() {
   };
 
   const handleEdit = () => {
-    openEditPostModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -90,7 +93,7 @@ export default function CommunityPostWithComments() {
         changeDateFormat(post);
       })
       .fail(() => {
-        alert.show("Unable to load post/Post deleted!");
+        //alert.show("Unable to load post/Post deleted!");
       });
   }
 
@@ -162,16 +165,24 @@ export default function CommunityPostWithComments() {
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
                   <div class="user-block">
-                    <img
-                      className="rounded-circle"
-                      src={data.author.profilePicture || defaultDP}
-                    />
+                  <img src={data.postCommunity.communityProfilePicture || defaultDP} />
+                    <span class="username">
+                    <Link
+                      to={"/community/" + data.postCommunity.id}
+                      style={{ color: "#3B21CB", fontSize: "18px" }}
+                    >
+                      {data.postCommunity.name}
+                    </Link>
+                    <span>&nbsp;</span>
+                    <span>&nbsp;</span>
+                    <span>&nbsp;</span>
                     <Link
                       to={"/profile/" + data.author.id}
-                      style={{ marginLeft: 10, color: "#3B21CB"}}
+                      style={{ color: "gray", fontSize: "13px" }}
                     >
-                      {data.author.username}
+                      Posted by @ {data.author.username}
                     </Link>
+                  </span>
                     <span class="description">
                       {" "}
                       {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
@@ -233,7 +244,10 @@ export default function CommunityPostWithComments() {
                       </p>
                     </div>
                   ))}
-                <p>{data.body}</p>
+                {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditPost>}
                 <p>
                   {liked == true ? (
                     <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>

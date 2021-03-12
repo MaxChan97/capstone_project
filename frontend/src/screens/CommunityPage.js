@@ -40,8 +40,7 @@ export default function ProfilePage() {
       setCurrentCommunity(currentCommunity);
     })
     .fail((xhr, status, error) => {
-    alert.show(xhr.responseJSON.error);
-    history.push("/community");
+    history.push("/community/" + communityId + "/banned");
     });
 }
   console.log(ownedCommunities);

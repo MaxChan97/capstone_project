@@ -165,7 +165,7 @@ export default function ManageCommunityDetails() {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
         setCommunityName(currentCommunity.name);
-        setDescription(currentCommunity.communityDescription);
+        setDescription(currentCommunity.description);
         setTopicInterests(currentCommunity.topicEnums);
         setCommunityPicture(currentCommunity.communityProfilePicture);
         setCommunityBanner(currentCommunity.communityBanner);
@@ -213,6 +213,7 @@ export default function ManageCommunityDetails() {
         console.log(communityBanner);
         alert.show("Community Updated Successfully!");
         setRefresh(!refresh);
+        history.push("/community/" + communityId);
       })
       .fail((xhr, status, error) => {
         console.log(xhr.responseJSON.error);

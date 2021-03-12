@@ -17,7 +17,9 @@ export default function FollowerRow({ follower }) {
           />
         </div>
         <div className="col-md-7">
-          <p className="text-left">{person.username}</p>
+          <a href={"/profile/" + person.id} class="link text-dark">
+            {person.username}
+          </a>
         </div>
       </div>
     </div>

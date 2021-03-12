@@ -25,8 +25,12 @@ export default function CustomiseProfile() {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isOldPasswordVisible, setIsOldPasswordVisible] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(
+    false
+  );
 
   const currentUser = useSelector((state) => state.currentUser);
   if (currentUser === null) {
@@ -51,6 +55,10 @@ export default function CustomiseProfile() {
     setNewPassword(event.target.value);
   };
 
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
+
   const handleOldPasswordVisibleChange = (event) => {
     setIsOldPasswordVisible(!isOldPasswordVisible);
   };
@@ -59,12 +67,20 @@ export default function CustomiseProfile() {
     setIsNewPasswordVisible(!isNewPasswordVisible);
   };
 
+  const handleConfirmPasswordVisibleChange = (event) => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (oldPassword == "") {
       alert.show("Please enter a password");
     } else if (newPassword == "") {
       alert.show("Please enter a password");
+    } else if (confirmPassword == "") {
+      alert.show("Please enter a password");
+    } else if (newPassword != confirmPassword) {
+      alert.show("Passwords do not match");
     } else if (oldPassword == newPassword) {
       alert.show("Please use a different password");
     } else {
@@ -110,7 +126,7 @@ export default function CustomiseProfile() {
                         onChange={handleOldPasswordChange}
                       ></input>
                     </div>
-                    <div className="col-2">
+                    <div className="col-1">
                       <button
                         className="btn"
                         onClick={handleOldPasswordVisibleChange}
@@ -133,7 +149,7 @@ export default function CustomiseProfile() {
                         onChange={handleNewPasswordChange}
                       ></input>
                     </div>
-                    <div className="col-2">
+                    <div className="col-1">
                       <button
                         className="btn"
                         onClick={handleNewPasswordVisibleChange}
@@ -141,6 +157,39 @@ export default function CustomiseProfile() {
                         <i className="far fa-eye text-secondary"></i>
                       </button>
                     </div>
+                  </div>
+                  <div className="form-group row">
+                    <label for="confirmPassword" class="col-3 col-form-label">
+                      Confirm Password
+                    </label>
+                    <div className="col-7">
+                      <input
+                        type={isConfirmPasswordVisible ? "text" : "password"}
+                        className="form-control"
+                        id="confirmPassword"
+                        required
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                      ></input>
+                    </div>
+                    <div className="col-1">
+                      <button
+                        className="btn"
+                        onClick={handleConfirmPasswordVisibleChange}
+                      >
+                        <i className="far fa-eye text-secondary"></i>
+                      </button>
+                    </div>
+                    {newPassword != "" &&
+                      confirmPassword != "" &&
+                      newPassword == confirmPassword && (
+                        <div className="col-1">
+                          <i
+                            className="far fa-check-circle fa-lg mt-2"
+                            style={{ color: "green" }}
+                          ></i>
+                        </div>
+                      )}
                   </div>
                   <div className="row">
                     <div className="col-8"></div>

@@ -13,6 +13,11 @@ import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostMo
 import FileTypes from "../../components/FileTypes.js";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
+import MakeCommentCardForFeed from "../../components/ProfilePage/MakeCommentCardForFeed";
+import Tooltip from '@material-ui/core/Tooltip';
+import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed";
+import EditPost from "../../components/ProfilePage/EditPost";
+
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({
@@ -27,10 +32,9 @@ export default function ProfilePostCard({
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
+  const [edit, setEdit] = useState(false);
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
-
   {
     /*}
   useEffect(() => {
@@ -93,7 +97,8 @@ export default function ProfilePostCard({
   };
 
   const handleEdit = () => {
-    openEditPostModal();
+    setEdit(true);
+    setAnchorEl(null);
   };
 
   const handleDelete = () => {
@@ -170,8 +175,8 @@ export default function ProfilePostCard({
         flexDirection: "column",
         textAlign: "left",
         width: "max-content",
-        justify:"left",
-        marginLeft:"-53px"
+        justify: "left",
+        marginLeft: "-53px"
       }}
     >
       <div class="col-md-9">
@@ -194,9 +199,9 @@ export default function ProfilePostCard({
         <div
           class="card"
           style={{
-            minWidth: "72ch",
-            maxWidth: "72ch",
-            
+            minWidth: "82ch",
+            maxWidth: "82ch",
+
           }}
         >
           <div class="card-body">
@@ -208,7 +213,7 @@ export default function ProfilePostCard({
                     src={data.author.profilePicture || defaultDP}
                   />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id}  style={{color: "#3B21CB",}}>
+                    <Link to={"/profile/" + data.author.id} style={{ color: "#3B21CB", }}>
                       {data.author.username}
                     </Link>
                   </span>
@@ -274,7 +279,10 @@ export default function ProfilePostCard({
                     </p>
                   </div>
                 ))}
-              <p>{data.body}</p>
+              {edit == false ? (<p>{data.body}</p>) : <EditPost autofocus data={data}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                setEdit={setEdit}></EditPost>}
               {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
@@ -316,7 +324,7 @@ export default function ProfilePostCard({
             */}
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                  <Link onClick={handleUnlike} style={{ color: "#3B21CB", }}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
@@ -326,14 +334,46 @@ export default function ProfilePostCard({
                 )}
 
                 <span>
-                  <Link
-                    to={"/community/post/" + data.id}
-                    style={{ marginLeft: 10, color: "black" }}
-                  >
-                    <i class="fas fa-comments mr-1"></i> {data.comments.length}
-                  </Link>
+                  <Tooltip title="Click to view full post" aria-label="View full post">
+                    <Link
+                      to={"/community/post/" + data.id}
+                      style={{ marginLeft: 10, color: "black" }}
+                    >
+                      <i class="fas fa-comments mr-1"></i> {data.comments.length}
+                    </Link>
+                  </Tooltip>
                 </span>
               </p>
+            </div>
+            <MakeCommentCardForFeed
+              data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            ></MakeCommentCardForFeed>
+            <CommentListForFeed
+              comments={data.comments}
+              refresh={refresh}
+              setRefresh={setRefresh}
+              post={data}
+            ></CommentListForFeed>
+
+            <div style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}>
+
+
+              {data.comments.length > 2 ? (
+                <Tooltip title="Click to view full post and all comments" aria-label="View full post">
+                  <Link
+                    to={"/community/post/" + data.id}
+                    style={{ color: "#3B21CB", margin: "0, auto", textAlign: "center" }}
+                  >
+                    View all comments
+
+                </Link>
+                </Tooltip>) : ("")}
             </div>
           </div>
         </div>

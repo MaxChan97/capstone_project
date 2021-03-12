@@ -9,9 +9,11 @@ import PostList from "../components/CommunityPage/PostList";
 import SearchCard from "../components/CommunityPage/SearchCard";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import BannedPage from "./BannedPage";
 
 export default function AnotherCommunityPage({ communityId }) {
   const alert = useAlert();
+  const history = useHistory();
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
@@ -55,7 +57,11 @@ export default function AnotherCommunityPage({ communityId }) {
         setCurrentCommunity(currentCommunity);
       })
       .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
+        if (xhr.responseJSON.error === "You are banned from the community") {
+          console.log("You are banned from the community");
+        } else {
+          alert.show(xhr.responseJSON.error);
+        }
       });
   }
 
@@ -64,7 +70,7 @@ export default function AnotherCommunityPage({ communityId }) {
       return (
         <div className="container mt-3 ">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-9">
               {joined == true ? (
                 <CreatePostCard
                   community={currentCommunity}
@@ -81,7 +87,7 @@ export default function AnotherCommunityPage({ communityId }) {
                 searchString={searchString}
               />
             </div>
-            <div className="col-md-4" style={{ textAlign: "left" }}>
+            <div className="col-md-3" style={{ textAlign: "left" }}>
               <SearchCard
                 searchString={searchString}
                 setSearchString={setSearchString}
