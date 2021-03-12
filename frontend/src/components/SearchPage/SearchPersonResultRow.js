@@ -12,7 +12,7 @@ export default function SearchPersonResultRow({ person }) {
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
-  }, []);
+  }, [person]);
 
   return (
     <div className="container">

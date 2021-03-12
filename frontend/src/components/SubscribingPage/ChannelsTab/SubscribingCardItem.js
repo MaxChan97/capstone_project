@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import defaultDP from "../../../assets/Default Dp logo.svg";
+import Api from "../../../helpers/Api";
+import { useAlert } from "react-alert";
 import {
+  Card,
+  Box,
+  CardContent,
   Button,
   Dialog,
   DialogActions,
@@ -7,13 +13,31 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import chatLogo from "../../../assets/Chat logo.svg";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import Api from "../../../helpers/Api";
-import { useAlert } from "react-alert";
-import { useSelector } from "react-redux";
 import moment from "moment";
+
+const useStyles = makeStyles({
+  root: {
+    height: "auto",
+    width: `${80 / 4}%`,
+    textAlign: "start",
+    marginLeft: "2.5%",
+    marginRight: "2.5%",
+    marginBottom: "1.2%",
+    borderBottom: "3",
+  },
+  mainText: {
+    fontSize: 22,
+    margin: 0,
+    fontWeight: "bold",
+  },
+  subText: {
+    fontSize: 17,
+    color: "gray",
+    margin: 0,
+  },
+});
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -25,24 +49,16 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default function SocialButtonGroup({
-  id,
-  username,
-  pricingPlan,
-  refresh,
-  setRefresh,
-  anotherPerson,
-}) {
+export default function SubscribingCardItem({ subscribe, currentUser }) {
+  const styles = useStyles();
   const alert = useAlert();
+  const publisher = subscribe["publisher"];
 
-  const [following, setFollowing] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
+  const [followerCount, setFollowerCount] = useState([]);
   const [subscription, setSubscription] = useState();
-  const [subscriptionStatus, setSubscriptionStatus] = useState("NotSubscribed");
+  const [subscriptionStatus, setSubscriptionStatus] = useState("Subscribed");
+  const [refresh, setRefresh] = useState(true);
 
-  const [confirmUnfollowDialogOpen, setConfirmUnfollowDialogOpen] = useState(
-    false
-  );
   const [confirmSubscribeDialogOpen, setConfirmSubscribeDialogOpen] = useState(
     false
   );
@@ -55,31 +71,18 @@ export default function SocialButtonGroup({
     setConfirmResubscribeDialogOpen,
   ] = useState(false);
 
-  const currentUser = useSelector((state) => state.currentUser);
-
   useEffect(() => {
-    Api.getFollowers(id)
-      .done((followObjects) => {
-        let followingFlag = false;
-        for (var i = 0; i < followObjects.length; i++) {
-          if (followObjects[i].follower.id === currentUser) {
-            followingFlag = true;
-            setFollowing(true);
-            break;
-          }
-        }
-        if (followingFlag === false) {
-          setFollowing(false);
-        }
+    Api.isSubscribed(currentUser, publisher.id)
+      .done((status) => {
+        setSubscriptionStatus(status.subscriptionStatus);
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
-  }, [refresh]);
+  }, [refresh, publisher]);
 
-  // wait for Shawns endpoint
   useEffect(() => {
-    Api.getSubscribers(id)
+    Api.getSubscribers(publisher.id)
       .done((subscriptionObjects) => {
         let subscribedFlag = false;
         for (var i = 0; i < subscriptionObjects.length; i++) {
@@ -98,24 +101,43 @@ export default function SocialButtonGroup({
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
-  }, [refresh]);
+  }, [refresh, publisher]);
 
   useEffect(() => {
-    Api.isSubscribed(currentUser, id)
-      .done((status) => {
-        setSubscriptionStatus(status.subscriptionStatus);
+    loadData(publisher);
+  }, [refresh, publisher]);
+
+  function loadData(publisher) {
+    Api.getFollowers(publisher["id"])
+      .done((data) => {
+        setFollowerCount(data.length);
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
-  }, [refresh]);
-
-  function handleUnfollowDialogOpen() {
-    setConfirmUnfollowDialogOpen(true);
   }
 
-  function handleUnfollowDialogClose() {
-    setConfirmUnfollowDialogOpen(false);
+  function handleSubscribe() {
+    Api.subscribeToPerson(currentUser, publisher.id)
+      .done(() => {
+        setRefresh(!refresh);
+        handleSubscribeDialogClose();
+        handleResubscribeDialogClose();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
+  function handleUnsubscribe() {
+    Api.unsubscribeFromPerson(currentUser, publisher.id)
+      .done(() => {
+        setRefresh(!refresh);
+        handleUnsubscribeDialogClose();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
   }
 
   function handleSubscribeDialogOpen() {
@@ -142,67 +164,16 @@ export default function SocialButtonGroup({
     setConfirmResubscribeDialogOpen(false);
   }
 
-  function handleFollow() {
-    Api.followPerson(currentUser, id)
-      .done(() => {
-        setRefresh(!refresh);
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
-  }
-
-  function handleUnfollow() {
-    Api.unfollowPerson(currentUser, id)
-      .done(() => {
-        setRefresh(!refresh);
-        handleUnfollowDialogClose();
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
-  }
-
-  function handleSubscribe() {
-    Api.subscribeToPerson(currentUser, id)
-      .done(() => {
-        if (following === false) {
-          Api.followPerson(currentUser, id)
-            .done(() => {
-              setRefresh(!refresh);
-              handleSubscribeDialogClose();
-              handleResubscribeDialogClose();
-            })
-            .fail((xhr, status, error) => {
-              alert.show(xhr.responseJSON.error);
-            });
-        } else {
-          setRefresh(!refresh);
-          handleSubscribeDialogClose();
-          handleResubscribeDialogClose();
-        }
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
-  }
-
-  function handleUnsubscribe() {
-    Api.unsubscribeFromPerson(currentUser, id)
-      .done(() => {
-        setRefresh(!refresh);
-        handleUnsubscribeDialogClose();
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
-  }
-
-  function renderSubscribe() {
+  function renderSocialButton() {
     if (subscriptionStatus === "Subscribed") {
       return (
         <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
+          style={{
+            height: "30px",
+            width: "110px",
+            outline: "none",
+            marginTop: "8px",
+          }}
           variant="contained"
           onClick={handleUnsubscribeDialogOpen}
         >
@@ -212,7 +183,12 @@ export default function SocialButtonGroup({
     } else if (subscriptionStatus === "NotSubscribed") {
       return (
         <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
+          style={{
+            height: "30px",
+            width: "110px",
+            outline: "none",
+            marginTop: "8px",
+          }}
           variant="outlined"
           color="primary"
           onClick={handleSubscribeDialogOpen}
@@ -221,95 +197,37 @@ export default function SocialButtonGroup({
         </Button>
       );
     } else {
-      // this case is ReSubscribe
+      // subscriptionStatus === "ReSubscribe"
       if (subscription != undefined) {
         return (
-          <div style={{ textAlign: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <Button
-              style={{ height: "40px", width: "160px", outline: "none" }}
+              style={{
+                height: "30px",
+                width: "118px",
+                outline: "none",
+                marginTop: "8px",
+              }}
               variant="outlined"
               color="primary"
               onClick={handleResubscribeDialogOpen}
             >
               Resubscribe
             </Button>
-            <div style={{ width: "160px" }}>
-              <p style={{ fontSize: "13px", color: "gray" }}>
-                subscription till{" "}
-                {moment(subscription.endDate.slice(0, -5)).format("DD/MM/YYYY")}
-              </p>
-            </div>
+            <p style={{ fontSize: "13px", color: "gray" }}>
+              subscription till{" "}
+              {moment(subscription.endDate.slice(0, -5)).format("DD/MM/YYYY")}
+            </p>
           </div>
         );
       }
     }
-  }
-
-  function renderChatButton() {
-    if (anotherPerson.chatIsPaid === true) {
-      if (subscriptionStatus !== "NotSubscribed") {
-        return (
-          <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
-            <Button
-              style={{ height: "40px", width: "25px", outline: "none" }}
-              variant="contained"
-            >
-              <img src={chatLogo} alt="chatLogo" />
-            </Button>
-          </Link>
-        );
-      } else {
-        return "";
-      }
-    } else {
-      return (
-        <Link style={{ marginRight: "3%" }} to={"/chat/" + id}>
-          <Button
-            style={{ height: "40px", width: "25px", outline: "none" }}
-            variant="contained"
-          >
-            <img src={chatLogo} alt="chatLogo" />
-          </Button>
-        </Link>
-      );
-    }
-  }
-
-  function renderUnFollowDialog() {
-    return (
-      <Dialog
-        open={confirmUnfollowDialogOpen}
-        onClose={handleUnfollowDialogClose}
-        aria-labelledby="confirm-unfollow-dialog-title"
-        aria-describedby="confirm-unfollow-dialog-description"
-      >
-        <DialogTitle id="confirm-unfollow-dialog-title">
-          Unfollow {username}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirm-unfollow-dialog-description">
-            Do you want to unfollow {username}?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            style={{ outline: "none" }}
-            onClick={handleUnfollowDialogClose}
-          >
-            Cancel
-          </Button>
-          <ColorButton
-            style={{ outline: "none" }}
-            onClick={handleUnfollow}
-            color="primary"
-            variant="contained"
-            autoFocus
-          >
-            Unfollow
-          </ColorButton>
-        </DialogActions>
-      </Dialog>
-    );
   }
 
   function renderSubscribeDialog() {
@@ -321,7 +239,7 @@ export default function SocialButtonGroup({
         aria-describedby="confirm-subscribe-dialog-description"
       >
         <DialogTitle id="confirm-subscribe-dialog-title">
-          Subscribe to {username}
+          Subscribe to {publisher.username}
         </DialogTitle>
         <DialogContent>
           <div style={{ minWidth: "450px" }}>
@@ -332,21 +250,21 @@ export default function SocialButtonGroup({
               }}
             >
               <p style={{ fontWeight: "bold" }}>Benefits</p>
-              {pricingPlan != undefined ? (
+              {publisher.pricingPlan != undefined ? (
                 <p style={{ color: "#3B21CB", fontWeight: "bold" }}>
-                  SGD {pricingPlan.toFixed(2)}/month
+                  SGD {publisher.pricingPlan.toFixed(2)}/month
                 </p>
               ) : (
                 ""
               )}
             </div>
             <p style={{ marginBottom: "2px" }}>
-              Ad-free viewing on {username}'s channel.
+              Ad-free viewing on {publisher.username}'s channel.
             </p>
             <p style={{ marginBottom: "2px" }}>
               Chat during Subscriber-Only Mode.
             </p>
-            <p>Access to exclusive content by {username}</p>
+            <p>Access to exclusive content by {publisher.username}</p>
           </div>
         </DialogContent>
         <DialogActions>
@@ -380,11 +298,11 @@ export default function SocialButtonGroup({
           aria-describedby="confirm-unsubscribe-dialog-description"
         >
           <DialogTitle id="confirm-unsubscribe-dialog-title">
-            Unsubscribe from {username}
+            Unsubscribe from {publisher.username}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="confirm-unsubscribe-dialog-description">
-              Do you want to unsubscribe from {username}?
+              Do you want to unsubscribe from {publisher.username}?
             </DialogContentText>
             <DialogContentText>
               Your subscription benefits will expire on{" "}
@@ -394,7 +312,8 @@ export default function SocialButtonGroup({
               if you unsubscribe
             </DialogContentText>
             <DialogContentText>
-              You will still be following {username} after unsubscribing.
+              You will still be following {publisher.username} after
+              unsubscribing.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -429,11 +348,11 @@ export default function SocialButtonGroup({
           aria-describedby="confirm-resubscribe-dialog-description"
         >
           <DialogTitle id="confirm-resubscribe-dialog-title">
-            Resubscribe to {username}
+            Resubscribe to {publisher.username}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="confirm-resubscribe-dialog-description">
-              Do you want to resubscribe to {username}?
+              Do you want to resubscribe to {publisher.username}?
             </DialogContentText>
             <DialogContentText>
               Your subscription benefits will expire on{" "}
@@ -442,9 +361,10 @@ export default function SocialButtonGroup({
               )}{" "}
               if you don't
             </DialogContentText>
-            {pricingPlan != undefined ? (
+            {publisher.pricingPlan != undefined ? (
               <DialogContentText>
-                You will continue to be charged SGD {pricingPlan.toFixed(2)}
+                You will continue to be charged SGD{" "}
+                {publisher.pricingPlan.toFixed(2)}
                 /month when your subscription expires if you do
               </DialogContentText>
             ) : (
@@ -474,50 +394,56 @@ export default function SocialButtonGroup({
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        paddingTop: "22px",
-        width: "35%",
-        marginRight: "2.31%",
-      }}
-    >
-      {renderChatButton()}
-      {following === false ? (
-        <ColorButton
+    <Card className={styles.root}>
+      <CardContent>
+        <Box
+          display="flex"
+          flexDirection="column"
           style={{
-            height: "40px",
-            width: "160px",
-            outline: "none",
-            marginRight: "3%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            height: 170,
           }}
-          variant="contained"
-          color="primary"
-          onClick={handleFollow}
         >
-          Follow
-        </ColorButton>
-      ) : (
-        <Button
-          style={{
-            height: "40px",
-            width: "160px",
-            outline: "none",
-            marginRight: "3%",
-          }}
-          variant="contained"
-          onClick={handleUnfollowDialogOpen}
-        >
-          Following
-        </Button>
-      )}
-      {renderSubscribe()}
-      {renderUnFollowDialog()}
-      {renderSubscribeDialog()}
-      {renderUnsubscribeDialog()}
-      {renderResubscribeDialog()}
-    </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Link to={"/profile/" + publisher.id} style={{ color: "inherit" }}>
+              <img
+                className="img-fluid rounded-circle"
+                style={{ height: "80px", width: "80px" }}
+                src={publisher.profilePicture || defaultDP}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <p style={{ marginBottom: "-8px" }} className={styles.mainText}>
+                  {publisher.username}
+                </p>
+                <p className={styles.subText}>
+                  {followerCount !== 1
+                    ? followerCount + " followers"
+                    : followerCount + " follower"}
+                </p>
+              </div>
+            </Link>
+            {renderSocialButton()}
+            {renderSubscribeDialog()}
+            {renderUnsubscribeDialog()}
+            {renderResubscribeDialog()}
+          </div>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }

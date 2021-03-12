@@ -40,8 +40,20 @@ export default function SearchPage({ searchString, searchRefresh }) {
 
   const [displayedSearchString, setDisplayedSearchString] = useState("");
   const [tabValue, setTabValue] = useState(0);
+  const [perPage] = useState(5);
+
+  // For pagination
+  const [personOffset, setPersonOffset] = useState(1);
   const [personResults, setPersonResults] = useState([]);
+  const [personPaginatedResults, setPersonPaginatedResults] = useState([]);
+  const [personPageCount, setPersonPageCount] = useState(0);
+
+  const [communityOffset, setCommunityOffset] = useState(1);
   const [communityResults, setCommunityResults] = useState([]);
+  const [communityPaginatedResults, setCommunityPaginatedResults] = useState(
+    []
+  );
+  const [communityPageCount, setCommunityPageCount] = useState(0);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -56,6 +68,7 @@ export default function SearchPage({ searchString, searchRefresh }) {
           (person) => person.id != currentUser
         );
         setPersonResults(filteredPersonObjects);
+        setPersonPageCount(Math.ceil(filteredPersonObjects.length / perPage));
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -63,14 +76,41 @@ export default function SearchPage({ searchString, searchRefresh }) {
   }, [searchRefresh]);
 
   useEffect(() => {
+    const slice = personResults.slice(
+      (personOffset - 1) * perPage,
+      (personOffset - 1) * perPage + perPage
+    );
+    setPersonPaginatedResults(slice);
+  }, [personOffset, personResults]);
+
+  useEffect(() => {
     Api.searchCommunityByName(searchString)
       .done((communityObjects) => {
         setCommunityResults(communityObjects);
+        setCommunityPageCount(Math.ceil(communityObjects.length / perPage));
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
   }, [searchRefresh]);
+
+  useEffect(() => {
+    const slice = communityResults.slice(
+      (communityOffset - 1) * perPage,
+      (communityOffset - 1) * perPage + perPage
+    );
+    setCommunityPaginatedResults(slice);
+  }, [communityOffset, communityResults]);
+
+  const handlePersonPageClick = (e) => {
+    const selectedPage = e.selected;
+    setPersonOffset(selectedPage + 1);
+  };
+
+  const handleCommunityPageClick = (e) => {
+    const selectedPage = e.selected;
+    setCommunityOffset(selectedPage + 1);
+  };
 
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -78,9 +118,21 @@ export default function SearchPage({ searchString, searchRefresh }) {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
-      return <SearchPersonResultList personList={personResults} />;
+      return (
+        <SearchPersonResultList
+          personList={personPaginatedResults}
+          personPageCount={personPageCount}
+          handlePersonPageClick={handlePersonPageClick}
+        />
+      );
     } else {
-      return <SearchCommunityResultList communityList={communityResults} />;
+      return (
+        <SearchCommunityResultList
+          communityList={communityPaginatedResults}
+          communityPageCount={communityPageCount}
+          handleCommunityPageClick={handleCommunityPageClick}
+        />
+      );
     }
   };
 
