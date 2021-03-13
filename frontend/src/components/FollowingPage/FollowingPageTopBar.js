@@ -3,7 +3,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
 import FollowingGroup from "./FollowingGroup";
 
-
 const StyledTabs = withStyles({
   indicator: {
     display: "flex",
@@ -46,13 +45,12 @@ export default function FollowingPageTopBar({
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
           paddingTop: "2.5%",
+          paddingLeft: "5%",
           backgroundColor: "#FDFDFD",
         }}
       >
-        <FollowingGroup username={username}/>
+        <h2 style={{ fontWeight: "bold" }}>Following</h2>
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>

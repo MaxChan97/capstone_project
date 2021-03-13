@@ -48,7 +48,7 @@ const persistor = persistStore(store);
 // react-alert stuff
 const options = {
   // you can also just use 'bottom center'
-  position: positions.BOTTOM_RIGHT,
+  position: positions.TOP_RIGHT,
   timeout: 5000,
   offset: "10px",
   // you can also just use 'scale'

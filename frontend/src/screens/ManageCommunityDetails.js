@@ -250,7 +250,7 @@ export default function ManageCommunityDetails() {
   }
 
   return (
-    <div className="content-wrapper">
+    <div style={{ overflowX: "hidden" }} className="content-wrapper">
       <div className="row">
         <div className="col-md-9 ml-4 mt-4" style={{ textAlign: "left" }}>
           <div className="card card-primary">
@@ -279,14 +279,14 @@ export default function ManageCommunityDetails() {
                         className="btn"
                         style={{
                           height: "35px",
-                          width: "100px",
+                          width: "250px",
                           outline: "none",
                           fontWeight: "600",
                           "background-color": "#3B21CB",
                           color: "white",
                         }}
                       >
-                        <p>UPLOAD</p>
+                        <p>ADD COMMUNITY PICTURE</p>
                         <input
                           id="pp"
                           type="file"
@@ -326,14 +326,14 @@ export default function ManageCommunityDetails() {
                 className="btn"
                 style={{
                   height: "35px",
-                  width: "100px",
+                  width: "250px",
                   outline: "none",
                   fontWeight: "600",
                   "background-color": "#3B21CB",
                   color: "white",
                 }}
               >
-                <p>UPLOAD</p>
+                <p>ADD COMMUNITY BANNER</p>
                 <input
                   id="pb"
                   type="file"

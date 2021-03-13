@@ -3,7 +3,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import banned from "../assets/Banned.png";
+import error from "../assets/Error.png";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -15,7 +15,7 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
-export default function BannedPage() {
+export default function ErrorPage() {
   return (
     <div className="content-wrapper">
       <div className="container">
@@ -25,16 +25,17 @@ export default function BannedPage() {
               resizeMode: "repeat",
               height: 350,
               marginTop: "90px",
-              marginLeft: "400px",
+              marginLeft: "430px",
             }}
-            src={banned}
+            src={error}
           />
         </div>
         <div className="row">
           <p
             style={{ marginTop: "30px", marginLeft: "385px", fontSize: "20px" }}
           >
-            Oops...You are banned from this community.
+            Oh no! We apologise for the inconvenience but <br/>
+            the piggy might have been broken by accident...
           </p>
         </div>
         <div className="row">
@@ -45,16 +46,16 @@ export default function BannedPage() {
               outline: "none",
               float: "right",
               fontWeight: "600",
-              marginLeft: "440px",
+              marginLeft: "460px",
               marginTop: "20px",
-              marginBottom:"160px"
+              marginBottom:"130px"
             }}
-            href="/community"
+            href="/"
             variant="contained"
             color="primary"
             type="button"
           >
-            Explore Communities
+            Take Piggy Home
           </ColorButton>
         </div>
       </div>
