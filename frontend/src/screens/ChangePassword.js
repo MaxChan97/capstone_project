@@ -9,6 +9,7 @@ import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import NiceInputPassword from "react-nice-input-password";
 import "react-nice-input-password/dist/react-nice-input-password.css";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomiseProfile() {
+  let history = useHistory();
   const classes = useStyles();
   const alert = useAlert();
 
@@ -87,8 +89,7 @@ export default function CustomiseProfile() {
       Api.changePassword(currentUser, oldPassword, newPassword)
         .done(() => {
           alert.show("Password updated successfully!");
-          setOldPassword("");
-          setNewPassword("");
+          history.push("/profile/" + currentUser);
         })
         .fail((xhr, status, error) => {
           if (xhr.responseJSON.error === "Missing person password") {
