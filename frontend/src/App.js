@@ -36,6 +36,14 @@ import CommunityFeed from "./screens/CommunityFeed";
 import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 import BannedPage from "./screens/BannedPage";
 import PageNotFound from "./screens/ErrorPage";
+import AdminSideBar from "./components/AdminSideBar";
+import AdminInboxPage from "./screens/AdminInboxPage";
+import AdminAnalyticsPage from "./screens/AdminAnalyticsPage";
+import AdminUserManagementPage from "./screens/AdminUserManagementPage";
+import AdminAdManagementPage from "./screens/AdminAdManagementPage";
+import AdminManagementPage from "./screens/AdminManagementPage";
+import AdminLogin from "./screens/AdminLogin"; 
+import CreateAnotherAdmin from "./screens/CreateAnotherAdmin"; 
 
 function App() {
   let location = useLocation();
@@ -44,7 +52,8 @@ function App() {
   const [searchRefresh, setSearchRefresh] = useState(true);
 
   function renderNavSide() {
-    if (location.pathname === "/login" || location.pathname === "/register") {
+    if (location.pathname === "/login" || location.pathname === "/register" 
+    || location.pathname === "/admin/login") {
       return "";
     } else if (location.pathname === "/chat") {
       return (
@@ -91,6 +100,21 @@ function App() {
           <CommunityDashboardSidebar />
         </div>
       );
+    } else if( location.pathname === "/admin" || location.pathname === "/admin/inbox"
+    || location.pathname === "/admin/analytics" || location.pathname === "/admin/usermanagement"
+    || location.pathname === "/admin/advertisementmanagement" || location.pathname === "/admin/adminmanagement"
+    || location.pathname === "/admin/createAdmin") {
+      return (
+        <div>
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <AdminSideBar />
+        </div>
+      );
     } else {
       return (
         <div>
@@ -111,6 +135,7 @@ function App() {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/admin/login" component={AdminLogin} />
         <Route exact path="/newPassword/:resetId" component={NewPassword} />
         <Route exact path="/resetPassword" component={ResetPassword} />
         <div className="layout-navbar-fixed">
@@ -180,7 +205,16 @@ function App() {
               )}
             />
             <Route exact path="/community" component={CommunityFeed} />
+
+            <Route exact path="/admin/inbox" component={AdminInboxPage} />
+            <Route exact path="/admin/analytics" component={AdminAnalyticsPage} />
+            <Route exact path="/admin/usermanagement" component={AdminUserManagementPage} />
+            <Route exact path="/admin/advertisementmanagement" component={AdminAdManagementPage} />
+            <Route exact path="/admin/adminmanagement" component={AdminManagementPage} />
+            <Route exact path="/admin/createAdmin" component={CreateAnotherAdmin} />
+
             <Route path="*" component={PageNotFound} />
+            
           </div>
         </div>
       </Switch>
