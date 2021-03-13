@@ -38,6 +38,9 @@ public class Administrator implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false)
+    private boolean isMaster;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
@@ -127,5 +130,19 @@ public class Administrator implements Serializable {
     @Override
     public String toString() {
         return "entity.adminEntities.Administrator[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the isMaster
+     */
+    public boolean getIsMaster() {
+        return isMaster;
+    }
+
+    /**
+     * @param isMaster the isMaster to set
+     */
+    public void setIsMaster(boolean isMaster) {
+        this.isMaster = isMaster;
     }
 }
