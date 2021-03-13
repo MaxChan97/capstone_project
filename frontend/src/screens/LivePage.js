@@ -22,14 +22,6 @@ export default function LivePage() {
       >
         {/* <Webcam /> */}
         <h1>Live Page</h1>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(logOut());
-          }}
-        >
-          Log Out
-        </button>
       </div>
     </div>
   );

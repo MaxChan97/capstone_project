@@ -11,7 +11,6 @@ export default function CategoriesPage() {
     return <Redirect to="/login" />;
   }
 
-  
   return (
     <div className="content-wrapper">
       <div
@@ -22,14 +21,6 @@ export default function CategoriesPage() {
         }}
       >
         <h1>Categories Page</h1>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(logOut());
-          }}
-        >
-          Log Out
-        </button>
       </div>
     </div>
   );

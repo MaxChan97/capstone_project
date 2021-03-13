@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import { logIn } from "../redux/actions/index";
+import { logIn, setIsAdmin } from "../redux/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
@@ -88,12 +88,11 @@ export default function Register() {
     e.preventDefault();
     Api.createPerson(email, username, password)
       .done((createdPerson) => {
-        alert.show("Registered Successfully!");
-        alert.show("Welcome " + createdPerson.username + "!");
         setEmail("");
         setUsername("");
         setPassword("");
         dispatch(logIn(createdPerson.id));
+        dispatch(setIsAdmin(false));
         history.push("/feed");
       })
       .fail((xhr, status, error) => {

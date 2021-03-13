@@ -11,7 +11,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { logIn } from "../redux/actions/index";
+import { logIn, setIsAdmin } from "../redux/actions/index";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 
@@ -91,10 +91,10 @@ export default function Login() {
     e.preventDefault();
     Api.login(email, password)
       .done((loggedInPerson) => {
-        alert.show("Welcome " + loggedInPerson.username + "!");
         setEmail("");
         setPassword("");
         dispatch(logIn(loggedInPerson.id));
+        dispatch(setIsAdmin(false));
         history.push("/feed");
       })
       .fail((xhr, status, error) => {
