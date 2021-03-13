@@ -11,6 +11,8 @@ import Select from "react-select";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { storage } from "../firebase";
+import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
+import { useHistory } from "react-router-dom";
 var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +32,7 @@ const topics = [
 ];
 
 export default function CustomiseProfile() {
+  let history = useHistory();
   const classes = useStyles();
   const alert = useAlert();
 
@@ -54,6 +57,8 @@ export default function CustomiseProfile() {
 
   const [profilePicture, setProfilePicture] = useState("");
   const [profileBanner, setProfileBanner] = useState("");
+  const [profileProgress, setProfileProgress] = useState(0);
+  const [bannerProgress, setBannerProgress] = useState(0);
 
   const changeProfilePictureHandler = (event) => {
     var oldName = event.target.files[0].name;
@@ -66,9 +71,10 @@ export default function CustomiseProfile() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        let progress = Math.round(
+        const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
+        setProfileProgress(progress);
       },
       (error) => {
         console.log(error);
@@ -99,6 +105,7 @@ export default function CustomiseProfile() {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
+        setBannerProgress(progress);
       },
       (error) => {
         console.log(error);
@@ -123,7 +130,6 @@ export default function CustomiseProfile() {
   useEffect(() => {
     if (currentUser) {
       loadData(currentUser);
-      console.log(currentUser);
     }
   }, [currentUser, refresh]);
 
@@ -140,7 +146,6 @@ export default function CustomiseProfile() {
         setTopicInterests(currentPerson.topicInterests);
         setProfilePicture(currentPerson.profilePicture);
         setProfileBanner(currentPerson.profileBanner);
-        console.log(currentPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -182,7 +187,8 @@ export default function CustomiseProfile() {
     )
       .done(() => {
         alert.show("Profile updated successfully!");
-        setRefresh(!refresh);
+        history.push("/profile/" + currentUser);
+        // setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
         console.log(xhr);
@@ -203,17 +209,25 @@ export default function CustomiseProfile() {
                 <div className="container">
                   <div className="row">
                     <div className="col-sm-3">
-                      <img
-                        style={{
-                          resizeMode: "repeat",
-                          height: 130,
-                          width: 130,
-                          borderRadius: "50%",
-                          display: "block",
-                        }}
-                        src={profilePicture || defaultDP}
-                        alt="Profile Picture"
-                      />
+                      {profileProgress > 0 && profileProgress < 100 ? (
+                        <div className="d-flex justify-content-center">
+                          <CircularProgressWithLabel
+                            value={profileProgress}
+                            size={130}
+                          />
+                        </div>
+                      ) : (
+                        <img
+                          style={{
+                            resizeMode: "repeat",
+                            height: 130,
+                            width: 130,
+                            borderRadius: "50%",
+                            display: "block",
+                          }}
+                          src={profilePicture || defaultDP}
+                        />
+                      )}
                     </div>
                     <div className="col-sm-8">
                       <label
@@ -224,7 +238,7 @@ export default function CustomiseProfile() {
                           width: "220px",
                           outline: "none",
                           fontWeight: "600",
-                          "background-color": "#3B21CB",
+                          backgroundColor: "#3B21CB",
                           color: "white",
                         }}
                       >
@@ -252,14 +266,20 @@ export default function CustomiseProfile() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Profile Banner
               </Box>
-              <img
-                style={{
-                  resizeMode: "repeat",
-                  height: 80,
-                  width: 512,
-                }}
-                src={profileBanner || defaultBanner}
-              />
+              {bannerProgress > 0 && bannerProgress < 100 ? (
+                <div className="d-flex justify-content-center">
+                  <CircularProgressWithLabel value={bannerProgress} size={80} />
+                </div>
+              ) : (
+                <img
+                  style={{
+                    resizeMode: "repeat",
+                    height: 80,
+                    width: 512,
+                  }}
+                  src={profileBanner || defaultBanner}
+                />
+              )}
               <Box fontWeight="fontWeightRegular" m={1}>
                 File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
               </Box>
@@ -271,7 +291,7 @@ export default function CustomiseProfile() {
                   width: "220px",
                   outline: "none",
                   fontWeight: "600",
-                  "background-color": "#3B21CB",
+                  backgroundColor: "#3B21CB",
                   color: "white",
                 }}
               >
