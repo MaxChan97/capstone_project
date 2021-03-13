@@ -13,6 +13,7 @@ import Select from "react-select";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { storage } from "../firebase";
+import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
 var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 
 const topics = [
   { value: "REAL_ESTATE", label: "Real Estate" },
@@ -42,11 +42,12 @@ export default function CreateCommunity() {
   const [communityPicture, setCommunityPicture] = useState("");
   const [communityBanner, setCommunityBanner] = useState("");
   const [charLimit, setCharLimit] = useState(1000);
+  const [profileProgress, setProfileProgress] = useState(0);
+  const [bannerProgress, setBannerProgress] = useState(0);
   console.log(charLimit);
 
   const history = useHistory();
   const dispatch = useDispatch();
-  
 
   const handleTopicInterestsChange = (selectedOptions) => {
     let tempSelectedOptions = [];
@@ -70,6 +71,7 @@ export default function CreateCommunity() {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
+        setProfileProgress(progress);
       },
       (error) => {
         console.log(error);
@@ -100,6 +102,7 @@ export default function CreateCommunity() {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
+        setBannerProgress(progress);
       },
       (error) => {
         console.log(error);
@@ -121,11 +124,9 @@ export default function CreateCommunity() {
 
   const currentUser = useSelector((state) => state.currentUser);
 
-
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
-
 
   function toTitleCase(str) {
     var i,
@@ -155,12 +156,13 @@ export default function CreateCommunity() {
     e.preventDefault();
     console.log("test1");
     Api.createCommunity(
-        currentUser, 
-        communityName, 
-        description, 
-        topicInterests, 
-        communityPicture, 
-        communityBanner)
+      currentUser,
+      communityName,
+      description,
+      topicInterests,
+      communityPicture,
+      communityBanner
+    )
       .done((createdCommunity) => {
         alert.show("Community Created Successfully!");
         setCommunityName("");
@@ -200,17 +202,25 @@ export default function CreateCommunity() {
                 <div className="container">
                   <div className="row">
                     <div className="col-sm-3">
-                      <img
-                        style={{
-                          resizeMode: "repeat",
-                          height: 130,
-                          width: 130,
-                          borderRadius: "50%",
-                          display: "block"
-                        }}
-                        src={communityPicture || defaultDP}
-                        alt="Community Picture"
-                      />
+                      {profileProgress > 0 && profileProgress < 100 ? (
+                        <div className="d-flex justify-content-center">
+                          <CircularProgressWithLabel
+                            value={profileProgress}
+                            size={130}
+                          />
+                        </div>
+                      ) : (
+                        <img
+                          style={{
+                            resizeMode: "repeat",
+                            height: 130,
+                            width: 130,
+                            borderRadius: "50%",
+                            display: "block",
+                          }}
+                          src={communityPicture || defaultDP}
+                        />
+                      )}
                     </div>
                     <div className="col-sm-8">
                       <label
@@ -236,8 +246,9 @@ export default function CreateCommunity() {
                         />
                       </label>
                       <Box fontWeight="fontWeightRegular" m={1}>
-                        JPEG or PNG only and cannot exceed 10MB. It’s recommended
-                        to use a picture that’s at least 100 x 100 pixels
+                        JPEG or PNG only and cannot exceed 10MB. It’s
+                        recommended to use a picture that’s at least 100 x 100
+                        pixels
                       </Box>
                     </div>
                   </div>
@@ -248,14 +259,20 @@ export default function CreateCommunity() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Community Banner
               </Box>
-              <img
-                style={{
-                  resizeMode: "repeat",
-                  height: 80,
-                  width: 512,
-                }}
-                src={communityBanner || defaultBanner}
-              />
+              {bannerProgress > 0 && bannerProgress < 100 ? (
+                <div className="d-flex justify-content-center">
+                  <CircularProgressWithLabel value={bannerProgress} size={80} />
+                </div>
+              ) : (
+                <img
+                  style={{
+                    resizeMode: "repeat",
+                    height: 80,
+                    width: 512,
+                  }}
+                  src={communityBanner || defaultBanner}
+                />
+              )}
               <Box fontWeight="fontWeightRegular" m={1}>
                 File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
               </Box>
@@ -304,22 +321,30 @@ export default function CreateCommunity() {
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputDescription">Description</label>
-                    <textarea className="form-control" value={description} maxLength={1000} onChange={(e) => {
-                        setDescription(e.target.value);}} />
-                    <p style={{textAlign: "right"}}>{description.length}/1000</p>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      maxLength={1000}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                      }}
+                    />
+                    <p style={{ textAlign: "right" }}>
+                      {description.length}/1000
+                    </p>
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputTopics">Related Topics</label>
                     <Select
-                        isMulti
-                        name="topics"
-                        options={topics}
-                        onChange={(selectedOptions) =>
-                          handleTopicInterestsChange(selectedOptions)
-                        }
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                      />
+                      isMulti
+                      name="topics"
+                      options={topics}
+                      onChange={(selectedOptions) =>
+                        handleTopicInterestsChange(selectedOptions)
+                      }
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
                   </div>
                   <div className="form-group">
                     <ColorButton
