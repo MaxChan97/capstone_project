@@ -11,6 +11,7 @@ import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
+import entity.adminEntities.Administrator;
 import entity.personEntities.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
@@ -79,6 +80,13 @@ public class DataInitSessionBean {
         } catch (NoResultException | NotValidException ex) {
             initData();
         }
+    }
+
+    private void createMasterAdmin() throws NotValidException {
+        Administrator masterAdmin = new Administrator();
+        masterAdmin.setEmail("admin@bnb.com");
+        masterAdmin.setUsername("masterAdmin");
+        masterAdmin.setPassword("password");
     }
 
     private void createPersons() throws NotValidException {
@@ -388,6 +396,7 @@ public class DataInitSessionBean {
     private void initData() {
 
         try {
+            createMasterAdmin();
             createPersons();
             updateProfilePictures();
             createCommunities();
