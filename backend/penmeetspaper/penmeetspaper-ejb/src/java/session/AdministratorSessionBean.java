@@ -48,7 +48,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
     }
 
     private boolean isMasterAdminCreated() {
-        Query q = em.createQuery("SELECT a Administrator a");
+        Query q = em.createQuery("SELECT a from Administrator a");
         List<Administrator> adminList = q.getResultList();
         if (adminList.isEmpty()) {
             // Master Admin cannot be deleted;

@@ -36,6 +36,9 @@ import javax.ejb.Startup;
 public class DataInitSessionBean {
 
     @EJB
+    private AdministratorSessionBeanLocal administratorSB;
+    
+    @EJB
     private BanSessionBeanLocal banSB;
 
     @EJB
@@ -87,6 +90,8 @@ public class DataInitSessionBean {
         masterAdmin.setEmail("admin@bnb.com");
         masterAdmin.setUsername("masterAdmin");
         masterAdmin.setPassword("password");
+        
+        administratorSB.createAdmin(masterAdmin);
     }
 
     private void createPersons() throws NotValidException {
