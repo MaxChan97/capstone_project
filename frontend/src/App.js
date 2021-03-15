@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Redirect, Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
@@ -213,7 +213,8 @@ function App() {
             <Route exact path="/admin/adminmanagement" component={AdminManagementPage} />
             <Route exact path="/admin/createAdmin" component={CreateAnotherAdmin} />
 
-            <Route path="*" component={PageNotFound} />
+            <Route path="/404" component={PageNotFound} />
+            <Redirect to="/404" />
             
           </div>
         </div>
