@@ -213,8 +213,8 @@ function App() {
             <Route exact path="/admin/adminmanagement" component={AdminManagementPage} />
             <Route exact path="/admin/createAdmin" component={CreateAnotherAdmin} />
 
-            <Route path="/404" component={PageNotFound} />
-            <Redirect to="/404" />
+            {/* <Route path="/404" component={PageNotFound} />
+            <Redirect to="/404" /> */}
             
           </div>
         </div>
