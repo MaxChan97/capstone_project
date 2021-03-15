@@ -44,9 +44,12 @@ import AdminAdManagementPage from "./screens/AdminAdManagementPage";
 import AdminManagementPage from "./screens/AdminManagementPage";
 import AdminLogin from "./screens/AdminLogin"; 
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin"; 
+import { useSelector, useDispatch } from "react-redux";
+import AdminNavBar from "./components/AdminNavBar";
 
 function App() {
   let location = useLocation();
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [searchString, setSearchString] = useState("");
   const [searchRefresh, setSearchRefresh] = useState(true);
@@ -55,7 +58,19 @@ function App() {
     if (location.pathname === "/login" || location.pathname === "/register" 
     || location.pathname === "/admin/login") {
       return "";
-    } else if (location.pathname === "/chat") {
+    } else if (isAdmin == true) {
+      return (
+        <div>
+          <AdminNavBar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <AdminSideBar />
+        </div>
+      );
+    }else if (location.pathname === "/chat") {
       return (
         <div>
           <Navbar
@@ -98,21 +113,6 @@ function App() {
             setSearchRefresh={setSearchRefresh}
           />
           <CommunityDashboardSidebar />
-        </div>
-      );
-    } else if( location.pathname === "/admin" || location.pathname === "/admin/inbox"
-    || location.pathname === "/admin/analytics" || location.pathname === "/admin/usermanagement"
-    || location.pathname === "/admin/advertisementmanagement" || location.pathname === "/admin/adminmanagement"
-    || location.pathname === "/admin/createAdmin") {
-      return (
-        <div>
-          <Navbar
-            searchString={searchString}
-            setSearchString={setSearchString}
-            searchRefresh={searchRefresh}
-            setSearchRefresh={setSearchRefresh}
-          />
-          <AdminSideBar />
         </div>
       );
     } else {
