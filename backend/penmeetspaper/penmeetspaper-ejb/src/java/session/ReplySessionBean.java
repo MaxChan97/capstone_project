@@ -11,6 +11,7 @@ import entity.personEntities.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Objects;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +25,9 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private PersonSessionBeanLocal personSB;
 
     // Helper methods to check and retrieve entities
     private Reply emGetReply(Long replyId) throws NoResultException, NotValidException {
@@ -95,6 +99,8 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         em.persist(reply);
 
         comment.getReplies().add(reply);
+
+        personSB.addContributorPointsToPerson(personId, 1.0);
 
         em.flush();
     }
