@@ -46,7 +46,7 @@ import AdminLogin from "./screens/AdminLogin";
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin"; 
 import { useSelector, useDispatch } from "react-redux";
 import AdminNavBar from "./components/AdminNavBar";
-
+import ReportDetails from "./components/AdminPage/ReportDetails";
 function App() {
   let location = useLocation();
   const isAdmin = useSelector((state) => state.isAdmin);
@@ -212,7 +212,7 @@ function App() {
             <Route exact path="/admin/advertisementmanagement" component={AdminAdManagementPage} />
             <Route exact path="/admin/adminmanagement" component={AdminManagementPage} />
             <Route exact path="/admin/createAdmin" component={CreateAnotherAdmin} />
-
+            <Route exact path="/admin/reportDetails" component={ReportDetails} />
             {/* <Route path="/404" component={PageNotFound} />
             <Redirect to="/404" /> */}
             
