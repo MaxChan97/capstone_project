@@ -154,6 +154,22 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     }
 
     @Override
+    public void addCCPointsToPerson(Long personId, double points) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        Double currCCPoints = person.getContentCreatorPoints();
+        currCCPoints += points;
+        person.setContentCreatorPoints(currCCPoints);
+    }
+
+    @Override
+    public void addContributorPointsToPerson(Long personId, double points) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        Double currContributorPoints = person.getContributorPoints();
+        currContributorPoints += points;
+        person.setContributorPoints(currContributorPoints);
+    }
+
+    @Override
     public Person createPerson(Person person) throws NotValidException {
         if (person == null) {
             throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON);

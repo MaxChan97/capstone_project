@@ -74,4 +74,8 @@ public interface PersonSessionBeanLocal {
 
     public void updatePersonInfo(Person person) throws NoResultException, NotValidException;
 
+    public void addCCPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
+
+    public void addContributorPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
+
 }
