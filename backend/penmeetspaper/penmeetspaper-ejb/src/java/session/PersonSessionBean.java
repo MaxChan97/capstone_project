@@ -613,6 +613,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         for (Badge b : dontHaveBadgeList) {
             BadgeTypeEnum badgeEnum = b.getBadgeType();
             int pointsRequired = b.getValueRequired();
+
             if (badgeEnum == BadgeTypeEnum.CONTRIBUTION) {
                 if (contributorPoints > pointsRequired) {
                     person.getBadges().add(b);
