@@ -7,6 +7,7 @@ package session;
 
 import entity.Badge;
 import exception.NotValidException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -22,4 +23,6 @@ public interface BadgeSessionBeanLocal {
     public void createBadges();
 
     public Badge getBadgeByDisplayName(String displayName) throws NotValidException;
+
+    public List<Badge> getAllBadges();
 }

@@ -590,4 +590,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         return resultList;
     }
 
+    @Override
+    public void checkBadgeQualification(Long personId) {
+
+    }
+
 }

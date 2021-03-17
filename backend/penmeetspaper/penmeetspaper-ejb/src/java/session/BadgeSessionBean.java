@@ -168,4 +168,10 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         }
     }
 
+    @Override
+    public List<Badge> getAllBadges() {
+        Query q = em.createQuery("SELECT b FROM Badge b");
+        return q.getResultList();
+    }
+
 }
