@@ -81,4 +81,6 @@ public interface PersonSessionBeanLocal {
 
     public List<Person> getTopTenContributors() throws NoResultException;
 
+    public List<Person> getTopTenStreamers() throws NoResultException;
+
 }

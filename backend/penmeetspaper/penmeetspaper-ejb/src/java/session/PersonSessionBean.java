@@ -15,7 +15,6 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -522,18 +521,16 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             throw new NoResultException(PersonSessionBeanLocal.EMPTY_PERSON);
         }
 
-        Collections.sort(personList, new Comparator<Person>() {
-            public int compare(Person p1, Person p2) {
-                double p1Points = p1.getContributorPoints();
-                double p2Points = p2.getContributorPoints();
+        Collections.sort(personList, (Person p1, Person p2) -> {
+            double p1Points = p1.getContributorPoints();
+            double p2Points = p2.getContributorPoints();
 
-                if (p1Points == p2Points) {
-                    return 0;
-                } else if (p1Points < p2Points) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+            if (p1Points == p2Points) {
+                return 0;
+            } else if (p1Points < p2Points) {
+                return -1;
+            } else {
+                return 1;
             }
         });
 
@@ -545,7 +542,38 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
 
         return resultList;
+    }
 
+    @Override
+    public List<Person> getTopTenStreamers() throws NoResultException {
+        Query q = em.createQuery("SELECT p FROM Person p");
+        List<Person> personList = q.getResultList();
+
+        if (personList.isEmpty()) {
+            throw new NoResultException(PersonSessionBeanLocal.EMPTY_PERSON);
+        }
+
+        Collections.sort(personList, (Person p1, Person p2) -> {
+            double p1Points = p1.getContentCreatorPoints();
+            double p2Points = p2.getContentCreatorPoints();
+
+            if (p1Points == p2Points) {
+                return 0;
+            } else if (p1Points < p2Points) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+
+        List<Person> resultList = new ArrayList();
+
+        for (int i = 0; i < 10; i++) {
+            Person p = resultList.get(i);
+            resultList.add(p);
+        }
+
+        return resultList;
     }
 
 }

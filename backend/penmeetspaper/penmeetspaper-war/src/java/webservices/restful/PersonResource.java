@@ -552,4 +552,22 @@ public class PersonResource {
         }
 
     }
+
+    @GET
+    @Path("/topTenStreamers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTenTopStreamers() {
+        try {
+            List<Person> results = personSB.getTopTenStreamers();
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+
+    }
 }
