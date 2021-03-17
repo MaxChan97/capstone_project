@@ -15,6 +15,7 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -197,6 +198,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         generateRandomProfilePicture(person);
         person.setProfileBanner(
                 "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
+        person.setContentCreatorPoints(0.0);
+        person.setContributorPoints(0.0);
         em.persist(person);
         em.flush();
 
@@ -509,4 +512,40 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         return results;
     }
+
+    @Override
+    public List<Person> getTopTenContributors() throws NoResultException {
+        Query q = em.createQuery("SELECT p FROM Person p");
+        List<Person> personList = q.getResultList();
+
+        if (personList.isEmpty()) {
+            throw new NoResultException(PersonSessionBeanLocal.EMPTY_PERSON);
+        }
+
+        Collections.sort(personList, new Comparator<Person>() {
+            public int compare(Person p1, Person p2) {
+                double p1Points = p1.getContributorPoints();
+                double p2Points = p2.getContributorPoints();
+
+                if (p1Points == p2Points) {
+                    return 0;
+                } else if (p1Points < p2Points) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+
+        List<Person> resultList = new ArrayList();
+
+        for (int i = 0; i < 10; i++) {
+            Person p = resultList.get(i);
+            resultList.add(p);
+        }
+
+        return resultList;
+
+    }
+
 }

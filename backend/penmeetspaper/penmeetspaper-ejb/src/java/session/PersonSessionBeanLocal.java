@@ -33,6 +33,7 @@ public interface PersonSessionBeanLocal {
     public final static String EMAIL_TAKEN = "Email taken";
     public final static String USERNAME_TAKEN = "Username taken";
     public final static String WRONG_PASSWORD = "Wrong password";
+    public final static String EMPTY_PERSON = "No person found";
 
     public Person createPerson(Person person) throws NotValidException;
 
@@ -77,5 +78,7 @@ public interface PersonSessionBeanLocal {
     public void addCCPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
 
     public void addContributorPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
+
+    public List<Person> getTopTenContributors() throws NoResultException;
 
 }

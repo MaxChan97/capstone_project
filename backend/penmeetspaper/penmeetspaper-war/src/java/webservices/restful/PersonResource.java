@@ -534,4 +534,22 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changePassword
+
+    @GET
+    @Path("/topTenContributors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTenTopContributors() {
+        try {
+            List<Person> results = personSB.getTopTenContributors();
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+
+    }
 }
