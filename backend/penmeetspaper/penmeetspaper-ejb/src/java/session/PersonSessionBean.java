@@ -12,13 +12,16 @@ import entity.personEntities.Person;
 import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import enumeration.BadgeTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -591,8 +594,40 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     }
 
     @Override
-    public void checkBadgeQualification(Long personId) {
+    public void checkBadgeQualification(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        List<Badge> badgeList = badgeSB.getAllBadges();
+        List<Badge> personBadgeList = person.getBadges();
 
+        Set<Badge> badgeSet = new HashSet<>(badgeList);
+        Set<Badge> personBadgeSet = new HashSet<Badge>(personBadgeList);
+        badgeSet.removeAll(personBadgeSet);
+
+        List<Badge> dontHaveBadgeList = new ArrayList();
+        dontHaveBadgeList.addAll(badgeSet);
+
+        double ccPoints = person.getContentCreatorPoints();
+        double contributorPoints = person.getContributorPoints();
+        double totalPoints = ccPoints + contributorPoints;
+
+        for (Badge b : dontHaveBadgeList) {
+            BadgeTypeEnum badgeEnum = b.getBadgeType();
+            int pointsRequired = b.getValueRequired();
+
+            if (badgeEnum == BadgeTypeEnum.CONTRIBUTION) {
+                if (contributorPoints > pointsRequired) {
+                    person.getBadges().add(b);
+                }
+            } else if (badgeEnum == BadgeTypeEnum.STREAM) {
+                if (ccPoints > pointsRequired) {
+                    person.getBadges().add(b);
+                }
+            } else if (badgeEnum == BadgeTypeEnum.OVERALL) {
+                if (totalPoints > pointsRequired) {
+                    person.getBadges().add(b);
+                }
+            }
+        }
     }
 
 }
