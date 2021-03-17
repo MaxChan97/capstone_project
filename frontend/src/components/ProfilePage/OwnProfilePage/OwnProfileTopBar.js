@@ -39,6 +39,7 @@ export default function OwnProfileTopBar({
   numFollowers,
   profilePicture,
   profileBanner,
+  badge
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -73,6 +74,7 @@ export default function OwnProfileTopBar({
           username={username}
           numFollowers={numFollowers}
           profilePicture={profilePicture}
+          badge={badge}
         />
         <ProfileManagementButtonGroup />
       </div>
