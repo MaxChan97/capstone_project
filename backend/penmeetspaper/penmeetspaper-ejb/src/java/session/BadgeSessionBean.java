@@ -155,8 +155,8 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
 
     @Override
     public Badge getBadgeByDisplayName(String displayName) throws NotValidException {
-        Query q = em.createQuery("SELECT b FROM Badge b WHERE LOWER(b.displayName) = :displayName");
-        q.setParameter("displayName", "%" + displayName.toLowerCase() + "%");
+        Query q = em.createQuery("SELECT b FROM Badge b WHERE b.displayName = :displayName");
+        q.setParameter("displayName", displayName);
 
         List<Badge> badgeList = q.getResultList();
         if (badgeList.size() > 1) {
