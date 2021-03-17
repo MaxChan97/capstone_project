@@ -37,9 +37,12 @@ public class DataInitSessionBean {
 
     @EJB
     private AdministratorSessionBeanLocal administratorSB;
-    
+
     @EJB
     private BanSessionBeanLocal banSB;
+
+    @EJB
+    private BadgeSessionBeanLocal badgeSB;
 
     @EJB
     private ChatSessionBeanLocal chatSB;
@@ -90,7 +93,7 @@ public class DataInitSessionBean {
         masterAdmin.setEmail("admin@bnb.com");
         masterAdmin.setUsername("masterAdmin");
         masterAdmin.setPassword("password");
-        
+
         administratorSB.createAdmin(masterAdmin);
     }
 
@@ -398,9 +401,14 @@ public class DataInitSessionBean {
         communitySB.banPerson(new Long(1), new Long(7), new Long(1));
     }
 
+    private void createBadges() throws NotValidException {
+        badgeSB.createBadges();
+    }
+
     private void initData() {
 
         try {
+            createBadges();
             createMasterAdmin();
             createPersons();
             updateProfilePictures();
