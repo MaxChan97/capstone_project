@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.Badge;
 import entity.Community;
 import entity.Post;
 import entity.personEntities.Person;
@@ -36,6 +37,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @EJB
     private BanSessionBeanLocal banSB;
+
+    @EJB
+    private BadgeSessionBeanLocal badgeSB;
 
     @EJB
     private CommunitySessionBeanLocal communitySB;
@@ -131,6 +135,15 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
     }
 
+    private void setDefaultBadge(Person person) throws NotValidException {
+
+        Badge b1 = badgeSB.getBadgeByDisplayName("Level 1 Badge");
+        List<Badge> badgeList = new ArrayList();
+        badgeList.add(b1);
+        person.setBadges(badgeList);
+        person.setBadgeDisplaying(b1);
+    }
+
     private void generateRandomProfilePicture(Person person) {
 
         String[] profilePicArray = {
@@ -199,6 +212,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         person.setContentCreatorPoints(0.0);
         person.setContributorPoints(0.0);
+        setDefaultBadge(person);
         em.persist(person);
         em.flush();
 

@@ -5,6 +5,8 @@
  */
 package session;
 
+import entity.Badge;
+import exception.NotValidException;
 import javax.ejb.Local;
 
 /**
@@ -15,6 +17,9 @@ import javax.ejb.Local;
 public interface BadgeSessionBeanLocal {
 
     public final static String MULTIPLE_BADGES_FOUND = "Multiple badges found";
+    public final static String NO_BADGES_FOUND = "No badges found";
 
     public void createBadges();
+
+    public Badge getBadgeByDisplayName(String displayName) throws NotValidException;
 }
