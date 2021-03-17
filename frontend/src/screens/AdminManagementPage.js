@@ -57,6 +57,36 @@ export default function AdminManagementPage() {
                 </div>
               </div>
             </div>
+            <br></br>
+            <div className="card card-primary">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <ColorButton
+                    style={{
+                      height: "35px",
+                      width: "300px",
+                      outline: "none",
+                      float: "right",
+                      fontWeight: "600",
+                      backgroundColor: "#EA3F79",
+                    }}
+
+                    variant="contained"
+                    color="primary"
+                    type="button"
+                  >
+                    View all admin logs
+                  </ColorButton>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

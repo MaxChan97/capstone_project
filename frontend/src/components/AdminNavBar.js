@@ -127,7 +127,7 @@ function AdminNavBar({
       </div>
 
       <div>
-        <Link to="/feed">
+        <Link to="/admin/inbox">
           <img
             style={{ height: "40px", display: "flex" }}
             src={BNBLogo}
@@ -162,7 +162,7 @@ function AdminNavBar({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-around",
-          width: "21%",
+          width: "10%",
         }}
       >
           {/*
