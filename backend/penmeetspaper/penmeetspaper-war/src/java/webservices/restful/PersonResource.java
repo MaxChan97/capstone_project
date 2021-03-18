@@ -568,6 +568,19 @@ public class PersonResource {
         } catch (NoResultException e) {
             return buildError(e, 400);
         }
+    }
 
+    @PUT
+    @Path("/changeBadge/person/{personId}/badge/{badgeId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeBadge(@PathParam("personId") Long personId, @PathParam("badgeId") Long badgeId) {
+        try {
+
+            personSB.changeBadge(personId, badgeId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     }
 }

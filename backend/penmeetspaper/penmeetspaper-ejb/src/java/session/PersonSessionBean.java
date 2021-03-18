@@ -641,6 +641,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
     }
 
+    @Override
     public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException {
         Person person = emGetPerson(personId);
 

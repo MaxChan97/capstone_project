@@ -88,4 +88,6 @@ public interface PersonSessionBeanLocal {
 
     public void checkBadgeQualification(Long personId) throws NotValidException, NoResultException;
 
+    public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException;
+
 }
