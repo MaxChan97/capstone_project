@@ -609,24 +609,33 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         double ccPoints = person.getContentCreatorPoints();
         double contributorPoints = person.getContributorPoints();
         double totalPoints = ccPoints + contributorPoints;
+        int numFollowers = getFollowers(person.getId()).size();
+        int numPosts = person.getPosts().size();
 
         for (Badge b : dontHaveBadgeList) {
             BadgeTypeEnum badgeEnum = b.getBadgeType();
             int pointsRequired = b.getValueRequired();
 
-            if (badgeEnum == BadgeTypeEnum.CONTRIBUTION) {
-                if (contributorPoints > pointsRequired) {
-                    person.getBadges().add(b);
-                }
-            } else if (badgeEnum == BadgeTypeEnum.STREAM) {
-                if (ccPoints > pointsRequired) {
-                    person.getBadges().add(b);
-                }
-            } else if (badgeEnum == BadgeTypeEnum.OVERALL) {
-                if (totalPoints > pointsRequired) {
-                    person.getBadges().add(b);
-                }
+            switch (badgeEnum) {
+                case OVERALL:
+                    if (totalPoints > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+                case STREAM:
+                    if (ccPoints > pointsRequired * 10) {
+                        person.getBadges().add(b);
+                    }
+                case FOLLOWER:
+                    if (numFollowers > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+                case POST:
+                    if (numPosts > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+
             }
+
         }
     }
 
