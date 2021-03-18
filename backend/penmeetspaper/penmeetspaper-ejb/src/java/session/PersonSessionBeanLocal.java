@@ -35,6 +35,9 @@ public interface PersonSessionBeanLocal {
     public final static String WRONG_PASSWORD = "Wrong password";
     public final static String EMPTY_PERSON = "No person found";
 
+    public final static String INVALID_BADGE_SELECTED = "Person does not have this badge";
+    public final static String UNEXPECTED_ERROR = "Unexpected error occured";
+
     public Person createPerson(Person person) throws NotValidException;
 
     public List<Person> searchPersonByUsername(String username) throws NoResultException, NotValidException;

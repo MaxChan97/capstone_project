@@ -621,21 +621,49 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                     if (totalPoints > pointsRequired) {
                         person.getBadges().add(b);
                     }
+
                 case STREAM:
                     if (ccPoints > pointsRequired * 10) {
                         person.getBadges().add(b);
                     }
+
                 case FOLLOWER:
                     if (numFollowers > pointsRequired) {
                         person.getBadges().add(b);
                     }
+
                 case POST:
                     if (numPosts > pointsRequired) {
                         person.getBadges().add(b);
                     }
 
             }
+        }
+    }
 
+    public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        List<Badge> personBadges = person.getBadges();
+
+        boolean hasBadge = false;
+
+        Badge badgeToDisplay = null;
+
+        for (Badge b : personBadges) {
+            if (b.getId() == badgeId) {
+                hasBadge = true;
+                badgeToDisplay = b;
+            }
+        }
+
+        if (!hasBadge) {
+            throw new NotValidException(PersonSessionBeanLocal.INVALID_BADGE_SELECTED);
+        }
+        if (badgeToDisplay != null) {
+            person.setBadgeDisplaying(badgeToDisplay);
+        } else {
+            throw new NotValidException(PersonSessionBeanLocal.UNEXPECTED_ERROR);
         }
     }
 
