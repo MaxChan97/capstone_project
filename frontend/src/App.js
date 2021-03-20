@@ -17,6 +17,7 @@ import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
 import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./screens/UserSettings";
+import StreamPage from "./screens/StreamPage";
 import ChatPage from "./screens/ChatPage";
 import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";
@@ -42,8 +43,8 @@ import AdminAnalyticsPage from "./screens/AdminAnalyticsPage";
 import AdminUserManagementPage from "./screens/AdminUserManagementPage";
 import AdminAdManagementPage from "./screens/AdminAdManagementPage";
 import AdminManagementPage from "./screens/AdminManagementPage";
-import AdminLogin from "./screens/AdminLogin"; 
-import CreateAnotherAdmin from "./screens/CreateAnotherAdmin"; 
+import AdminLogin from "./screens/AdminLogin";
+import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 
 function App() {
   let location = useLocation();
@@ -52,8 +53,11 @@ function App() {
   const [searchRefresh, setSearchRefresh] = useState(true);
 
   function renderNavSide() {
-    if (location.pathname === "/login" || location.pathname === "/register" 
-    || location.pathname === "/admin/login") {
+    if (
+      location.pathname === "/login" ||
+      location.pathname === "/register" ||
+      location.pathname === "/admin/login"
+    ) {
       return "";
     } else if (location.pathname === "/chat") {
       return (
@@ -100,10 +104,15 @@ function App() {
           <CommunityDashboardSidebar />
         </div>
       );
-    } else if( location.pathname === "/admin" || location.pathname === "/admin/inbox"
-    || location.pathname === "/admin/analytics" || location.pathname === "/admin/usermanagement"
-    || location.pathname === "/admin/advertisementmanagement" || location.pathname === "/admin/adminmanagement"
-    || location.pathname === "/admin/createAdmin") {
+    } else if (
+      location.pathname === "/admin" ||
+      location.pathname === "/admin/inbox" ||
+      location.pathname === "/admin/analytics" ||
+      location.pathname === "/admin/usermanagement" ||
+      location.pathname === "/admin/advertisementmanagement" ||
+      location.pathname === "/admin/adminmanagement" ||
+      location.pathname === "/admin/createAdmin"
+    ) {
       return (
         <div>
           <Navbar
@@ -157,11 +166,16 @@ function App() {
             <Route exact path="/postCard" component={ProfilePostCard} />
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
+            <Route exact path="/stream" component={StreamPage} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
             <Route exact path="/changePassword" component={ChangePassword} />
             <Route exact path="/myCommunities" component={MyCommunities} />
-            <Route exact path="/community/:communityId/banned" component={BannedPage} />
+            <Route
+              exact
+              path="/community/:communityId/banned"
+              component={BannedPage}
+            />
 
             <Route
               exact
@@ -207,14 +221,33 @@ function App() {
             <Route exact path="/community" component={CommunityFeed} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />
-            <Route exact path="/admin/analytics" component={AdminAnalyticsPage} />
-            <Route exact path="/admin/usermanagement" component={AdminUserManagementPage} />
-            <Route exact path="/admin/advertisementmanagement" component={AdminAdManagementPage} />
-            <Route exact path="/admin/adminmanagement" component={AdminManagementPage} />
-            <Route exact path="/admin/createAdmin" component={CreateAnotherAdmin} />
+            <Route
+              exact
+              path="/admin/analytics"
+              component={AdminAnalyticsPage}
+            />
+            <Route
+              exact
+              path="/admin/usermanagement"
+              component={AdminUserManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/advertisementmanagement"
+              component={AdminAdManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/adminmanagement"
+              component={AdminManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/createAdmin"
+              component={CreateAnotherAdmin}
+            />
 
             <Route path="*" component={PageNotFound} />
-            
           </div>
         </div>
       </Switch>
