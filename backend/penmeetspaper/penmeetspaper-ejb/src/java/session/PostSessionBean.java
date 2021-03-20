@@ -119,6 +119,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
+
+        personSB.addContributorPointsToPerson(personId, 3.0);
         em.flush();
 
     } // end createPostForPerson

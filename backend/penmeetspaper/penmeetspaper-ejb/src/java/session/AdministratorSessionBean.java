@@ -6,6 +6,7 @@
 package session;
 
 import entity.adminEntities.Administrator;
+import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +33,22 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         }
     }
 
+    private Administrator emGetAdmin(Long adminId) throws NoResultException, NotValidException {
+        if (adminId == null) {
+            throw new NotValidException(AdministratorSessionBeanLocal.MISSING_ADMIN_ID);
+        }
+
+        Administrator admin = em.find(Administrator.class, adminId);
+
+        if (admin == null) {
+            throw new NoResultException(AdministratorSessionBeanLocal.CANNOT_FIND_ADMIN);
+        }
+
+        return admin;
+    }
+
     private boolean isMasterAdminCreated() {
-        Query q = em.createQuery("SELECT a Administrator a");
+        Query q = em.createQuery("SELECT a from Administrator a");
         List<Administrator> adminList = q.getResultList();
         if (adminList.isEmpty()) {
             // Master Admin cannot be deleted;
@@ -73,6 +88,15 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         em.persist(admin);
         em.flush();
 
+        return admin;
+    }
+
+    @Override
+    public Administrator getAdminById(Long aId) throws NoResultException, NotValidException {
+        Administrator admin = emGetAdmin(aId);
+        em.detach(admin);
+
+        // nullifying for marshalling done hereS
         return admin;
     }
 }

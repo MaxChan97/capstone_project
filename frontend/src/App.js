@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Redirect, Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
@@ -46,8 +46,14 @@ import AdminManagementPage from "./screens/AdminManagementPage";
 import AdminLogin from "./screens/AdminLogin";
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 
+import AdminLogin from "./screens/AdminLogin";
+import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
+import { useSelector, useDispatch } from "react-redux";
+import AdminNavBar from "./components/AdminNavBar";
+import ReportDetails from "./components/AdminPage/ReportDetails";
 function App() {
   let location = useLocation();
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [searchString, setSearchString] = useState("");
   const [searchRefresh, setSearchRefresh] = useState(true);
@@ -59,6 +65,18 @@ function App() {
       location.pathname === "/admin/login"
     ) {
       return "";
+    } else if (isAdmin == true) {
+      return (
+        <div>
+          <AdminNavBar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <AdminSideBar />
+        </div>
+      );
     } else if (location.pathname === "/chat") {
       return (
         <div>
@@ -246,8 +264,13 @@ function App() {
               path="/admin/createAdmin"
               component={CreateAnotherAdmin}
             />
-
-            <Route path="*" component={PageNotFound} />
+            <Route
+              exact
+              path="/admin/reportDetails"
+              component={ReportDetails}
+            />
+            {/* <Route path="/404" component={PageNotFound} />
+            <Redirect to="/404" /> */}
           </div>
         </div>
       </Switch>

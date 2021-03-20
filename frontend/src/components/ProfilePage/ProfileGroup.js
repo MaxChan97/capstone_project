@@ -1,11 +1,15 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
+// import badge from "../../assets/Videos Streamed Badge.png";
 
 export default function ProfileGroup({
   username,
   numFollowers,
   profilePicture,
+  badge
 }) {
+  console.log(badge);
   return (
     <div
       style={{
@@ -14,6 +18,7 @@ export default function ProfileGroup({
         justifyContent: "center",
         alignItems: "center",
         width: "30%",
+        marginLeft: "20px"
       }}
     >
       <img
@@ -44,6 +49,10 @@ export default function ProfileGroup({
           {numFollowers} followers
         </p>
       </div>
+      <img
+        style={{ height: "35px", marginLeft: "20px", marginTop:"-20px"}}
+        src={badge}
+      />
     </div>
   );
 }

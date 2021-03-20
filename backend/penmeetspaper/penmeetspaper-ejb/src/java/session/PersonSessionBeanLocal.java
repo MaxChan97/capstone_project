@@ -33,6 +33,10 @@ public interface PersonSessionBeanLocal {
     public final static String EMAIL_TAKEN = "Email taken";
     public final static String USERNAME_TAKEN = "Username taken";
     public final static String WRONG_PASSWORD = "Wrong password";
+    public final static String EMPTY_PERSON = "No person found";
+
+    public final static String INVALID_BADGE_SELECTED = "Person does not have this badge";
+    public final static String UNEXPECTED_ERROR = "Unexpected error occured";
 
     public Person createPerson(Person person) throws NotValidException;
 
@@ -73,5 +77,17 @@ public interface PersonSessionBeanLocal {
     public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException;
 
     public void updatePersonInfo(Person person) throws NoResultException, NotValidException;
+
+    public void addCCPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
+
+    public void addContributorPointsToPerson(Long personId, double points) throws NotValidException, NoResultException;
+
+    public List<Person> getTopTenContributors() throws NoResultException;
+
+    public List<Person> getTopTenStreamers() throws NoResultException;
+
+    public void checkBadgeQualification(Long personId) throws NotValidException, NoResultException;
+
+    public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException;
 
 }

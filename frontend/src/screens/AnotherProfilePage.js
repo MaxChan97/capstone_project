@@ -15,6 +15,7 @@ export default function AnotherProfilePage({ personId }) {
   const [numFollowers, setNumFollowers] = useState(0);
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
+  const [badge, setBadge] = useState();
 
   useEffect(() => {
     if (personId) {
@@ -26,6 +27,7 @@ export default function AnotherProfilePage({ personId }) {
     Api.getPersonById(personId)
       .done((anotherPerson) => {
         setAnotherPerson(anotherPerson);
+        setBadge(anotherPerson.badgeDisplaying.image);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -81,6 +83,7 @@ export default function AnotherProfilePage({ personId }) {
             profilePicture={anotherPerson.profilePicture}
             profileBanner={anotherPerson.profileBanner}
             anotherPerson={anotherPerson}
+            badge={badge}
           />
           {handleTabView(tabValue)}
         </div>

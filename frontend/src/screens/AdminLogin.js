@@ -91,29 +91,28 @@ export default function AdminLogin() {
     function handleLogin(e) {
         // Enter login logic here
         e.preventDefault();
-        /*
-        Api.login(email, password)
+        
+        Api.adminLogin(email, password)
           .done((loggedInPerson) => {
             setEmail("");
             setPassword("");
             dispatch(logIn(loggedInPerson.id));
-            dispatch(setIsAdmin(false));
-            history.push("/feed");
+            dispatch(setIsAdmin(true));
+            history.push("/admin/inbox");
           })
           .fail((xhr, status, error) => {
             if (xhr.responseJSON.error === "Invalid credentials") {
               alert.show("Invalid credentials, please try again");
             }
           });
-          */
-        history.push("/admin/inbox");
     }
-
+    const isAdmin = useSelector((state) => state.isAdmin);
     const currentUser = useSelector((state) => state.currentUser);
     if (currentUser !== null) {
-        return <Redirect to="/" />;
+        return <Redirect to="/admin/inbox" />;
     }
 
+    
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
