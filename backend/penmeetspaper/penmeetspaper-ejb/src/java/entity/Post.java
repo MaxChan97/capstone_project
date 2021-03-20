@@ -60,10 +60,6 @@ public class Post implements Serializable, Comparable<Post> {
     @ManyToOne
     @JoinColumn(name = "postCommunity")
     private Community postCommunity;
-    // unidirectional
-    @OneToMany
-    @JoinColumn(name = "media_id")
-    private List<Media> media = new ArrayList<>();
 
     // unidirectional | nullable
     @OneToOne
@@ -132,14 +128,6 @@ public class Post implements Serializable, Comparable<Post> {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public List<Media> getMedia() {
-        return media;
-    }
-
-    public void setMedia(List<Media> media) {
-        this.media = media;
     }
 
     public Poll getPoll() {
