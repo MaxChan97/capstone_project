@@ -187,10 +187,6 @@ public class Person implements Serializable {
     @OneToOne
     private Badge badgeDisplaying;
 
-    //unidirectional
-    @JoinColumn(name = "monthlySubscriberCount_id")
-    private List<MonthlySubscriberCount> MonthlySubscriberCounts = new ArrayList<>();
-
     // Getters and Setters -----------------------------------------------------------
     public Person() {
     }
@@ -489,14 +485,6 @@ public class Person implements Serializable {
 
     public void setBadgeDisplaying(Badge badgeDisplaying) {
         this.badgeDisplaying = badgeDisplaying;
-    }
-
-    public List<MonthlySubscriberCount> getMonthlySubscriberCounts() {
-        return MonthlySubscriberCounts;
-    }
-
-    public void setMonthlySubscriberCounts(List<MonthlySubscriberCount> MonthlySubscriberCounts) {
-        this.MonthlySubscriberCounts = MonthlySubscriberCounts;
     }
 
     public String getResetId() {
