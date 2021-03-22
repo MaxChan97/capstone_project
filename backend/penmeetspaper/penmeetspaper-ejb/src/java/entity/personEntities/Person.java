@@ -16,7 +16,6 @@ import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
 import entity.streamingEntities.Stream;
-import entity.viewEntities.ProfilePageView;
 import entity.walletEntities.BankAccount;
 import entity.walletEntities.PaymentCard;
 import entity.walletEntities.PaymentTransaction;
@@ -121,11 +120,6 @@ public class Person implements Serializable {
     @OneToOne
     @JoinColumn(name = "streamStreaming")
     private Stream streamStreaming;
-
-    // Unidirectional
-    @OneToMany
-    @JoinColumn(name = "profilePageView_id")
-    private List<ProfilePageView> profilePageViews = new ArrayList<>();
 
     @OneToMany(mappedBy = "subscriber")
     private List<Subscription> subscriptions = new ArrayList<>();
@@ -349,14 +343,6 @@ public class Person implements Serializable {
 
     public void setStreamStreaming(Stream streamStreaming) {
         this.streamStreaming = streamStreaming;
-    }
-
-    public List<ProfilePageView> getProfilePageViews() {
-        return profilePageViews;
-    }
-
-    public void setProfilePageViews(List<ProfilePageView> profilePageViews) {
-        this.profilePageViews = profilePageViews;
     }
 
     public List<Subscription> getSubscriptions() {
