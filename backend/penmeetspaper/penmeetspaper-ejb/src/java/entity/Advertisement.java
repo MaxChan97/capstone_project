@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.adminEntities;
+package entity;
 
-import enumeration.AdminLogsTypeEnum;
+import enumeration.TopicEnum;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,9 +17,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,29 +25,27 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class AdminLog implements Serializable {
+public class Advertisement implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private AdminLogsTypeEnum adminLogsType;
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String image;
+
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    private Date datePosted;
 
-    // unidirectional | nullable
-    @OneToOne
-    private Report report;
-
-    @ManyToOne
-    @JoinColumn(name = "report_administrator")
-    private Administrator admin;
+    @Enumerated(EnumType.STRING)
+    private List<TopicEnum> topics = new ArrayList();
 
     public Long getId() {
         return id;
@@ -58,12 +55,12 @@ public class AdminLog implements Serializable {
         this.id = id;
     }
 
-    public AdminLogsTypeEnum getAdminLogsType() {
-        return adminLogsType;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAdminLogsType(AdminLogsTypeEnum adminLogsType) {
-        this.adminLogsType = adminLogsType;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -74,28 +71,28 @@ public class AdminLog implements Serializable {
         this.description = description;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
+    public String getImage() {
+        return image;
     }
 
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public Report getReport() {
-        return report;
+    public Date getDatePosted() {
+        return datePosted;
     }
 
-    public void setReport(Report report) {
-        this.report = report;
+    public void setDatePosted(Date datePosted) {
+        this.datePosted = datePosted;
     }
 
-    public Administrator getAdmin() {
-        return admin;
+    public List<TopicEnum> getTopics() {
+        return topics;
     }
 
-    public void setAdmin(Administrator admin) {
-        this.admin = admin;
+    public void setTopics(List<TopicEnum> topics) {
+        this.topics = topics;
     }
 
     @Override
@@ -108,10 +105,10 @@ public class AdminLog implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AdminLog)) {
+        if (!(object instanceof Advertisement)) {
             return false;
         }
-        AdminLog other = (AdminLog) object;
+        Advertisement other = (Advertisement) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -120,7 +117,7 @@ public class AdminLog implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.adminEntities.AdminLog[ id=" + id + " ]";
+        return "entity.advertisementEntities.Advertisement[ id=" + id + " ]";
     }
 
 }

@@ -5,18 +5,19 @@
  */
 package entity;
 
+import enumeration.AdminLogsTypeEnum;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,26 +26,29 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Reply implements Serializable {
+public class AdminLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 2048)
-    private String body;
+    @Enumerated(EnumType.STRING)
+    private AdminLogsTypeEnum adminLogsType;
 
-    @ManyToMany
-    @JoinColumn(name = "likes_replies")
-    private List<Person> likes = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "person_replies")
-    private Person author;
+    @Column(nullable = false)
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    private Date dateCreated;
+
+    // unidirectional | nullable
+    @OneToOne
+    private Report report;
+
+    @ManyToOne
+    @JoinColumn(name = "report_administrator")
+    private Administrator admin;
 
     public Long getId() {
         return id;
@@ -54,36 +58,44 @@ public class Reply implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public AdminLogsTypeEnum getAdminLogsType() {
+        return adminLogsType;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setAdminLogsType(AdminLogsTypeEnum adminLogsType) {
+        this.adminLogsType = adminLogsType;
     }
 
-    public List<Person> getLikes() {
-        return likes;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Person getAuthor() {
-        return author;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setAuthor(Person author) {
-        this.author = author;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
+    public Report getReport() {
+        return report;
     }
 
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
+    public Administrator getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Administrator admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -96,10 +108,10 @@ public class Reply implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reply)) {
+        if (!(object instanceof AdminLog)) {
             return false;
         }
-        Reply other = (Reply) object;
+        AdminLog other = (AdminLog) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -108,7 +120,7 @@ public class Reply implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Reply[ id=" + id + " ]";
+        return "entity.adminEntities.AdminLog[ id=" + id + " ]";
     }
 
 }

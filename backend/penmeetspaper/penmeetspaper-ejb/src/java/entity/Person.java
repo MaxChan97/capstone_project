@@ -3,22 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.personEntities;
+package entity;
 
 import entity.Badge;
 import entity.Community;
 import entity.Notification;
 import entity.Post;
 import entity.Video;
-import entity.adminEntities.Report;
-import entity.messagingEntities.Chat;
-import entity.personToPersonEntities.Ban;
-import entity.personToPersonEntities.Follow;
-import entity.personToPersonEntities.Subscription;
-import entity.streamingEntities.Stream;
-import entity.walletEntities.BankAccount;
-import entity.walletEntities.PaymentCard;
-import entity.walletEntities.PaymentTransaction;
+import entity.Report;
+import entity.Chat;
 import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import java.io.Serializable;

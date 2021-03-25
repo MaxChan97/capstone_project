@@ -3,36 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.walletEntities;
+package entity;
 
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class BankAccount implements Serializable {
+public class Chat implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
-    // All variables here should be hashed.
-    @Column(nullable = false)
-    private String accountNumber;
+    @ManyToMany
+    @JoinColumn(name = "chat_person")
+    private List<Person> chatParticipants = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String bankName;
-
-    @Column(nullable = false)
-    private String displayName;
+    @OneToMany
+    @JoinColumn(name = "message_id")
+    private List<Message> chatMessages = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -42,28 +44,24 @@ public class BankAccount implements Serializable {
         this.id = id;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public List<Person> getChatParticipants() {
+        return chatParticipants;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setChatParticipants(List<Person> chatParticipants) {
+        this.chatParticipants = chatParticipants;
     }
 
-    public String getBankName() {
-        return bankName;
+    public List<Message> getChatMessages() {
+        return chatMessages;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public void setChatMessages(List<Message> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void addChatMessage(Message chatMessage) {
+        this.chatMessages.add(chatMessage);
     }
 
     @Override
@@ -76,10 +74,10 @@ public class BankAccount implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BankAccount)) {
+        if (!(object instanceof Chat)) {
             return false;
         }
-        BankAccount other = (BankAccount) object;
+        Chat other = (Chat) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -88,7 +86,7 @@ public class BankAccount implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.walletEntities.BankAccount[ id=" + id + " ]";
+        return "entity.Chat[ id=" + id + " ]";
     }
 
 }

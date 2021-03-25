@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.messagingEntities;
+package entity;
 
-import entity.personEntities.Person;
+import entity.Person;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -22,20 +21,18 @@ import javax.persistence.OneToMany;
  * @author Shawn
  */
 @Entity
-public class Chat implements Serializable {
+public class Ban implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    @JoinColumn(name = "chat_person")
-    private List<Person> chatParticipants = new ArrayList<>();
+    private int numBan;
 
     @OneToMany
-    @JoinColumn(name = "message_id")
-    private List<Message> chatMessages = new ArrayList<>();
+    @JoinColumn(name = "ban_personId")
+    private List<Person> banList = new ArrayList();
 
     public Long getId() {
         return id;
@@ -45,24 +42,26 @@ public class Chat implements Serializable {
         this.id = id;
     }
 
-    public List<Person> getChatParticipants() {
-        return chatParticipants;
+    /**
+     * @return the numBan
+     */
+    public int getNumBan() {
+        return numBan;
     }
 
-    public void setChatParticipants(List<Person> chatParticipants) {
-        this.chatParticipants = chatParticipants;
+    /**
+     * @param numBan the numBan to set
+     */
+    public void setNumBan(int numBan) {
+        this.numBan = numBan;
     }
 
-    public List<Message> getChatMessages() {
-        return chatMessages;
+    public List<Person> getBanList() {
+        return banList;
     }
 
-    public void setChatMessages(List<Message> chatMessages) {
-        this.chatMessages = chatMessages;
-    }
-
-    public void addChatMessage(Message chatMessage) {
-        this.chatMessages.add(chatMessage);
+    public void setBanList(List<Person> banList) {
+        this.banList = banList;
     }
 
     @Override
@@ -75,10 +74,10 @@ public class Chat implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Chat)) {
+        if (!(object instanceof Ban)) {
             return false;
         }
-        Chat other = (Chat) object;
+        Ban other = (Ban) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -87,7 +86,7 @@ public class Chat implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Chat[ id=" + id + " ]";
+        return "entity.Ban[ id=" + id + " ]";
     }
 
 }

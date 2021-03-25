@@ -3,36 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.personToPersonEntities;
+package entity;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Ban implements Serializable {
+public class BankAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int numBan;
+    // All variables here should be hashed.
+    @Column(nullable = false)
+    private String accountNumber;
 
-    @OneToMany
-    @JoinColumn(name = "ban_personId")
-    private List<Person> banList = new ArrayList();
+    @Column(nullable = false)
+    private String bankName;
+
+    @Column(nullable = false)
+    private String displayName;
 
     public Long getId() {
         return id;
@@ -42,26 +42,28 @@ public class Ban implements Serializable {
         this.id = id;
     }
 
-    /**
-     * @return the numBan
-     */
-    public int getNumBan() {
-        return numBan;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    /**
-     * @param numBan the numBan to set
-     */
-    public void setNumBan(int numBan) {
-        this.numBan = numBan;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public List<Person> getBanList() {
-        return banList;
+    public String getBankName() {
+        return bankName;
     }
 
-    public void setBanList(List<Person> banList) {
-        this.banList = banList;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -74,10 +76,10 @@ public class Ban implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ban)) {
+        if (!(object instanceof BankAccount)) {
             return false;
         }
-        Ban other = (Ban) object;
+        BankAccount other = (BankAccount) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -86,7 +88,7 @@ public class Ban implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Ban[ id=" + id + " ]";
+        return "entity.walletEntities.BankAccount[ id=" + id + " ]";
     }
 
 }

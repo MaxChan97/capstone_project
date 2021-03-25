@@ -5,8 +5,6 @@
  */
 package entity;
 
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Ban;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;

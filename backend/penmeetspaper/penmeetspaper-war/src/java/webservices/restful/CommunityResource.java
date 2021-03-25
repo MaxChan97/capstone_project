@@ -6,7 +6,7 @@
 package webservices.restful;
 
 import entity.Community;
-import entity.personEntities.Person;
+import entity.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
