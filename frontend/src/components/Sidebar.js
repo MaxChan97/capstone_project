@@ -329,6 +329,39 @@ function Sidebar() {
                 </Link>
               )}
             </li>
+            <li className="nav-item">
+              {location.pathname === "/userAnalytics" ? (
+                <Link
+                  to="/userAnalytics"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
+                    <p className="ml-2">Analytics</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/userAnalytics" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
+                    <p className="ml-2">Analytics</p>
+                  </div>
+                </Link>
+              )}
+            </li>
           </ul>
         </nav>
       </div>
