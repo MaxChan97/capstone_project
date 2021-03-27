@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import Highcharts from "highcharts";
@@ -12,6 +12,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import TabPanel from "../components/UserAnalyticsPage/TabPanel";
+import Api from "../helpers/Api";
 
 function a11yProps(index) {
   return {
@@ -34,9 +35,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserAnalytics() {
   const classes = useStyles();
-
   const currentUser = useSelector((state) => state.currentUser);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [followersMap, setFollowersMap] = useState();
+
+  useEffect(() => {
+    Api.getFollowersAnalytics(currentUser)
+      .done((followersAnalytics) => {
+        let followersMap = followersAnalytics.followersCount;
+        console.log(typeof followersMap);
+        console.log(followersMap);
+        setFollowersMap(followersMap);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, []);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;

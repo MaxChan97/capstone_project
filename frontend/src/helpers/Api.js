@@ -940,7 +940,7 @@ export default {
 
   getFollowersAnalytics(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/getFollowersAnalytics/" + id,
+      url: this.SERVER_PREFIX + "/analytics/followersAnalytics/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
