@@ -27,7 +27,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import entity.FollowersAnalytics;
 
 /**
  *
@@ -348,12 +347,6 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.flush();
     }
     
-    @Override
-     public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException {
-        Person person = emGetPerson(personId);
-        return person.getFollowersAnalytics();
-    }
-
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
         Person person = emGetPerson(personId);

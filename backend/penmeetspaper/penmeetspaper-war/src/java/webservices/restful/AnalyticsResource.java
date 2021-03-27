@@ -19,7 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import session.PersonSessionBeanLocal;
+import session.AnalyticsSessionBeanLocal;
 
 /**
  *
@@ -29,7 +29,7 @@ import session.PersonSessionBeanLocal;
 public class AnalyticsResource {
 
   @EJB
-  private PersonSessionBeanLocal personSB;
+  private AnalyticsSessionBeanLocal analyticsSessionBean;
 
   private JsonObject createJsonObject(String jsonString) {
     JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -50,8 +50,7 @@ public class AnalyticsResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getFollowersAnalytics(@PathParam("id") Long id) {
     try {
-      FollowersAnalytics followersAnalytics = personSB.getFollowersAnalytics(id);
-      System.out.println(followersAnalytics.getFollowersCount());
+      FollowersAnalytics followersAnalytics = analyticsSessionBean.getFollowersAnalytics(id);
       return Response.status(200).entity(followersAnalytics).type(MediaType.APPLICATION_JSON).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);
