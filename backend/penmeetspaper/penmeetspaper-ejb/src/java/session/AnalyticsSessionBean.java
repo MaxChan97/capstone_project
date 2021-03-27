@@ -5,8 +5,11 @@
  */
 package session;
 
+import entity.EarningsAnalytics;
 import entity.FollowersAnalytics;
 import entity.Person;
+import entity.SubscribersAnalytics;
+import entity.ViewersAnalytics;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Stateless;
@@ -38,8 +41,26 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
   }
 
   @Override
+  public SubscribersAnalytics getSubscribersAnalytics(Long personId) throws NoResultException, NotValidException {
+    Person person = emGetPerson(personId);
+    return person.getSubscribersAnalytics();
+  }
+  
+  @Override
   public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException {
     Person person = emGetPerson(personId);
     return person.getFollowersAnalytics();
+  }
+  
+  @Override
+  public EarningsAnalytics getEarningsAnalytics(Long personId) throws NoResultException, NotValidException {
+    Person person = emGetPerson(personId);
+    return person.getEarningsAnalytics();
+  }
+  
+  @Override
+  public ViewersAnalytics getViewersAnalytics(Long personId) throws NoResultException, NotValidException {
+    Person person = emGetPerson(personId);
+    return person.getViewersAnalytics();
   }
 }

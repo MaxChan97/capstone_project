@@ -24,120 +24,142 @@ import javax.persistence.Query;
 @Stateless
 public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
-    @PersistenceContext
-    private EntityManager em;
+  @PersistenceContext
+  private EntityManager em;
 
-    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
-        if (personId == null) {
-            throw new NotValidException(SubscriptionSessionBeanLocal.MISSING_PERSON_ID);
-        }
-
-        Person person = em.find(Person.class, personId);
-
-        if (person == null) {
-            throw new NoResultException(SubscriptionSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
-
-        return person;
+  private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+    if (personId == null) {
+      throw new NotValidException(SubscriptionSessionBeanLocal.MISSING_PERSON_ID);
     }
 
-    private Subscription setStartEndDate(Subscription s) {
-        Date today = new Date();
-        s.setStartDate(today);
+    Person person = em.find(Person.class, personId);
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
-        Date endDate = cal.getTime();
-        s.setEndDate(endDate);
-
-        return s;
+    if (person == null) {
+      throw new NoResultException(SubscriptionSessionBeanLocal.CANNOT_FIND_PERSON);
     }
 
-    private Subscription getSubscription(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
-        Query q;
-        q = em.createQuery("SELECT s FROM Subscription s WHERE s.subscriber.id = :subscriberId AND s.publisher.id = :publisherId");
-        q.setParameter("subscriberId", subscriberId);
-        q.setParameter("publisherId", publisherId);
+    return person;
+  }
 
-        List<Subscription> subscriptionList = q.getResultList();
+  private Subscription setStartEndDate(Subscription s) {
+    Date today = new Date();
+    s.setStartDate(today);
 
-        if (subscriptionList.isEmpty()) {
-            throw new NoResultException(SubscriptionSessionBeanLocal.CANNOT_FIND_SUB);
-        }
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.MONTH, 1);
+    Date endDate = cal.getTime();
+    s.setEndDate(endDate);
 
-        if (subscriptionList.size() > 1) {
-            throw new NotValidException(SubscriptionSessionBeanLocal.MULTIPLE_SUBS_FOUND);
-        }
+    return s;
+  }
 
-        return subscriptionList.get(0);
+  private Subscription getSubscription(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
+    Query q;
+    q = em.createQuery("SELECT s FROM Subscription s WHERE s.subscriber.id = :subscriberId AND s.publisher.id = :publisherId");
+    q.setParameter("subscriberId", subscriberId);
+    q.setParameter("publisherId", publisherId);
 
+    List<Subscription> subscriptionList = q.getResultList();
+
+    if (subscriptionList.isEmpty()) {
+      throw new NoResultException(SubscriptionSessionBeanLocal.CANNOT_FIND_SUB);
     }
 
-    @Override
-    public void subscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
-        // Check whether Subscription already exists
-        Subscription existingSubscription = null;
+    if (subscriptionList.size() > 1) {
+      throw new NotValidException(SubscriptionSessionBeanLocal.MULTIPLE_SUBS_FOUND);
+    }
 
-        try {
-            existingSubscription = getSubscription(subscriberId, publisherId);
-        } catch (NoResultException e) {
+    return subscriptionList.get(0);
 
-        }
+  }
 
-        if (existingSubscription != null && !existingSubscription.isIsTerminated()) {
+  @Override
+  public void subscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
+    // Check whether Subscription already exists
+    Subscription existingSubscription = null;
 
-            throw new NotValidException(SubscriptionSessionBeanLocal.SUB_ALREADY_EXISTS);
-
-        } else if (existingSubscription != null && existingSubscription.isIsTerminated()) {
-
-            // existing subscription that is terminated
-            existingSubscription.setIsTerminated(false);
-            return;
-        }
-
-        Person subscriber = emGetPerson(subscriberId);
-
-        Person publisher = emGetPerson(publisherId);
-
-        Subscription newSubscription = new Subscription();
-
-        newSubscription = setStartEndDate(newSubscription);
-        newSubscription.setIsNotificationOn(true);
-        newSubscription.setIsTerminated(false);
-        newSubscription.setSubscriber(subscriber);
-        newSubscription.setPublisher(publisher);
-
-        newSubscription.setPricingPlan(publisher.getPricingPlan());
-
-        em.persist(newSubscription);
-
-        subscriber.getSubscriptions().add(newSubscription);
-        publisher.getPublications().add(newSubscription);
+    try {
+      existingSubscription = getSubscription(subscriberId, publisherId);
+    } catch (NoResultException e) {
 
     }
 
-    @Override
-    public void unsubscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
-        Subscription subscription = getSubscription(subscriberId, publisherId);
+    if (existingSubscription != null && !existingSubscription.isIsTerminated()) {
 
-        subscription.setIsTerminated(true);
+      throw new NotValidException(SubscriptionSessionBeanLocal.SUB_ALREADY_EXISTS);
+
+    } else if (existingSubscription != null && existingSubscription.isIsTerminated()) {
+
+      // existing subscription that is terminated
+      existingSubscription.setIsTerminated(false);
+      return;
     }
 
-    @Override
-    public String isSubscribed(Long subscriberId, Long publisherId) throws NotValidException {
+    Person subscriber = emGetPerson(subscriberId);
 
-        try {
-            Subscription subscription = getSubscription(subscriberId, publisherId);
+    Person publisher = emGetPerson(publisherId);
 
-            if (subscription.isIsTerminated()) {
-                return "ReSubscribe";
-            } else {
-                return "Subscribed";
-            }
+    Subscription newSubscription = new Subscription();
 
-        } catch (NoResultException e) {
-            return "NotSubscribed";
-        }
+    newSubscription = setStartEndDate(newSubscription);
+    newSubscription.setIsNotificationOn(true);
+    newSubscription.setIsTerminated(false);
+    newSubscription.setSubscriber(subscriber);
+    newSubscription.setPublisher(publisher);
 
+    newSubscription.setPricingPlan(publisher.getPricingPlan());
+
+    em.persist(newSubscription);
+
+    subscriber.getSubscriptions().add(newSubscription);
+    publisher.getPublications().add(newSubscription);
+
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    Date date = cal.getTime();
+    Long newSubscriberCount = publisher.getSubscriptions().stream().filter(s -> !s.isIsTerminated()).count();
+    publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
+
+  }
+
+  @Override
+  public void unsubscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException {
+    Subscription subscription = getSubscription(subscriberId, publisherId);
+
+    subscription.setIsTerminated(true);
+
+    Person publisher = emGetPerson(publisherId);
+
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    Date date = cal.getTime();
+    Long newSubscriberCount = publisher.getSubscriptions().stream().filter(s -> !s.isIsTerminated()).count();
+    publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
+  }
+
+  @Override
+  public String isSubscribed(Long subscriberId, Long publisherId) throws NotValidException {
+
+    try {
+      Subscription subscription = getSubscription(subscriberId, publisherId);
+
+      if (subscription.isIsTerminated()) {
+        return "ReSubscribe";
+      } else {
+        return "Subscribed";
+      }
+
+    } catch (NoResultException e) {
+      return "NotSubscribed";
     }
+
+  }
 }

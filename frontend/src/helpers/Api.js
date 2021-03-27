@@ -951,7 +951,7 @@ export default {
 
   getSubscribersAnalytics(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/getSubscribersAnalytics/" + id,
+      url: this.SERVER_PREFIX + "/analytics/subscribersAnalytics/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -962,7 +962,7 @@ export default {
 
   getEarningsAnalytics(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/getEarningsAnalytics/" + id,
+      url: this.SERVER_PREFIX + "/analytics/earningsAnalytics/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -973,7 +973,7 @@ export default {
 
   getViewersAnalytics(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/getViewersAnalytics/" + id,
+      url: this.SERVER_PREFIX + "/analytics/viewersAnalytics/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

@@ -5,8 +5,8 @@
  */
 package session;
 
-import entity.Person;
 import entity.Follow;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Calendar;
@@ -100,7 +100,6 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
     cal.set(Calendar.MILLISECOND, 0);
     
     Date date = cal.getTime();
-    System.out.println(date);
     publisher.getFollowersAnalytics().getFollowersCount().put(date, new Long(publisher.getFollowers().size()));
   }
 
@@ -118,6 +117,15 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
     follower.getFollowing().remove(followEntity);
 
     em.remove(followEntity);
+    
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    
+    Date date = cal.getTime();
+    publisher.getFollowersAnalytics().getFollowersCount().put(date, new Long(publisher.getFollowers().size()));
 
   }
 }

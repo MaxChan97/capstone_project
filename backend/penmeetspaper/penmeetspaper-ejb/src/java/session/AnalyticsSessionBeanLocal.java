@@ -5,7 +5,10 @@
  */
 package session;
 
+import entity.EarningsAnalytics;
 import entity.FollowersAnalytics;
+import entity.SubscribersAnalytics;
+import entity.ViewersAnalytics;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;
@@ -18,5 +21,11 @@ import javax.ejb.Local;
 public interface AnalyticsSessionBeanLocal {
 
   public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException;
+
+  public SubscribersAnalytics getSubscribersAnalytics(Long personId) throws NoResultException, NotValidException;
+
+  public EarningsAnalytics getEarningsAnalytics(Long personId) throws NoResultException, NotValidException;
+
+  public ViewersAnalytics getViewersAnalytics(Long personId) throws NoResultException, NotValidException;
   
 }
