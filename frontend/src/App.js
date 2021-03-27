@@ -46,8 +46,6 @@ import AdminManagementPage from "./screens/AdminManagementPage";
 import AdminLogin from "./screens/AdminLogin";
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 
-import AdminLogin from "./screens/AdminLogin";
-import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import AdminNavBar from "./components/AdminNavBar";
 import ReportDetails from "./components/AdminPage/ReportDetails";
