@@ -5,13 +5,10 @@
  */
 package entity;
 
-import entity.Badge;
-import entity.Community;
-import entity.Notification;
-import entity.Post;
-import entity.Video;
-import entity.Report;
-import entity.Chat;
+import entity.userAnalyticsEntities.EarningsAnalytics;
+import entity.userAnalyticsEntities.FollowersAnalytics;
+import entity.userAnalyticsEntities.SubscribersAnalytics;
+import entity.userAnalyticsEntities.ViewersAnalytics;
 import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import java.io.Serializable;
@@ -31,7 +28,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 /**
  *
  * @author carlc
@@ -173,6 +169,18 @@ public class Person implements Serializable {
     // unidirectional | nullable
     @OneToOne
     private Badge badgeDisplaying;
+    
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private FollowersAnalytics followersAnalytics = new FollowersAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private SubscribersAnalytics subscribersAnalytics = new SubscribersAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private EarningsAnalytics earningsAnalytics = new EarningsAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private ViewersAnalytics viewersAnalytics = new ViewersAnalytics();
 
     // Getters and Setters -----------------------------------------------------------
     public Person() {
@@ -474,6 +482,37 @@ public class Person implements Serializable {
         this.resetId = resetId;
     }
 
+    public FollowersAnalytics getFollowersAnalytics() {
+    return followersAnalytics;
+  }
+
+  public void setFollowersAnalytics(FollowersAnalytics followersAnalytics) {
+    this.followersAnalytics = followersAnalytics;
+  }
+
+  public SubscribersAnalytics getSubscribersAnalytics() {
+    return subscribersAnalytics;
+  }
+
+  public void setSubscribersAnalytics(SubscribersAnalytics subscribersAnalytics) {
+    this.subscribersAnalytics = subscribersAnalytics;
+  }
+
+  public EarningsAnalytics getEarningsAnalytics() {
+    return earningsAnalytics;
+  }
+
+  public void setEarningsAnalytics(EarningsAnalytics earningsAnalytics) {
+    this.earningsAnalytics = earningsAnalytics;
+  }
+
+  public ViewersAnalytics getViewersAnalytics() {
+    return viewersAnalytics;
+  }
+
+  public void setViewersAnalytics(ViewersAnalytics viewersAnalytics) {
+    this.viewersAnalytics = viewersAnalytics;
+  }
     @Override
     public int hashCode() {
         int hash = 0;
