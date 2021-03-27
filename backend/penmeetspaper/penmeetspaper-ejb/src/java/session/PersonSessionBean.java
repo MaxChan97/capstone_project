@@ -5,25 +5,29 @@
  */
 package session;
 
+import entity.Badge;
 import entity.Community;
 import entity.Post;
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Ban;
-import entity.personToPersonEntities.Follow;
-import entity.personToPersonEntities.Subscription;
-import entity.userAnalyticsEntities.FollowersAnalytics;
+import entity.Person;
+import entity.Ban;
+import entity.Follow;
+import entity.Subscription;
+import enumeration.BadgeTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import entity.userAnalyticsEntities.FollowersAnalytics;
 
 /**
  *
@@ -37,6 +41,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
     @EJB
     private BanSessionBeanLocal banSB;
+
+    @EJB
+    private BadgeSessionBeanLocal badgeSB;
 
     @EJB
     private CommunitySessionBeanLocal communitySB;
@@ -132,6 +139,15 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         }
     }
 
+    private void setDefaultBadge(Person person) throws NotValidException {
+
+        Badge b1 = badgeSB.getBadgeByDisplayName("Level 1 Badge");
+        List<Badge> badgeList = new ArrayList();
+        badgeList.add(b1);
+        person.setBadges(badgeList);
+        person.setBadgeDisplaying(b1);
+    }
+
     private void generateRandomProfilePicture(Person person) {
 
         String[] profilePicArray = {
@@ -152,6 +168,22 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         person.setProfilePicture(profilePicArray[randomNum]);
 
+    }
+
+    @Override
+    public void addCCPointsToPerson(Long personId, double points) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        Double currCCPoints = person.getContentCreatorPoints();
+        currCCPoints += points;
+        person.setContentCreatorPoints(currCCPoints);
+    }
+
+    @Override
+    public void addContributorPointsToPerson(Long personId, double points) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        Double currContributorPoints = person.getContributorPoints();
+        currContributorPoints += points;
+        person.setContributorPoints(currContributorPoints);
     }
 
     @Override
@@ -182,6 +214,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         generateRandomProfilePicture(person);
         person.setProfileBanner(
                 "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
+        person.setContentCreatorPoints(0.0);
+        person.setContributorPoints(0.0);
+        setDefaultBadge(person);
         em.persist(person);
         em.flush();
 
@@ -504,4 +539,144 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         return results;
     }
+
+    @Override
+    public List<Person> getTopTenContributors() throws NoResultException {
+        Query q = em.createQuery("SELECT p FROM Person p");
+        List<Person> personList = q.getResultList();
+
+        if (personList.isEmpty()) {
+            throw new NoResultException(PersonSessionBeanLocal.EMPTY_PERSON);
+        }
+
+        Collections.sort(personList, (Person p1, Person p2) -> {
+            double p1Points = p1.getContributorPoints();
+            double p2Points = p2.getContributorPoints();
+
+            if (p1Points == p2Points) {
+                return 0;
+            } else if (p1Points < p2Points) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+
+        List<Person> resultList = new ArrayList();
+
+        for (int i = 0; i < 10; i++) {
+            Person p = resultList.get(i);
+            resultList.add(p);
+        }
+
+        return resultList;
+    }
+
+    @Override
+    public List<Person> getTopTenStreamers() throws NoResultException {
+        Query q = em.createQuery("SELECT p FROM Person p");
+        List<Person> personList = q.getResultList();
+
+        if (personList.isEmpty()) {
+            throw new NoResultException(PersonSessionBeanLocal.EMPTY_PERSON);
+        }
+
+        Collections.sort(personList, (Person p1, Person p2) -> {
+            double p1Points = p1.getContentCreatorPoints();
+            double p2Points = p2.getContentCreatorPoints();
+
+            if (p1Points == p2Points) {
+                return 0;
+            } else if (p1Points < p2Points) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+
+        List<Person> resultList = new ArrayList();
+
+        for (int i = 0; i < 10; i++) {
+            Person p = resultList.get(i);
+            resultList.add(p);
+        }
+
+        return resultList;
+    }
+
+    @Override
+    public void checkBadgeQualification(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        List<Badge> badgeList = badgeSB.getAllBadges();
+        List<Badge> personBadgeList = person.getBadges();
+
+        Set<Badge> badgeSet = new HashSet<>(badgeList);
+        Set<Badge> personBadgeSet = new HashSet<Badge>(personBadgeList);
+        badgeSet.removeAll(personBadgeSet);
+
+        List<Badge> dontHaveBadgeList = new ArrayList();
+        dontHaveBadgeList.addAll(badgeSet);
+
+        double ccPoints = person.getContentCreatorPoints();
+        double contributorPoints = person.getContributorPoints();
+        double totalPoints = ccPoints + contributorPoints;
+        int numFollowers = getFollowers(person.getId()).size();
+        int numPosts = person.getPosts().size();
+
+        for (Badge b : dontHaveBadgeList) {
+            BadgeTypeEnum badgeEnum = b.getBadgeType();
+            int pointsRequired = b.getValueRequired();
+
+            switch (badgeEnum) {
+                case OVERALL:
+                    if (totalPoints > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+
+                case STREAM:
+                    if (ccPoints > pointsRequired * 10) {
+                        person.getBadges().add(b);
+                    }
+
+                case FOLLOWER:
+                    if (numFollowers > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+
+                case POST:
+                    if (numPosts > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
+
+            }
+        }
+    }
+
+    @Override
+    public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        List<Badge> personBadges = person.getBadges();
+
+        boolean hasBadge = false;
+
+        Badge badgeToDisplay = null;
+
+        for (Badge b : personBadges) {
+            if (b.getId() == badgeId) {
+                hasBadge = true;
+                badgeToDisplay = b;
+            }
+        }
+
+        if (!hasBadge) {
+            throw new NotValidException(PersonSessionBeanLocal.INVALID_BADGE_SELECTED);
+        }
+        if (badgeToDisplay != null) {
+            person.setBadgeDisplaying(badgeToDisplay);
+        } else {
+            throw new NotValidException(PersonSessionBeanLocal.UNEXPECTED_ERROR);
+        }
+    }
+
 }

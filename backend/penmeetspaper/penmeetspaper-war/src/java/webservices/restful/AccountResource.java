@@ -5,7 +5,8 @@
  */
 package webservices.restful;
 
-import entity.personEntities.Person;
+import entity.Administrator;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.EJB;
@@ -38,6 +39,25 @@ public class AccountResource {
             Person p = accountSessionLocal.login(email, password);
             return Response.status(200).entity(
                     p
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", e.getMessage())
+                    .build();
+
+            return Response.status(400).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end login
+
+    @GET
+    @Path("adminlogin/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response adminLogin(@QueryParam("email") String email, @QueryParam("password") String password) {
+        try {
+            Administrator admin = accountSessionLocal.adminLogin(email, password);
+            return Response.status(200).entity(
+                    admin
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException | NotValidException e) {
             JsonObject exception = Json.createObjectBuilder()

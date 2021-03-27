@@ -5,8 +5,8 @@
  */
 package webservices.restful;
 
-import entity.messagingEntities.Chat;
-import entity.messagingEntities.Message;
+import entity.Chat;
+import entity.Message;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.List;

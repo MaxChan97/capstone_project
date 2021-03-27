@@ -17,6 +17,7 @@ export default function OwnProfilePage({ personId }) {
   const [currentPerson, setCurrentPerson] = useState({});
   const [refresh, setRefresh] = useState(true);
   const [numFollowers, setNumFollowers] = useState(0);
+  const [badge, setBadge] = useState();
 
   useEffect(() => {
     if (personId) {
@@ -28,6 +29,7 @@ export default function OwnProfilePage({ personId }) {
     Api.getPersonById(personId)
       .done((currentPerson) => {
         setCurrentPerson(currentPerson);
+        setBadge(currentPerson.badgeDisplaying.image);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -86,6 +88,7 @@ export default function OwnProfilePage({ personId }) {
             numFollowers={numFollowers}
             profilePicture={currentPerson.profilePicture}
             profileBanner={currentPerson.profileBanner}
+            badge={badge}
           />
           {handleTabView(tabValue)}
         </div>

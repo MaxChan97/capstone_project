@@ -5,7 +5,7 @@
  */
 package session;
 
-import entity.personToPersonEntities.Ban;
+import entity.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;

@@ -7,9 +7,9 @@ package webservices.restful;
 
 import entity.Community;
 import entity.Post;
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Follow;
-import entity.personToPersonEntities.Subscription;
+import entity.Person;
+import entity.Follow;
+import entity.Subscription;
 import entity.userAnalyticsEntities.FollowersAnalytics;
 import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
@@ -548,4 +548,53 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changePassword
+
+    @GET
+    @Path("/topTenContributors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTenTopContributors() {
+        try {
+            List<Person> results = personSB.getTopTenContributors();
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+
+    }
+
+    @GET
+    @Path("/topTenStreamers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTenTopStreamers() {
+        try {
+            List<Person> results = personSB.getTopTenStreamers();
+
+            GenericEntity<List<Person>> entity = new GenericEntity<List<Person>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/changeBadge/person/{personId}/badge/{badgeId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeBadge(@PathParam("personId") Long personId, @PathParam("badgeId") Long badgeId) {
+        try {
+
+            personSB.changeBadge(personId, badgeId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }

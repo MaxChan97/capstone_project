@@ -13,7 +13,7 @@ import { Redirect, useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import Api from "../helpers/Api";
 import logout from "../assets/logout 1.svg";
-import { logOut } from "../redux/actions/index";
+import { logOut, setIsAdmin } from "../redux/actions/index";
 import BNBLogo from "../assets/BNB Logo.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +89,7 @@ function Navbar({
   function handleLogOut(e) {
     e.preventDefault();
     dispatch(logOut());
+    dispatch(setIsAdmin(null));
   }
 
   return (
@@ -126,7 +127,11 @@ function Navbar({
 
       <div>
         <Link to="/feed">
-          <img style={{ height: "40px", display: "flex",}} src={BNBLogo} alt="BNB Logo" />
+          <img
+            style={{ height: "40px", display: "flex" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
         </Link>
       </div>
 

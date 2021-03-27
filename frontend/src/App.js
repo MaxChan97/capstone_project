@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Redirect, Switch, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
@@ -17,6 +17,7 @@ import ProfilePage from "./screens/ProfilePage";
 import ProfilePostCard from "./components/ProfilePage/ProfilePostCard";
 import AboutMe from "./components/ProfilePage/AboutMe";
 import UserSettings from "./screens/UserSettings";
+import StreamPage from "./screens/StreamPage";
 import ChatPage from "./screens/ChatPage";
 import CustomiseProfile from "./screens/CustomiseProfile";
 import SubscribersPage from "./screens/SubscribersPage";
@@ -37,16 +38,44 @@ import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 import BannedPage from "./screens/BannedPage";
 import PageNotFound from "./screens/ErrorPage";
 import UserAnalytics from "./screens/UserAnalytics";
+import AdminSideBar from "./components/AdminSideBar";
+import AdminInboxPage from "./screens/AdminInboxPage";
+import AdminAnalyticsPage from "./screens/AdminAnalyticsPage";
+import AdminUserManagementPage from "./screens/AdminUserManagementPage";
+import AdminAdManagementPage from "./screens/AdminAdManagementPage";
+import AdminManagementPage from "./screens/AdminManagementPage";
+import AdminLogin from "./screens/AdminLogin";
+import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 
+import { useSelector, useDispatch } from "react-redux";
+import AdminNavBar from "./components/AdminNavBar";
+import ReportDetails from "./components/AdminPage/ReportDetails";
 function App() {
   let location = useLocation();
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [searchString, setSearchString] = useState("");
   const [searchRefresh, setSearchRefresh] = useState(true);
 
   function renderNavSide() {
-    if (location.pathname === "/login" || location.pathname === "/register") {
+    if (
+      location.pathname === "/login" ||
+      location.pathname === "/register" ||
+      location.pathname === "/admin/login"
+    ) {
       return "";
+    } else if (isAdmin == true) {
+      return (
+        <div>
+          <AdminNavBar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <AdminSideBar />
+        </div>
+      );
     } else if (location.pathname === "/chat") {
       return (
         <div>
@@ -92,6 +121,26 @@ function App() {
           <CommunityDashboardSidebar />
         </div>
       );
+    } else if (
+      location.pathname === "/admin" ||
+      location.pathname === "/admin/inbox" ||
+      location.pathname === "/admin/analytics" ||
+      location.pathname === "/admin/usermanagement" ||
+      location.pathname === "/admin/advertisementmanagement" ||
+      location.pathname === "/admin/adminmanagement" ||
+      location.pathname === "/admin/createAdmin"
+    ) {
+      return (
+        <div>
+          <Navbar
+            searchString={searchString}
+            setSearchString={setSearchString}
+            searchRefresh={searchRefresh}
+            setSearchRefresh={setSearchRefresh}
+          />
+          <AdminSideBar />
+        </div>
+      );
     } else {
       return (
         <div>
@@ -112,6 +161,7 @@ function App() {
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/admin/login" component={AdminLogin} />
         <Route exact path="/newPassword/:resetId" component={NewPassword} />
         <Route exact path="/resetPassword" component={ResetPassword} />
         <div className="layout-navbar-fixed">
@@ -133,6 +183,7 @@ function App() {
             <Route exact path="/postCard" component={ProfilePostCard} />
             <Route exact path="/aboutMe" component={AboutMe} />
             <Route exact path="/userSettings" component={UserSettings} />
+            <Route exact path="/stream" component={StreamPage} />
             <Route exact path="/chat/:personId" component={ChatPage} />
             <Route exact path="/createCommunity" component={CreateCommunity} />
             <Route exact path="/changePassword" component={ChangePassword} />
@@ -186,7 +237,40 @@ function App() {
               )}
             />
             <Route exact path="/community" component={CommunityFeed} />
-            <Route path="*" component={PageNotFound} />
+
+            <Route exact path="/admin/inbox" component={AdminInboxPage} />
+            <Route
+              exact
+              path="/admin/analytics"
+              component={AdminAnalyticsPage}
+            />
+            <Route
+              exact
+              path="/admin/usermanagement"
+              component={AdminUserManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/advertisementmanagement"
+              component={AdminAdManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/adminmanagement"
+              component={AdminManagementPage}
+            />
+            <Route
+              exact
+              path="/admin/createAdmin"
+              component={CreateAnotherAdmin}
+            />
+            <Route
+              exact
+              path="/admin/reportDetails"
+              component={ReportDetails}
+            />
+            {/* <Route path="/404" component={PageNotFound} />
+            <Redirect to="/404" /> */}
           </div>
         </div>
       </Switch>

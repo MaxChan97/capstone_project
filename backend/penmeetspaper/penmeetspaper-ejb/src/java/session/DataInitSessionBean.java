@@ -11,7 +11,8 @@ import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
-import entity.personEntities.Person;
+import entity.Administrator;
+import entity.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -35,7 +36,13 @@ import javax.ejb.Startup;
 public class DataInitSessionBean {
 
     @EJB
+    private AdministratorSessionBeanLocal administratorSB;
+
+    @EJB
     private BanSessionBeanLocal banSB;
+
+    @EJB
+    private BadgeSessionBeanLocal badgeSB;
 
     @EJB
     private ChatSessionBeanLocal chatSB;
@@ -79,6 +86,15 @@ public class DataInitSessionBean {
         } catch (NoResultException | NotValidException ex) {
             initData();
         }
+    }
+
+    private void createMasterAdmin() throws NotValidException {
+        Administrator masterAdmin = new Administrator();
+        masterAdmin.setEmail("admin@bnb.com");
+        masterAdmin.setUsername("masterAdmin");
+        masterAdmin.setPassword("password");
+
+        administratorSB.createAdmin(masterAdmin);
     }
 
     private void createPersons() throws NotValidException {
@@ -385,9 +401,15 @@ public class DataInitSessionBean {
         communitySB.banPerson(new Long(1), new Long(7), new Long(1));
     }
 
+    private void createBadges() throws NotValidException {
+        badgeSB.createBadges();
+    }
+
     private void initData() {
 
         try {
+            createBadges();
+            createMasterAdmin();
             createPersons();
             updateProfilePictures();
             createCommunities();

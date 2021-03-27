@@ -7,10 +7,11 @@ package session;
 
 import entity.Comment;
 import entity.Post;
-import entity.personEntities.Person;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Objects;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +25,9 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private PersonSessionBeanLocal personSB;
 
     // Helper methods to check and retrieve entities
     private Post emGetPost(Long postId) throws NoResultException, NotValidException {
@@ -96,6 +100,9 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         em.persist(comment);
 
         post.getComments().add(comment);
+
+        personSB.addContributorPointsToPerson(personId, 1.0);
+
         em.flush();
     }
 

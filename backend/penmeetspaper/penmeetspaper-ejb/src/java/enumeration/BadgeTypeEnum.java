@@ -11,7 +11,10 @@ package enumeration;
  */
 public enum BadgeTypeEnum {
     CONTRIBUTION,
+    OVERALL,
     STREAM,
-    OVERALL
+    COMMENT,
+    FOLLOWER,
+    POST,
 
 }

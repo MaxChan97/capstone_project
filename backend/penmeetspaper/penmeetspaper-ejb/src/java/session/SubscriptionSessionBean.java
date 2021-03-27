@@ -5,8 +5,8 @@
  */
 package session;
 
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Subscription;
+import entity.Person;
+import entity.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Calendar;

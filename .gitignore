@@ -41,3 +41,6 @@
 
 # eslintcache
 .eslintcache
+
+# stream stuff
+/streamServer/node_modules

@@ -11,7 +11,7 @@ import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
-import entity.personEntities.Person;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -119,6 +119,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         em.persist(post);
         poster.getPosts().add(post);
+
+        personSB.addContributorPointsToPerson(personId, 3.0);
         em.flush();
 
     } // end createPostForPerson

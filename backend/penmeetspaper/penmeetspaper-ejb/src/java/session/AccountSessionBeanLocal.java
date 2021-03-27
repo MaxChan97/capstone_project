@@ -5,7 +5,8 @@
  */
 package session;
 
-import entity.personEntities.Person;
+import entity.Administrator;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;
@@ -17,11 +18,12 @@ import javax.ejb.Local;
 @Local
 public interface AccountSessionBeanLocal {
 
-  public final static String MISSING_EMAIL = "Missing person email";
-  public final static String MISSING_PASSWORD = "Missing person password";
-  public final static String INVALID_CREDENTIALS = "Invalid credentials";
-  
-  
-  public Person login(String email, String password) throws NoResultException, NotValidException;
+    public final static String MISSING_EMAIL = "Missing person email";
+    public final static String MISSING_PASSWORD = "Missing person password";
+    public final static String INVALID_CREDENTIALS = "Invalid credentials";
+
+    public Person login(String email, String password) throws NoResultException, NotValidException;
+
+    public Administrator adminLogin(String email, String password) throws NoResultException, NotValidException;
 
 }

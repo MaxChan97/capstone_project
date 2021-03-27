@@ -21,14 +21,14 @@ export default function LivePage() {
         }}
       >
         <h1>Live Page</h1>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(logOut());
-          }}
-        >
-          Log Out
-        </button>
+        <iframe
+          src="https://embed.api.video/live/li2XqqQrQjTfWAosisxd5e3V"
+          width="750px"
+          height="450px"
+          frameborder="0"
+          scrolling="no"
+          allowfullscreen="true"
+        ></iframe>
       </div>
     </div>
   );

@@ -981,4 +981,21 @@ export default {
       type: "GET",
     });
   },
+
+  adminLogin(email, password) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/account/adminlogin/query?" +
+        "email=" +
+        email +
+        "&password=" +
+        password,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

@@ -44,6 +44,7 @@ export default function AnotherProfileTopBar({
   profilePicture,
   profileBanner,
   anotherPerson,
+  badge
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -77,6 +78,7 @@ export default function AnotherProfileTopBar({
           username={username}
           numFollowers={numFollowers}
           profilePicture={profilePicture}
+          badge={badge}
         />
         <SocialButtonGroup
           id={id}
