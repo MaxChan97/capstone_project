@@ -10,7 +10,7 @@ import entity.Post;
 import entity.Person;
 import entity.Follow;
 import entity.Subscription;
-import entity.userAnalyticsEntities.FollowersAnalytics;
+import entity.FollowersAnalytics;
 import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;

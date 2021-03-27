@@ -14,7 +14,7 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
 import javax.ejb.Local;
-import entity.userAnalyticsEntities.FollowersAnalytics;
+import entity.FollowersAnalytics;
 
 
 /**

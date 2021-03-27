@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.userAnalyticsEntities;
+package entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,16 +18,16 @@ import javax.persistence.Id;
  * @author carlc
  */
 @Entity
-public class ViewersAnalytics implements Serializable {
+public class EarningsAnalytics implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   
-  private HashMap<Date, Long> viewersCount = new HashMap<Date, Long>();
+  private HashMap<Date, Double> earnings = new HashMap<Date, Double>();
 
-  public ViewersAnalytics() {
+  public EarningsAnalytics() {
   }
 
   public Long getId() {
@@ -38,12 +38,12 @@ public class ViewersAnalytics implements Serializable {
     this.id = id;
   }
 
-  public HashMap<Date, Long> getViewersCount() {
-    return viewersCount;
+  public HashMap<Date, Double> getEarnings() {
+    return earnings;
   }
 
-  public void setViewersCount(HashMap<Date, Long> viewersCount) {
-    this.viewersCount = viewersCount;
+  public void setEarnings(HashMap<Date, Double> earnings) {
+    this.earnings = earnings;
   }
 
   @Override
@@ -56,10 +56,10 @@ public class ViewersAnalytics implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof ViewersAnalytics)) {
+    if (!(object instanceof EarningsAnalytics)) {
       return false;
     }
-    ViewersAnalytics other = (ViewersAnalytics) object;
+    EarningsAnalytics other = (EarningsAnalytics) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -68,7 +68,7 @@ public class ViewersAnalytics implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.userAnalyticsEntities.ViewersAnalytics[ id=" + id + " ]";
+    return "entity.userAnalyticsEntities.EarningsAnalytics[ id=" + id + " ]";
   }
   
 }
