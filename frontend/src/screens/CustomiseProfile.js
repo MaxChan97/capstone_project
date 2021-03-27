@@ -25,10 +25,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const topics = [
+  { value: "INVESTMENTS,", label: "Investments" },
+  { value: "STOCKS", label: "Stocks" },
+  { value: "SAVINGS", label: "Savings" },
+  { value: "CAREER", label: "Career" },
+  { value: "ETF", label: "ETF" },
+  { value: "ROBOADVISORS", label: "Robo-Advisors" },
+  { value: "TRADING", label: "Trading" },
+  { value: "INSURANCE", label: "Insurance" },
+  { value: "BROKERAGES", label: "Brokerages" },
+  { value: "RETIREMENT", label: "Retirement" },
+  { value: "SALARY", label: "Salary" },
+  { value: "CPF", label: "CPF" },
+  { value: "BTO", label: "BTO" },
+  { value: "UTILITIES_BILL", label: "Utilities Bill" },
   { value: "REAL_ESTATE", label: "Real Estate" },
   { value: "FUTURES", label: "Futures" },
   { value: "CRYPTOCURRENCY", label: "Cryptocurrency" },
-  { value: "STOCKS", label: "Stocks" },
+  { value: "CREDITCARDS", label: "Credit Cards" },
+  { value: "BANKING", label: "Banking" },
+  { value: "REITS", label: "REITs" },
+  { value: "BLOCKCHAIN", label: "Blockchain" },
 ];
 
 export default function CustomiseProfile() {
