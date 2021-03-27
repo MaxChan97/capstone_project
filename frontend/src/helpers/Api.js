@@ -937,4 +937,48 @@ export default {
       type: "GET",
     });
   },
+
+  getFollowersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/getFollowersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscribersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/getSubscribersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getEarningsAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/getEarningsAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getViewersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/getViewersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

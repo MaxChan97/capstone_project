@@ -36,6 +36,7 @@ import CommunityFeed from "./screens/CommunityFeed";
 import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 import BannedPage from "./screens/BannedPage";
 import PageNotFound from "./screens/ErrorPage";
+import UserAnalytics from "./screens/UserAnalytics";
 
 function App() {
   let location = useLocation();
@@ -136,7 +137,12 @@ function App() {
             <Route exact path="/createCommunity" component={CreateCommunity} />
             <Route exact path="/changePassword" component={ChangePassword} />
             <Route exact path="/myCommunities" component={MyCommunities} />
-            <Route exact path="/community/:communityId/banned" component={BannedPage} />
+            <Route exact path="/userAnalytics" component={UserAnalytics} />
+            <Route
+              exact
+              path="/community/:communityId/banned"
+              component={BannedPage}
+            />
 
             <Route
               exact
