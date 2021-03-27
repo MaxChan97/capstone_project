@@ -5,9 +5,6 @@
  */
 package entity;
 
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Ban;
-import entity.viewEntities.CommunityPageView;
 import enumeration.TopicEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,11 +61,6 @@ public class Community implements Serializable {
 
     @OneToMany(mappedBy = "postCommunity")
     private List<Post> posts = new ArrayList();
-
-    // Unidirectional
-    @OneToMany
-    @JoinColumn(name = "communityPageViews_id")
-    private List<CommunityPageView> communityPageViews = new ArrayList<>();
 
     // Unidirectional
     private Ban ban;
@@ -131,14 +123,6 @@ public class Community implements Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
-    }
-
-    public List<CommunityPageView> getCommunityPageViews() {
-        return communityPageViews;
-    }
-
-    public void setCommunityPageViews(List<CommunityPageView> communityPageViews) {
-        this.communityPageViews = communityPageViews;
     }
 
     public String getCommunityProfilePicture() {

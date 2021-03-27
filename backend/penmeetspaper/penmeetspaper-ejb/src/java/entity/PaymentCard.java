@@ -3,35 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.viewEntities;
+package entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class CommunityPageView implements Serializable {
+public class PaymentCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // All variables here should be hashed.
     @Column(nullable = false)
-    private int views;
+    private String cardNo;
 
-    @Temporal(TemporalType.DATE)
-    private Date viewDate;
+    @Column(nullable = false)
+    private String expiry;
+
+    @Column(nullable = false)
+    private String cvv;
 
     public Long getId() {
         return id;
@@ -41,20 +42,28 @@ public class CommunityPageView implements Serializable {
         this.id = id;
     }
 
-    public int getViews() {
-        return views;
+    public String getCardNo() {
+        return cardNo;
     }
 
-    public void setViews(int views) {
-        this.views = views;
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
     }
 
-    public Date getViewDate() {
-        return viewDate;
+    public String getExpiry() {
+        return expiry;
     }
 
-    public void setViewDate(Date viewDate) {
-        this.viewDate = viewDate;
+    public void setExpiry(String expiry) {
+        this.expiry = expiry;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 
     @Override
@@ -67,10 +76,10 @@ public class CommunityPageView implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CommunityPageView)) {
+        if (!(object instanceof PaymentCard)) {
             return false;
         }
-        CommunityPageView other = (CommunityPageView) object;
+        PaymentCard other = (PaymentCard) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -79,7 +88,7 @@ public class CommunityPageView implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.CommunityPageView[ id=" + id + " ]";
+        return "entity.walletEntities.PaymentCard[ id=" + id + " ]";
     }
 
 }

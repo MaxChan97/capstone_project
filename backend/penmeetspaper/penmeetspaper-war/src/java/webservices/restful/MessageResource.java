@@ -5,7 +5,7 @@
  */
 package webservices.restful;
 
-import entity.messagingEntities.Message;
+import entity.Message;
 import java.io.StringReader;
 import java.util.Date;
 import javax.ejb.EJB;

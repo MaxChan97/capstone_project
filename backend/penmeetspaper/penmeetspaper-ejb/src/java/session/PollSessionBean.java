@@ -7,7 +7,7 @@ package session;
 
 import entity.PersonAnswer;
 import entity.Poll;
-import entity.personEntities.Person;
+import entity.Person;
 import exception.NotValidException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

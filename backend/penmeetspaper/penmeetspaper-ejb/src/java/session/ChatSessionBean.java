@@ -5,9 +5,9 @@
  */
 package session;
 
-import entity.messagingEntities.Chat;
-import entity.messagingEntities.Message;
-import entity.personEntities.Person;
+import entity.Chat;
+import entity.Message;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Collections;

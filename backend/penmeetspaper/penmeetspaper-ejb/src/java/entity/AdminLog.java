@@ -3,18 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.personToPersonEntities;
+package entity;
 
-import entity.personEntities.Person;
+import enumeration.AdminLogsTypeEnum;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,26 +26,29 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Follow implements Serializable {
+public class AdminLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private AdminLogsTypeEnum adminLogsType;
+
     @Column(nullable = false)
-    private boolean isNotificationOn;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date followDate;
+    private Date dateCreated;
+
+    // unidirectional | nullable
+    @OneToOne
+    private Report report;
 
     @ManyToOne
-    @JoinColumn(name = "Follow_follower")
-    private Person follower;
-
-    @ManyToOne
-    @JoinColumn(name = "Follow_publisher")
-    private Person publisher;
+    @JoinColumn(name = "report_administrator")
+    private Administrator admin;
 
     public Long getId() {
         return id;
@@ -52,36 +58,44 @@ public class Follow implements Serializable {
         this.id = id;
     }
 
-    public boolean isIsNotificationOn() {
-        return isNotificationOn;
+    public AdminLogsTypeEnum getAdminLogsType() {
+        return adminLogsType;
     }
 
-    public void setIsNotificationOn(boolean isNotificationOn) {
-        this.isNotificationOn = isNotificationOn;
+    public void setAdminLogsType(AdminLogsTypeEnum adminLogsType) {
+        this.adminLogsType = adminLogsType;
     }
 
-    public Date getFollowDate() {
-        return followDate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setFollowDate(Date followDate) {
-        this.followDate = followDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Person getFollower() {
-        return follower;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setFollower(Person follower) {
-        this.follower = follower;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Person getPublisher() {
-        return publisher;
+    public Report getReport() {
+        return report;
     }
 
-    public void setPublisher(Person publisher) {
-        this.publisher = publisher;
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
+    public Administrator getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Administrator admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -94,10 +108,10 @@ public class Follow implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Follow)) {
+        if (!(object instanceof AdminLog)) {
             return false;
         }
-        Follow other = (Follow) object;
+        AdminLog other = (AdminLog) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -106,7 +120,7 @@ public class Follow implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Follow[ id=" + id + " ]";
+        return "entity.adminEntities.AdminLog[ id=" + id + " ]";
     }
 
 }

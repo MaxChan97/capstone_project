@@ -5,36 +5,36 @@
  */
 package entity;
 
-import enumeration.MediaTypeEnum;
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class Media implements Serializable {
+public class Chat implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
-    @Column(nullable = false)
-    private boolean isVideo;
+    @ManyToMany
+    @JoinColumn(name = "chat_person")
+    private List<Person> chatParticipants = new ArrayList<>();
 
-    @Column(nullable = false)
-    private byte payload;
-
-    @Enumerated(EnumType.STRING)
-    private MediaTypeEnum mediaType;
+    @OneToMany
+    @JoinColumn(name = "message_id")
+    private List<Message> chatMessages = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -44,28 +44,24 @@ public class Media implements Serializable {
         this.id = id;
     }
 
-    public boolean isIsVideo() {
-        return isVideo;
+    public List<Person> getChatParticipants() {
+        return chatParticipants;
     }
 
-    public void setIsVideo(boolean isVideo) {
-        this.isVideo = isVideo;
+    public void setChatParticipants(List<Person> chatParticipants) {
+        this.chatParticipants = chatParticipants;
     }
 
-    public byte getPayload() {
-        return payload;
+    public List<Message> getChatMessages() {
+        return chatMessages;
     }
 
-    public void setPayload(byte payload) {
-        this.payload = payload;
+    public void setChatMessages(List<Message> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 
-    public MediaTypeEnum getMediaType() {
-        return mediaType;
-    }
-
-    public void setMediaType(MediaTypeEnum mediaType) {
-        this.mediaType = mediaType;
+    public void addChatMessage(Message chatMessage) {
+        this.chatMessages.add(chatMessage);
     }
 
     @Override
@@ -78,10 +74,10 @@ public class Media implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Media)) {
+        if (!(object instanceof Chat)) {
             return false;
         }
-        Media other = (Media) object;
+        Chat other = (Chat) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -90,7 +86,7 @@ public class Media implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Media[ id=" + id + " ]";
+        return "entity.Chat[ id=" + id + " ]";
     }
 
 }

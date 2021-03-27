@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.streamingEntities;
+package entity;
 
 import entity.PersonAnswer;
-import entity.personEntities.Person;
+import entity.Person;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;

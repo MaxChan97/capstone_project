@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.personEntities;
+package entity;
 
+import entity.Person;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,7 +23,7 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class MonthlyFollowerCount implements Serializable {
+public class Follow implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,10 +31,18 @@ public class MonthlyFollowerCount implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private int followerCount;
+    private boolean isNotificationOn;
 
-    @Temporal(TemporalType.DATE)
-    private Date monthOf;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date followDate;
+
+    @ManyToOne
+    @JoinColumn(name = "Follow_follower")
+    private Person follower;
+
+    @ManyToOne
+    @JoinColumn(name = "Follow_publisher")
+    private Person publisher;
 
     public Long getId() {
         return id;
@@ -41,20 +52,36 @@ public class MonthlyFollowerCount implements Serializable {
         this.id = id;
     }
 
-    public int getFollowerCount() {
-        return followerCount;
+    public boolean isIsNotificationOn() {
+        return isNotificationOn;
     }
 
-    public void setFollowerCount(int followerCount) {
-        this.followerCount = followerCount;
+    public void setIsNotificationOn(boolean isNotificationOn) {
+        this.isNotificationOn = isNotificationOn;
     }
 
-    public Date getMonthOf() {
-        return monthOf;
+    public Date getFollowDate() {
+        return followDate;
     }
 
-    public void setMonthOf(Date monthOf) {
-        this.monthOf = monthOf;
+    public void setFollowDate(Date followDate) {
+        this.followDate = followDate;
+    }
+
+    public Person getFollower() {
+        return follower;
+    }
+
+    public void setFollower(Person follower) {
+        this.follower = follower;
+    }
+
+    public Person getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Person publisher) {
+        this.publisher = publisher;
     }
 
     @Override
@@ -67,10 +94,10 @@ public class MonthlyFollowerCount implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MonthlyFollowerCount)) {
+        if (!(object instanceof Follow)) {
             return false;
         }
-        MonthlyFollowerCount other = (MonthlyFollowerCount) object;
+        Follow other = (Follow) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -79,7 +106,7 @@ public class MonthlyFollowerCount implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.personEntities.MonthlyFollowerCount[ id=" + id + " ]";
+        return "entity.Follow[ id=" + id + " ]";
     }
 
 }

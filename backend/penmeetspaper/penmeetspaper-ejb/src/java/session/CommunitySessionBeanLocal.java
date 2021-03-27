@@ -6,7 +6,7 @@
 package session;
 
 import entity.Community;
-import entity.personEntities.Person;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;

@@ -7,9 +7,9 @@ package session;
 
 import entity.Community;
 import entity.Post;
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Follow;
-import entity.personToPersonEntities.Subscription;
+import entity.Person;
+import entity.Follow;
+import entity.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;

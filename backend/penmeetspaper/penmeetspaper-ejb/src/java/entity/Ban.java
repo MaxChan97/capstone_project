@@ -3,36 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.walletEntities;
+package entity;
 
+import entity.Person;
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class PaymentCard implements Serializable {
+public class Ban implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // All variables here should be hashed.
-    @Column(nullable = false)
-    private String cardNo;
+    private int numBan;
 
-    @Column(nullable = false)
-    private String expiry;
-
-    @Column(nullable = false)
-    private String cvv;
+    @OneToMany
+    @JoinColumn(name = "ban_personId")
+    private List<Person> banList = new ArrayList();
 
     public Long getId() {
         return id;
@@ -42,28 +42,26 @@ public class PaymentCard implements Serializable {
         this.id = id;
     }
 
-    public String getCardNo() {
-        return cardNo;
+    /**
+     * @return the numBan
+     */
+    public int getNumBan() {
+        return numBan;
     }
 
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
+    /**
+     * @param numBan the numBan to set
+     */
+    public void setNumBan(int numBan) {
+        this.numBan = numBan;
     }
 
-    public String getExpiry() {
-        return expiry;
+    public List<Person> getBanList() {
+        return banList;
     }
 
-    public void setExpiry(String expiry) {
-        this.expiry = expiry;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setBanList(List<Person> banList) {
+        this.banList = banList;
     }
 
     @Override
@@ -76,10 +74,10 @@ public class PaymentCard implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PaymentCard)) {
+        if (!(object instanceof Ban)) {
             return false;
         }
-        PaymentCard other = (PaymentCard) object;
+        Ban other = (Ban) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -88,7 +86,7 @@ public class PaymentCard implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.walletEntities.PaymentCard[ id=" + id + " ]";
+        return "entity.Ban[ id=" + id + " ]";
     }
 
 }

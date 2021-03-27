@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.advertisementEntities;
+package entity;
 
-import enumeration.TopicEnum;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,27 +20,24 @@ import javax.persistence.TemporalType;
  * @author Shawn
  */
 @Entity
-public class Advertisement implements Serializable {
+public class PaymentTransaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private double amount;
 
     @Column(nullable = false)
-    private String description;
-
-    @Column(nullable = false)
-    private String image;
+    private boolean isPaidToUser;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+    private Date transactionDate;
 
-    @Enumerated(EnumType.STRING)
-    private List<TopicEnum> topics = new ArrayList();
+    @Column(nullable = false)
+    private String messageBody;
 
     public Long getId() {
         return id;
@@ -55,44 +47,36 @@ public class Advertisement implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
+    public boolean isIsPaidToUser() {
+        return isPaidToUser;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setIsPaidToUser(boolean isPaidToUser) {
+        this.isPaidToUser = isPaidToUser;
     }
 
-    public String getImage() {
-        return image;
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
+    public String getMessageBody() {
+        return messageBody;
     }
 
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
-    }
-
-    public List<TopicEnum> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(List<TopicEnum> topics) {
-        this.topics = topics;
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
 
     @Override
@@ -105,10 +89,10 @@ public class Advertisement implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Advertisement)) {
+        if (!(object instanceof PaymentTransaction)) {
             return false;
         }
-        Advertisement other = (Advertisement) object;
+        PaymentTransaction other = (PaymentTransaction) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +101,7 @@ public class Advertisement implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.advertisementEntities.Advertisement[ id=" + id + " ]";
+        return "entity.walletEntities.PaymentTransaction[ id=" + id + " ]";
     }
 
 }

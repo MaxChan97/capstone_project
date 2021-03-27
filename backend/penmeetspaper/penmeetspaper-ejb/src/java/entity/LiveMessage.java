@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.siteAnalyticsEntities;
+package entity;
 
+import entity.Person;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -12,15 +13,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author Shawn
+ * @author carlc
  */
 @Entity
-public class siteMonthlyRevenue implements Serializable {
+public class LiveMessage implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -28,10 +30,15 @@ public class siteMonthlyRevenue implements Serializable {
   private Long id;
 
   @Column(nullable = false)
-  private double revenue;
+  private String body;
 
-  @Temporal(TemporalType.DATE)
-  private Date monthOf;
+  @Column(nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date date;
+
+  // unidirectional 
+  @ManyToOne
+  private Person sender;
 
   public Long getId() {
     return id;
@@ -41,20 +48,28 @@ public class siteMonthlyRevenue implements Serializable {
     this.id = id;
   }
 
-  public double getRevenue() {
-    return revenue;
+  public String getBody() {
+    return body;
   }
 
-  public void setRevenue(double revenue) {
-    this.revenue = revenue;
+  public void setBody(String body) {
+    this.body = body;
   }
 
-  public Date getMonthOf() {
-    return monthOf;
+  public Date getDate() {
+    return date;
   }
 
-  public void setMonthOf(Date monthOf) {
-    this.monthOf = monthOf;
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  public Person getSender() {
+    return sender;
+  }
+
+  public void setSender(Person sender) {
+    this.sender = sender;
   }
 
   @Override
@@ -67,10 +82,10 @@ public class siteMonthlyRevenue implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof siteMonthlyRevenue)) {
+    if (!(object instanceof LiveMessage)) {
       return false;
     }
-    siteMonthlyRevenue other = (siteMonthlyRevenue) object;
+    LiveMessage other = (LiveMessage) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -79,7 +94,7 @@ public class siteMonthlyRevenue implements Serializable {
 
   @Override
   public String toString() {
-    return "entity.siteAnalyticsEntities.siteMonthlyRevenue[ id=" + id + " ]";
+    return "entity.LiveMessage[ id=" + id + " ]";
   }
 
 }

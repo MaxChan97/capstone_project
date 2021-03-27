@@ -3,35 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.personEntities;
+package entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Shawn
  */
 @Entity
-public class MonthlySubscriberCount implements Serializable {
+public class BankAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // All variables here should be hashed.
     @Column(nullable = false)
-    private int subscriberCount;
+    private String accountNumber;
 
-    @Temporal(TemporalType.DATE)
-    private Date monthOf;
+    @Column(nullable = false)
+    private String bankName;
+
+    @Column(nullable = false)
+    private String displayName;
 
     public Long getId() {
         return id;
@@ -41,20 +42,28 @@ public class MonthlySubscriberCount implements Serializable {
         this.id = id;
     }
 
-    public int getSubscriberCount() {
-        return subscriberCount;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setSubscriberCount(int subscriberCount) {
-        this.subscriberCount = subscriberCount;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public Date getMonthOf() {
-        return monthOf;
+    public String getBankName() {
+        return bankName;
     }
 
-    public void setMonthOf(Date monthOf) {
-        this.monthOf = monthOf;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -67,10 +76,10 @@ public class MonthlySubscriberCount implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MonthlySubscriberCount)) {
+        if (!(object instanceof BankAccount)) {
             return false;
         }
-        MonthlySubscriberCount other = (MonthlySubscriberCount) object;
+        BankAccount other = (BankAccount) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -79,7 +88,7 @@ public class MonthlySubscriberCount implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.personEntities.MonthlySubscriberCount[ id=" + id + " ]";
+        return "entity.walletEntities.BankAccount[ id=" + id + " ]";
     }
 
 }

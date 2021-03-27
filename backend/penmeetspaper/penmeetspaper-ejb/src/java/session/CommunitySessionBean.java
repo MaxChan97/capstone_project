@@ -7,8 +7,8 @@ package session;
 
 import entity.Community;
 import entity.Post;
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Ban;
+import entity.Person;
+import entity.Ban;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
