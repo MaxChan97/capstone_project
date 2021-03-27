@@ -9,6 +9,7 @@ import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -23,90 +24,100 @@ import javax.persistence.Query;
 @Stateless
 public class FollowerSessionBean implements FollowerSessionBeanLocal {
 
-    @PersistenceContext
-    private EntityManager em;
+  @PersistenceContext
+  private EntityManager em;
 
-    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
-        if (personId == null) {
-            throw new NotValidException(FollowerSessionBeanLocal.MISSING_PERSON_ID);
-        }
-
-        Person person = em.find(Person.class, personId);
-
-        if (person == null) {
-            throw new NoResultException(FollowerSessionBeanLocal.CANNOT_FIND_PERSON);
-        }
-
-        return person;
+  private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+    if (personId == null) {
+      throw new NotValidException(FollowerSessionBeanLocal.MISSING_PERSON_ID);
     }
 
-    private Follow getFollow(Long followerId, Long publisherId) throws NoResultException, NotValidException {
-        Query q;
-        q = em.createQuery("SELECT f FROM Follow f WHERE f.follower.id = :followerId AND f.publisher.id = :publisherId");
-        q.setParameter("followerId", followerId);
-        q.setParameter("publisherId", publisherId);
+    Person person = em.find(Person.class, personId);
 
-        List<Follow> followList = q.getResultList();
+    if (person == null) {
+      throw new NoResultException(FollowerSessionBeanLocal.CANNOT_FIND_PERSON);
+    }
 
-        if (followList.isEmpty()) {
-            throw new NoResultException(FollowerSessionBeanLocal.CANNOT_FIND_FOLLOW);
-        }
+    return person;
+  }
 
-        if (followList.size() > 1) {
-            throw new NotValidException(FollowerSessionBeanLocal.MULTIPLE_FOLLOW_FOUND);
-        }
+  private Follow getFollow(Long followerId, Long publisherId) throws NoResultException, NotValidException {
+    Query q;
+    q = em.createQuery("SELECT f FROM Follow f WHERE f.follower.id = :followerId AND f.publisher.id = :publisherId");
+    q.setParameter("followerId", followerId);
+    q.setParameter("publisherId", publisherId);
 
-        return followList.get(0);
+    List<Follow> followList = q.getResultList();
+
+    if (followList.isEmpty()) {
+      throw new NoResultException(FollowerSessionBeanLocal.CANNOT_FIND_FOLLOW);
+    }
+
+    if (followList.size() > 1) {
+      throw new NotValidException(FollowerSessionBeanLocal.MULTIPLE_FOLLOW_FOUND);
+    }
+
+    return followList.get(0);
+
+  }
+
+  @Override
+  public void followPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException {
+
+    // Check whether followEntity already exists
+    Follow existingFollow = null;
+
+    try {
+      existingFollow = getFollow(followerId, publisherId);
+    } catch (NoResultException e) {
 
     }
 
-    @Override
-    public void followPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException {
-
-        // Check whether followEntity already exists
-        Follow existingFollow = null;
-
-        try {
-            existingFollow = getFollow(followerId, publisherId);
-        } catch (NoResultException e) {
-
-        }
-
-        if (existingFollow != null) {
-            throw new NotValidException(FollowerSessionBeanLocal.FOLLOW_ALREADY_EXISTS);
-        }
-
-        Person follower = emGetPerson(followerId);
-
-        Person publisher = emGetPerson(publisherId);
-
-        Follow followEntity = new Follow();
-        followEntity.setFollowDate(new Date());
-        followEntity.setIsNotificationOn(true);
-
-        followEntity.setFollower(follower);
-        followEntity.setPublisher(publisher);
-
-        em.persist(followEntity);
-
-        publisher.getFollowers().add(followEntity);
-        follower.getFollowing().add(followEntity);
+    if (existingFollow != null) {
+      throw new NotValidException(FollowerSessionBeanLocal.FOLLOW_ALREADY_EXISTS);
     }
 
-    @Override
-    public void unfollowPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException {
-        // Check whether followEntity already exists
+    Person follower = emGetPerson(followerId);
 
-        Follow followEntity = getFollow(followerId, publisherId);
+    Person publisher = emGetPerson(publisherId);
 
-        Person follower = emGetPerson(followerId);
+    Follow followEntity = new Follow();
+    followEntity.setFollowDate(new Date());
+    followEntity.setIsNotificationOn(true);
 
-        Person publisher = emGetPerson(publisherId);
+    followEntity.setFollower(follower);
+    followEntity.setPublisher(publisher);
 
-        publisher.getFollowers().remove(followEntity);
-        follower.getFollowing().remove(followEntity);
+    em.persist(followEntity);
 
-        em.remove(followEntity);
+    publisher.getFollowers().add(followEntity);
+    follower.getFollowing().add(followEntity);
 
-    }
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    
+    Date date = cal.getTime();
+    System.out.println(date);
+    publisher.getFollowersAnalytics().getFollowersCount().put(date, new Long(publisher.getFollowers().size()));
+  }
+
+  @Override
+  public void unfollowPerson(Long followerId, Long publisherId) throws NoResultException, NotValidException {
+    // Check whether followEntity already exists
+
+    Follow followEntity = getFollow(followerId, publisherId);
+
+    Person follower = emGetPerson(followerId);
+
+    Person publisher = emGetPerson(publisherId);
+
+    publisher.getFollowers().remove(followEntity);
+    follower.getFollowing().remove(followEntity);
+
+    em.remove(followEntity);
+
+  }
 }

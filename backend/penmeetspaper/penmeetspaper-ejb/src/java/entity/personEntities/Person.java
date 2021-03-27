@@ -16,6 +16,10 @@ import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
 import entity.streamingEntities.Stream;
+import entity.userAnalyticsEntities.EarningsAnalytics;
+import entity.userAnalyticsEntities.FollowersAnalytics;
+import entity.userAnalyticsEntities.SubscribersAnalytics;
+import entity.userAnalyticsEntities.ViewersAnalytics;
 import entity.viewEntities.ProfilePageView;
 import entity.walletEntities.BankAccount;
 import entity.walletEntities.PaymentCard;
@@ -26,6 +30,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -194,6 +199,18 @@ public class Person implements Serializable {
   //unidirectional
   @JoinColumn(name = "monthlySubscriberCount_id")
   private List<MonthlySubscriberCount> MonthlySubscriberCounts = new ArrayList<>();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private FollowersAnalytics followersAnalytics = new FollowersAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private SubscribersAnalytics subscribersAnalytics = new SubscribersAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private EarningsAnalytics earningsAnalytics = new EarningsAnalytics();
+  
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private ViewersAnalytics viewersAnalytics = new ViewersAnalytics();
 
   // Getters and Setters -----------------------------------------------------------
   public Person() {
@@ -517,6 +534,38 @@ public class Person implements Serializable {
 
   public void setResetId(String resetId) {
     this.resetId = resetId;
+  }
+
+  public FollowersAnalytics getFollowersAnalytics() {
+    return followersAnalytics;
+  }
+
+  public void setFollowersAnalytics(FollowersAnalytics followersAnalytics) {
+    this.followersAnalytics = followersAnalytics;
+  }
+
+  public SubscribersAnalytics getSubscribersAnalytics() {
+    return subscribersAnalytics;
+  }
+
+  public void setSubscribersAnalytics(SubscribersAnalytics subscribersAnalytics) {
+    this.subscribersAnalytics = subscribersAnalytics;
+  }
+
+  public EarningsAnalytics getEarningsAnalytics() {
+    return earningsAnalytics;
+  }
+
+  public void setEarningsAnalytics(EarningsAnalytics earningsAnalytics) {
+    this.earningsAnalytics = earningsAnalytics;
+  }
+
+  public ViewersAnalytics getViewersAnalytics() {
+    return viewersAnalytics;
+  }
+
+  public void setViewersAnalytics(ViewersAnalytics viewersAnalytics) {
+    this.viewersAnalytics = viewersAnalytics;
   }
 
   @Override

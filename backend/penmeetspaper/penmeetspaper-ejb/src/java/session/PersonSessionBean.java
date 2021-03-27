@@ -11,6 +11,7 @@ import entity.personEntities.Person;
 import entity.personToPersonEntities.Ban;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import entity.userAnalyticsEntities.FollowersAnalytics;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
@@ -218,7 +219,11 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setPublications(null);
         person.setOwnedCommunities(null);
         person.setFollowingCommunities(null);
-
+        person.setFollowersAnalytics(null);
+        person.setSubscribersAnalytics(null);
+        person.setViewersAnalytics(null);
+        person.setEarningsAnalytics(null);
+        
         return person;
     } // end getPersonById
 
@@ -306,6 +311,12 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         oldPerson.setIncomeRange(person.getIncomeRange());
         oldPerson.setDob(person.getDob());
         em.flush();
+    }
+    
+    @Override
+     public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException {
+        Person person = emGetPerson(personId);
+        return person.getFollowersAnalytics();
     }
 
     // Get the people this person is following

@@ -10,6 +10,7 @@ import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import entity.userAnalyticsEntities.FollowersAnalytics;
 import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
@@ -188,6 +189,19 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end getPersonByEmail
+    
+    @GET
+    @Path("/{id}/followersAnalytics")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowersAnalytics(@PathParam("id") Long id) {
+        try {
+            FollowersAnalytics followersAnalytics = personSB.getFollowersAnalytics(id);
+            System.out.println(followersAnalytics.getFollowersCount());
+            return Response.status(200).entity(followersAnalytics).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
     @GET
     @Path("/{id}/followers")

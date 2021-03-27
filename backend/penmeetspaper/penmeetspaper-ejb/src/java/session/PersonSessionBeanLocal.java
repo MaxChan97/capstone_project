@@ -10,6 +10,7 @@ import entity.Post;
 import entity.personEntities.Person;
 import entity.personToPersonEntities.Follow;
 import entity.personToPersonEntities.Subscription;
+import entity.userAnalyticsEntities.FollowersAnalytics;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -73,5 +74,7 @@ public interface PersonSessionBeanLocal {
     public List<Post> getFollowingCommunityPosts(Long personId) throws NoResultException, NotValidException;
 
     public void updatePersonInfo(Person person) throws NoResultException, NotValidException;
+
+  public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException;
 
 }
