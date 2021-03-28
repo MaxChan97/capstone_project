@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import AdminList from "../components/AdminPage/AdminList";
 import { Link } from "react-router-dom";
+import Banned from "./AdminBannedAccessPage";
 
 export default function AdminManagementPage() {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ export default function AdminManagementPage() {
                   alignItems: "center",
                 }}
               >
-                <Link to="/admin/inbox">
+                <Link to="/admin/logs">
                   <ColorButton
                     style={{
                       height: "35px",
@@ -91,7 +92,7 @@ export default function AdminManagementPage() {
         </div>
       </div>
     </div>
-  ): (
-    <h1>No Access</h1>
-);
+  ) : (
+    <Banned></Banned>
+  );
 }

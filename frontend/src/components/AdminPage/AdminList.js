@@ -70,7 +70,7 @@ export default function AdminList() {
             width: 150,
             renderCell: (params) => (
                 <div>
-                    <Link to="/admin/inbox">
+                    <Link to="/admin/log">
                         <i className="far fa-eye" style={{marginLeft: 30, color: "#3B21CB",}}></i>
                     </Link>
                 </div>

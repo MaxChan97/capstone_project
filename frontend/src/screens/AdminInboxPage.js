@@ -8,6 +8,7 @@ import ReportCard from "../components/AdminPage/ReportCard";
 import ReportDetails from "../components/AdminPage/ReportDetails";
 import Box from "@material-ui/core/Box";
 import SortReportDropdown from "../components/AdminPage/SortReportDropdown";
+import Banned from "./AdminBannedAccessPage";
 
 export default function AdminInboxPage() {
   const dispatch = useDispatch();
@@ -20,11 +21,11 @@ export default function AdminInboxPage() {
     console.log(currentUser);
   },[]);
   */
-  return (
+  return isAdmin == true ?(
     <div className="content-wrapper">
       <div className="container mt-3">
         <div className="row">
-          <div className="col-md-6 mt-3">
+          <div className="col-md-6 mt-3"  style={{margin:"auto"}}>
             <ReportCard></ReportCard>
             <ReportCard></ReportCard>
           </div>
@@ -34,5 +35,7 @@ export default function AdminInboxPage() {
         </div>
       </div>
     </div>
+  ) : (
+    <Banned></Banned>
   );
 }
