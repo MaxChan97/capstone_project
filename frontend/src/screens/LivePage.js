@@ -20,8 +20,15 @@ export default function LivePage() {
           alignItems: "center",
         }}
       >
-        {/* <Webcam /> */}
         <h1>Live Page</h1>
+        <iframe
+          src="https://embed.api.video/live/li2XqqQrQjTfWAosisxd5e3V"
+          width="750px"
+          height="450px"
+          frameborder="0"
+          scrolling="no"
+          allowfullscreen="true"
+        ></iframe>
       </div>
     </div>
   );

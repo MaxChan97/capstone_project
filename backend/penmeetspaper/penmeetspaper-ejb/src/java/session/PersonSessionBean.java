@@ -8,10 +8,10 @@ package session;
 import entity.Badge;
 import entity.Community;
 import entity.Post;
-import entity.personEntities.Person;
-import entity.personToPersonEntities.Ban;
-import entity.personToPersonEntities.Follow;
-import entity.personToPersonEntities.Subscription;
+import entity.Person;
+import entity.Ban;
+import entity.Follow;
+import entity.Subscription;
 import enumeration.BadgeTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -253,7 +253,11 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setPublications(null);
         person.setOwnedCommunities(null);
         person.setFollowingCommunities(null);
-
+        person.setFollowersAnalytics(null);
+        person.setSubscribersAnalytics(null);
+        person.setViewersAnalytics(null);
+        person.setEarningsAnalytics(null);
+        
         return person;
     } // end getPersonById
 
@@ -342,7 +346,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         oldPerson.setDob(person.getDob());
         em.flush();
     }
-
+    
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
         Person person = emGetPerson(personId);

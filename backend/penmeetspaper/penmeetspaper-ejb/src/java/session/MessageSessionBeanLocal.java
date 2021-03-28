@@ -5,7 +5,7 @@
  */
 package session;
 
-import entity.messagingEntities.Message;
+import entity.Message;
 import javax.ejb.Local;
 
 /**

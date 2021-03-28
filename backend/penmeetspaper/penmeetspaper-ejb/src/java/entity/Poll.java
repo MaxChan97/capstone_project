@@ -5,7 +5,6 @@
  */
 package entity;
 
-import entity.personEntities.Person;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;

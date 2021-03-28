@@ -938,6 +938,50 @@ export default {
     });
   },
 
+  getFollowersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/followersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSubscribersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/subscribersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getEarningsAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/earningsAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getViewersAnalytics(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/viewersAnalytics/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   adminLogin(email, password) {
     return jQuery.ajax({
       url:

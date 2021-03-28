@@ -5,8 +5,8 @@
  */
 package session;
 
-import entity.adminEntities.Administrator;
-import entity.personEntities.Person;
+import entity.Administrator;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Local;
