@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateAnotherAdmin() {
+    let history = useHistory();
     const alert = useAlert();
     const classes = useStyles();
     const [refresh, setRefresh] = useState(true);
@@ -50,14 +52,19 @@ export default function CreateAnotherAdmin() {
             alert.show("Email cannot be empty");
         } 
 
+        history.push("/admin/adminmanagement");
     };
+
+    function handleCancel(){
+        history.push("/admin/adminmanagement");
+    }
 
     return (
         <div
-            style={{ paddingTop: "24px", paddingLeft: "17px" }}
+            style={{ paddingTop: "24px", paddingLeft: "17px", }}
             className="content-wrapper"
         >
-            <div class="col-md-9" style={{ textAlign: "left" }}>
+            <div class="col-md-9" style={{ textAlign: "left", margin:"auto" }}>
                 <div class="card card-primary">
                     <form
                         onSubmit={handleSubmit}
@@ -97,6 +104,10 @@ export default function CreateAnotherAdmin() {
                             </div>
                             <br></br>
                             <div style={{ textAlign: "right" }}>
+                            <Button style={{ outline: "none" }} onClick={handleCancel}>
+                                Cancel
+                            </Button>
+                            {" "}
                                 <ColorButton
                                     style={{
                                         height: "30px",
