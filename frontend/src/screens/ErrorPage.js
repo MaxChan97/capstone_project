@@ -34,7 +34,7 @@ export default function ErrorPage() {
           <p
             style={{ marginTop: "30px", marginLeft: "385px", fontSize: "20px" }}
           >
-            Oh no! We apologise for the inconvenience but <br/>
+            Oh no! We apologise for the inconvenience but <br />
             the piggy might have been broken by accident...
           </p>
         </div>
@@ -48,9 +48,9 @@ export default function ErrorPage() {
               fontWeight: "600",
               marginLeft: "460px",
               marginTop: "20px",
-              marginBottom:"130px"
+              marginBottom: "130px",
             }}
-            href="/"
+            href="/feed"
             variant="contained"
             color="primary"
             type="button"
