@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Redirect, Switch, Route, useLocation } from "react-router-dom";
+import { Redirect, Route, useLocation } from "react-router-dom";
+import { Switch } from "react-router";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
@@ -110,9 +111,9 @@ function App() {
       );
     } else if (
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-      "manageDetails" ||
+        "manageDetails" ||
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-      "manageMembers"
+        "manageMembers"
     ) {
       return (
         <div>
@@ -254,19 +255,10 @@ function App() {
               component={ReportDetails}
             />
 
-            <Route
-              exact
-              path="/admin/log"
-              component={AdminLog}
-            />
+            <Route exact path="/admin/log" component={AdminLog} />
 
-            <Route
-              exact
-              path="/admin/logs"
-              component={AllAdminLogs}
-            />
-            {/* <Route path="/404" component={PageNotFound} />
-            <Redirect to="/404" /> */}
+            <Route exact path="/admin/logs" component={AllAdminLogs} />
+            <Route component={PageNotFound} />
           </div>
         </div>
       </Switch>
