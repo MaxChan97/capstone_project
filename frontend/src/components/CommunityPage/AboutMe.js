@@ -17,12 +17,12 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   chip: {
-    display: 'flex',
-        justifyContent: 'left',
-        flexWrap: 'wrap',
-        '& > *': {
-        margin: theme.spacing(0.5),
-        },
+    display: "flex",
+    justifyContent: "left",
+    flexWrap: "wrap",
+    "& > *": {
+      margin: theme.spacing(0.5),
+    },
   },
 }));
 
@@ -43,6 +43,7 @@ export default function AboutMe() {
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [currentPerson, setCurrentPerson] = useState({});
+  const [owner, setOwner] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
   useEffect(() => {
     if (currentUser) {
@@ -59,16 +60,17 @@ export default function AboutMe() {
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
+        setOwner(currentCommunity.owner)
       })
       .fail((xhr, status, error) => {
         alert.show("This community does not exist!");
       });
-      Api.getPersonById(currentUser)
+    Api.getPersonById(currentUser)
       .done((currentPerson) => {
-      setCurrentPerson(currentPerson);
+        setCurrentPerson(currentPerson);
       })
       .fail((xhr, status, error) => {
-      alert.show("This user does not exist!");
+        alert.show("This user does not exist!");
       });
   }
 
@@ -79,33 +81,45 @@ export default function AboutMe() {
           <div className="card card-primary mx-2 p-2">
             <div className="card-body">
               <Box fontWeight="600" fontSize={20}>
-                  About this Community
+                About this Community
               </Box>
               {currentCommunity.dateCreated !== undefined ? (
-                <p className="font-weight-light" >Created {dayjs(currentCommunity.dateCreated.slice(0, -5)).format('DD MMMM YYYY')}</p>
-              ): (null)}
+                <p className="font-weight-light">
+                  Created{" "}
+                  {dayjs(currentCommunity.dateCreated.slice(0, -5)).format(
+                    "DD MMMM YYYY"
+                  )}
+                </p>
+              ) : null}
               <p className="font-weight-normal">
                 {currentCommunity.description}
               </p>
-              
+
               <Box fontWeight="600" fontSize={20}>
-                  Related Topics
+                Related Topics
               </Box>
               <div component="ul" className={classes.root}>
-              {currentCommunity.topicEnums !== undefined ? (
-                          <div component="ul" className={classes.chip}>
-                              {currentCommunity.topicEnums.map((topics, index) => <Chip label={toTitleCase(topics)} key={index} style={{backgroundColor: '#F1F3F8'}}/>)}
-                          </div>
-                          ) :
-                          (null)}
+                {currentCommunity.topicEnums !== undefined ? (
+                  <div component="ul" className={classes.chip}>
+                    {currentCommunity.topicEnums.map((topics, index) => (
+                      <Chip
+                        label={toTitleCase(topics)}
+                        key={index}
+                        style={{ backgroundColor: "#F1F3F8" }}
+                      />
+                    ))}
+                  </div>
+                ) : null}
               </div>
-              <br/>
+              <br />
               <Box fontWeight="600" fontSize={20}>
-                  Community Owner
+                Community Owner
               </Box>
-              <p className="font-weight-normal">
-                @{currentPerson.username}
-              </p>
+              {owner.username !== undefined ? (
+                <p className="font-weight-normal">
+                  @{owner.username}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>

@@ -638,22 +638,22 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
             switch (badgeEnum) {
                 case OVERALL:
-                    if (totalPoints > pointsRequired) {
+                    if (totalPoints >= pointsRequired) {
                         person.getBadges().add(b);
                     }
 
                 case STREAM:
-                    if (ccPoints > pointsRequired * 10) {
+                    if (ccPoints >= pointsRequired * 10) {
                         person.getBadges().add(b);
                     }
 
                 case FOLLOWER:
-                    if (numFollowers > pointsRequired) {
+                    if (numFollowers >= pointsRequired) {
                         person.getBadges().add(b);
                     }
 
                 case POST:
-                    if (numPosts > pointsRequired) {
+                    if (numPosts >= pointsRequired) {
                         person.getBadges().add(b);
                     }
 
