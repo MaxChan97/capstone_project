@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { useSelector } from "react-redux";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -13,8 +14,10 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
+
 export default function ProfileManagementButtonGroup() {
-  return (
+  const isAdmin = useSelector((state) => state.isAdmin);
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -55,5 +58,7 @@ export default function ProfileManagementButtonGroup() {
         </Link>
       </Button>
     </div>
+  ) : (
+    ""
   );
 }

@@ -68,7 +68,7 @@ export default function ReportDetails() {
                                 </div>
                                 <br>
                                 </br>
-
+                                <p>Report Reason: Frauds and scams</p>
                                 <Box fontWeight="fontWeightRegular" fontSize={20}>
                                     User Message:
                                 </Box>

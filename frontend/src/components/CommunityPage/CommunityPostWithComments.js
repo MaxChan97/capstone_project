@@ -30,6 +30,7 @@ export default function CommunityPostWithComments() {
   const alert = useAlert();
   const [refresh, setRefresh] = useState(true);
   const [edit, setEdit] = useState(false);
+  const isAdmin = useSelector((state) => state.isAdmin);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -190,7 +191,7 @@ export default function CommunityPostWithComments() {
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>
-                  {data.author.id == currentUser ? (
+                  {isAdmin == false && data.author.id == currentUser ? (
                     <div style={{ textAlign: "right" }}>
                       <IconButton
                         style={{ outline: "none" }}

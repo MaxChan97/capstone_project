@@ -98,6 +98,8 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     setFormatDate(changedDate);
   }
 
+  const isAdmin = useSelector((state) => state.isAdmin);
+
   useEffect(() => {
     if (data && data.body == "Reply Deleted") {
       setDeleted(true);
@@ -162,7 +164,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
-              {data.author.id == currentUser ? (
+              {isAdmin == false && data.author.id == currentUser ? (
                 <div style={{ textAlign: "right", marginRight: "3%" }}>
                   <IconButton
                     style={{ outline: "none" }}

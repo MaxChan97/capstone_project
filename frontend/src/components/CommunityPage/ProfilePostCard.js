@@ -28,7 +28,7 @@ export default function ProfilePostCard({
   community,
 }) {
   const alert = useAlert();
-
+  const isAdmin = useSelector((state) => state.isAdmin);
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -225,7 +225,7 @@ export default function ProfilePostCard({
                     {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>
-                {data.author.id == currentUser ? (
+                {isAdmin == false && data.author.id == currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <IconButton
                       style={{ outline: "none" }}

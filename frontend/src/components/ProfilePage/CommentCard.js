@@ -76,6 +76,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
   const [liked, setLiked] = useState();
   const currentUser = useSelector((state) => state.currentUser);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const handleLike = (event) => {
     Api.likeProfilePostComment(data.id, currentUser);
@@ -165,7 +166,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
-              {data.author.id == currentUser ? (
+              {isAdmin == false && data.author.id == currentUser ? (
                 <div style={{ textAlign: "right", marginRight: "3%" }}>
                   <IconButton
                     style={{ outline: "none" }}
@@ -202,10 +203,10 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               )}
             </div>
 
-            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditComment  autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditComment>}
+            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditComment autofocus data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+              setEdit={setEdit}></EditComment>}
 
             <p style={{ marginLeft: 10 }}>
               {liked == true ? (
@@ -226,7 +227,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                 {data.replies.length}
               </span>
             </p>
-            {showReplies == true ? (
+            {isAdmin == false && showReplies == true ? (
               <div>
                 <Link
                   style={{ fontSize: 15 }}
@@ -243,6 +244,10 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                 ></ReplyCommentCard>
               </div>
             ) : (
+              ""
+            )}
+
+            {isAdmin == false && showReplies == false ? (
               <Link
                 style={{ fontSize: 15 }}
                 onClick={handleViewHideReplies}
@@ -250,7 +255,42 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               >
                 Reply/View replies
               </Link>
+            ) : (
+              ""
             )}
+
+            {isAdmin == true && data.replies.length > 0 && showReplies == false ? (
+              <Link
+                style={{ fontSize: 15 }}
+                onClick={handleViewHideReplies}
+                style={{ color: "#3B21CB", fontSize: "14px" }}
+              >
+                View replies
+              </Link>
+            ) : (
+              ""
+            )}
+
+            {isAdmin == true &&  showReplies == true ? (
+              <div>
+                <Link
+                  style={{ fontSize: 15 }}
+                  onClick={handleViewHideReplies}
+                  style={{ color: "#3B21CB", fontSize: "14px" }}
+                >
+                  Hide replies
+                </Link>
+                <Divider variant="middle" />
+                <ReplyCommentCard
+                  commentData={data}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                ></ReplyCommentCard>
+              </div>
+            ) : (
+              ""
+            )}
+
 
             <Divider variant="middle" />
           </div>

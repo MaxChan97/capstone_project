@@ -166,6 +166,7 @@ export default function ProfilePostWithComments() {
   }
 
   const currentUser = useSelector((state) => state.currentUser);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const handleLike = (event) => {
     Api.likeProfilePost(data.id, currentUser);
@@ -240,7 +241,7 @@ export default function ProfilePostWithComments() {
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>
-                  {data.author.id == currentUser ? (
+                  {isAdmin == false && data.author.id == currentUser ? (
                     <div style={{ textAlign: "right" }}>
                       <IconButton
                         style={{ outline: "none" }}
