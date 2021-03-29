@@ -12,6 +12,9 @@ import entity.ViewersAnalytics;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -54,43 +57,59 @@ public class AnalyticsResource {
   public Response getSubscribersAnalytics(@PathParam("id") Long id) {
     try {
       SubscribersAnalytics subscribersAnalytics = analyticsSessionBean.getSubscribersAnalytics(id);
-      return Response.status(200).entity(subscribersAnalytics).type(MediaType.APPLICATION_JSON).build();
+      Map<Long, Long> map = new HashMap<Long, Long>();
+      for (Map.Entry<Date, Long> entry : subscribersAnalytics.getSubscribersCount().entrySet()) {
+        map.put(entry.getKey().getTime(), entry.getValue());
+      }
+      return Response.status(200).entity(map).type(MediaType.APPLICATION_JSON).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);
     }
   }
-  
+
   @GET
   @Path("/followersAnalytics/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getFollowersAnalytics(@PathParam("id") Long id) {
     try {
       FollowersAnalytics followersAnalytics = analyticsSessionBean.getFollowersAnalytics(id);
-      return Response.status(200).entity(followersAnalytics).type(MediaType.APPLICATION_JSON).build();
+      Map<Long, Long> map = new HashMap<Long, Long>();
+      for (Map.Entry<Date, Long> entry : followersAnalytics.getFollowersCount().entrySet()) {
+        map.put(entry.getKey().getTime(), entry.getValue());
+      }
+      return Response.status(200).entity(map).type(MediaType.APPLICATION_JSON).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);
     }
   }
-  
+
   @GET
   @Path("/earningsAnalytics/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getEarningsAnalytics(@PathParam("id") Long id) {
     try {
       EarningsAnalytics earningsAnalytics = analyticsSessionBean.getEarningsAnalytics(id);
-      return Response.status(200).entity(earningsAnalytics).type(MediaType.APPLICATION_JSON).build();
+      Map<Long, Double> map = new HashMap<Long, Double>();
+      for (Map.Entry<Date, Double> entry : earningsAnalytics.getEarnings().entrySet()) {
+        map.put(entry.getKey().getTime(), entry.getValue());
+      }
+      return Response.status(200).entity(map).type(MediaType.APPLICATION_JSON).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);
     }
   }
-  
+
   @GET
   @Path("/viewersAnalytics/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getViewersAnalytics(@PathParam("id") Long id) {
     try {
       ViewersAnalytics viewersAnalytics = analyticsSessionBean.getViewersAnalytics(id);
-      return Response.status(200).entity(viewersAnalytics).type(MediaType.APPLICATION_JSON).build();
+      Map<Long, Long> map = new HashMap<Long, Long>();
+      for (Map.Entry<Date, Long> entry : viewersAnalytics.getViewersCount().entrySet()) {
+        map.put(entry.getKey().getTime(), entry.getValue());
+      }
+      return Response.status(200).entity(map).type(MediaType.APPLICATION_JSON).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);
     }

@@ -8,6 +8,7 @@ import communityLogo from "../assets/Community Logo.svg";
 import categoriesLogo from "../assets/Categories Logo.svg";
 import feedLogo from "../assets/Feed Logo.svg";
 import subscribeLogo from "../assets/subscribeLogo.svg";
+import BarChartIcon from "@material-ui/icons/BarChart";
 
 function Sidebar() {
   let location = useLocation();
@@ -343,8 +344,8 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
-                    <p className="ml-2">Analytics</p>
+                    <BarChartIcon fontSize="large"></BarChartIcon>
+                    <p className="ml-1">Analytics</p>
                   </div>
                 </Link>
               ) : (
@@ -356,8 +357,8 @@ function Sidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
-                    <p className="ml-2">Analytics</p>
+                    <BarChartIcon fontSize="large"></BarChartIcon>
+                    <p className="ml-1">Analytics</p>
                   </div>
                 </Link>
               )}

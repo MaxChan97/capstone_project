@@ -5,14 +5,14 @@
  */
 package session;
 
+import entity.Administrator;
 import entity.Comment;
 import entity.Community;
+import entity.Person;
 import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
-import entity.Administrator;
-import entity.Person;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -75,7 +75,10 @@ public class DataInitSessionBean {
 
     @EJB
     private SubscriptionSessionBeanLocal subSB;
-
+    
+    @EJB
+    private AnalyticsSessionBeanLocal analyticsSB;
+    
     public DataInitSessionBean() {
     }
 
@@ -226,7 +229,7 @@ public class DataInitSessionBean {
         followSB.followPerson(new Long(5), new Long(1));
         followSB.followPerson(new Long(6), new Long(1));
         followSB.followPerson(new Long(7), new Long(1));
-
+        
         followSB.followPerson(new Long(1), new Long(2));
         followSB.followPerson(new Long(1), new Long(3));
         followSB.followPerson(new Long(1), new Long(4));
