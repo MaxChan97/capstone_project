@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import loginImage from "../assets/LoginImage.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
@@ -128,8 +129,13 @@ export default function NewPassword() {
         sm={4}
         md={7}
         className={classes.image}
-      />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      >
+        <img
+          className="img-fluid"
+          src={loginImage}
+          style={{ height: "100%" }}
+        />
+      </Grid>
       <Grid
         style={{
           background: "#F5F8F6",

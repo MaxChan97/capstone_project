@@ -14,13 +14,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { logIn, setIsAdmin } from "../redux/actions/index";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import logo from "../assets/BNB Logo.png";
-import loginImage from "../assets/LoginImage.png";
+import loginImage from "../assets/LoginImage.jpg";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
+  root: { height: "100vh", overflow: "hidden" },
   image: {
     backgroundRepeat: "no-repeat",
     backgroundColor: "#EBE8FF",
@@ -112,20 +109,19 @@ export default function Login() {
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid
+      style={{ maxheight: "100%" }}
+      container
+      component="main"
+      className={classes.root}
+    >
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image}>
         <div>
           <img
             className="img-fluid"
-            style={{
-              height: "100%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              display: "block",
-              // marginTop: "300px",
-            }}
             src={loginImage}
+            style={{ height: "100%" }}
           />
         </div>
       </Grid>

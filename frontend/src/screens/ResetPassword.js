@@ -15,6 +15,8 @@ import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { logIn } from "../redux/actions/index";
 import emailjs from "emailjs-com";
+import loginImage from "../assets/LoginImage.jpg";
+
 var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
@@ -146,12 +148,18 @@ export default function ResetPassword() {
         sm={4}
         md={7}
         className={classes.image}
-      />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      >
+        <div>
+          <img
+            className="img-fluid"
+            src={loginImage}
+            style={{ height: "100%" }}
+          />
+        </div>
+      </Grid>
       <Grid
         style={{
           background: "#F5F8F6",
-          height: "100vh",
         }}
         item
         xs={12}
