@@ -60,7 +60,11 @@ export default function AnotherProfilePage({ personId }) {
     if (tabValue === 2) {
       return (
         <div style={{ marginTop: "20px" }}>
-          <AboutMe />
+          <AboutMe
+            person={anotherPerson}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
         </div>
       );
     }

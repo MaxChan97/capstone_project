@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 //chip is the topic tag
 
-export default function AboutMe({ currentPerson, refresh, setRefresh }) {
+export default function AboutMe({ person, refresh, setRefresh }) {
   const classes = useStyles();
 
   //   const [profilePicture, setProfilePicture] = useState("");
@@ -40,15 +40,17 @@ export default function AboutMe({ currentPerson, refresh, setRefresh }) {
 
   const currentUser = useSelector((state) => state.currentUser);
 
-  console.log(currentPerson);
+  console.log(person);
   if (currentUser === null) {
     return <Redirect to="/login" />;
   }
 
   function changeBadge(personId, badgeId) {
-    Api.changeBadge(personId, badgeId).done(() => {
-      setRefresh(!refresh);
-    });
+    if (person.id === currentUser) {
+      Api.changeBadge(personId, badgeId).done(() => {
+        setRefresh(!refresh);
+      });
+    }
   }
 
   function toTitleCase(str) {
@@ -97,12 +99,12 @@ export default function AboutMe({ currentPerson, refresh, setRefresh }) {
             <div className="card-body">
               <strong>About</strong>
 
-              <p>{currentPerson.description}</p>
+              <p>{person.description}</p>
 
               <strong> Interests</strong>
-              {currentPerson.topicInterests !== undefined ? (
+              {person.topicInterests !== undefined ? (
                 <div component="ul" className={classes.chip}>
-                  {currentPerson.topicInterests.map((topics, index) => (
+                  {person.topicInterests.map((topics, index) => (
                     <Chip
                       label={toTitleCase(topics)}
                       key={index}
@@ -113,9 +115,9 @@ export default function AboutMe({ currentPerson, refresh, setRefresh }) {
               ) : null}
               <br />
               <strong>My Badges</strong>
-              {currentPerson.badges !== undefined ? (
+              {person.badges !== undefined ? (
                 <div component="ul" className={classes.badge}>
-                  {currentPerson.badges.map((badge, index) => (
+                  {person.badges.map((badge, index) => (
                     <button
                       style={{
                         height: "45px",
@@ -151,8 +153,8 @@ export default function AboutMe({ currentPerson, refresh, setRefresh }) {
                   LEVEL{" "}
                   {getLevel(
                     totalPoints(
-                      currentPerson.contentCreatorPoints,
-                      currentPerson.contributorPoints
+                      person.contentCreatorPoints,
+                      person.contributorPoints
                     )
                   )}
                 </strong>
@@ -160,8 +162,8 @@ export default function AboutMe({ currentPerson, refresh, setRefresh }) {
 
               <p>
                 {totalPoints(
-                  currentPerson.contentCreatorPoints,
-                  currentPerson.contributorPoints
+                  person.contentCreatorPoints,
+                  person.contributorPoints
                 )}{" "}
                 Points
               </p>
