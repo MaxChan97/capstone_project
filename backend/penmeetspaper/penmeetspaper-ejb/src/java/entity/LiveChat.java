@@ -27,6 +27,8 @@ public class LiveChat implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
+  private int random = 88;
+  
   // unidirectional
   @OneToMany
   @JoinColumn(name = "liveChat_id")

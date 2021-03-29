@@ -257,6 +257,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setSubscribersAnalytics(null);
         person.setViewersAnalytics(null);
         person.setEarningsAnalytics(null);
+        person.setStreams(null);
         
         return person;
     } // end getPersonById
