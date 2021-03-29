@@ -5,12 +5,14 @@ import Button from "@material-ui/core/Button";
 import { logOut } from "../redux/actions/index";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
+import AdminList from "../components/AdminPage/AdminList";
+import { Link } from "react-router-dom";
+import Banned from "./AdminBannedAccessPage";
 
 export default function AdminManagementPage() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser);
-
-
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const ColorButton = withStyles((theme) => ({
     root: {
@@ -22,51 +24,46 @@ export default function AdminManagementPage() {
     },
   }))(Button);
 
-  return (
+  return isAdmin == true ? (
     <div className="content-wrapper">
       <div className="container">
         <div className="row">
-          <div className="col-md-8 mt-4">
+          <div className="col-md-12 mt-4" style={{ textAlign: "left", }}>
 
-          </div>
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <div className="card card-primary">
-              <div className="card-body">
-                <div
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Link to="/admin/createAdmin">
+                <ColorButton
                   style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    height: "35px",
+                    width: "300px",
+                    outline: "none",
+                    float: "right",
+                    fontWeight: "600",
+                    margin: "20px"
                   }}
+
+                  variant="contained"
+                  color="primary"
+                  type="button"
                 >
-                  <ColorButton
-                    style={{
-                      height: "35px",
-                      width: "300px",
-                      outline: "none",
-                      float: "right",
-                      fontWeight: "600",
-                    }}
-                    href="/admin/createAdmin"
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                  >
-                    Create Admin Account
+                  Create Admin Account
                 </ColorButton>
-                </div>
-              </div>
-            </div>
-            <br></br>
-            <div className="card card-primary">
-              <div className="card-body">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
+              </Link>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Link to="/admin/logs">
                   <ColorButton
                     style={{
                       height: "35px",
@@ -75,6 +72,7 @@ export default function AdminManagementPage() {
                       float: "right",
                       fontWeight: "600",
                       backgroundColor: "#EA3F79",
+                      margin: "20px"
                     }}
 
                     variant="contained"
@@ -83,13 +81,18 @@ export default function AdminManagementPage() {
                   >
                     View all admin logs
                   </ColorButton>
-                </div>
+                </Link>
               </div>
             </div>
 
           </div>
         </div>
+        <div className="col-md-12 mt-4">
+          <AdminList></AdminList>
+        </div>
       </div>
     </div>
+  ) : (
+    <Banned></Banned>
   );
 }
