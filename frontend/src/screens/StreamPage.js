@@ -104,6 +104,7 @@ export default function StreamPage() {
   var mediaRecorder;
   var socket;
   var state = "stop";
+  var imageCapture;
 
   const videoRef = useRef(null);
 
@@ -180,6 +181,8 @@ export default function StreamPage() {
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
+        let mediaStreamTrack = stream.getVideoTracks()[0];
+        imageCapture = new ImageCapture(mediaStreamTrack);
         showVideo(stream);
         socket.emit("config_rtmpDestination", url);
         socket.emit("start", "start");
@@ -209,6 +212,8 @@ export default function StreamPage() {
         state = "stop";
       });
   }
+
+  function takeThumbnailPhoto() {}
 
   function handleContinueDialogOpen() {
     setShowContinueDialog(true);
