@@ -128,6 +128,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
   const [liked, setLiked] = useState();
   const currentUser = useSelector((state) => state.currentUser);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const handleLike = (event) => {
     Api.likeProfilePost(data.id, currentUser).done(() => {

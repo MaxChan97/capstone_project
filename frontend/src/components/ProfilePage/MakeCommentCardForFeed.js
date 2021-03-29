@@ -44,7 +44,7 @@ export default function MakeCommentCardForFeed({ data, refresh, setRefresh }) {
   };
   const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
-
+  const isAdmin = useSelector((state) => state.isAdmin);
   useEffect(() => {
     if (currentUser) {
       loadData(currentUser);
@@ -81,7 +81,7 @@ export default function MakeCommentCardForFeed({ data, refresh, setRefresh }) {
 
   const [comment, setComment] = React.useState("");
 
-  return (
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -158,5 +158,7 @@ export default function MakeCommentCardForFeed({ data, refresh, setRefresh }) {
       </form>
       <Divider variant="middle" />
     </div>
+  ) : (
+    ""
   );
 }

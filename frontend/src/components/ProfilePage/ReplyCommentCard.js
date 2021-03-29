@@ -45,6 +45,7 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
 
   const [currentPerson, setCurrentPerson] = useState({});
   const currentUser = useSelector((state) => state.currentUser);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   useEffect(() => {
     if (currentUser) {
@@ -81,7 +82,7 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
 
   const [comment, setComment] = React.useState("");
 
-  return (
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -166,5 +167,11 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
         setRefresh={setRefresh}
       ></ReplyList>
     </div>
+  ) : (
+    <ReplyList
+        repliesData={commentData.replies}
+        refresh={refresh}
+        setRefresh={setRefresh}
+    ></ReplyList>
   );
 }

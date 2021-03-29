@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { logOut } from "../redux/actions/index";
+import Banned from "./AdminBannedAccessPage";
 
 export default function AdminAdManagementPage() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
-  return (
+  return isAdmin == true ? (
     <div className="content-wrapper">
       <div
         style={{
@@ -21,5 +23,7 @@ export default function AdminAdManagementPage() {
         <h1>Advertisement Management</h1>
       </div>
     </div>
+  ) : (
+    <Banned></Banned>
   );
 }

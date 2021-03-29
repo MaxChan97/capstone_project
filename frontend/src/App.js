@@ -50,6 +50,9 @@ import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import AdminNavBar from "./components/AdminNavBar";
 import ReportDetails from "./components/AdminPage/ReportDetails";
+import AdminLog from "./components/AdminPage/AdminLog";
+import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
+
 function App() {
   let location = useLocation();
   const isAdmin = useSelector((state) => state.isAdmin);
@@ -107,9 +110,9 @@ function App() {
       );
     } else if (
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-        "manageDetails" ||
+      "manageDetails" ||
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-        "manageMembers"
+      "manageMembers"
     ) {
       return (
         <div>
@@ -120,26 +123,6 @@ function App() {
             setSearchRefresh={setSearchRefresh}
           />
           <CommunityDashboardSidebar />
-        </div>
-      );
-    } else if (
-      location.pathname === "/admin" ||
-      location.pathname === "/admin/inbox" ||
-      location.pathname === "/admin/analytics" ||
-      location.pathname === "/admin/usermanagement" ||
-      location.pathname === "/admin/advertisementmanagement" ||
-      location.pathname === "/admin/adminmanagement" ||
-      location.pathname === "/admin/createAdmin"
-    ) {
-      return (
-        <div>
-          <Navbar
-            searchString={searchString}
-            setSearchString={setSearchString}
-            searchRefresh={searchRefresh}
-            setSearchRefresh={setSearchRefresh}
-          />
-          <AdminSideBar />
         </div>
       );
     } else {
@@ -269,6 +252,18 @@ function App() {
               exact
               path="/admin/reportDetails"
               component={ReportDetails}
+            />
+
+            <Route
+              exact
+              path="/admin/log"
+              component={AdminLog}
+            />
+
+            <Route
+              exact
+              path="/admin/logs"
+              component={AllAdminLogs}
             />
             {/* <Route path="/404" component={PageNotFound} />
             <Redirect to="/404" /> */}
