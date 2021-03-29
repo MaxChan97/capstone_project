@@ -145,22 +145,22 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         badgeList.add(b1);
         person.setBadges(badgeList);
         person.setBadgeDisplaying(b1);
-        System.out.println(badgeList);
+        em.flush();
     }
 
     private void generateRandomProfilePicture(Person person) {
 
         String[] profilePicArray = {
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb" };
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb"};
 
         Random rand = new Random();
         int randomNum = rand.nextInt(profilePicArray.length);
@@ -183,6 +183,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Double currContributorPoints = person.getContributorPoints();
         currContributorPoints += points;
         person.setContributorPoints(currContributorPoints);
+        em.flush();
     }
 
     @Override
@@ -215,7 +216,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
                 "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Profile%20Banner%20Image.png?alt=media&token=e59ee28d-8388-4e81-8fd7-8d6409690897");
         person.setContentCreatorPoints(0.0);
         person.setContributorPoints(0.0);
-        setDefaultBadge(person);
+
+        Badge b1 = badgeSB.getBadgeByDisplayName("Level 1 Badge");
+        List<Badge> badgeList = new ArrayList();
+
+        badgeList.add(b1);
+        person.setBadges(badgeList);
+        person.setBadgeDisplaying(b1);
+
         em.persist(person);
         em.flush();
 
@@ -629,28 +637,29 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             int pointsRequired = b.getValueRequired();
 
             switch (badgeEnum) {
-            case OVERALL:
-                if (totalPoints > pointsRequired) {
-                    person.getBadges().add(b);
-                }
+                case OVERALL:
+                    if (totalPoints > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
 
-            case STREAM:
-                if (ccPoints > pointsRequired * 10) {
-                    person.getBadges().add(b);
-                }
+                case STREAM:
+                    if (ccPoints > pointsRequired * 10) {
+                        person.getBadges().add(b);
+                    }
 
-            case FOLLOWER:
-                if (numFollowers > pointsRequired) {
-                    person.getBadges().add(b);
-                }
+                case FOLLOWER:
+                    if (numFollowers > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
 
-            case POST:
-                if (numPosts > pointsRequired) {
-                    person.getBadges().add(b);
-                }
+                case POST:
+                    if (numPosts > pointsRequired) {
+                        person.getBadges().add(b);
+                    }
 
             }
         }
+        em.flush();
     }
 
     @Override
@@ -661,7 +670,19 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         boolean hasBadge = false;
 
+        System.out.print(badgeId);
+
+        if (badgeId == 0) {
+            person.setBadgeDisplaying(null);
+            em.flush();
+            return;
+        }
+
         Badge badgeToDisplay = null;
+
+        if (personBadges.isEmpty()) {
+            throw new NotValidException(PersonSessionBeanLocal.BADGE_LIST_EMPTY);
+        }
 
         for (Badge b : personBadges) {
             if (b.getId() == badgeId) {

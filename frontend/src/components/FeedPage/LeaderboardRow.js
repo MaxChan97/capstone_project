@@ -1,20 +1,28 @@
 import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
+import { Link } from "react-router-dom";
 
-export default function LeaderboardRow({ data }) {
+export default function LeaderboardRow({ data, rank }) {
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-2">
-          <p className="text-left">{data.rank}</p>
-        </div>
-        <div className="col-md-3">
-          <img className="img-fluid" src={defaultDP} alt="defaultDP" />
-        </div>
-        <div className="col-md-7">
-          <p className="text-left">{data.name}</p>
+    <Link to={"/profile/" + data.id}>
+      <div className="container" style={{color: "black"}}>
+        <div className="row" style={{ marginBottom: "-25px" }}>
+          <div className="col-md-2">
+            <p className="text-left">{rank + 1}</p>
+          </div>
+          <div className="col-md-3">
+            <img
+              className="img-circle"
+              style={{ height: "25px" }}
+              src={data.profilePicture}
+              alt="defaultDP"
+            />
+          </div>
+          <div className="col-md-7">
+            <p className="text-left">{data.username}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

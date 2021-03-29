@@ -44,7 +44,7 @@ export default function AnotherProfileTopBar({
   profilePicture,
   profileBanner,
   anotherPerson,
-  badge
+  badge,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -56,7 +56,7 @@ export default function AnotherProfileTopBar({
         <div>
           <img
             className="img-fluid"
-            style={{ width: "100%" }}
+            style={{ width: "100%", maxHeight: "250px" }}
             src={profileBanner}
           />
         </div>

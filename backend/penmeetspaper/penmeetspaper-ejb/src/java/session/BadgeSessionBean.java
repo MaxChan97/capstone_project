@@ -30,7 +30,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b1.setDisplayName("Level 1 Badge");
         b1.setBadgeType(BadgeTypeEnum.OVERALL);
         b1.setValueRequired(0);
-        b1.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Fcb9ed069-e3f7-4db4-bf58-bb7d61007618.png?alt=media&token=6269f3b9-9bd4-4143-9914-2b874b3e191e");
+        b1.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%201.png?alt=media&token=cbfb6acb-e8b0-4124-bbdd-61e3edee129d");
 
         em.persist(b1);
         em.flush();
@@ -39,7 +39,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b2.setDisplayName("Level 2 Badge");
         b2.setBadgeType(BadgeTypeEnum.OVERALL);
         b2.setValueRequired(10);
-        b2.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F7e0f929c-0872-4547-bf01-e3eb159151d1.png?alt=media&token=40734e1e-e458-413d-aafa-2c87f24fc409");
+        b2.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%202.png?alt=media&token=9c315e42-f9a6-4e24-8f50-3db8eb24748f");
 
         em.persist(b2);
         em.flush();
@@ -48,7 +48,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b3.setDisplayName("Level 3 Badge");
         b3.setBadgeType(BadgeTypeEnum.OVERALL);
         b3.setValueRequired(30);
-        b3.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Fd7b392d6-9656-499c-8c21-d3e273c2c1b5.png?alt=media&token=83d54525-7b4c-43d6-bc19-9df6f277b9e3");
+        b3.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%203.png?alt=media&token=485e4c5b-e190-48b6-803e-933ce0ca7926");
 
         em.persist(b3);
         em.flush();
@@ -57,7 +57,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b4.setDisplayName("Level 4 Badge");
         b4.setBadgeType(BadgeTypeEnum.OVERALL);
         b4.setValueRequired(80);
-        b4.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Fb5d8ca6b-b751-43c4-91e0-6dd517cc11a3.png?alt=media&token=95193b1b-27e4-4c92-a065-79f9d10eb175");
+        b4.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%204.png?alt=media&token=ab0bc2f4-b25e-4500-9759-120ce209bc44");
 
         em.persist(b4);
         em.flush();
@@ -66,7 +66,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b5.setDisplayName("Level 5 Badge");
         b5.setBadgeType(BadgeTypeEnum.OVERALL);
         b5.setValueRequired(150);
-        b5.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F72afa395-c09f-4603-ae2e-604081c4e90b.png?alt=media&token=e8ac058d-0337-44fb-895f-6dfc30e51646");
+        b5.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%205.png?alt=media&token=03a64648-ea11-4db8-a000-59b97a96b6bb");
 
         em.persist(b5);
         em.flush();
@@ -75,7 +75,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b6.setDisplayName("Level 6 Badge");
         b6.setBadgeType(BadgeTypeEnum.OVERALL);
         b6.setValueRequired(300);
-        b6.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Fe6084d50-4602-489c-bf8e-3a3071d8b1f5.png?alt=media&token=4c4858f3-18ff-4bb0-9d26-9ec356d21796");
+        b6.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%206.png?alt=media&token=933c4a8c-4534-43f7-af80-ebf21a1594f9");
 
         em.persist(b6);
         em.flush();
@@ -84,7 +84,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b7.setDisplayName("Level 7 Badge");
         b7.setBadgeType(BadgeTypeEnum.OVERALL);
         b7.setValueRequired(800);
-        b7.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Ff113b184-3dd8-40a7-9b79-7e5bb4fb1aac.png?alt=media&token=130ff9a8-6851-4714-953f-d0bbecd535f0");
+        b7.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%207.png?alt=media&token=9877a62b-1526-43b1-a46c-536005e816e9");
 
         em.persist(b7);
         em.flush();
@@ -93,7 +93,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b8.setDisplayName("Level 8 Badge");
         b8.setBadgeType(BadgeTypeEnum.OVERALL);
         b8.setValueRequired(1700);
-        b8.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F2acb559d-d237-4fa3-8f26-8e3ef5373a03.png?alt=media&token=8866486a-8d28-43e3-a64e-807365717e8e");
+        b8.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%208.png?alt=media&token=61a8aaa0-2f7d-4d6d-9871-b3fe8446941b");
 
         em.persist(b8);
         em.flush();
@@ -102,7 +102,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b9.setDisplayName("Level 9 Badge");
         b9.setBadgeType(BadgeTypeEnum.OVERALL);
         b9.setValueRequired(3500);
-        b9.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2Fa80e874a-bfb6-44e2-8a45-de42c9e0784b.png?alt=media&token=188b253e-7553-4f35-940b-12372cef6c72");
+        b9.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%209.png?alt=media&token=59f2600f-1131-4973-bc91-a6e52021d29b");
 
         em.persist(b9);
         em.flush();
@@ -111,7 +111,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         b10.setDisplayName("Level 10 Badge");
         b10.setBadgeType(BadgeTypeEnum.OVERALL);
         b10.setValueRequired(7000);
-        b10.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F53bcd42c-b167-469a-aedb-7277a1bcf85c.png?alt=media&token=61ae201c-e6ed-4e73-ae5c-c7bf245e7a9f");
+        b10.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%2010.png?alt=media&token=9d5c6b2f-a04e-4dc9-bbc5-807cec4ab835");
 
         em.persist(b10);
         em.flush();
@@ -120,7 +120,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         topCommenter.setDisplayName("Top commenter");
         topCommenter.setBadgeType(BadgeTypeEnum.COMMENT);
         topCommenter.setValueRequired(1000);
-        topCommenter.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F950cb5c6-6df2-4b5e-b60e-09a3e29b3ec8.png?alt=media&token=dca76d99-8612-4b2f-929c-0505dde414b6");
+        topCommenter.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FComments%20Badge.png?alt=media&token=e8a11cce-471c-4e8a-8b70-12ffed01d3de");
 
         em.persist(topCommenter);
         em.flush();
@@ -129,7 +129,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         topStreamer.setDisplayName("Top streamer");
         topStreamer.setBadgeType(BadgeTypeEnum.STREAM);
         topStreamer.setValueRequired(1000);
-        topStreamer.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F1fcf5791-7d34-4700-9912-fb51b677666a.png?alt=media&token=51e2efe7-47ad-4ca9-ac2b-2333f9ba49d8");
+        topStreamer.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FVideos%20Streamed%20Badge.png?alt=media&token=ca1e7fce-d946-423c-b599-5d75d7b6b97c");
 
         em.persist(topStreamer);
         em.flush();
@@ -138,7 +138,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         topFollower.setDisplayName("Top follower");
         topFollower.setBadgeType(BadgeTypeEnum.FOLLOWER);
         topFollower.setValueRequired(1000);
-        topFollower.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F1fcf5791-7d34-4700-9912-fb51b677666a.png?alt=media&token=51e2efe7-47ad-4ca9-ac2b-2333f9ba49d8");
+        topFollower.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FFollowers%20Badge.png?alt=media&token=1ce14370-a4a7-4fa6-b6c8-1fd86eebf66d");
 
         em.persist(topFollower);
         em.flush();
@@ -147,7 +147,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         topPoster.setDisplayName("Top poster");
         topPoster.setBadgeType(BadgeTypeEnum.POST);
         topPoster.setValueRequired(1000);
-        topPoster.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/images%2F0173f2eb-95cf-4b4a-9224-79942fdc4368.png?alt=media&token=ed6ea42f-6ccc-4a12-a7f4-c1ce69f27a17");
+        topPoster.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FPosts%20Badge.png?alt=media&token=c1c75dce-6289-4cea-8877-aa3a76e15baa");
 
         em.persist(topPoster);
         em.flush();
