@@ -145,7 +145,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         badgeList.add(b1);
         person.setBadges(badgeList);
         person.setBadgeDisplaying(b1);
-        System.out.println(badgeList);
+        em.flush();
     }
 
     private void generateRandomProfilePicture(Person person) {
