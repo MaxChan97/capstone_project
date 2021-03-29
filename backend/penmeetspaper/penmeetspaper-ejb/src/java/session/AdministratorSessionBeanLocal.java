@@ -21,12 +21,19 @@ public interface AdministratorSessionBeanLocal {
     public final static String MISSING_USERNAME = "Missing Username parameter";
     public final static String USERNAME_TAKEN = "Administrator Username already taken";
     public final static String EMAIL_TAKEN = "Administrator Email already taken";
+    public final static String MASTER_CREATED = "Master already created";
 
     public final static String MISSING_ADMIN_ID = "Missing Admin ID";
     public final static String CANNOT_FIND_ADMIN = "Could not find Admino";
-
-    public String createAdmin(Administrator admin) throws NotValidException;
+    public final static String NO_CREDENTIALS = "No permissions for this action";
+    public final static String MASTER_ADMIN_NO_DEACT = "Cannot deactivate master admin";
 
     public Administrator getAdminById(Long aId) throws NoResultException, NotValidException;
+
+    public void createMasterAdmin(Administrator admin) throws NotValidException;
+
+    public String createAdmin(Long adminId, Administrator admin) throws NotValidException, NoResultException;
+
+    public void deactivateAdmin(Long adminId, Long deactivateId) throws NoResultException, NotValidException;
 
 }

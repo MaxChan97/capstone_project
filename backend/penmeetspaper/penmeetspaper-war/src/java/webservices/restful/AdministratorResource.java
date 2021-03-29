@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Administrator;
+import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
 import javax.ejb.EJB;
@@ -14,7 +15,9 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,9 +45,10 @@ public class AdministratorResource {
     }
 
     @POST
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createAdmin(String jsonString) {
+    public Response createAdmin(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String email = jsonObject.getString("email");
@@ -54,13 +58,26 @@ public class AdministratorResource {
         admin.setUsername(username);
 
         try {
-            String generatedPassword = adminSB.createAdmin(admin);
+            String generatedPassword = adminSB.createAdmin(adminId, admin);
             JsonObject pw = Json.createObjectBuilder().add("password", generatedPassword).build();
             return Response.status(200).entity(pw).type(MediaType.APPLICATION_JSON).build();
 
-        } catch (NotValidException e) {
+        } catch (NotValidException | NoResultException e) {
             return buildError(e, 400);
         }
-    } // end createPerson
+    } // end createAdmin
+
+    @PUT
+    @Path("/{id}/deactivate/{adminToDeactivateId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deactivateAdmin(@PathParam("id") Long adminId, @PathParam("adminToDeactivateId") Long deAdminId) {
+        try {
+            adminSB.deactivateAdmin(adminId, deAdminId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
 
 }

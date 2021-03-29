@@ -5,7 +5,6 @@
  */
 package entity;
 
-import entity.AdminLog;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +38,7 @@ public class Administrator implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String email;
-    
+
     @Column(nullable = false)
     private boolean isMaster;
 
@@ -92,11 +91,11 @@ public class Administrator implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public boolean isIsDeactivated() {
+    public boolean isDeactivated() {
         return isDeactivated;
     }
 
-    public void setIsDeactivated(boolean isDeactivated) {
+    public void setDeactivated(boolean isDeactivated) {
         this.isDeactivated = isDeactivated;
     }
 
@@ -136,14 +135,11 @@ public class Administrator implements Serializable {
     /**
      * @return the isMaster
      */
-    public boolean getIsMaster() {
+    public boolean isMaster() {
         return isMaster;
     }
 
-    /**
-     * @param isMaster the isMaster to set
-     */
-    public void setIsMaster(boolean isMaster) {
+    public void setMaster(boolean isMaster) {
         this.isMaster = isMaster;
     }
 }

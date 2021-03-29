@@ -97,7 +97,7 @@ public class DataInitSessionBean {
         masterAdmin.setUsername("masterAdmin");
         masterAdmin.setPassword("password");
 
-        administratorSB.createAdmin(masterAdmin);
+        administratorSB.createMasterAdmin(masterAdmin);
     }
 
     private void createPersons() throws NotValidException {
