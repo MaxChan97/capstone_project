@@ -6,11 +6,11 @@
 package session;
 
 import entity.Badge;
-import entity.Community;
-import entity.Post;
-import entity.Person;
 import entity.Ban;
+import entity.Community;
 import entity.Follow;
+import entity.Person;
+import entity.Post;
 import entity.Subscription;
 import enumeration.BadgeTypeEnum;
 import exception.NoResultException;
@@ -257,7 +257,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setSubscribersAnalytics(null);
         person.setViewersAnalytics(null);
         person.setEarningsAnalytics(null);
-        
+
         return person;
     } // end getPersonById
 
@@ -346,7 +346,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         oldPerson.setDob(person.getDob());
         em.flush();
     }
-    
+
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
         Person person = emGetPerson(personId);
@@ -534,7 +534,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     }
 
     @Override
-    public List<Person> getTopTenContributors() throws NoResultException {
+    public List<Person> getTopTenContributors() throws NoResultException, NotValidException {
         Query q = em.createQuery("SELECT p FROM Person p");
         List<Person> personList = q.getResultList();
 
@@ -549,19 +549,26 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             if (p1Points == p2Points) {
                 return 0;
             } else if (p1Points < p2Points) {
-                return -1;
-            } else {
                 return 1;
+            } else {
+                return -1;
             }
         });
 
         List<Person> resultList = new ArrayList();
 
-        for (int i = 0; i < 10; i++) {
-            Person p = resultList.get(i);
-            resultList.add(p);
+        if (personList.size() < 10) {
+            resultList = personList;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                Person p = resultList.get(i);
+                resultList.add(p);
+            }
         }
 
+        for (Person p : resultList) {
+            p = getPersonById(p.getId());
+        }
         return resultList;
     }
 
