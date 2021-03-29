@@ -7,19 +7,9 @@ import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/FeedPage/PostListOfFollowing";
+import Api from "../helpers/Api";
 
 export default function FeedPage() {
-  const leaderboardList = [
-    { name: "item1", rank: "1" },
-    { name: "item2", rank: "2" },
-    { name: "item3", rank: "3" },
-    { name: "item4", rank: "4" },
-    { name: "item5", rank: "5" },
-    { name: "item6", rank: "6" },
-    { name: "item7", rank: "7" },
-    { name: "item8", rank: "8" },
-    { name: "item9", rank: "9" },
-  ];
 
   const horizontalList = [
     {
@@ -87,16 +77,32 @@ export default function FeedPage() {
     },
   ];
 
-  const [leaderboard, setLeaderboard] = useState(leaderboardList);
+  const [topTenContributors, setTopTenContributors] = useState([]);
   const [horizontalMenu, setHorizontalMenu] = useState(horizontalList);
 
   const currentUser = useSelector((state) => state.currentUser);
 
-  useEffect(() => {}, [leaderboard]);
+ 
   useEffect(() => {}, [horizontalMenu]);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadData();
+    }
+  }, [currentUser]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  function loadData() {
+    Api.getTopTenContributors()
+      .done((topTenContributors) => {
+        setTopTenContributors(topTenContributors);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
   }
 
   return (
@@ -113,7 +119,8 @@ export default function FeedPage() {
           </div>
           
           <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
-            <LeaderboardCard data={leaderboard} />
+            <LeaderboardCard data={topTenContributors} />
+            {console.log(topTenContributors)}
           </div>
         </div>
       </div>
