@@ -61,7 +61,7 @@ export default function UserAnalytics() {
   const [earnings, setEarnings] = useState();
   const [earningsArray, setEarningsArray] = useState();
 
-  useEffect(async () => {
+  useEffect(() => {
     Api.getPersonById(currentUser)
       .done((person) => {
         setUsername(person.username);
