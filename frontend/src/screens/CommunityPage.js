@@ -10,7 +10,7 @@ export default function ProfilePage() {
   const { communityId } = useParams();
 
   const currentUser = useSelector((state) => state.currentUser);
-  const [currentCommunity, setCurrentCommunity] = useState({});
+  const [currentCommunity, setCurrentCommunity] = useState(null);
   const [ownedCommunities, setOwnedCommunities] = useState({});
 
   const history = useHistory();
@@ -60,13 +60,13 @@ export default function ProfilePage() {
     return owner;
   }
 
-  return (
+  return currentCommunity != null ? (
     <div>
-      {searchForMatch(currentCommunity, ownedCommunities) === true ? (
+      {currentCommunity.owner.id === currentUser ? (
         <OwnCommunityPage communityId={communityId} />
       ) : (
         <AnotherCommunityPage communityId={communityId} />
       )}
     </div>
-  );
+  ): ("");
 }
