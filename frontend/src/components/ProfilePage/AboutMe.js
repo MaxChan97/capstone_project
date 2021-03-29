@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
@@ -22,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
+  badge: {
+    display: "flex",
+    justifyContent: "left",
+    flexWrap: "wrap",
+  },
 }));
 
 //chip is the topic tag
@@ -33,6 +39,7 @@ export default function AboutMe() {
   const [topicInterests, setTopicInterests] = useState();
   const [contentCreatorPoints, setContentCreatorPoints] = useState();
   const [contributorPoints, setContributorPoints] = useState();
+  const [badges, setBadges] = useState();
 
   //   const [profilePicture, setProfilePicture] = useState("");
   //   const [profileBanner, setProfileBanner] = useState("");
@@ -40,6 +47,7 @@ export default function AboutMe() {
   const [currentPerson, setCurrentPerson] = useState({});
 
   const currentUser = useSelector((state) => state.currentUser);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -60,11 +68,18 @@ export default function AboutMe() {
         setTopicInterests(currentPerson.topicInterests);
         setContentCreatorPoints(currentPerson.contentCreatorPoints);
         setContributorPoints(currentPerson.contributorPoints);
+        setBadges(currentPerson.badges);
         console.log(currentPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+  }
+
+  function changeBadge(personId, badgeId) {
+    Api.changeBadge(personId, badgeId).done(() => {
+      setRefresh(!refresh);
+    });
   }
 
   function toTitleCase(str) {
@@ -86,32 +101,23 @@ export default function AboutMe() {
   function getLevel(totalPoints) {
     if (totalPoints >= 10 && totalPoints < 30) {
       return 2;
-    }
-    else if (totalPoints >= 30 && totalPoints < 80) {
+    } else if (totalPoints >= 30 && totalPoints < 80) {
       return 3;
-    }
-    else if (totalPoints >= 80 && totalPoints < 150) {
+    } else if (totalPoints >= 80 && totalPoints < 150) {
       return 4;
-    }
-    else if (totalPoints >= 150 && totalPoints < 300) {
+    } else if (totalPoints >= 150 && totalPoints < 300) {
       return 5;
-    }
-    else if (totalPoints >= 300 && totalPoints < 800) {
+    } else if (totalPoints >= 300 && totalPoints < 800) {
       return 6;
-    }
-    else if (totalPoints >= 800 && totalPoints < 1700) {
+    } else if (totalPoints >= 800 && totalPoints < 1700) {
       return 7;
-    }
-    else if (totalPoints >= 1700 && totalPoints < 3500) {
+    } else if (totalPoints >= 1700 && totalPoints < 3500) {
       return 8;
-    }
-    else if (totalPoints >= 3500 && totalPoints < 7000) {
+    } else if (totalPoints >= 3500 && totalPoints < 7000) {
       return 9;
-    }
-    else if (totalPoints >= 7000) {
+    } else if (totalPoints >= 7000) {
       return 10;
-    }
-    else return 1;
+    } else return 1;
   }
 
   return (
@@ -136,6 +142,34 @@ export default function AboutMe() {
                   ))}
                 </div>
               ) : null}
+              <br />
+              <strong>My Badges</strong>
+              {badges !== undefined ? (
+                <div component="ul" className={classes.badge}>
+                  {badges.map((badge, index) => (
+                    <button
+                      style={{
+                        height: "45px",
+                        width: "15px",
+                        backgroundColor: "transparent",
+                        borderColor: "transparent",
+                        marginRight: "60px",
+                        marginLeft: "-12px"
+                      }}
+                    >
+                      <img
+                        style={{
+                          height: "45px",
+                          marginTop: "5px",
+                          marginRight: "15px",
+                        }}
+                        src={badge.image}
+                        onClick={() => changeBadge(currentUser, badge.id)}
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -143,7 +177,12 @@ export default function AboutMe() {
           <div class="card card-primary">
             <div class="card-body">
               <div style={{ color: "#3B21CB" }}>
-                <strong>LEVEL {getLevel(totalPoints(contentCreatorPoints, contributorPoints))}</strong>
+                <strong>
+                  LEVEL{" "}
+                  {getLevel(
+                    totalPoints(contentCreatorPoints, contributorPoints)
+                  )}
+                </strong>
               </div>
 
               <p>

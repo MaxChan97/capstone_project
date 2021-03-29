@@ -1065,14 +1065,43 @@ export default {
 
   getTopTenContributors() {
     return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/person/topTenContributors",
+      url: this.SERVER_PREFIX + "/person/topTenContributors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  changeBadge(personId, badgeId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/person/changeBadge/person/" +
+        personId +
+        "/badge/" +
+        badgeId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  removeBadge(personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/person/changeBadge/person/" +
+        personId +
+        "/badge/0",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
     });
   },
 };
