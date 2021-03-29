@@ -184,6 +184,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Double currContributorPoints = person.getContributorPoints();
         currContributorPoints += points;
         person.setContributorPoints(currContributorPoints);
+        em.flush();
     }
 
     @Override
@@ -651,6 +652,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
             }
         }
+        em.flush();
     }
 
     @Override
