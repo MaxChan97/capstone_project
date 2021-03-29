@@ -50,12 +50,10 @@ export default function TopBar({
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <img
-        style={{
-          width: "100%",
-        }}
+        className="img-fluid"
+        style={{ width: "100%", maxHeight: "250px" }}
         src={communityBanner}
       />
-
       <div
         style={{
           display: "flex",
