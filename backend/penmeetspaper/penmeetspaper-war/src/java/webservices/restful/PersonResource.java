@@ -371,16 +371,25 @@ public class PersonResource {
 
         String username = jsonObject.getString("username");
         String description = jsonObject.getString("description");
+        String dobStr = jsonObject.getString("DoB");
+        String incomeRangeStr = jsonObject.getString("IncomeRange");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
         String profilePicture = jsonObject.getString("profilePicture");
         String profileBanner = jsonObject.getString("profileBanner");
 
         List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
         try {
+            Date dob = formatter.parse(dobStr);
+            IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
+
             Person p = personSB.getPersonById(personId);
             p.setUsername(username);
             p.setDescription(description);
+            p.setDob(dob);
+            p.setIncomeRange(incomeRange);
             p.setTopicInterests(topicInterests);
             p.setProfilePicture(profilePicture);
             p.setProfileBanner(profileBanner);
@@ -388,7 +397,7 @@ public class PersonResource {
             personSB.updatePerson(p);
             return Response.status(204).build();
 
-        } catch (NoResultException | NotValidException e) {
+        } catch (NoResultException | NotValidException | ParseException e) {
             return buildError(e, 400);
         }
 
@@ -447,8 +456,8 @@ public class PersonResource {
     public Response onboarding(@PathParam("id") Long id, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        String incomeRangeStr = jsonObject.getString("incomeRangeEnum");
-        String dobStr = jsonObject.getString("dob");
+        String incomeRangeStr = jsonObject.getString("incomeRange");
+        String dobStr = jsonObject.getString("DoB");
 
         try {
             IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);

@@ -298,6 +298,8 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             oldPerson.setUsername(person.getUsername());
             oldPerson.setPassword(person.getPassword());
             oldPerson.setDescription(person.getDescription());
+            oldPerson.setDob(person.getDob());
+            oldPerson.setIncomeRange(person.getIncomeRange());
             oldPerson.setTopicInterests(person.getTopicInterests());
             oldPerson.setProfilePicture(person.getProfilePicture());
             oldPerson.setProfileBanner(person.getProfileBanner());
