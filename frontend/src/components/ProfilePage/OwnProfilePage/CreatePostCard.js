@@ -12,6 +12,7 @@ import chatPaperClip from "../../../assets/chatPaperClip.png";
 import postPoll from "../../../assets/postPoll.png";
 import CreatePollCard from "./CreatePollCard";
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel.js";
+import { useSelector } from "react-redux";
 
 var uuid = require("uuid");
 
@@ -41,6 +42,7 @@ export default function CreatePostCard({
 
   const classes = useStyles();
   const alert = useAlert();
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [post, setPost] = React.useState("");
   const [fileName, setFileName] = useState("");
@@ -136,7 +138,7 @@ export default function CreatePostCard({
     setShowPollInput(false);
   }
 
-  return (
+  return isAdmin == false ? (
     <div className="container">
       <form
         onSubmit={handleSubmit}
@@ -269,5 +271,7 @@ export default function CreatePostCard({
         </div>
       </form>
     </div>
+  ) : (
+    ""
   );
 }

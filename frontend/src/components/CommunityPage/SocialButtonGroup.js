@@ -34,7 +34,7 @@ export default function SocialButtonGroup({communityId, communityName, refresh, 
   );
 
   const currentUser = useSelector((state) => state.currentUser);
-
+  const isAdmin = useSelector((state) => state.isAdmin);
   useEffect(() => {
     Api.getFollowingCommunities(currentUser)
       .done((followObjects) => {
@@ -88,7 +88,7 @@ export default function SocialButtonGroup({communityId, communityName, refresh, 
   }
   
 
-  return (
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -161,5 +161,5 @@ export default function SocialButtonGroup({communityId, communityName, refresh, 
         </DialogActions>
       </Dialog>
     </div>
-  );
+  ) : ("");
 }

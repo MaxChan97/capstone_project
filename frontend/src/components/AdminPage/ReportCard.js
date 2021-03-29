@@ -49,11 +49,13 @@ export default function ReportCard() {
                         {moment().format("DD/MM/YYYY hh:mm:ss a")}
 
                 </div>
+                <p>Report Reason: Frauds and scams</p>
                 <div style={{ display: "flex", alignItems: "baseline" }}>
 
                     <p>Report status: pending</p>
 
                 </div>
+                
                 <div style={{ textAlign: "right" }}>
                     <ColorButton
                         style={{

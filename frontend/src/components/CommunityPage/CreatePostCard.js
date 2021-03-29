@@ -36,6 +36,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
 
   const classes = useStyles();
   const alert = useAlert();
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [post, setPost] = React.useState("");
   const [fileName, setFileName] = useState("");
@@ -151,7 +152,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
     setShowPollInput(false);
   }
 */
-  return (
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -301,5 +302,5 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         </div>
       </form>
     </div>
-  );
+  ) : ("");
 }

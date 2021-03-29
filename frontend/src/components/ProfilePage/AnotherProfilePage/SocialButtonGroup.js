@@ -34,7 +34,7 @@ export default function SocialButtonGroup({
   anotherPerson,
 }) {
   const alert = useAlert();
-
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [following, setFollowing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [subscription, setSubscription] = useState();
@@ -473,7 +473,7 @@ export default function SocialButtonGroup({
     }
   }
 
-  return (
+  return isAdmin == false ? (
     <div
       style={{
         display: "flex",
@@ -519,5 +519,5 @@ export default function SocialButtonGroup({
       {renderUnsubscribeDialog()}
       {renderResubscribeDialog()}
     </div>
-  );
+  ):("");
 }

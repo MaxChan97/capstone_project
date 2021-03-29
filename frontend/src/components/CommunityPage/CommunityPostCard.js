@@ -31,6 +31,7 @@ export default function CommunityPostCard({
   //for menu button
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
@@ -232,7 +233,7 @@ export default function CommunityPostCard({
                   </span>
                 </div>
 
-                {data.author.id == currentUser ? (
+                {isAdmin == false && data.author.id == currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <IconButton
                       style={{ outline: "none" }}
