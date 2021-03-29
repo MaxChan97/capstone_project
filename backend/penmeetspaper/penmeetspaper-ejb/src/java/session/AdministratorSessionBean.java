@@ -10,6 +10,7 @@ import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,7 +59,20 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         }
     }
 
-    public Administrator createAdmin(Administrator admin) throws NotValidException {
+    private String generateRandomPassword() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 8;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+    }
+
+    public String createAdmin(Administrator admin) throws NotValidException {
         if (admin == null) {
             throw new NotValidException(AdministratorSessionBeanLocal.MISSING_PERSON);
         }
@@ -75,6 +89,9 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         checkUsernameTaken(admin.getUsername());
 
+        String password = generateRandomPassword();
+        admin.setPassword(password);
+
         admin.setCreatedDate(new Date());
 
         admin.setIsDeactivated(false);
@@ -88,7 +105,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         em.persist(admin);
         em.flush();
 
-        return admin;
+        return password;
     }
 
     @Override

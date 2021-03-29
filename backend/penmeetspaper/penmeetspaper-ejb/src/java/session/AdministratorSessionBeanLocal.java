@@ -25,7 +25,7 @@ public interface AdministratorSessionBeanLocal {
     public final static String MISSING_ADMIN_ID = "Missing Admin ID";
     public final static String CANNOT_FIND_ADMIN = "Could not find Admino";
 
-    public Administrator createAdmin(Administrator admin) throws NotValidException;
+    public String createAdmin(Administrator admin) throws NotValidException;
 
     public Administrator getAdminById(Long aId) throws NoResultException, NotValidException;
 
