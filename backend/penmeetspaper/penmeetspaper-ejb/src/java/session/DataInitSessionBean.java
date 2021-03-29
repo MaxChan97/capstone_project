@@ -75,10 +75,10 @@ public class DataInitSessionBean {
 
     @EJB
     private SubscriptionSessionBeanLocal subSB;
-    
+
     @EJB
     private AnalyticsSessionBeanLocal analyticsSB;
-    
+
     public DataInitSessionBean() {
     }
 
@@ -229,7 +229,7 @@ public class DataInitSessionBean {
         followSB.followPerson(new Long(5), new Long(1));
         followSB.followPerson(new Long(6), new Long(1));
         followSB.followPerson(new Long(7), new Long(1));
-        
+
         followSB.followPerson(new Long(1), new Long(2));
         followSB.followPerson(new Long(1), new Long(3));
         followSB.followPerson(new Long(1), new Long(4));
@@ -432,6 +432,7 @@ public class DataInitSessionBean {
 
             addFollowing();
             ban();
+            System.out.println("// COMPLETED INIT WITHOUT ERRORS //");
 
         } catch (NotValidException | NoResultException ex) {
             ex.printStackTrace();

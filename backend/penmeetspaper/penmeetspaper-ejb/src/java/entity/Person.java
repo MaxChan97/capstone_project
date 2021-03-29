@@ -157,7 +157,7 @@ public class Person implements Serializable {
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
     // unidirectional
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "badge_id")
     private List<Badge> badges = new ArrayList<>();
 
