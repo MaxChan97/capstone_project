@@ -101,6 +101,7 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         comment.getReplies().add(reply);
 
         personSB.addContributorPointsToPerson(personId, 1.0);
+        personSB.checkBadgeQualification(personId);
         em.flush();
     }
 

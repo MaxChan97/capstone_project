@@ -102,6 +102,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         post.getComments().add(comment);
 
         personSB.addContributorPointsToPerson(personId, 1.0);
+        personSB.checkBadgeQualification(personId);
         em.flush();
     }
 
