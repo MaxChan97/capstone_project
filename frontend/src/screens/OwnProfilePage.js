@@ -71,7 +71,7 @@ export default function OwnProfilePage({ personId }) {
       return (
         <div style={{ marginTop: "20px" }}>
           <AboutMe
-            currentPerson={currentPerson}
+            person={currentPerson}
             refresh={refresh}
             setRefresh={setRefresh}
           />

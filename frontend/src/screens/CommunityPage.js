@@ -26,31 +26,32 @@ export default function ProfilePage() {
     return <Redirect to="/login" />;
   }
 
-  function loadData(communityId, currentUser) {      
+  function loadData(communityId, currentUser) {
     Api.getOwnedCommunities(currentUser)
-    .done((ownedCommunities) => {
-      setOwnedCommunities(ownedCommunities);
-    })
-    .fail((xhr, status, error) => {
-    alert.show("This user does not exist!");
-    });
+      .done((ownedCommunities) => {
+        setOwnedCommunities(ownedCommunities);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
 
     Api.getCommunityById(communityId, currentUser)
-    .done((currentCommunity) => {
-      setCurrentCommunity(currentCommunity);
-    })
-    .fail((xhr, status, error) => {
-    history.push("/community/" + communityId + "/banned");
-    });
-}
+      .done((currentCommunity) => {
+        setCurrentCommunity(currentCommunity);
+      })
+      .fail((xhr, status, error) => {
+        history.push("/community/" + communityId + "/banned");
+      });
+  }
   console.log(ownedCommunities);
   console.log(currentCommunity);
 
-  function searchForMatch(currentCommunity, ownedCommunities) {
-    var i, owner = false;
-    if(ownedCommunities !== undefined){
+  function searchForMatch(currentCommunity) {
+    var i,
+      owner = false;
+    if (ownedCommunities !== undefined) {
       for (i = 0; i < ownedCommunities.length; i++) {
-        if(ownedCommunities[i].id === currentCommunity.id){
+        if (ownedCommunities[i].id === currentCommunity.id) {
           owner = true;
           console.log(owner);
           break;
