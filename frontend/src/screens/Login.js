@@ -14,6 +14,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logIn, setIsAdmin } from "../redux/actions/index";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import logo from "../assets/BNB Logo.png";
+import loginImage from "../assets/LoginImage.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     backgroundRepeat: "no-repeat",
-    backgroundColor: "#04005E",
+    backgroundColor: "#EBE8FF",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -38,24 +40,24 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    background: "#04005E",
+    background: "#3B21CB",
     "&:hover": {
       backgroundColor: "#440BD4",
     },
   },
   smalllinks: {
-    color: "#67776D",
+    color: "#3B21CB",
   },
   input: {
     borderColor: "#04005E",
     borderWidth: 1,
     "&:hover": {
-      borderColor: "#440BD4",
+      borderColor: "#3B21CB",
       borderWidth: 2,
     },
   },
   login: {
-    color: "#04005E",
+    color: "#3B21CB",
     fontSize: "60px",
   },
   forgetPassword: {
@@ -112,7 +114,21 @@ export default function Login() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={classes.image}>
+        <div>
+          <img
+            className="img-fluid"
+            style={{
+              height: "100%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "block",
+              // marginTop: "300px",
+            }}
+            src={loginImage}
+          />
+        </div>
+      </Grid>
       <Grid
         style={{
           background: "#F5F8F6",

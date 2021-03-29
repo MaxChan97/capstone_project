@@ -92,6 +92,20 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
       // existing subscription that is terminated
       existingSubscription.setIsTerminated(false);
+
+      Person publisher = emGetPerson(publisherId);
+
+      Calendar cal = Calendar.getInstance();
+      cal.set(Calendar.HOUR_OF_DAY, 0);
+      cal.set(Calendar.MINUTE, 0);
+      cal.set(Calendar.SECOND, 0);
+      cal.set(Calendar.MILLISECOND, 0);
+
+      Date date = cal.getTime();
+      Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
+      System.out.println("resubscribe" + newSubscriberCount);
+      publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
+
       return;
     }
 
@@ -121,7 +135,8 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
     cal.set(Calendar.MILLISECOND, 0);
 
     Date date = cal.getTime();
-    Long newSubscriberCount = publisher.getSubscriptions().stream().filter(s -> !s.isIsTerminated()).count();
+    Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
+    System.out.println("new subscribe" + newSubscriberCount);
     publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
 
   }
@@ -141,7 +156,8 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
     cal.set(Calendar.MILLISECOND, 0);
 
     Date date = cal.getTime();
-    Long newSubscriberCount = publisher.getSubscriptions().stream().filter(s -> !s.isIsTerminated()).count();
+    Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
+    System.out.println("unsubscribe:" + newSubscriberCount);
     publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
   }
 
