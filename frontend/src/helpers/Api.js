@@ -998,4 +998,17 @@ export default {
       type: "GET",
     });
   },
+
+  getTopTenContributors() {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/person/topTenContributors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };
