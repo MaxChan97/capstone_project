@@ -141,7 +141,7 @@ function AdminSidebar() {
                     }}
                   >
                     <img src={advertisementLogo} className="nav-icon" alt="advertisementLogo" />
-                    <p className="ml-2">Advertisement Management</p>
+                    <p className="ml-2">Ad Management</p>
                   </div>
                 </Link>
               ) : (
@@ -154,7 +154,7 @@ function AdminSidebar() {
                     }}
                   >
                     <img src={advertisementLogo} className="nav-icon" alt="advertisementLogo" />
-                    <p className="ml-2">Advertisement Management</p>
+                    <p className="ml-2">Ad Management</p>
                   </div>
                 </Link>
               )}
