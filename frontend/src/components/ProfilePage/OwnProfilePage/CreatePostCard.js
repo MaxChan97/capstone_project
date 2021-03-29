@@ -124,6 +124,7 @@ export default function CreatePostCard({
             .then((url) => {
               setFileUrl(url);
             });
+          event.target.value = null;
         }
       );
     }

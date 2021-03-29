@@ -39,7 +39,7 @@ export default function OwnProfileTopBar({
   numFollowers,
   profilePicture,
   profileBanner,
-  badge
+  badge,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -51,7 +51,7 @@ export default function OwnProfileTopBar({
         <div>
           <img
             className="img-fluid"
-            style={{ width: "100%" }}
+            style={{ width: "100%", maxHeight: "250px" }}
             src={profileBanner}
           />
         </div>

@@ -139,6 +139,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
             .then((url) => {
               setFileUrl(url);
             });
+          event.target.value = null;
         }
       );
     }

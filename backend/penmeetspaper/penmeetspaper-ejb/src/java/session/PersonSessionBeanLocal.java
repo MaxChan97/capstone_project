@@ -36,6 +36,7 @@ public interface PersonSessionBeanLocal {
     public final static String EMPTY_PERSON = "No person found";
 
     public final static String INVALID_BADGE_SELECTED = "Person does not have this badge";
+    public final static String BADGE_LIST_EMPTY = "badge list is empty";
     public final static String UNEXPECTED_ERROR = "Unexpected error occured";
 
     public Person createPerson(Person person) throws NotValidException;
