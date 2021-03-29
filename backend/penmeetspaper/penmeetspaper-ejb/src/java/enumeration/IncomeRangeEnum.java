@@ -10,11 +10,11 @@ package enumeration;
  * @author Shawn
  */
 public enum IncomeRangeEnum {
-  NOT_EARNING,
-  LOW,
-  MIDDLE_LOW,
-  MIDDLE,
-  MIDDLE_HIGH,
-  HIGH,
-  CRA
+    NOT_EARNING,
+    LOW, //0-25K
+    MIDDLE_LOW, //25-45k
+    MIDDLE, //45-90k
+    MIDDLE_HIGH, //90-150k
+    HIGH, //150-200K
+    CRA  //200K
 }

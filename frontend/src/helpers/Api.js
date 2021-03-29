@@ -157,11 +157,14 @@ export default {
   editPersonProfileInformation(
     id,
     username,
+    DoB,
+    incomeRange,
     description,
     topicInterests,
     profilePicture,
     profileBanner
   ) {
+    const incomeRangeStr = incomeRange.value;
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
       headers: {
@@ -171,6 +174,8 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         username: username,
+        DoB: DoB,
+        incomeRange: incomeRangeStr,
         description: description,
         topicInterests: topicInterests,
         profilePicture: profilePicture,
@@ -652,6 +657,21 @@ export default {
         "Content-Type": "application/json",
       },
       type: "DELETE",
+    });
+  },
+
+  updatePersonProfile(personId, DoB, incomeRange) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/onboarding",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        DoB: DoB,
+        incomeRange: incomeRange,
+      }),
     });
   },
 
