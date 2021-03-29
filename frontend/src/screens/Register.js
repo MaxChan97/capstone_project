@@ -14,6 +14,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { logIn, setIsAdmin } from "../redux/actions/index";
+import loginImage from "../assets/LoginImage.png";
+
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
@@ -113,28 +115,26 @@ export default function Register() {
   }
 
   return (
-    <Grid
-      style={{ maxheight: "100%" }}
-      container
-      component="main"
-      className={classes.root}
-    >
+    <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid
-        style={{
-          background: "#7AA18A",
-        }}
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        className={classes.image}
-      />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={classes.image}>
+        <div>
+          <img
+            className="img-fluid"
+            style={{
+              height: "100%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "block",
+              // marginTop: "300px",
+            }}
+            src={loginImage}
+          />
+        </div>
+      </Grid>
       <Grid
         style={{
           background: "#F5F8F6",
-          height: "100vh",
         }}
         item
         xs={12}
