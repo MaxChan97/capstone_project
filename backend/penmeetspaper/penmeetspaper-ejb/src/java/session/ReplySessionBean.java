@@ -6,8 +6,8 @@
 package session;
 
 import entity.Comment;
-import entity.Reply;
 import entity.Person;
+import entity.Reply;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Objects;
@@ -101,7 +101,6 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         comment.getReplies().add(reply);
 
         personSB.addContributorPointsToPerson(personId, 1.0);
-
         em.flush();
     }
 
@@ -117,6 +116,7 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         checkReplyCredentials(oldreply, personId);
 
         oldreply.setBody(reply.getBody());
+        em.flush();
     }
 
     @Override

@@ -7,11 +7,11 @@ package session;
 
 import entity.Comment;
 import entity.Community;
+import entity.Person;
 import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
-import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -121,6 +121,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         poster.getPosts().add(post);
 
         personSB.addContributorPointsToPerson(personId, 3.0);
+        personSB.checkBadgeQualification(personId);
         em.flush();
 
     } // end createPostForPerson
@@ -141,6 +142,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
         em.persist(post);
         person.getPosts().add(post);
         community.getPosts().add(post);
+
+        personSB.addContributorPointsToPerson(personId, 3.0);
+        personSB.checkBadgeQualification(personId);
         em.flush();
 
     } // end createPostForCommunity

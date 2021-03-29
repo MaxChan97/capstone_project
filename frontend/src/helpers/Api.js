@@ -999,6 +999,70 @@ export default {
     });
   },
 
+  startStream(streamerId, streamTitle, streamDescription, subscribersOnly) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/" + streamerId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        streamTitle: streamTitle,
+        streamDescription: streamDescription,
+        subscribersOnly: subscribersOnly,
+      }),
+    });
+  },
+
+  editStreamInfo(streamId, streamTitle, streamDescription) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/streamInfo/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        streamTitle: streamTitle,
+        streamDescription: streamDescription,
+      }),
+    });
+  },
+
+  endStream(streamId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  getOngoingStreams() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/ongoing",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getPersonOngoingStreams(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/ongoing/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   getTopTenContributors() {
     return jQuery.ajax({
       url:

@@ -6,8 +6,8 @@
 package session;
 
 import entity.Comment;
-import entity.Post;
 import entity.Person;
+import entity.Post;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Objects;
@@ -102,7 +102,6 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         post.getComments().add(comment);
 
         personSB.addContributorPointsToPerson(personId, 1.0);
-
         em.flush();
     }
 

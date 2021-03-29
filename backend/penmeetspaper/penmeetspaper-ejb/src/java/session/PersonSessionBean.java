@@ -151,17 +151,16 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     private void generateRandomProfilePicture(Person person) {
 
         String[] profilePicArray = {
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
-            "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb"
-        };
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb",
+                "https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Default%20Dp%20logo.svg?alt=media&token=8e2c7896-9e1f-4541-8934-bb00543bd9bb" };
 
         Random rand = new Random();
         int randomNum = rand.nextInt(profilePicArray.length);
@@ -184,6 +183,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Double currContributorPoints = person.getContributorPoints();
         currContributorPoints += points;
         person.setContributorPoints(currContributorPoints);
+        em.flush();
     }
 
     @Override
@@ -258,6 +258,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setSubscribersAnalytics(null);
         person.setViewersAnalytics(null);
         person.setEarningsAnalytics(null);
+        person.setStreams(null);
 
         return person;
     } // end getPersonById
@@ -629,28 +630,29 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             int pointsRequired = b.getValueRequired();
 
             switch (badgeEnum) {
-                case OVERALL:
-                    if (totalPoints > pointsRequired) {
-                        person.getBadges().add(b);
-                    }
+            case OVERALL:
+                if (totalPoints > pointsRequired) {
+                    person.getBadges().add(b);
+                }
 
-                case STREAM:
-                    if (ccPoints > pointsRequired * 10) {
-                        person.getBadges().add(b);
-                    }
+            case STREAM:
+                if (ccPoints > pointsRequired * 10) {
+                    person.getBadges().add(b);
+                }
 
-                case FOLLOWER:
-                    if (numFollowers > pointsRequired) {
-                        person.getBadges().add(b);
-                    }
+            case FOLLOWER:
+                if (numFollowers > pointsRequired) {
+                    person.getBadges().add(b);
+                }
 
-                case POST:
-                    if (numPosts > pointsRequired) {
-                        person.getBadges().add(b);
-                    }
+            case POST:
+                if (numPosts > pointsRequired) {
+                    person.getBadges().add(b);
+                }
 
             }
         }
+        em.flush();
     }
 
     @Override

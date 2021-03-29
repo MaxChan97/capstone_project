@@ -92,11 +92,6 @@ public class Person implements Serializable {
   @Enumerated(EnumType.STRING)
   private List<TopicEnum> topicInterests = new ArrayList<>();
 
-  // unidirectional
-  @OneToMany
-  @JoinColumn(name = "person_id")
-  private List<Stream> pastStreams = new ArrayList<>();
-
   @OneToMany(mappedBy = "publisher")
   private List<Follow> followers = new ArrayList<>();
 
@@ -104,9 +99,8 @@ public class Person implements Serializable {
   private List<Follow> following = new ArrayList<>();
 
   // birectional
-  @OneToOne
-  @JoinColumn(name = "streamStreaming")
-  private Stream streamStreaming;
+  @OneToMany(mappedBy="streamer")
+  private List<Stream> streams = new ArrayList<>();
 
   @OneToMany(mappedBy = "subscriber")
   private List<Subscription> subscriptions = new ArrayList<>();
@@ -312,14 +306,6 @@ public class Person implements Serializable {
     this.topicInterests = topicInterests;
   }
 
-  public List<Stream> getPastStreams() {
-    return pastStreams;
-  }
-
-  public void setPastStreams(List<Stream> pastStreams) {
-    this.pastStreams = pastStreams;
-  }
-
   public List<Follow> getFollowers() {
     return followers;
   }
@@ -334,14 +320,6 @@ public class Person implements Serializable {
 
   public void setFollowing(List<Follow> following) {
     this.following = following;
-  }
-
-  public Stream getStreamStreaming() {
-    return streamStreaming;
-  }
-
-  public void setStreamStreaming(Stream streamStreaming) {
-    this.streamStreaming = streamStreaming;
   }
 
   public List<Subscription> getSubscriptions() {
@@ -550,5 +528,19 @@ public class Person implements Serializable {
   public void setProfileBanner(String profileBanner) {
     this.profileBanner = profileBanner;
   }
+
+    /**
+     * @return the streams
+     */
+    public List<Stream> getStreams() {
+        return streams;
+    }
+
+    /**
+     * @param streams the streams to set
+     */
+    public void setStreams(List<Stream> streams) {
+        this.streams = streams;
+    }
 
 }

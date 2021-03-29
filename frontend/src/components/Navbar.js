@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import searchLogo from "../assets/Search logo.svg";
-import { makeStyles } from "@material-ui/core/styles";
-import { InputBase, IconButton, Paper } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import {
+  InputBase,
+  IconButton,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@material-ui/core";
 import { Link } from "react-router-dom";
 import liveLogo from "../assets/Live Logo.svg";
 import uploadLogo from "../assets/Upload logo.svg";
@@ -15,6 +25,16 @@ import Api from "../helpers/Api";
 import logout from "../assets/logout 1.svg";
 import { logOut, setIsAdmin } from "../redux/actions/index";
 import BNBLogo from "../assets/BNB Logo.png";
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText("#3B21CB"),
+    backgroundColor: "#3B21CB",
+    "&:hover": {
+      backgroundColor: "#260eab",
+    },
+  },
+}))(Button);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +68,10 @@ function Navbar({
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentPerson, setCurrentPerson] = useState({});
+  const [
+    confirmStartStreamDialogOpen,
+    setConfirmStartStreamDialogOpen,
+  ] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -58,6 +82,55 @@ function Navbar({
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
+  }
+
+  function handleStartStreamDialogOpen() {
+    setConfirmStartStreamDialogOpen(true);
+  }
+
+  function handleStartStreamDialogClose() {
+    setConfirmStartStreamDialogOpen(false);
+  }
+
+  function handleStartStream() {
+    handleStartStreamDialogClose();
+    history.push("/stream");
+  }
+
+  function renderStartStreamDialog() {
+    return (
+      <Dialog
+        open={confirmStartStreamDialogOpen}
+        onClose={handleStartStreamDialogClose}
+        aria-labelledby="confirm-start-stream-dialog-title"
+        aria-describedby="confirm-start-stream-dialog-description"
+      >
+        <DialogTitle id="confirm-start-stream-dialog-title">
+          Confirm start stream
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-start-stream-dialog-description">
+            Would you like to start a stream?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleStartStreamDialogClose}
+          >
+            Cancel
+          </Button>
+          <ColorButton
+            style={{ outline: "none" }}
+            color="primary"
+            variant="contained"
+            onClick={handleStartStream}
+          >
+            Confirm
+          </ColorButton>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   function handleSearch(event) {
@@ -90,6 +163,13 @@ function Navbar({
     e.preventDefault();
     dispatch(logOut());
     dispatch(setIsAdmin(null));
+  }
+
+  function onClickStreamButton(e) {
+    e.preventDefault();
+    if (location.pathname !== "/stream") {
+      handleStartStreamDialogOpen();
+    }
   }
 
   return (
@@ -164,7 +244,7 @@ function Navbar({
           width: "21%",
         }}
       >
-        <Link to="/">
+        <Link onClick={onClickStreamButton}>
           <img src={liveLogo} alt="liveLogo" />
         </Link>
         <Link to="/">
@@ -187,6 +267,7 @@ function Navbar({
           />
         </Link>
       </div>
+      {renderStartStreamDialog()}
     </nav>
   );
 }

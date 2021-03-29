@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -34,7 +35,7 @@ public class Stream implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private String description;
@@ -61,7 +62,7 @@ public class Stream implements Serializable {
     private List<LivePoll> polls = new ArrayList<>();
 
     // birectional
-    @OneToOne(mappedBy = "streamStreaming")
+    @ManyToOne
     private Person streamer;
 
     // unidirectional
@@ -82,12 +83,12 @@ public class Stream implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
