@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -14,8 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import { logIn, setIsAdmin } from "../redux/actions/index";
-import loginImage from "../assets/LoginImage.png";
-
+import loginImage from "../assets/LoginImage.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: { height: "100vh", overflow: "hidden" },
@@ -82,31 +79,36 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   function handleRegister(e) {
     e.preventDefault();
-    Api.createPerson(email, username, password)
-      .done((createdPerson) => {
-        setEmail("");
-        setUsername("");
-        setPassword("");
-        dispatch(logIn(createdPerson.id));
-        dispatch(setIsAdmin(false));
-        history.push("/feed");
-      })
-      .fail((xhr, status, error) => {
-        if (xhr.responseJSON.error === "Email taken") {
+    if (password != confirmPassword) {
+      alert.show("Passwords do not match");
+    } else {
+      Api.createPerson(email, username, password)
+        .done((createdPerson) => {
           setEmail("");
-          alert.show("This email is already in use");
-        }
-        if (xhr.responseJSON.error === "Username taken") {
           setUsername("");
-          alert.show("This username is already in use");
-        }
-      });
+          setPassword("");
+          dispatch(logIn(createdPerson.id));
+          dispatch(setIsAdmin(false));
+          history.push("/feed");
+        })
+        .fail((xhr, status, error) => {
+          if (xhr.responseJSON.error === "Email taken") {
+            setEmail("");
+            alert.show("This email is already in use");
+          }
+          if (xhr.responseJSON.error === "Username taken") {
+            setUsername("");
+            alert.show("This username is already in use");
+          }
+        });
+    }
   }
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -115,20 +117,19 @@ export default function Register() {
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid
+      style={{ maxheight: "100%" }}
+      container
+      component="main"
+      className={classes.root}
+    >
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image}>
         <div>
           <img
             className="img-fluid"
-            style={{
-              height: "100%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              display: "block",
-              // marginTop: "300px",
-            }}
             src={loginImage}
+            style={{ height: "100%" }}
           />
         </div>
       </Grid>
@@ -200,6 +201,20 @@ export default function Register() {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
+              }}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
               }}
             />
             <Button
