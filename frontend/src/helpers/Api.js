@@ -1104,4 +1104,19 @@ export default {
       type: "PUT",
     });
   },
+
+  createAdmin(username, email) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/1",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        username: username,
+        email: email,
+      }),
+    });
+  },
 };

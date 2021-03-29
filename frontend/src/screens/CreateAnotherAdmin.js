@@ -51,9 +51,19 @@ export default function CreateAnotherAdmin() {
             alert.show("Username cannot be empty");
         } else if (email.trim() === "") {
             alert.show("Email cannot be empty");
+        } else {
+            Api.createAdmin(username, email)
+                .done((a) => {
+                    setEmail("");
+                    setUsername("");
+                    history.push("/admin/adminmanagement");
+                }).fail((xhr, status, error) => {
+                    alert.show(
+                        "Something went wrong, please try again!"
+                    );
+                });
         }
 
-        history.push("/admin/adminmanagement");
     };
 
     function handleCancel() {
@@ -107,7 +117,7 @@ export default function CreateAnotherAdmin() {
                             <div style={{ textAlign: "right" }}>
                                 <Button style={{ outline: "none" }} onClick={handleCancel}>
                                     Cancel
-                            </Button>
+                                </Button>
                                 {" "}
                                 <ColorButton
                                     style={{
