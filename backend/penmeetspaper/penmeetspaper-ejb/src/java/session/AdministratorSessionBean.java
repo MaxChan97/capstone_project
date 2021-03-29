@@ -48,6 +48,12 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         return admin;
     }
 
+    private void checkMasterAdmin(Administrator admin) throws NotValidException {
+        if (!admin.isMaster()) {
+            throw new NotValidException(AdministratorSessionBeanLocal.NO_CREDENTIALS);
+        }
+    }
+
     private boolean isMasterAdminCreated() {
         Query q = em.createQuery("SELECT a from Administrator a");
         List<Administrator> adminList = q.getResultList();
@@ -72,13 +78,31 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
                 .toString();
     }
 
-    public String createAdmin(Administrator admin) throws NotValidException {
+    @Override
+    public void createMasterAdmin(Administrator admin) throws NotValidException {
+        if (isMasterAdminCreated()) {
+            throw new NotValidException(AdministratorSessionBeanLocal.MASTER_CREATED);
+        }
+
+        admin.setCreatedDate(new Date());
+        admin.setMaster(true);
+        admin.setDeactivated(false);
+        em.persist(admin);
+        em.flush();
+
+    }
+
+    @Override
+    public String createAdmin(Long adminId, Administrator admin) throws NotValidException, NoResultException {
         if (admin == null) {
             throw new NotValidException(AdministratorSessionBeanLocal.MISSING_PERSON);
         }
         if (admin.getUsername() == null) {
             throw new NotValidException(AdministratorSessionBeanLocal.MISSING_USERNAME);
         }
+
+        Administrator a = emGetAdmin(adminId);
+        checkMasterAdmin(a);
 
         Query q;
         q = em.createQuery("SELECT a from Administrator a WHERE a.email =:email");
@@ -94,13 +118,9 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         admin.setCreatedDate(new Date());
 
-        admin.setIsDeactivated(false);
+        admin.setDeactivated(false);
 
-        if (isMasterAdminCreated()) {
-            admin.setIsMaster(false);
-        } else {
-            admin.setIsMaster(true);
-        }
+        admin.setMaster(false);
 
         em.persist(admin);
         em.flush();
@@ -115,5 +135,15 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         // nullifying for marshalling done hereS
         return admin;
+    } // end getAdminById
+
+    @Override
+    public void deactivateAdmin(Long adminId, Long deactivateId) throws NoResultException, NotValidException {
+        Administrator admin = emGetAdmin(adminId);
+        checkMasterAdmin(admin);
+        Administrator deAdmin = emGetAdmin(deactivateId);
+        deAdmin.setDeactivated(true);
+        em.flush();
+
     }
 }
