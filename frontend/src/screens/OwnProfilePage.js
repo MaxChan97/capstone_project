@@ -23,7 +23,7 @@ export default function OwnProfilePage({ personId }) {
     if (personId) {
       loadData(personId);
     }
-  }, [personId]);
+  }, [personId, refresh]);
 
   function loadData(personId) {
     Api.getPersonById(personId)
@@ -70,7 +70,11 @@ export default function OwnProfilePage({ personId }) {
     if (tabValue === 2) {
       return (
         <div style={{ marginTop: "20px" }}>
-          <AboutMe />
+          <AboutMe
+            currentPerson={currentPerson}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
         </div>
       );
     }

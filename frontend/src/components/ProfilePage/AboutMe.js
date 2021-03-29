@@ -32,48 +32,17 @@ const useStyles = makeStyles((theme) => ({
 
 //chip is the topic tag
 
-export default function AboutMe() {
+export default function AboutMe({ currentPerson, refresh, setRefresh }) {
   const classes = useStyles();
-
-  const [description, setAbout] = useState();
-  const [topicInterests, setTopicInterests] = useState();
-  const [contentCreatorPoints, setContentCreatorPoints] = useState();
-  const [contributorPoints, setContributorPoints] = useState();
-  const [badges, setBadges] = useState();
 
   //   const [profilePicture, setProfilePicture] = useState("");
   //   const [profileBanner, setProfileBanner] = useState("");
 
-  const [currentPerson, setCurrentPerson] = useState({});
-
   const currentUser = useSelector((state) => state.currentUser);
-  const [refresh, setRefresh] = useState(true);
 
-  useEffect(() => {
-    if (currentUser) {
-      loadData(currentUser);
-      console.log(currentUser);
-    }
-  }, [currentUser]);
-
+  console.log(currentPerson);
   if (currentUser === null) {
     return <Redirect to="/login" />;
-  }
-
-  function loadData(currentUser) {
-    Api.getPersonById(currentUser)
-      .done((currentPerson) => {
-        setCurrentPerson(currentPerson);
-        setAbout(currentPerson.description);
-        setTopicInterests(currentPerson.topicInterests);
-        setContentCreatorPoints(currentPerson.contentCreatorPoints);
-        setContributorPoints(currentPerson.contributorPoints);
-        setBadges(currentPerson.badges);
-        console.log(currentPerson);
-      })
-      .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
-      });
   }
 
   function changeBadge(personId, badgeId) {
@@ -128,12 +97,12 @@ export default function AboutMe() {
             <div className="card-body">
               <strong>About</strong>
 
-              <p>{description}</p>
+              <p>{currentPerson.description}</p>
 
               <strong> Interests</strong>
-              {topicInterests !== undefined ? (
+              {currentPerson.topicInterests !== undefined ? (
                 <div component="ul" className={classes.chip}>
-                  {topicInterests.map((topics, index) => (
+                  {currentPerson.topicInterests.map((topics, index) => (
                     <Chip
                       label={toTitleCase(topics)}
                       key={index}
@@ -144,9 +113,9 @@ export default function AboutMe() {
               ) : null}
               <br />
               <strong>My Badges</strong>
-              {badges !== undefined ? (
+              {currentPerson.badges !== undefined ? (
                 <div component="ul" className={classes.badge}>
-                  {badges.map((badge, index) => (
+                  {currentPerson.badges.map((badge, index) => (
                     <button
                       style={{
                         height: "45px",
@@ -154,7 +123,8 @@ export default function AboutMe() {
                         backgroundColor: "transparent",
                         borderColor: "transparent",
                         marginRight: "60px",
-                        marginLeft: "-12px"
+                        marginLeft: "-12px",
+                        outline: "none",
                       }}
                     >
                       <img
@@ -180,13 +150,20 @@ export default function AboutMe() {
                 <strong>
                   LEVEL{" "}
                   {getLevel(
-                    totalPoints(contentCreatorPoints, contributorPoints)
+                    totalPoints(
+                      currentPerson.contentCreatorPoints,
+                      currentPerson.contributorPoints
+                    )
                   )}
                 </strong>
               </div>
 
               <p>
-                {totalPoints(contentCreatorPoints, contributorPoints)} Points
+                {totalPoints(
+                  currentPerson.contentCreatorPoints,
+                  currentPerson.contributorPoints
+                )}{" "}
+                Points
               </p>
             </div>
           </div>
