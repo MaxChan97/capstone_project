@@ -13,10 +13,12 @@ import analyticsLogo from "../assets/analytics.svg";
 import userManagementLogo from "../assets/UserManagement.svg";
 import advertisementLogo from "../assets/advertise.svg";
 import adminLogo from "../assets/admin.svg";
+import { useSelector } from "react-redux";
 
 function AdminSidebar() {
   let location = useLocation();
-
+  const isAdmin = useSelector((state) => state.isAdmin);
+  const currentUser = useSelector((state) => state.currentUser);
   return (
     <aside className="main-sidebar sidebar-light-primary elevation-1">
       <div className="sidebar">
@@ -159,6 +161,7 @@ function AdminSidebar() {
                 </Link>
               )}
             </li>
+            {currentUser == 1 ? ( 
             <li className="nav-item">
               {location.pathname === "/admin/adminmanagement" ? (
                 <Link
@@ -192,6 +195,7 @@ function AdminSidebar() {
                 </Link>
               )}
             </li>
+            ):("")}
             {/*
             <li className="nav-item">
               {location.pathname === "/" ? (
