@@ -4,6 +4,7 @@ import profileLogo from "../assets/channelDashboardSidebar/profile.png";
 import subscribersLogo from "../assets/channelDashboardSidebar/subscribers.png";
 import settingsLogo from "../assets/channelDashboardSidebar/settings.svg";
 import changePasswordLogo from "../assets/channelDashboardSidebar/changePassword.png";
+import liveLogo from "../assets/Live Logo.svg";
 
 export default function ChannelDashboardSidebar() {
   let location = useLocation();
@@ -65,6 +66,39 @@ export default function ChannelDashboardSidebar() {
                       alt="profileLogo"
                     />
                     <p className="ml-2">Profile</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
+              {location.pathname === "/stream" ? (
+                <Link
+                  to="/stream"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={liveLogo} className="nav-icon" alt="liveLogo" />
+                    <p className="ml-2">Stream</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/stream" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={liveLogo} className="nav-icon" alt="liveLogo" />
+                    <p className="ml-2">Stream</p>
                   </div>
                 </Link>
               )}

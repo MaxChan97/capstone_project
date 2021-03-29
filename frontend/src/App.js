@@ -94,7 +94,8 @@ function App() {
       location.pathname === "/customiseProfile" ||
       location.pathname === "/subscribers" ||
       location.pathname === "/userSettings" ||
-      location.pathname === "/changePassword"
+      location.pathname === "/changePassword" ||
+      location.pathname === "/stream"
     ) {
       return (
         <div>
