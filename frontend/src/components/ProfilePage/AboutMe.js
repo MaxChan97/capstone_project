@@ -91,6 +91,45 @@ export default function AboutMe({ person, refresh, setRefresh }) {
     } else return 1;
   }
 
+  function renderBadges() {
+    if (person.id === currentUser) {
+      return person.badges.map((badge, index) => (
+        <button
+          style={{
+            height: "45px",
+            width: "15px",
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+            marginRight: "60px",
+            marginLeft: "-12px",
+            outline: "none",
+          }}
+        >
+          <img
+            style={{
+              height: "45px",
+              marginTop: "5px",
+              marginRight: "15px",
+            }}
+            src={badge.image}
+            onClick={() => changeBadge(currentUser, badge.id)}
+          />
+        </button>
+      ));
+    } else {
+      return person.badges.map((badge, index) => (
+        <img
+          style={{
+            height: "45px",
+            marginTop: "5px",
+            marginRight: "15px",
+          }}
+          src={badge.image}
+        />
+      ));
+    }
+  }
+
   return (
     <div className="container mt-3 ml-5">
       <div className="row" style={{ textAlign: "left" }}>
@@ -117,29 +156,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
               <strong>My Badges</strong>
               {person.badges !== undefined ? (
                 <div component="ul" className={classes.badge}>
-                  {person.badges.map((badge, index) => (
-                    <button
-                      style={{
-                        height: "45px",
-                        width: "15px",
-                        backgroundColor: "transparent",
-                        borderColor: "transparent",
-                        marginRight: "60px",
-                        marginLeft: "-12px",
-                        outline: "none",
-                      }}
-                    >
-                      <img
-                        style={{
-                          height: "45px",
-                          marginTop: "5px",
-                          marginRight: "15px",
-                        }}
-                        src={badge.image}
-                        onClick={() => changeBadge(currentUser, badge.id)}
-                      />
-                    </button>
-                  ))}
+                  {renderBadges()}
                 </div>
               ) : null}
             </div>

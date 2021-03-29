@@ -258,7 +258,7 @@ function App() {
             <Route exact path="/admin/log" component={AdminLog} />
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
-            <Route component={PageNotFound} />
+            {/*<Route component={PageNotFound} />*/}
           </div>
         </div>
       </Switch>
