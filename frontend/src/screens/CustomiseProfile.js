@@ -14,8 +14,8 @@ import { storage } from "../firebase";
 import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
-import TextField from '@material-ui/core/TextField';
-
+import * as dayjs from "dayjs";
+import TextField from "@material-ui/core/TextField";
 
 var uuid = require("uuid");
 
@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -42,9 +42,7 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  
 }));
-
 
 const topics = [
   { value: "INVESTMENTS,", label: "Investments" },
@@ -85,7 +83,6 @@ export default function CustomiseProfile() {
   const classes = useStyles();
   const alert = useAlert();
 
-
   const [username, setUsername] = useState();
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -101,7 +98,6 @@ export default function CustomiseProfile() {
     setIncomeRange(event.target.value);
     console.log(event.target.value);
   };
-
 
   const [description, setAbout] = useState();
   const handleAboutChange = (event) => {
@@ -202,11 +198,14 @@ export default function CustomiseProfile() {
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
+        console.log(currentPerson);
         setCurrentPerson(currentPerson);
         setUsername(currentPerson.username);
         setAbout(currentPerson.description);
-        setDoB(currentPerson.DoB);
-        setIncomeRange(currentPerson.incomeRange)
+        if (currentPerson.dob != undefined) {
+          setDoB(dayjs(currentPerson.dob.slice(0, -5)).toDate());
+        }
+        setIncomeRange(currentPerson.incomeRange);
         setTopicInterests(currentPerson.topicInterests);
         setProfilePicture(currentPerson.profilePicture);
         setProfileBanner(currentPerson.profileBanner);
@@ -233,14 +232,14 @@ export default function CustomiseProfile() {
   function getInitialState() {
     var value = new Date().toISOString();
     return {
-      value: value
-    }
+      value: value,
+    };
   }
 
   function handleChange(value, formattedValue) {
     this.setState({
       value: value, // ISO String, ex: "2016-11-19T12:00:00.000Z"
-      formattedValue: formattedValue // Formatted String, ex: "11/19/2016"
+      formattedValue: formattedValue, // Formatted String, ex: "11/19/2016"
     });
   }
 
@@ -248,9 +247,8 @@ export default function CustomiseProfile() {
     // Access ISO String and formatted values from the DOM.
     var hiddenInputElement = document.getElementById("example-datepicker");
     console.log(hiddenInputElement.value); // ISO String, ex: "2016-11-19T12:00:00.000Z"
-    console.log(hiddenInputElement.getAttribute('data-formattedvalue')) // Formatted String, ex: "11/19/2016"
+    console.log(hiddenInputElement.getAttribute("data-formattedvalue")); // Formatted String, ex: "11/19/2016"
   }
-
 
   const ColorButton = withStyles((theme) => ({
     root: {
@@ -262,14 +260,14 @@ export default function CustomiseProfile() {
     },
   }))(Button);
 
-
   const handleSubmit = (e) => {
     console.log(typeof incomeRange.value);
     const incomeRangeStr = incomeRange.value;
+    console.log(typeof moment(DoB).format("dd/MM/yyyy"));
     Api.editPersonProfileInformation(
       currentUser,
       username,
-      moment(DoB).format("dd/MM/yyyy"),
+      moment(DoB).format("DD/MM/yyyy"),
       incomeRange,
       description,
       topicInterests,
@@ -285,6 +283,14 @@ export default function CustomiseProfile() {
         alert.show("Something went wrong, please try again!");
       });
   };
+
+  function getIncomeRangeToDisplay(incomeRange) {
+    for (var i = 0; i < incomes.length; i++) {
+      if (incomes[i].value === incomeRange) {
+        return incomes[i];
+      }
+    }
+  }
 
   return (
     <div style={{ overflowX: "hidden" }} className="content-wrapper">
@@ -307,17 +313,17 @@ export default function CustomiseProfile() {
                           />
                         </div>
                       ) : (
-                          <img
-                            style={{
-                              resizeMode: "repeat",
-                              height: 130,
-                              width: 130,
-                              borderRadius: "50%",
-                              display: "block",
-                            }}
-                            src={profilePicture || defaultDP}
-                          />
-                        )}
+                        <img
+                          style={{
+                            resizeMode: "repeat",
+                            height: 130,
+                            width: 130,
+                            borderRadius: "50%",
+                            display: "block",
+                          }}
+                          src={profilePicture || defaultDP}
+                        />
+                      )}
                     </div>
                     <div className="col-sm-8">
                       <label
@@ -362,15 +368,15 @@ export default function CustomiseProfile() {
                   <CircularProgressWithLabel value={bannerProgress} size={80} />
                 </div>
               ) : (
-                  <img
-                    style={{
-                      resizeMode: "repeat",
-                      height: 80,
-                      width: 512,
-                    }}
-                    src={profileBanner || defaultBanner}
-                  />
-                )}
+                <img
+                  style={{
+                    resizeMode: "repeat",
+                    height: 80,
+                    width: 512,
+                  }}
+                  src={profileBanner || defaultBanner}
+                />
+              )}
               <Box fontWeight="fontWeightRegular" m={1}>
                 File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
               </Box>
@@ -424,7 +430,7 @@ export default function CustomiseProfile() {
                         type="date"
                         defaultValue="2021-01-01"
                         className="form-control"
-                        value={DoB}
+                        value={moment(DoB).format("YYYY-MM-DD")}
                         onChange={handleDoBChange}
                         InputLabelProps={{
                           shrink: true,
@@ -438,17 +444,18 @@ export default function CustomiseProfile() {
                       <Select
                         name="incomes"
                         options={incomes}
+                        value={getIncomeRangeToDisplay(incomeRange)}
                         onChange={setIncomeRange}
                         classNamePrefix="select"
                       />
                     ) : (
-                        <Select
-                          name="incomes"
-                          options={incomes}
-                          onChange={setIncomeRange}
-                          classNamePrefix="select"
-                        />
-                      )}
+                      <Select
+                        name="incomes"
+                        options={incomes}
+                        onChange={setIncomeRange}
+                        classNamePrefix="select"
+                      />
+                    )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputAbout">About</label>
@@ -465,8 +472,8 @@ export default function CustomiseProfile() {
                         {description.length}/255
                       </p>
                     ) : (
-                        <p style={{ textAlign: "right" }}>0/255</p>
-                      )}
+                      <p style={{ textAlign: "right" }}>0/255</p>
+                    )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputInterests">Interests</label>
@@ -483,17 +490,17 @@ export default function CustomiseProfile() {
                         classNamePrefix="select"
                       />
                     ) : (
-                        <Select
-                          isMulti
-                          name="topics"
-                          options={topics}
-                          onChange={(selectedOptions) =>
-                            handleTopicInterestsChange(selectedOptions)
-                          }
-                          className="basic-multi-select"
-                          classNamePrefix="select"
-                        />
-                      )}
+                      <Select
+                        isMulti
+                        name="topics"
+                        options={topics}
+                        onChange={(selectedOptions) =>
+                          handleTopicInterestsChange(selectedOptions)
+                        }
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    )}
                   </div>
                   <div className="form-group">
                     <ColorButton

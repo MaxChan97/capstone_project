@@ -164,9 +164,9 @@ export default {
     profilePicture,
     profileBanner
   ) {
-    const incomeRangeStr = incomeRange.value;
+    //const incomeRangeStr = incomeRange.value;
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/person/" + id + "?type=information",
+      url: this.SERVER_PREFIX + "/person/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export default {
       data: JSON.stringify({
         username: username,
         DoB: DoB,
-        incomeRange: incomeRangeStr,
+        incomeRange: incomeRange,
         description: description,
         topicInterests: topicInterests,
         profilePicture: profilePicture,
