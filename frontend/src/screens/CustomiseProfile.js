@@ -13,6 +13,10 @@ import { useAlert } from "react-alert";
 import { storage } from "../firebase";
 import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
+import * as dayjs from "dayjs";
+import TextField from "@material-ui/core/TextField";
+
 var uuid = require("uuid");
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +25,22 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: "25ch",
     },
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -48,6 +68,16 @@ const topics = [
   { value: "BLOCKCHAIN", label: "Blockchain" },
 ];
 
+const incomes = [
+  { value: "NOT_EARNING", label: "No income" },
+  { value: "LOW", label: "0-25K" },
+  { value: "MIDDLE_LOW", label: "25-45K" },
+  { value: "MIDDLE", label: "45-90K" },
+  { value: "MIDDLE_HIGH", label: "90-150K" },
+  { value: "HIGH", label: "150-200K" },
+  { value: "CRA", label: "200K and above" },
+];
+
 export default function CustomiseProfile() {
   let history = useHistory();
   const classes = useStyles();
@@ -56,6 +86,17 @@ export default function CustomiseProfile() {
   const [username, setUsername] = useState();
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
+  };
+
+  const [DoB, setDoB] = useState();
+  const handleDoBChange = (event) => {
+    setDoB(event.target.value);
+  };
+
+  const [incomeRange, setIncomeRange] = useState();
+  const handleIncomeRangeChange = (event) => {
+    setIncomeRange(event.target.value);
+    console.log(event.target.value);
   };
 
   const [description, setAbout] = useState();
@@ -157,9 +198,14 @@ export default function CustomiseProfile() {
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
+        console.log(currentPerson);
         setCurrentPerson(currentPerson);
         setUsername(currentPerson.username);
         setAbout(currentPerson.description);
+        if (currentPerson.dob != undefined) {
+          setDoB(dayjs(currentPerson.dob.slice(0, -5)).toDate());
+        }
+        setIncomeRange(currentPerson.incomeRange);
         setTopicInterests(currentPerson.topicInterests);
         setProfilePicture(currentPerson.profilePicture);
         setProfileBanner(currentPerson.profileBanner);
@@ -183,6 +229,27 @@ export default function CustomiseProfile() {
     return { value: x, label: toTitleCase(x) };
   }
 
+  function getInitialState() {
+    var value = new Date().toISOString();
+    return {
+      value: value,
+    };
+  }
+
+  function handleChange(value, formattedValue) {
+    this.setState({
+      value: value, // ISO String, ex: "2016-11-19T12:00:00.000Z"
+      formattedValue: formattedValue, // Formatted String, ex: "11/19/2016"
+    });
+  }
+
+  function componentDidUpdate() {
+    // Access ISO String and formatted values from the DOM.
+    var hiddenInputElement = document.getElementById("example-datepicker");
+    console.log(hiddenInputElement.value); // ISO String, ex: "2016-11-19T12:00:00.000Z"
+    console.log(hiddenInputElement.getAttribute("data-formattedvalue")); // Formatted String, ex: "11/19/2016"
+  }
+
   const ColorButton = withStyles((theme) => ({
     root: {
       color: theme.palette.getContrastText("#3B21CB"),
@@ -194,9 +261,14 @@ export default function CustomiseProfile() {
   }))(Button);
 
   const handleSubmit = (e) => {
+    console.log(typeof incomeRange.value);
+    const incomeRangeStr = incomeRange.value;
+    console.log(typeof moment(DoB).format("dd/MM/yyyy"));
     Api.editPersonProfileInformation(
       currentUser,
       username,
+      moment(DoB).format("DD/MM/yyyy"),
+      incomeRange,
       description,
       topicInterests,
       profilePicture,
@@ -208,10 +280,17 @@ export default function CustomiseProfile() {
         // setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
-        console.log(xhr);
         alert.show("Something went wrong, please try again!");
       });
   };
+
+  function getIncomeRangeToDisplay(incomeRange) {
+    for (var i = 0; i < incomes.length; i++) {
+      if (incomes[i].value === incomeRange) {
+        return incomes[i];
+      }
+    }
+  }
 
   return (
     <div style={{ overflowX: "hidden" }} className="content-wrapper">
@@ -269,6 +348,7 @@ export default function CustomiseProfile() {
                           onChange={changeProfilePictureHandler}
                         />
                       </label>
+
                       <Box fontWeight="fontWeightRegular" m={1}>
                         JPEG or PNG only and cannot exceed 10MB. It’s
                         recommended to use a picture that’s at least 100 x 100
@@ -342,15 +422,43 @@ export default function CustomiseProfile() {
                     />
                   </div>
                   <div className="form-group">
+                    <label htmlFor="inputDoB">Birthday</label>
+                    <form className={classes.container} noValidate>
+                      <input
+                        id="DoB"
+                        // label="Birthday"
+                        type="date"
+                        defaultValue="2021-01-01"
+                        className="form-control"
+                        value={moment(DoB).format("YYYY-MM-DD")}
+                        onChange={handleDoBChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </form>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="inputIncomeRange">Annual Income</label>
+                    {incomeRange !== undefined ? (
+                      <Select
+                        name="incomes"
+                        options={incomes}
+                        value={getIncomeRangeToDisplay(incomeRange)}
+                        onChange={setIncomeRange}
+                        classNamePrefix="select"
+                      />
+                    ) : (
+                      <Select
+                        name="incomes"
+                        options={incomes}
+                        onChange={setIncomeRange}
+                        classNamePrefix="select"
+                      />
+                    )}
+                  </div>
+                  <div className="form-group">
                     <label htmlFor="inputAbout">About</label>
-                    {/* <input
-                      type="text"
-                      id="inputAbout"
-                      // required
-                      className="form-control"
-                      value={description}
-                      onChange={handleAboutChange}
-                    /> */}
                     <textarea
                       className="form-control"
                       value={description}

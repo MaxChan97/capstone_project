@@ -372,7 +372,8 @@ public class PersonResource {
         String username = jsonObject.getString("username");
         String description = jsonObject.getString("description");
         String dobStr = jsonObject.getString("DoB");
-        String incomeRangeStr = jsonObject.getString("IncomeRange");
+        String incomeRangeStr = jsonObject.getJsonObject("incomeRange").getString("value");
+        //String incomeRangeStr = jsonObject.getString("incomeRange");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
         String profilePicture = jsonObject.getString("profilePicture");
         String profileBanner = jsonObject.getString("profileBanner");
