@@ -68,6 +68,7 @@ export default function EditComment({
                 onChange={handleEdit}
                 fullWidth={true}
                 variant="filled"
+                style= {{width:"90%"}}
             />
             <br></br>
             <br></br>

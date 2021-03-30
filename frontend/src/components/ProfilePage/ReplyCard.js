@@ -119,7 +119,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
         width: "max-content",
       }}
     >
-      <div class="col-md-9">
+      <div >
         <DeleteReplyModal
           show={deleteCommentModal}
           handleClose={closeDeleteCommentModal}

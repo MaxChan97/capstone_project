@@ -123,7 +123,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
         width: "max-content",
       }}
     >
-      <div class="col-md-9">
+      <div >
         <DeleteCommentModal
           show={deleteCommentModal}
           handleClose={closeDeleteCommentModal}
