@@ -75,12 +75,26 @@ export default function CreateCommunity() {
 
   return (
     <div className="content-wrapper">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-8 mt-4">
+      <div
+        style={{
+          paddingLeft: "70px",
+          paddingRight: "98px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <div className="col-md-9 mt-4">
             <MyCommunitiesCard communityList={followingAndOwnedCommunities} />
           </div>
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
+          <div
+            className="col-md-3 mt-4"
+            style={{ textAlign: "left", marginLeft: "28px" }}
+          >
             <div className="card card-primary">
               <div className="card-body">
                 <div
