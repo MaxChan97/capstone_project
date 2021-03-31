@@ -5,7 +5,6 @@
  */
 package entity;
 
-import entity.Person;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;

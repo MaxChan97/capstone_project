@@ -29,6 +29,7 @@
     "react-bootstrap-date-picker": "^5.1.0",
     "react-chat-elements": "^10.14.0",
     "react-dom": "^17.0.1",
+    "react-hashtag": "^2.1.2",
     "react-horizontal-scrolling-menu": "^0.7.9",
     "react-nice-input-password": "^2.7.0",
     "react-paginate": "^7.1.0",
