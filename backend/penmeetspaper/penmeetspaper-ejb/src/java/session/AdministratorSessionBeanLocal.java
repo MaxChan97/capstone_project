@@ -8,6 +8,7 @@ package session;
 import entity.Administrator;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -35,5 +36,7 @@ public interface AdministratorSessionBeanLocal {
     public String createAdmin(Long adminId, Administrator admin) throws NotValidException, NoResultException;
 
     public void deactivateAdmin(Long adminId, Long deactivateId) throws NoResultException, NotValidException;
+
+    public List<Administrator> getAllAdmin() throws NoResultException, NotValidException;
 
 }

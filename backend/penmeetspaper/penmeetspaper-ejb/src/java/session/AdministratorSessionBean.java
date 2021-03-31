@@ -144,6 +144,17 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         Administrator deAdmin = emGetAdmin(deactivateId);
         deAdmin.setDeactivated(true);
         em.flush();
+    }
 
+    @Override
+    public List<Administrator> getAllAdmin() throws NoResultException, NotValidException {
+        Query q = em.createQuery("SELECT a FROM  Administrator a");
+        List<Administrator> resultList = q.getResultList();
+
+        for (Administrator a : resultList) {
+            a = getAdminById(a.getId());
+        }
+
+        return resultList;
     }
 }
