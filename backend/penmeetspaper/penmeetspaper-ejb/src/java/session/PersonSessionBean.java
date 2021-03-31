@@ -352,7 +352,6 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     public void onboarding(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 
-        // NEED TO ADD MORE
         oldPerson.setIncomeRange(person.getIncomeRange());
         oldPerson.setDob(person.getDob());
         em.flush();
