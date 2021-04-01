@@ -184,6 +184,48 @@ export default {
     });
   },
 
+  editPersonProfilePicture(id, profilePicture) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/profilePicture/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        profilePicture: profilePicture,
+      }),
+    });
+  },
+
+  editPersonProfileBanner(id, profileBanner) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/profileBanner/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        profileBanner: profileBanner,
+      }),
+    });
+  },
+
+  editPersonDescription(id, description) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/description/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        description: description,
+      }),
+    });
+  },
+
   editProfilePost(personId, postId, postBody) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + personId + "/edit/" + postId,

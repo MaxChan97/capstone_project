@@ -403,6 +403,60 @@ public class PersonResource {
         }
 
     }
+    
+    @PUT
+    @Path("/profilePicture/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonProfilePicture(@PathParam("id") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String profilePicture = jsonObject.getString("profilePicture");
+        
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setProfilePicture(profilePicture);
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+    
+    @PUT
+    @Path("/profileBanner/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonProfileBanner(@PathParam("id") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String profileBanner = jsonObject.getString("profileBanner");
+        
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setProfileBanner(profileBanner);
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+    
+    @PUT
+    @Path("/description/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPersonDescription(@PathParam("id") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String description = jsonObject.getString("description");
+        
+        try {
+            Person p = personSB.getPersonById(personId);
+            p.setDescription(description);
+            personSB.updatePerson(p);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
     @PUT
     @Path("/{id}/settings")
