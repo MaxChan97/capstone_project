@@ -195,6 +195,14 @@ export default function CustomiseProfile() {
     return <Redirect to="/login" />;
   }
 
+  function stringToIncomes(incomeRangeStr) {
+    for (var i = 0; i < incomes.length; i++) {
+      if (incomes[i].value === incomeRangeStr) {
+        return incomes[i];
+      }
+    }
+  }
+
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
@@ -205,7 +213,10 @@ export default function CustomiseProfile() {
         if (currentPerson.dob != undefined) {
           setDoB(dayjs(currentPerson.dob.slice(0, -5)).toDate());
         }
-        setIncomeRange(currentPerson.incomeRange);
+        if (currentPerson.incomeRange != undefined) {
+          setIncomeRange(stringToIncomes(currentPerson.incomeRange));
+        }
+        console.log(currentPerson.incomeRange);
         setTopicInterests(currentPerson.topicInterests);
         setProfilePicture(currentPerson.profilePicture);
         setProfileBanner(currentPerson.profileBanner);
@@ -261,14 +272,16 @@ export default function CustomiseProfile() {
   }))(Button);
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     console.log(typeof incomeRange.value);
     const incomeRangeStr = incomeRange.value;
     console.log(typeof moment(DoB).format("dd/MM/yyyy"));
+    console.log(incomeRange);
     Api.editPersonProfileInformation(
       currentUser,
       username,
       moment(DoB).format("DD/MM/yyyy"),
-      incomeRange,
+      incomeRangeStr,
       description,
       topicInterests,
       profilePicture,
@@ -280,7 +293,8 @@ export default function CustomiseProfile() {
         // setRefresh(!refresh);
       })
       .fail((xhr, status, error) => {
-        alert.show("Something went wrong, please try again!");
+        //alert.show("Something went wrong, please try again!");
+        alert.show(xhr.responseJSON.error);
       });
   };
 
@@ -444,7 +458,7 @@ export default function CustomiseProfile() {
                       <Select
                         name="incomes"
                         options={incomes}
-                        value={getIncomeRangeToDisplay(incomeRange)}
+                        value={incomeRange}
                         onChange={setIncomeRange}
                         classNamePrefix="select"
                       />

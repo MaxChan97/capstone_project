@@ -113,11 +113,13 @@ export default function ManageMembersRow({ member, refresh, setRefresh }) {
         <div className="col-md-3">
           <img
             className="img-fluid"
-            style ={{resizeMode: "repeat",
-            height: 40,
-            width: 40,
-            borderRadius: "50%",
-            display: "block"}}
+            style={{
+              resizeMode: "repeat",
+              height: 40,
+              width: 40,
+              borderRadius: "50%",
+              display: "block",
+            }}
             src={member.profilePicture}
             alt="defaultDP"
           />
