@@ -69,7 +69,7 @@ export default function EditReply({
                 variant="filled"
                 size="small"
                 fullWidth
-                style= {{width:"90%"}}
+                style= {{width:"95%"}}
             />
             <br></br>
             <br></br>

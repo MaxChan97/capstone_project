@@ -194,11 +194,10 @@ export default function ProfilePostWithComments() {
           display: "flex",
           flexDirection: "column",
           textAlign: "left",
-          width: "max-content",
           margin: "auto",
         }}
       >
-        <div class="col-md-9" style={{ marginTop: "20px" }}>
+        <div class="col-md-9 mt-4" style={{ margin: "auto" }}>
           <DeletePostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -215,10 +214,6 @@ export default function ProfilePostWithComments() {
           />
           <div
             class="card"
-            style={{
-              minWidth: "80ch",
-              maxWidth: "80ch",
-            }}
           >
             <div class="card-body">
               <div class="post">
@@ -236,8 +231,8 @@ export default function ProfilePostWithComments() {
                     </Link>
                     <span class="description">
                       {" "}
-                      {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                      <span>&nbsp; </span>
+                      {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+            
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>

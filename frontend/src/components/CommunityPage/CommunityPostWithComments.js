@@ -186,8 +186,8 @@ export default function CommunityPostWithComments() {
                   </span>
                     <span class="description">
                       {" "}
-                      {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                      <span>&nbsp; </span>
+                      {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+                    
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>
