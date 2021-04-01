@@ -24,15 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchCard( {searchTerm, setSearchTerm} ) {
+export default function SearchCard({ searchTerm, setSearchTerm }) {
   const classes = useStyles();
 
   return (
     <div className="card card-primary mx-2">
       <div className="card-body">
-        <p className="font-weight-light">
-          Search videos from followed channels
-        </p>
+        <p className="font-weight-light">Search videos from followed users</p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
             <InputBase
@@ -48,7 +46,7 @@ export default function SearchCard( {searchTerm, setSearchTerm} ) {
               className={classes.iconButton}
               aria-label="search"
             > */}
-              {/* <img src={searchLogo} alt="searchLogo" /> */}
+            {/* <img src={searchLogo} alt="searchLogo" /> */}
             {/* </IconButton> */}
           </Paper>
         </div>

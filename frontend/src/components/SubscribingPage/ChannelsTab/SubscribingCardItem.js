@@ -259,7 +259,7 @@ export default function SubscribingCardItem({ subscribe, currentUser }) {
               )}
             </div>
             <p style={{ marginBottom: "2px" }}>
-              Ad-free viewing on {publisher.username}'s channel.
+              Ad-free viewing on {publisher.username}'s profile.
             </p>
             <p style={{ marginBottom: "2px" }}>
               Chat during Subscriber-Only Mode.

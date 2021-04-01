@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchCard( {searchTerm, setSearchTerm} ) {
+export default function SearchCard({ searchTerm, setSearchTerm }) {
   const classes = useStyles();
 
   return (
     <div className="card card-primary mx-2">
       <div className="card-body">
         <p className="font-weight-light">
-          Search your subscribed channels going live
+          Search your subscribed users going live
         </p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
