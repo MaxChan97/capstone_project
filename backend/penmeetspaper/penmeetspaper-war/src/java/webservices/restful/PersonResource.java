@@ -561,7 +561,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
 
-    }
+    } // end getTenTopContributors
 
     @GET
     @Path("/topTenStreamers")
@@ -578,7 +578,7 @@ public class PersonResource {
         } catch (NoResultException e) {
             return buildError(e, 400);
         }
-    }
+    } // end getTenTopStreamers
 
     @PUT
     @Path("/changeBadge/person/{personId}/badge/{badgeId}")
@@ -592,5 +592,5 @@ public class PersonResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    }
+    } // end changeBadge
 }
