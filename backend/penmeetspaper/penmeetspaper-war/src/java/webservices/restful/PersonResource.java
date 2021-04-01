@@ -83,24 +83,25 @@ public class PersonResource {
         return topicInterests;
     }
 
-    private IncomeRangeEnum convertToIncomeRangeEnum(String str) throws NotValidException {
-        if (str.equals("NOT_EARNING")) {
-            return IncomeRangeEnum.NOT_EARNING;
-        } else if (str.equals("LOW")) {
-            return IncomeRangeEnum.LOW;
-        } else if (str.equals("MIDDLE_LOW")) {
-            return IncomeRangeEnum.MIDDLE_LOW;
-        } else if (str.equals("MIDDLE")) {
-            return IncomeRangeEnum.MIDDLE;
-        } else if (str.equals("MIDDLE_HIGH")) {
-            return IncomeRangeEnum.MIDDLE_HIGH;
-        } else if (str.equals("HIGH")) {
-            return IncomeRangeEnum.HIGH;
-        } else if (str.equals("CRA")) {
-            return IncomeRangeEnum.CRA;
+    private IncomeRangeEnum convertToIncomeRangeEnum(String str) {
+        switch (str) {
+            case "NOT_EARNING":
+                return IncomeRangeEnum.NOT_EARNING;
+            case "LOW":
+                return IncomeRangeEnum.LOW;
+            case "MIDDLE_LOW":
+                return IncomeRangeEnum.MIDDLE_LOW;
+            case "MIDDLE":
+                return IncomeRangeEnum.MIDDLE;
+            case "MIDDLE_HIGH":
+                return IncomeRangeEnum.MIDDLE_HIGH;
+            case "HIGH":
+                return IncomeRangeEnum.HIGH;
+            case "CRA":
+                return IncomeRangeEnum.CRA;
+            default:
+                return IncomeRangeEnum.NOT_SPECIFIED;
         }
-
-        throw new NotValidException("could not match income range");
     }
 
     // Main Business logic -------------------------------------
@@ -403,7 +404,7 @@ public class PersonResource {
         }
 
     }
-    
+
     @PUT
     @Path("/profilePicture/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -411,7 +412,7 @@ public class PersonResource {
     public Response editPersonProfilePicture(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String profilePicture = jsonObject.getString("profilePicture");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setProfilePicture(profilePicture);
@@ -421,7 +422,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
-    
+
     @PUT
     @Path("/profileBanner/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -429,7 +430,7 @@ public class PersonResource {
     public Response editPersonProfileBanner(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String profileBanner = jsonObject.getString("profileBanner");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setProfileBanner(profileBanner);
@@ -439,7 +440,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
-    
+
     @PUT
     @Path("/description/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -447,7 +448,7 @@ public class PersonResource {
     public Response editPersonDescription(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String description = jsonObject.getString("description");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setDescription(description);
