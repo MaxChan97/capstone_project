@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -21,6 +22,7 @@ import javax.persistence.Query;
 @Stateless
 public class ReportSessionBean implements ReportSessionBeanLocal {
 
+    @PersistenceContext
     EntityManager em;
 
     private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
