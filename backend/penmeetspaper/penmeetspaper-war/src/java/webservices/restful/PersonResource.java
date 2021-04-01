@@ -459,6 +459,9 @@ public class PersonResource {
 
         String incomeRangeStr = jsonObject.getString("incomeRange");
         String dobStr = jsonObject.getString("DoB");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
         try {
             IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
@@ -467,6 +470,7 @@ public class PersonResource {
             Person person = personSB.getPersonById(id);
             person.setIncomeRange(incomeRange);
             person.setDob(dob);
+            person.setTopicInterests(topicInterests);
 
             personSB.onboarding(person);
 

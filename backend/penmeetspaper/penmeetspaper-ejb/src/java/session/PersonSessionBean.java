@@ -354,6 +354,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         oldPerson.setIncomeRange(person.getIncomeRange());
         oldPerson.setDob(person.getDob());
+        oldPerson.setTopicInterests(person.getTopicInterests());
         oldPerson.setCompletedOnboarding(true);
         em.flush();
     } // end onboarding
