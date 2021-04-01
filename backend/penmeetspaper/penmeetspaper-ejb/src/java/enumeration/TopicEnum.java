@@ -10,8 +10,25 @@ package enumeration;
  * @author Shawn
  */
 public enum TopicEnum {
-  REAL_ESTATE,
-  STOCKS,
-  FUTURES,
-  CRYPTOCURRENCY
+    INVESTMENTS,
+    STOCKS,
+    SAVINGS,
+    CAREER,
+    ETF,
+    ROBOADVISORS,
+    TRADING,
+    INSURANCE,
+    BROKERAGES,
+    RETIREMENT,
+    SALARY,
+    CPF,
+    BTO,
+    UTILITIES_BILL,
+    REAL_ESTATE,
+    FUTURES,
+    CRYPTOCURRENCY,
+    CREDITCARDS,
+    BANKING,
+    REITS,
+    BLOCKCHAIN
 }
