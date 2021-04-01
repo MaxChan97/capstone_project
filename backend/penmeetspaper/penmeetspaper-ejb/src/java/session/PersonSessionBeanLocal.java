@@ -95,4 +95,8 @@ public interface PersonSessionBeanLocal {
 
     public void banPersonFromLogin(Long personId) throws NotValidException, NoResultException;
 
+    public boolean checkPersonBanFromLogin(Long personId) throws NotValidException, NoResultException;
+
+    public void unbanPersonFromLogin(Long personId) throws NotValidException, NoResultException;
+
 }
