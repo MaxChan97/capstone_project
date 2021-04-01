@@ -59,7 +59,7 @@ export default function SubscribingCard({
     )
   ) : (
     <Box className={styles.noSubscribersText}>
-      <p>You are not subscribed to any channels!</p>
+      <p>You are not subscribed to any users!</p>
     </Box>
   );
 }

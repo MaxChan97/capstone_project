@@ -5,21 +5,35 @@ import subscribersLogo from "../assets/channelDashboardSidebar/subscribers.png";
 import settingsLogo from "../assets/channelDashboardSidebar/settings.svg";
 import changePasswordLogo from "../assets/channelDashboardSidebar/changePassword.png";
 import liveLogo from "../assets/Live Logo.svg";
+import BNBLogo from "../assets/BNB Logo.png";
 
 export default function ChannelDashboardSidebar() {
   let location = useLocation();
 
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/feed">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
       <h5
         style={{
           textAlign: "left",
-          paddingLeft: "15px",
-          paddingTop: "13px",
+          paddingLeft: "24px",
+          paddingTop: "10px",
           fontWeight: "bold",
+          fontSize: "18px",
         }}
       >
-        Channel Dashboard
+        User Dashboard
       </h5>
       <div className="sidebar">
         <nav className="mt-2">

@@ -56,7 +56,7 @@ export default function SubscribingPageTopBar({
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
           <StyledTab label="Live" />
           <StyledTab label="Videos" />
-          <StyledTab label="Channel" />
+          <StyledTab label="Users" />
         </StyledTabs>
       </div>
     </div>
