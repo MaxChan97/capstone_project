@@ -93,4 +93,6 @@ public interface PersonSessionBeanLocal {
 
     public void skipOnboarding(Long personId) throws NoResultException, NotValidException;
 
+    public void banPersonFromLogin(Long personId) throws NotValidException, NoResultException;
+
 }

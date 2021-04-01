@@ -8,7 +8,6 @@ package session;
 import entity.AdminLog;
 import exception.NoResultException;
 import exception.NotValidException;
-import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,8 +36,8 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
         return report;
     }
 
-    public AdminLog createAdminLog(AdminLog al) {
-        al.setDateCreated(new Date());
+    @Override
+    public AdminLog persistAdminLog(AdminLog al) {
 
         em.persist(al);
         em.flush();

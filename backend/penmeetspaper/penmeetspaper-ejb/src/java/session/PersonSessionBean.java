@@ -709,6 +709,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NotValidException(PersonSessionBeanLocal.UNEXPECTED_ERROR);
         }
-    }
+    } // end changeBadge
 
+    @Override
+    public void banPersonFromLogin(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        person.setIsBannedFromLogin(true);
+        em.flush();
+
+    } // end banPersonFromLogin
 }
