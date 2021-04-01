@@ -481,7 +481,7 @@ public class PersonResource {
     @Path("{id}/skipOnboarding")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response skipOnboarding(@PathParam("id") Long id) {
+    public Response skipOnboarding(@PathParam("id") Long id, String jsonString) {
         try {
             personSB.skipOnboarding(id);
             return Response.status(204).build();
