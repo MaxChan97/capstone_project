@@ -104,36 +104,16 @@ function AdminNavBar({
       className="main-header navbar navbar-expand bg-white navbar-light border-bottom"
     >
       <div>
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            {location.pathname.slice(0, 5) !== "/chat" ? (
-              <a
-                className="nav-link"
-                data-widget="pushmenu"
-                style={{ cursor: "pointer" }}
-              >
-                <i style={{ fontSize: "18px" }} className="fa fa-bars" />
-              </a>
-            ) : (
-              <a className="nav-link">
-                <i
-                  style={{ fontSize: "18px", visibility: "hidden" }}
-                  className="fa fa-bars"
-                />
-              </a>
-            )}
+        <ul className="navbar-nav" style={{ cursor: "default" }}>
+          <li className="nav-item" style={{ cursor: "default" }}>
+            <a className="nav-link" style={{ cursor: "default" }}>
+              <i
+                style={{ fontSize: "18px", visibility: "hidden" }}
+                className="fa fa-bars"
+              />
+            </a>
           </li>
         </ul>
-      </div>
-
-      <div>
-        <Link to="/admin/inbox">
-          <img
-            style={{ height: "40px", display: "flex" }}
-            src={BNBLogo}
-            alt="BNB Logo"
-          />
-        </Link>
       </div>
 
       <div>
@@ -165,7 +145,7 @@ function AdminNavBar({
           width: "10%",
         }}
       >
-          {/*
+        {/*
         <Link to="/">
           <img src={liveLogo} alt="liveLogo" />
         </Link>

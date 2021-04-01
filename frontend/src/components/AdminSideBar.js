@@ -14,15 +14,28 @@ import userManagementLogo from "../assets/UserManagement.svg";
 import advertisementLogo from "../assets/advertise.svg";
 import adminLogo from "../assets/admin.svg";
 import { useSelector } from "react-redux";
+import BNBLogo from "../assets/BNB Logo.png";
 
 function AdminSidebar() {
   let location = useLocation();
   const isAdmin = useSelector((state) => state.isAdmin);
   const currentUser = useSelector((state) => state.currentUser);
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/admin/inbox">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
       <div className="sidebar">
-        <nav className="mt-2">
+        <nav>
           <ul
             className="nav nav-pills nav-sidebar flex-column"
             data-widget="treeview"
@@ -76,7 +89,11 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={analyticsLogo} className="nav-icon" alt="analyticsLogo" />
+                    <img
+                      src={analyticsLogo}
+                      className="nav-icon"
+                      alt="analyticsLogo"
+                    />
                     <p className="ml-2">Analytics</p>
                   </div>
                 </Link>
@@ -89,7 +106,11 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={analyticsLogo} className="nav-icon" alt="analyticsLogo" />
+                    <img
+                      src={analyticsLogo}
+                      className="nav-icon"
+                      alt="analyticsLogo"
+                    />
                     <p className="ml-2">Analytics</p>
                   </div>
                 </Link>
@@ -109,7 +130,11 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={userManagementLogo} className="nav-icon" alt="userManagementLogo" />
+                    <img
+                      src={userManagementLogo}
+                      className="nav-icon"
+                      alt="userManagementLogo"
+                    />
                     <p className="ml-2">User Management</p>
                   </div>
                 </Link>
@@ -122,7 +147,11 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={userManagementLogo} className="nav-icon" alt="userManagementLogo" />
+                    <img
+                      src={userManagementLogo}
+                      className="nav-icon"
+                      alt="userManagementLogo"
+                    />
                     <p className="ml-2">User Management</p>
                   </div>
                 </Link>
@@ -142,7 +171,11 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={advertisementLogo} className="nav-icon" alt="advertisementLogo" />
+                    <img
+                      src={advertisementLogo}
+                      className="nav-icon"
+                      alt="advertisementLogo"
+                    />
                     <p className="ml-2">Ad Management</p>
                   </div>
                 </Link>
@@ -155,47 +188,61 @@ function AdminSidebar() {
                       alignItems: "center",
                     }}
                   >
-                    <img src={advertisementLogo} className="nav-icon" alt="advertisementLogo" />
+                    <img
+                      src={advertisementLogo}
+                      className="nav-icon"
+                      alt="advertisementLogo"
+                    />
                     <p className="ml-2">Ad Management</p>
                   </div>
                 </Link>
               )}
             </li>
-            {currentUser == 1 ? ( 
-            <li className="nav-item">
-              {location.pathname === "/admin/adminmanagement" ? (
-                <Link
-                  to="/admin/adminmanagement"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
+            {currentUser == 1 ? (
+              <li className="nav-item">
+                {location.pathname === "/admin/adminmanagement" ? (
+                  <Link
+                    to="/admin/adminmanagement"
+                    className="nav-link"
+                    style={{ backgroundColor: "#EAECEF" }}
                   >
-                    <img src={adminLogo} className="nav-icon" alt="adminLogo" />
-                    <p className="ml-2">Admin Management</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/admin/adminmanagement" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={adminLogo} className="nav-icon" alt="adminLogo" />
-                    <p className="ml-2">Admin Management</p>
-                  </div>
-                </Link>
-              )}
-            </li>
-            ):("")}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={adminLogo}
+                        className="nav-icon"
+                        alt="adminLogo"
+                      />
+                      <p className="ml-2">Admin Management</p>
+                    </div>
+                  </Link>
+                ) : (
+                  <Link to="/admin/adminmanagement" className="nav-link">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={adminLogo}
+                        className="nav-icon"
+                        alt="adminLogo"
+                      />
+                      <p className="ml-2">Admin Management</p>
+                    </div>
+                  </Link>
+                )}
+              </li>
+            ) : (
+              ""
+            )}
             {/*
             <li className="nav-item">
               {location.pathname === "/" ? (

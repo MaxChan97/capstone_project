@@ -9,14 +9,28 @@ import categoriesLogo from "../assets/Categories Logo.svg";
 import feedLogo from "../assets/Feed Logo.svg";
 import subscribeLogo from "../assets/subscribeLogo.svg";
 import BarChartIcon from "@material-ui/icons/BarChart";
+import BNBLogo from "../assets/BNB Logo.png";
 
 function Sidebar() {
   let location = useLocation();
 
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/feed">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
+
       <div className="sidebar">
-        <nav className="mt-2">
+        <nav>
           <ul
             className="nav nav-pills nav-sidebar flex-column"
             data-widget="treeview"
