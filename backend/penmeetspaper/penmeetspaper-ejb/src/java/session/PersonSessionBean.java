@@ -354,8 +354,17 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         oldPerson.setIncomeRange(person.getIncomeRange());
         oldPerson.setDob(person.getDob());
+        oldPerson.setTopicInterests(person.getTopicInterests());
+        oldPerson.setCompletedOnboarding(true);
         em.flush();
-    }
+    } // end onboarding
+
+    @Override
+    public void skipOnboarding(Long personId) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(personId);
+        oldPerson.setCompletedOnboarding(true);
+        em.flush();
+    } // end skipOnboarding
 
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
@@ -700,6 +709,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         } else {
             throw new NotValidException(PersonSessionBeanLocal.UNEXPECTED_ERROR);
         }
-    }
+    } // end changeBadge
 
+    @Override
+    public void banPersonFromLogin(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        person.setIsBannedFromLogin(true);
+        em.flush();
+
+    } // end banPersonFromLogin
 }

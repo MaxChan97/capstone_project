@@ -717,6 +717,36 @@ export default {
     });
   },
 
+  updateCompletedOnboarding(personId, topicInterests, DoB, incomeRange){
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/onboarding",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        DoB: DoB,
+        incomeRange: incomeRange,
+        topicInterests: topicInterests,
+      }),
+    });
+  },
+
+  updateSkipOnboarding(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/skipOnboarding",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        id: personId,
+      })
+    });
+  },
+
   updateExplicitAndChat(personId, explicit, chatIsPaid) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/settings",
@@ -1144,21 +1174,6 @@ export default {
         personId +
         "/badge/" +
         badgeId,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      type: "PUT",
-    });
-  },
-
-  removeBadge(personId) {
-    return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/person/changeBadge/person/" +
-        personId +
-        "/badge/0",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
