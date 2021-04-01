@@ -25,4 +25,6 @@ public interface ReportSessionBeanLocal {
 
     public void updateReport(Report updatedReport) throws NoResultException, NotValidException;
 
+    public Report getReportById(Long reportId) throws NoResultException, NotValidException;
+
 }

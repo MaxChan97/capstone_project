@@ -41,7 +41,8 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         em.persist(report);
         em.flush();
         return report;
-    }
+
+    } // end createReport
 
     @Override
     public void updateReport(Report updatedReport) throws NoResultException, NotValidException {
@@ -53,5 +54,16 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         oldReport.setReportState(updatedReport.getReportState());
 
         em.flush();
-    }
+
+    } // end updateReport
+
+    @Override
+    public Report getReportById(Long reportId) throws NoResultException, NotValidException {
+        Report report = emGetReport(reportId);
+
+        em.detach(report);
+
+        return report;
+
+    } // end getReportById
 }
