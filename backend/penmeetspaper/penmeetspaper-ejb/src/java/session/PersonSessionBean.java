@@ -719,4 +719,19 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.flush();
 
     } // end banPersonFromLogin
+
+    @Override
+    public void unbanPersonFromLogin(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        person.setIsBannedFromLogin(false);
+        em.flush();
+    } // end unbanPersonFromLogin
+
+    @Override
+    public boolean checkPersonBanFromLogin(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+
+        return person.isIsBannedFromLogin();
+    } // end checkPersonBanFromLogin
 }
