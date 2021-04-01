@@ -170,6 +170,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         return resultList;
     }
 
+    @Override
     public void checkAdminDeactivated(Long adminId) throws NoResultException, NotValidException {
         Administrator admin = emGetAdmin(adminId);
         if (admin.isDeactivated()) {
@@ -177,6 +178,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         }
     }
 
+    @Override
     public void banPersonFromLogin(Long adminId, Long personId) throws NoResultException, NotValidException {
         checkAdminDeactivated(adminId);
         personSB.banPersonFromLogin(personId);
