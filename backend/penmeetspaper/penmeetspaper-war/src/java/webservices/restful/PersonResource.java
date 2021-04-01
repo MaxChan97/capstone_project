@@ -478,7 +478,7 @@ public class PersonResource {
     } // end onboardin
 
     @PUT
-    @Path("{id}/skiponboarding")
+    @Path("{id}/skipOnboarding")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response skipOnboarding(@PathParam("id") Long id) {
