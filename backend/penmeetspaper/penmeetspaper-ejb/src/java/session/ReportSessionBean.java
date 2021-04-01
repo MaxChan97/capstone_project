@@ -9,8 +9,10 @@ import entity.Report;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -66,4 +68,17 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         return report;
 
     } // end getReportById
+
+    @Override
+    public List<Report> getAllReports() throws NoResultException, NotValidException {
+        Query q = em.createQuery("SELECT a FROM  Administrator a");
+        List<Report> resultList = q.getResultList();
+
+        for (Report r : resultList) {
+            r = getReportById(r.getId());
+        }
+
+        return resultList;
+
+    } // end getAllReports
 }

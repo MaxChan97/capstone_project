@@ -8,6 +8,7 @@ package session;
 import entity.Report;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -26,5 +27,7 @@ public interface ReportSessionBeanLocal {
     public void updateReport(Report updatedReport) throws NoResultException, NotValidException;
 
     public Report getReportById(Long reportId) throws NoResultException, NotValidException;
+
+    public List<Report> getAllReports() throws NoResultException, NotValidException;
 
 }
