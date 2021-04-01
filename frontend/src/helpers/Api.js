@@ -1110,21 +1110,6 @@ export default {
     });
   },
 
-  removeBadge(personId) {
-    return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/person/changeBadge/person/" +
-        personId +
-        "/badge/0",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      type: "PUT",
-    });
-  },
-
   createAdmin(username, email) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/1",
