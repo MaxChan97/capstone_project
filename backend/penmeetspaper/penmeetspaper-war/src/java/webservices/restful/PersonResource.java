@@ -475,6 +475,19 @@ public class PersonResource {
         } catch (NoResultException | NotValidException | ParseException e) {
             return buildError(e, 400);
         }
+    } // end onboardin
+
+    @PUT
+    @Path("{id}/skiponboarding")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response skipOnboarding(@PathParam("id") Long id) {
+        try {
+            personSB.skipOnboarding(id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     }
 
     @PUT

@@ -91,4 +91,6 @@ public interface PersonSessionBeanLocal {
 
     public void changeBadge(long personId, long badgeId) throws NotValidException, NoResultException;
 
+    public void skipOnboarding(Long personId) throws NoResultException, NotValidException;
+
 }

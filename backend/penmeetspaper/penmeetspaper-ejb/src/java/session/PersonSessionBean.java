@@ -354,8 +354,16 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         oldPerson.setIncomeRange(person.getIncomeRange());
         oldPerson.setDob(person.getDob());
+        oldPerson.setCompletedOnboarding(true);
         em.flush();
-    }
+    } // end onboarding
+
+    @Override
+    public void skipOnboarding(Long personId) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(personId);
+        oldPerson.setCompletedOnboarding(true);
+        em.flush();
+    } // end skipOnboarding
 
     // Get the people this person is following
     public List<Follow> getFollowing(Long personId) throws NoResultException, NotValidException {
