@@ -41,4 +41,8 @@ public interface AdministratorSessionBeanLocal {
 
     public List<Administrator> getAllAdmin() throws NoResultException, NotValidException;
 
+    public void checkAdminDeactivated(Long adminId) throws NoResultException, NotValidException;
+
+    public void banPersonFromLogin(Long adminId, Long personId) throws NoResultException, NotValidException;
+
 }
