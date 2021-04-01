@@ -5,12 +5,18 @@
  */
 package session;
 
+import entity.AdminLog;
 import entity.Administrator;
+import entity.Person;
+import enumeration.AdminLogsTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +31,12 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    PersonSessionBeanLocal personSB;
+
+    @EJB
+    AdminLogSessionBeanLocal adminLogSB;
 
     private void checkUsernameTaken(String username) throws NotValidException {
         Query q = em.createQuery("SELECT a from Administrator a WHERE a.username =:username");
@@ -157,4 +169,33 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         return resultList;
     }
+
+    public void checkAdminDeactivated(Long adminId) throws NoResultException, NotValidException {
+        Administrator admin = emGetAdmin(adminId);
+        if (admin.isDeactivated()) {
+            throw new NotValidException(AdministratorSessionBeanLocal.DEACTIVATED);
+        }
+    }
+
+    public void banPersonFromLogin(Long adminId, Long personId) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+        personSB.banPersonFromLogin(personId);
+
+        Administrator admin = emGetAdmin(adminId);
+        Person person = personSB.getPersonById(personId);
+
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s banned user %s (%o) on %s", admin.getUsername(), person.getUsername(), person.getId(), strDate);
+        log.setDescription(desc);
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+    }
+
 }

@@ -372,8 +372,8 @@ public class PersonResource {
         String username = jsonObject.getString("username");
         String description = jsonObject.getString("description");
         String dobStr = jsonObject.getString("DoB");
-        String incomeRangeStr = jsonObject.getJsonObject("incomeRange").getString("value");
-        //String incomeRangeStr = jsonObject.getString("incomeRange");
+        //String incomeRangeStr = jsonObject.getJsonObject("incomeRange").getString("value");
+        String incomeRangeStr = jsonObject.getString("incomeRange");
         JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
         String profilePicture = jsonObject.getString("profilePicture");
         String profileBanner = jsonObject.getString("profileBanner");
@@ -459,6 +459,9 @@ public class PersonResource {
 
         String incomeRangeStr = jsonObject.getString("incomeRange");
         String dobStr = jsonObject.getString("DoB");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
+
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
         try {
             IncomeRangeEnum incomeRange = convertToIncomeRangeEnum(incomeRangeStr);
@@ -467,12 +470,26 @@ public class PersonResource {
             Person person = personSB.getPersonById(id);
             person.setIncomeRange(incomeRange);
             person.setDob(dob);
+            person.setTopicInterests(topicInterests);
 
             personSB.onboarding(person);
 
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException | ParseException e) {
+            return buildError(e, 400);
+        }
+    } // end onboardin
+
+    @PUT
+    @Path("{id}/skipOnboarding")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response skipOnboarding(@PathParam("id") Long id, String jsonString) {
+        try {
+            personSB.skipOnboarding(id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     }
@@ -561,7 +578,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
 
-    }
+    } // end getTenTopContributors
 
     @GET
     @Path("/topTenStreamers")
@@ -578,7 +595,7 @@ public class PersonResource {
         } catch (NoResultException e) {
             return buildError(e, 400);
         }
-    }
+    } // end getTenTopStreamers
 
     @PUT
     @Path("/changeBadge/person/{personId}/badge/{badgeId}")
@@ -592,5 +609,5 @@ public class PersonResource {
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    }
+    } // end changeBadge
 }
