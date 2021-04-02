@@ -733,7 +733,7 @@ export default {
     });
   },
 
-  updateSkipOnboarding(personId) {
+  updateSkipOnboarding(personId){
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/skipOnboarding",
       headers: {

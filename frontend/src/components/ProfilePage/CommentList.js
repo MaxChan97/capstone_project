@@ -11,7 +11,6 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "82ch",
   },
   inline: {
     display: "inline",
@@ -23,12 +22,12 @@ export default function CommentList({ comments, refresh, setRefresh }) {
   const alert = useAlert();
 
   const [dataList, setDataList] = useState([]);
- 
+
   useEffect(() => {
     //if (personId) {
-      //loadData(personId);
-   // }
-   setDataList(comments);
+    //loadData(personId);
+    // }
+    setDataList(comments);
   }, [comments]);
 
   function loadData(personId) {
@@ -49,14 +48,14 @@ export default function CommentList({ comments, refresh, setRefresh }) {
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-          <ListItem alignItems="flex-start">
-            <CommentCard key={data.id} data={data} refresh={refresh}
-                setRefresh={setRefresh} />
-          </ListItem>
+
+          <CommentCard key={data.id} data={data} refresh={refresh}
+            setRefresh={setRefresh} />
+
         </div>
       ))}
     </List>
   ) : (
-      <p></p>
-    );
+    <p></p>
+  );
 }

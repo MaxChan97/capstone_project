@@ -69,14 +69,95 @@ public class PersonResource {
 
         for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
             String topicInterest = topicInterestsJsonArray.getString(i);
-            if ("REAL_ESTATE".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.REAL_ESTATE);
-            } else if ("STOCKS".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.STOCKS);
-            } else if ("FUTURES".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.FUTURES);
-            } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+            if (null != topicInterest) {
+                switch (topicInterest) {
+                    case "INVESTMENTS":
+                        topicInterests.add(TopicEnum.INVESTMENTS);
+                        break;
+
+                    case "STOCKS":
+                        topicInterests.add(TopicEnum.STOCKS);
+                        break;
+
+                    case "SAVINGS":
+                        topicInterests.add(TopicEnum.SAVINGS);
+                        break;
+
+                    case "CAREER":
+                        topicInterests.add(TopicEnum.CAREER);
+                        break;
+
+                    case "ETF":
+                        topicInterests.add(TopicEnum.ETF);
+                        break;
+
+                    case "ROBOADVISORS":
+                        topicInterests.add(TopicEnum.ROBOADVISORS);
+                        break;
+
+                    case "TRADING":
+                        topicInterests.add(TopicEnum.TRADING);
+                        break;
+
+                    case "INSURANCE":
+                        topicInterests.add(TopicEnum.INSURANCE);
+                        break;
+
+                    case "BROKERAGES":
+                        topicInterests.add(TopicEnum.BROKERAGES);
+                        break;
+
+                    case "RETIREMENT":
+                        topicInterests.add(TopicEnum.RETIREMENT);
+                        break;
+
+                    case "SALARY":
+                        topicInterests.add(TopicEnum.SALARY);
+                        break;
+
+                    case "CPF":
+                        topicInterests.add(TopicEnum.CPF);
+                        break;
+
+                    case "BTO":
+                        topicInterests.add(TopicEnum.BTO);
+                        break;
+
+                    case "UTILITIES_BILL":
+                        topicInterests.add(TopicEnum.UTILITIES_BILL);
+                        break;
+
+                    case "REAL_ESTATE":
+                        topicInterests.add(TopicEnum.REAL_ESTATE);
+                        break;
+
+                    case "FUTURES":
+                        topicInterests.add(TopicEnum.FUTURES);
+                        break;
+
+                    case "CRYPTOCURRENCY":
+                        topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                        break;
+
+                    case "CREDITCARDS":
+                        topicInterests.add(TopicEnum.CREDITCARDS);
+                        break;
+
+                    case "BANKING":
+                        topicInterests.add(TopicEnum.BANKING);
+                        break;
+
+                    case "REITS":
+                        topicInterests.add(TopicEnum.REITS);
+                        break;
+
+                    case "BLOCKCHAIN":
+                        topicInterests.add(TopicEnum.BLOCKCHAIN);
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
@@ -665,4 +746,17 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changeBadge
+
+    @GET
+    @Path("/{personId}/checkLoginBan")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkLoginBan(@PathParam("personId") Long personId) {
+        try {
+            Boolean res = personSB.checkPersonBanFromLogin(personId);
+            return Response.status(200).entity(res).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }

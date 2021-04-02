@@ -16,6 +16,8 @@ export default function OwnCommunityPage({ communityId }) {
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
+  const [communityBanner, setCommunityBanner] = useState("");
+  const [communityPicture, setCommunityPicture] = useState("");
 
   const [searchString, setSearchString] = useState("");
 
@@ -36,7 +38,8 @@ export default function OwnCommunityPage({ communityId }) {
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
-        //setRefresh(!refresh);
+        setCommunityBanner(currentCommunity.communityBanner);
+        setCommunityPicture(currentCommunity.communityProfilePicture);
       })
       .fail((xhr, status, error) => {
         alert.show("This community does not exist!");
@@ -72,7 +75,14 @@ export default function OwnCommunityPage({ communityId }) {
       );
     }
     if (tabValue === 1) {
-      return <AboutMe />;
+      return (
+        <AboutMe
+          community={currentCommunity}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          communityOwner={currentCommunity.owner}
+        />
+      );
     }
     return "";
   };
@@ -83,10 +93,16 @@ export default function OwnCommunityPage({ communityId }) {
         tabValue={tabValue}
         setTabValue={setTabValue}
         communityName={currentCommunity.name}
-        communityPicture={currentCommunity.communityProfilePicture}
-        communityBanner={currentCommunity.communityBanner}
+        communityPicture={communityPicture}
+        communityBanner={communityBanner}
         numMembers={currentCommunity.members.length}
         communityId={communityId}
+        personId={currentUser}
+        setCommunityBanner={setCommunityBanner}
+        refresh={refresh}
+        setRefresh={setRefresh}
+        communityOwner={currentCommunity.owner}
+        setCommunityPicture={setCommunityPicture}
       />
       {handleTabView(tabValue)}
     </div>

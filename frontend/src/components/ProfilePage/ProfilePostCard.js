@@ -178,7 +178,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         marginLeft: "-53px",
       }}
     >
-      <div class="col-md-9">
+      <div>
         <DeletePostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
@@ -193,13 +193,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        <div
-          class="card"
-          style={{
-            minWidth: "82ch",
-            maxWidth: "82ch",
-          }}
-        >
+        <div class="card">
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -219,8 +213,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
 
                   <span class="description">
                     {" "}
-                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                    <span>&nbsp; </span>
+                    {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
                     {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>

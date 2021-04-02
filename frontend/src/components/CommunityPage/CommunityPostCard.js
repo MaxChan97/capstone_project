@@ -180,7 +180,7 @@ export default function CommunityPostCard({
         marginLeft: "-53px",
       }}
     >
-      <div class="col-md-9">
+      <div>
         <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
@@ -197,13 +197,7 @@ export default function CommunityPostCard({
           setRefresh={setRefresh}
         />
 
-        <div
-          class="card"
-          style={{
-            minWidth: "82ch",
-            maxWidth: "82ch",
-          }}
-        >
+        <div class="card">
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -229,8 +223,7 @@ export default function CommunityPostCard({
 
                   <span class="description">
                     {" "}
-                    {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                    <span>&nbsp; </span>
+                    {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
                     {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>

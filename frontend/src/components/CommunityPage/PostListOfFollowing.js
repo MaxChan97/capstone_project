@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "86ch",
     margin: "auto",
   },
   inline: {
@@ -47,7 +46,7 @@ export default function PostListOfFollowing() {
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-          <ListItem alignItems="flex-start">
+       
             <CommunityPostCard
               key={data.id}
               data={data}
@@ -55,7 +54,7 @@ export default function PostListOfFollowing() {
               setRefresh={setRefresh}
               community={data.postCommunity}
             />
-          </ListItem>
+     
         </div>
       ))}
     </List>

@@ -158,7 +158,6 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        width: "max-content",
         marginTop: "20px",
         marginBottom: "20px",
       }}
@@ -172,8 +171,6 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         <div
           className="card"
           style={{
-            minWidth: "80ch",
-            maxWidth: "80ch",
             margin: "auto",
           }}
         >
