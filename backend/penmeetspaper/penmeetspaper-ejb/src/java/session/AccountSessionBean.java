@@ -12,6 +12,7 @@ import exception.NotValidException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -73,8 +74,11 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
         try {
             Administrator a = (Administrator) q.getSingleResult();
             a = adminSB.getAdminById(a.getId());
+            if (a.isDeactivated()) {
+                throw new NotValidException(AdministratorSessionBeanLocal.DEACTIVATED);
+            }
             return a;
-        } catch (Exception e) {
+        } catch (NonUniqueResultException | javax.persistence.NoResultException e) {
             throw new NotValidException(AccountSessionBeanLocal.INVALID_CREDENTIALS);
         }
     }
