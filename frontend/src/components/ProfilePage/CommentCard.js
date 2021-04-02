@@ -136,7 +136,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
         />
         <div
           class="card-body"
-          style={{marginTop: -30}}
+          style={{marginTop: -20}}
         >
           <div class="post">
             <div style={{ display: "flex", alignItems: "baseline" }}>

@@ -175,9 +175,6 @@ export default function CommunityPostCard({
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        width: "max-content",
-        justify: "left",
-        marginLeft: "-53px",
       }}
     >
       <div>

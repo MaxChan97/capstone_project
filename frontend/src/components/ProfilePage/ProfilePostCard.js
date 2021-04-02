@@ -173,9 +173,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        width: "max-content",
-        justify: "left",
-        marginLeft: "-53px",
+ 
       }}
     >
       <div>

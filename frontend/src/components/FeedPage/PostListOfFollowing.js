@@ -11,7 +11,6 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "86ch",
     margin: "auto",
   },
   inline: {
@@ -46,19 +45,19 @@ export default function PostListOfFollowing() {
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-          <ListItem alignItems="flex-start">
-            <ProfilePostCard
-              key={data.id}
-              data={data}
-              refresh={refresh}
-              setRefresh={setRefresh}
-            />
-          </ListItem>
+
+          <ProfilePostCard
+            key={data.id}
+            data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
+
         </div>
       ))}
     </List>
   ) : (
-    <div style={{marginTop: "30px"}}>
+    <div style={{ marginTop: "30px" }}>
       <h3
         style={{
           color: "gray",

@@ -8,7 +8,6 @@ import ReactPaginate from "react-paginate";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "86ch",
     margin: "auto",
   },
   inline: {
@@ -31,24 +30,24 @@ export default function SearchPostResultList({
         <List className={classes.root}>
           {postList.map((data) => (
             <div>
-              <ListItem alignItems="flex-start">
-                {data.postCommunity == undefined ? (
-                  <ProfilePostCard
-                    key={data.id}
-                    data={data}
-                    refresh={postRefresh}
-                    setRefresh={setPostRefresh}
-                  />
-                ) : (
-                  <CommunityPostCard
-                    key={data.id}
-                    data={data}
-                    refresh={postRefresh}
-                    setRefresh={setPostRefresh}
-                    community={data.postCommunity}
-                  />
-                )}
-              </ListItem>
+
+              {data.postCommunity == undefined ? (
+                <ProfilePostCard
+                  key={data.id}
+                  data={data}
+                  refresh={postRefresh}
+                  setRefresh={setPostRefresh}
+                />
+              ) : (
+                <CommunityPostCard
+                  key={data.id}
+                  data={data}
+                  refresh={postRefresh}
+                  setRefresh={setPostRefresh}
+                  community={data.postCommunity}
+                />
+              )}
+
             </div>
           ))}
         </List>
