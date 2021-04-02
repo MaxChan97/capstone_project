@@ -5,11 +5,16 @@
  */
 package session;
 
+import entity.AdminLog;
+import entity.Administrator;
 import entity.Person;
 import entity.Report;
+import enumeration.AdminLogsTypeEnum;
 import enumeration.ReportStateEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -30,6 +35,9 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
 
     @EJB
     PersonSessionBeanLocal personSB;
+
+    @EJB
+    AdminLogSessionBeanLocal adminLogSB;
 
     private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
         if (reportId == null) {
@@ -57,6 +65,20 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         }
 
         return person;
+    }
+
+    private Administrator emGetAdmin(Long adminId) throws NoResultException, NotValidException {
+        if (adminId == null) {
+            throw new NotValidException(AdministratorSessionBeanLocal.MISSING_ADMIN_ID);
+        }
+
+        Administrator admin = em.find(Administrator.class, adminId);
+
+        if (admin == null) {
+            throw new NoResultException(AdministratorSessionBeanLocal.CANNOT_FIND_ADMIN);
+        }
+
+        return admin;
     }
 
     @Override
@@ -109,11 +131,32 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     } // end getAllReports
 
     @Override
-    public void setReportState(Long reportId, ReportStateEnum state) throws NoResultException, NotValidException {
+    public void setReportState(Long reportId, ReportStateEnum state, Long adminId) throws NoResultException, NotValidException {
         Report report = emGetReport(reportId);
         report.setReportState(state);
 
-        // end to create admin log
+        Date now = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+
+        Administrator admin = emGetAdmin(adminId);
+        AdminLog log = new AdminLog();
+        String desc = "";
+        log.setAdmin(admin);
+        if (state.equals(ReportStateEnum.RESOLVED)) {
+            log.setAdminLogsType(AdminLogsTypeEnum.RESOLVE_REPORT);
+            desc = String.format("%s resolved report (%o) on %s.", admin.getUsername(), report.getId(), strDate);
+        } else {
+            log.setAdminLogsType(AdminLogsTypeEnum.VOID_REPORT);
+            desc = String.format("%s voided report (%o) on %s.", admin.getUsername(), report.getId(), strDate);
+        }
+        log.setDateCreated(now);
+        log.setDescription(desc);
+        log.setReport(report);
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+
         em.flush();
     }
 }

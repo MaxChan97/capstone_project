@@ -34,6 +34,6 @@ public interface ReportSessionBeanLocal {
 
     public Report createReport(Report report, Long reporterId) throws NoResultException, NotValidException;
 
-    public void setReportState(Long reportId, ReportStateEnum state) throws NoResultException, NotValidException;
+    public void setReportState(Long reportId, ReportStateEnum state, Long adminId) throws NoResultException, NotValidException;
 
 }

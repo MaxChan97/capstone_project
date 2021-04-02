@@ -101,13 +101,15 @@ public class ReportResource {
 
         JsonObject jsonObject = createJsonObject(jsonString);
         String action = jsonObject.getString("action");
+        String adminIdStr = jsonObject.getString("adminId");
 
         try {
+            Long adminId = Long.parseLong(adminIdStr);
 
             if (action.equals("RESOLVED")) {
-                reportSB.setReportState(reportId, ReportStateEnum.RESOLVED);
+                reportSB.setReportState(reportId, ReportStateEnum.RESOLVED, adminId);
             } else {
-                reportSB.setReportState(reportId, ReportStateEnum.VOID);
+                reportSB.setReportState(reportId, ReportStateEnum.VOID, adminId);
             }
             return Response.status(204).build();
 
