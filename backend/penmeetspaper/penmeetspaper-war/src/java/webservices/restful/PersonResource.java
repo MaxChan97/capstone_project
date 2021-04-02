@@ -746,4 +746,17 @@ public class PersonResource {
             return buildError(e, 400);
         }
     } // end changeBadge
+
+    @GET
+    @Path("/{personId}/checkLoginBan")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkLoginBan(@PathParam("personId") Long personId) {
+        try {
+            Boolean res = personSB.checkPersonBanFromLogin(personId);
+            return Response.status(200).entity(res).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 }
