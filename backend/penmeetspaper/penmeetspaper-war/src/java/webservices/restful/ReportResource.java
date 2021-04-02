@@ -92,7 +92,7 @@ public class ReportResource {
         } catch (NotValidException | NoResultException e) {
             return buildError(e, 400);
         }
-    } // end createAdmin
+    } // end createReport
 
     @PUT
     @Path("/{id}/settleReport")
@@ -116,6 +116,6 @@ public class ReportResource {
         } catch (NotValidException | NoResultException e) {
             return buildError(e, 400);
         }
-    } // end resolveReport
+    } // end settleReport
 
 }
