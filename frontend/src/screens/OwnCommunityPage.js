@@ -75,7 +75,14 @@ export default function OwnCommunityPage({ communityId }) {
       );
     }
     if (tabValue === 1) {
-      return <AboutMe />;
+      return (
+        <AboutMe
+          community={currentCommunity}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          communityOwner={currentCommunity.owner}
+        />
+      );
     }
     return "";
   };
@@ -90,12 +97,12 @@ export default function OwnCommunityPage({ communityId }) {
         communityBanner={communityBanner}
         numMembers={currentCommunity.members.length}
         communityId={communityId}
-        personId = {currentUser}
-        setCommunityBanner = {setCommunityBanner}
+        personId={currentUser}
+        setCommunityBanner={setCommunityBanner}
         refresh={refresh}
         setRefresh={setRefresh}
         communityOwner={currentCommunity.owner}
-        setCommunityPicture = {setCommunityPicture}
+        setCommunityPicture={setCommunityPicture}
       />
       {handleTabView(tabValue)}
     </div>

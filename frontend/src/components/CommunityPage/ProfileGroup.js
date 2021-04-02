@@ -48,6 +48,7 @@ export default function ProfileGroup({
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
+        setPictureProgress(progress);
       },
       (error) => {
         console.log(error);
@@ -253,7 +254,7 @@ export default function ProfileGroup({
           <img
             className="rounded-circle"
             style={{ height: "10vh" }}
-            src={communityPicture || defaultDP}
+            src={communityPicture}
           />
           <Button
             className="rounded-circle"
@@ -276,11 +277,13 @@ export default function ProfileGroup({
           </Button>
         </div>
       ) : (
+        <div>
         <img
           className="rounded-circle"
-          style={{ height: "10vh" }}
+          style={{ marginLeft:"150px", height: "10vh" }}
           src={communityPicture}
         />
+        </div>
       )}
       <div
         style={{
