@@ -1,25 +1,42 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import profileLogo from "../assets/channelDashboardSidebar/profile.png";
 import subscribersLogo from "../assets/channelDashboardSidebar/subscribers.png";
 import settingsLogo from "../assets/channelDashboardSidebar/settings.svg";
 import changePasswordLogo from "../assets/channelDashboardSidebar/changePassword.png";
+import backLogo from "../assets/channelDashboardSidebar/back.png";
 import liveLogo from "../assets/Live Logo.svg";
+import BNBLogo from "../assets/BNB Logo.png";
 
 export default function ChannelDashboardSidebar() {
   let location = useLocation();
+  const currentUser = useSelector((state) => state.currentUser);
 
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/feed">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
       <h5
         style={{
           textAlign: "left",
-          paddingLeft: "15px",
-          paddingTop: "13px",
+          paddingLeft: "24px",
+          paddingTop: "10px",
           fontWeight: "bold",
+          fontSize: "18px",
         }}
       >
-        Channel Dashboard
+        User Dashboard
       </h5>
       <div className="sidebar">
         <nav className="mt-2">
@@ -29,6 +46,20 @@ export default function ChannelDashboardSidebar() {
             role="menu"
             data-accordion="false"
           >
+            <li className="nav-item">
+              <Link to={"/profile/" + currentUser} className="nav-link">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={backLogo} className="nav-icon" alt="backLogo" />
+                  <p className="ml-2">Back</p>
+                </div>
+              </Link>
+            </li>
             <li className="nav-item">
               {location.pathname === "/customiseProfile" ? (
                 <Link

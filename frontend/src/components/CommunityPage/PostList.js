@@ -10,7 +10,6 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "85ch",
     margin: "auto",
   },
   inline: {
@@ -51,15 +50,15 @@ export default function PostList({
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-          <ListItem alignItems="left">
-            <ProfilePostCard
-              key={data.id}
-              data={data}
-              refresh={refresh}
-              setRefresh={setRefresh}
-              community={community}
-            />
-          </ListItem>
+
+          <ProfilePostCard
+            key={data.id}
+            data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            community={community}
+          />
+
         </div>
       ))}
     </List>

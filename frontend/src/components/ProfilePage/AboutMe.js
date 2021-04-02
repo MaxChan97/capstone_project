@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Api from "../../helpers/Api";
+import tick from "../../assets/tick.png";
+import Button from "react-bootstrap/Button";
+import EditDescription from "./EditDescription";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +40,8 @@ export default function AboutMe({ person, refresh, setRefresh }) {
 
   //   const [profilePicture, setProfilePicture] = useState("");
   //   const [profileBanner, setProfileBanner] = useState("");
+  const [edit, setEdit] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -45,9 +50,22 @@ export default function AboutMe({ person, refresh, setRefresh }) {
     return <Redirect to="/login" />;
   }
 
+  const handleEdit = () => {
+    setEdit(true);
+    setAnchorEl(null);
+  };
+
   function changeBadge(personId, badgeId) {
     if (person.id === currentUser) {
       Api.changeBadge(personId, badgeId).done(() => {
+        setRefresh(!refresh);
+      });
+    }
+  }
+
+  function removeBadge(personId) {
+    if (person.id === currentUser) {
+      Api.changeBadge(personId, 0).done(() => {
         setRefresh(!refresh);
       });
     }
@@ -105,15 +123,37 @@ export default function AboutMe({ person, refresh, setRefresh }) {
             outline: "none",
           }}
         >
-          <img
-            style={{
-              height: "45px",
-              marginTop: "5px",
-              marginRight: "15px",
-            }}
-            src={badge.image}
-            onClick={() => changeBadge(currentUser, badge.id)}
-          />
+          {person.badgeDisplaying !== undefined &&
+          person.badgeDisplaying.id === badge.id ? (
+            <div>
+              <img
+                style={{
+                  height: "45px",
+                  marginTop: "15px",
+                  marginRight: "15px",
+                }}
+                src={badge.image}
+                onClick={() => removeBadge(currentUser)}
+              />
+              <img
+                style={{
+                  marginTop: "-125px",
+                  marginLeft: "40px",
+                }}
+                src={tick}
+              />
+            </div>
+          ) : (
+            <img
+              style={{
+                height: "45px",
+                marginTop: "15px",
+                marginRight: "15px",
+              }}
+              src={badge.image}
+              onClick={() => changeBadge(currentUser, badge.id)}
+            />
+          )}
         </button>
       ));
     } else {
@@ -121,7 +161,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
         <img
           style={{
             height: "45px",
-            marginTop: "5px",
+            marginTop: "15px",
             marginRight: "15px",
           }}
           src={badge.image}
@@ -137,8 +177,35 @@ export default function AboutMe({ person, refresh, setRefresh }) {
           <div className="card card-primary mx-2 p-2">
             <div className="card-body">
               <strong>About</strong>
+              <Button
+                style={{
+                  height: "35px",
+                  width: "35px",
+                  outline: "none",
+                  marginBottom: "3px",
+                  marginLeft: "-3px",
+                }}
+                variant="contained"
+                color="primary"
+                onClick={handleEdit}
+              >
+                <i
+                  class="fas fa-pen"
+                  style={{ height: "25px", width: "25px" }}
+                ></i>
+              </Button>
 
-              <p>{person.description}</p>
+              {edit === false ? (
+                <p>{person.description}</p>
+              ) : (
+                <EditDescription
+                  autofocus
+                  data={person}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  setEdit={setEdit}
+                ></EditDescription>
+              )}
 
               <strong> Interests</strong>
               {person.topicInterests !== undefined ? (
@@ -159,6 +226,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
                   {renderBadges()}
                 </div>
               ) : null}
+              <br/>
             </div>
           </div>
         </div>

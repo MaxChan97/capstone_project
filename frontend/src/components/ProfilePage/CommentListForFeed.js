@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
-        maxWidth: "82ch",
     },
     inline: {
         display: "inline",
@@ -52,14 +51,14 @@ export default function CommentListForFeed({ comments, refresh, setRefresh, post
             <List className={classes.root}>
                 {dataList.map((data) => (
                     <div>
-                        <ListItem alignItems="flex-start">
-                            <CommentCard key={data.id} data={data} refresh={refresh}
-                                setRefresh={setRefresh} />
-                        </ListItem>
+
+                        <CommentCard key={data.id} data={data} refresh={refresh}
+                            setRefresh={setRefresh} />
+
                     </div>
                 ))}
             </List>
-            
+
         </div>
     ) : (
         <p></p>

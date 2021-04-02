@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import profileLogo from "../assets/channelDashboardSidebar/profile.png";
+import backLogo from "../assets/channelDashboardSidebar/back.png";
+import BNBLogo from "../assets/BNB Logo.png";
 
 export default function CommunityDashboardSidebar() {
   let location = useLocation();
@@ -10,13 +12,26 @@ export default function CommunityDashboardSidebar() {
   ];
 
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/feed">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
       <h5
         style={{
           textAlign: "left",
-          paddingLeft: "15px",
-          paddingTop: "13px",
+          paddingLeft: "24px",
+          paddingTop: "10px",
           fontWeight: "bold",
+          fontSize: "18px",
         }}
       >
         Community Dashboard
@@ -29,6 +44,20 @@ export default function CommunityDashboardSidebar() {
             role="menu"
             data-accordion="false"
           >
+            <li className="nav-item">
+              <Link to={"/community/" + communityId} className="nav-link">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={backLogo} className="nav-icon" alt="backLogo" />
+                  <p className="ml-2">Back</p>
+                </div>
+              </Link>
+            </li>
             <li className="nav-item">
               {location.pathname.split("/")[
                 location.pathname.split("/").length - 1

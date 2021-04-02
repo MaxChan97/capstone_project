@@ -120,7 +120,6 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        width: "max-content",
       }}
     >
       <div >
@@ -137,10 +136,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
         />
         <div
           class="card-body"
-          style={{
-            minWidth: "80ch",
-            maxWidth: "80ch",
-          }}
+          style={{marginTop: -20}}
         >
           <div class="post">
             <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -161,13 +157,13 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
 
                 <span class="description">
                   {" "}
-                  {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                  <span>&nbsp; </span>
+                  { /* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+                
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
               {isAdmin == false && data.author.id == currentUser ? (
-                <div style={{ textAlign: "right", marginRight: "3%" }}>
+                <div style={{ textAlign: "right",  }}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"
@@ -298,14 +294,6 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
       </div>
     </div>
   ) : (
-    <div
-      class="card-body"
-      style={{
-        minWidth: "80ch",
-        maxWidth: "80ch",
-      }}
-    >
-      <p>[Comment does not exist/deleted!]</p>
-    </div>
+    ""
   );
 }

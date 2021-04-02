@@ -43,6 +43,7 @@ export default function TopBar({
   communityId,
   refresh,
   setRefresh,
+  communityOwner
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -70,6 +71,7 @@ export default function TopBar({
           numMembers={numMembers}
           communityPicture={communityPicture}
           communityId={communityId}
+          communityOwner ={communityOwner}
         />
         <SocialButtonGroup
           communityId={communityId}

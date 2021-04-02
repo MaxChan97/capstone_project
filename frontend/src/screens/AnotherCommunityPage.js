@@ -98,7 +98,14 @@ export default function AnotherCommunityPage({ communityId }) {
       );
     }
     if (tabValue === 1) {
-      return <AboutMe />;
+      return (
+        <AboutMe
+          community={currentCommunity}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          communityOwner={currentCommunity.owner}
+        />
+      );
     }
     return "";
   };
@@ -115,6 +122,7 @@ export default function AnotherCommunityPage({ communityId }) {
         communityId={communityId}
         refresh={refresh}
         setRefresh={setRefresh}
+        communityOwner={currentCommunity.owner}
       />
       {handleTabView(tabValue)}
     </div>

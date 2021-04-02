@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const topics = [
-  { value: "INVESTMENTS,", label: "Investments" },
+  { value: "INVESTMENTS", label: "Investments" },
   { value: "STOCKS", label: "Stocks" },
   { value: "SAVINGS", label: "Savings" },
   { value: "CAREER", label: "Career" },
@@ -99,11 +99,6 @@ export default function CustomiseProfile() {
     console.log(event.target.value);
   };
 
-  const [description, setAbout] = useState();
-  const handleAboutChange = (event) => {
-    setAbout(event.target.value);
-  };
-
   const [topicInterests, setTopicInterests] = useState();
   const handleTopicInterestsChange = (selectedOptions) => {
     let tempSelectedOptions = [];
@@ -111,6 +106,11 @@ export default function CustomiseProfile() {
       tempSelectedOptions.push(selectedOptions[i].value);
     }
     setTopicInterests(tempSelectedOptions);
+  };
+  
+  const [description, setAbout] = useState();
+  const handleAboutChange = (event) => {
+    setAbout(event.target.value);
   };
 
   const [profilePicture, setProfilePicture] = useState("");
@@ -273,10 +273,12 @@ export default function CustomiseProfile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(typeof incomeRange.value);
-    const incomeRangeStr = incomeRange.value;
-    console.log(typeof moment(DoB).format("dd/MM/yyyy"));
-    console.log(incomeRange);
+    let incomeRangeStr;
+    if (incomeRange == undefined) {
+      incomeRangeStr = ""
+    } else {
+      incomeRangeStr = incomeRange.value;
+    }
     Api.editPersonProfileInformation(
       currentUser,
       username,

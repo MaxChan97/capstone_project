@@ -16,5 +16,6 @@ public enum IncomeRangeEnum {
     MIDDLE, //45-90k
     MIDDLE_HIGH, //90-150k
     HIGH, //150-200K
-    CRA  //200K
+    CRA, //200K
+    NOT_SPECIFIED
 }

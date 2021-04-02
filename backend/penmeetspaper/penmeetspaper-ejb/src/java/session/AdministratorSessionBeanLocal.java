@@ -29,6 +29,8 @@ public interface AdministratorSessionBeanLocal {
     public final static String NO_CREDENTIALS = "No permissions for this action";
     public final static String MASTER_ADMIN_NO_DEACT = "Cannot deactivate master admin";
 
+    public final static String DEACTIVATED = "Admin is deactivated";
+
     public Administrator getAdminById(Long aId) throws NoResultException, NotValidException;
 
     public void createMasterAdmin(Administrator admin) throws NotValidException;
@@ -38,5 +40,15 @@ public interface AdministratorSessionBeanLocal {
     public void deactivateAdmin(Long adminId, Long deactivateId) throws NoResultException, NotValidException;
 
     public List<Administrator> getAllAdmin() throws NoResultException, NotValidException;
+
+    public void checkAdminDeactivated(Long adminId) throws NoResultException, NotValidException;
+
+    public void banPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException;
+
+    public void unbanPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException;
+
+    public void banPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
+
+    public void unbanPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
 
 }

@@ -27,7 +27,7 @@ const ColorButton = withStyles((theme) => ({
     },
 }))(Button);
 
-export default function EditReply({
+export default function EditDescription({
     data,
     refresh,
     setRefresh,
@@ -36,10 +36,10 @@ export default function EditReply({
     const currentUser = useSelector((state) => state.currentUser);
     const theme = useTheme();
     const alert = useAlert();
-    const [post, setPost] = React.useState(data.body);
+    const [description, setDescription] = React.useState(data.description);
 
     const handleEdit = (event) => {
-        setPost(event.target.value);
+        setDescription(event.target.value);
     };
 
     async function handleCancel() {
@@ -47,7 +47,7 @@ export default function EditReply({
     }
 
     async function handleSubmit() {
-        Api.editProfilePostReply(data.id, currentUser, post)
+        Api.editPersonDescription(data.id, description)
             .done(() => {
                 alert.show("Edit success!");
                 setRefresh(!refresh);
@@ -62,14 +62,13 @@ export default function EditReply({
         <div>
 
             <TextField
-                label="Edit Reply"
+                label="Edit Description"
                 multiline
-                value={post}
+                value={description}
                 onChange={handleEdit}
+                fullWidth={true}
                 variant="filled"
-                size="small"
-                fullWidth
-                style= {{width:"95%"}}
+                style= {{width:"90%"}}
             />
             <br></br>
             <br></br>
@@ -77,7 +76,7 @@ export default function EditReply({
                 <ColorButton
                     style={{
                         outline: "none",
-                        marginRight: "3%",
+                        marginRight: "2%",
                         backgroundColor: "#FFFFFF",
                         color: "#4A5056",
                     }}
@@ -93,7 +92,7 @@ export default function EditReply({
                 <ColorButton
                     style={{
                         outline: "none",
-                        marginRight: "3%",
+                        marginRight: "10%",
                         textAlign: "right",
                     }}
                     variant="contained"

@@ -46,11 +46,13 @@ export default function AnotherProfilePage({ personId }) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <PostList
-              personId={personId}
-              refresh={refresh}
-              setRefresh={setRefresh}
-            />
+            <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+              <PostList
+                personId={personId}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
+            </div>
           </div>
         );
       } else {

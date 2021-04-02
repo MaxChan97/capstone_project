@@ -140,7 +140,7 @@ export default function CreatePostCard({
   }
 
   return isAdmin == false ? (
-    <div className="container">
+    <div >
       <form
         onSubmit={handleSubmit}
         className={classes.root}
@@ -150,8 +150,6 @@ export default function CreatePostCard({
         <div
           className="card"
           style={{
-            minWidth: "82ch",
-            maxWidth: "82ch",
             margin: "auto",
           }}
         >

@@ -7,6 +7,8 @@ import Api from "../../helpers/Api";
 import Box from "@material-ui/core/Box";
 import * as dayjs from "dayjs";
 import { useAlert } from "react-alert";
+import Button from "react-bootstrap/Button";
+import EditDescription from "./EditDescription";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +38,18 @@ function toTitleCase(str) {
   return frags.join(" ");
 }
 
-export default function AboutMe() {
+export default function AboutMe({
+  community,
+  refresh,
+  setRefresh,
+  communityOwner,
+}) {
   const classes = useStyles();
   const { communityId } = useParams();
   const alert = useAlert();
+
+  const [edit, setEdit] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const [currentCommunity, setCurrentCommunity] = useState({});
   const [currentPerson, setCurrentPerson] = useState({});
@@ -55,12 +65,17 @@ export default function AboutMe() {
     return <Redirect to="/login" />;
   }
 
+  const handleEdit = () => {
+    setEdit(true);
+    setAnchorEl(null);
+  };
+
   function loadData(communityId) {
     Api.getCommunityById(communityId, currentUser)
       .done((currentCommunity) => {
         console.log(currentCommunity);
         setCurrentCommunity(currentCommunity);
-        setOwner(currentCommunity.owner)
+        setOwner(currentCommunity.owner);
       })
       .fail((xhr, status, error) => {
         alert.show("This community does not exist!");
@@ -82,7 +97,27 @@ export default function AboutMe() {
             <div className="card-body">
               <Box fontWeight="600" fontSize={20}>
                 About this Community
+                {String(currentUser) === String(communityOwner.id) ? (
+                  <Button
+                    style={{
+                      height: "35px",
+                      width: "35px",
+                      outline: "none",
+                      marginBottom: "3px",
+                      marginLeft: "-3px",
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleEdit}
+                  >
+                    <i
+                      class="fas fa-pen"
+                      style={{ height: "25px", width: "25px" }}
+                    ></i>
+                  </Button>
+                ) : null}
               </Box>
+
               {currentCommunity.dateCreated !== undefined ? (
                 <p className="font-weight-light">
                   Created{" "}
@@ -91,9 +126,17 @@ export default function AboutMe() {
                   )}
                 </p>
               ) : null}
-              <p className="font-weight-normal">
-                {currentCommunity.description}
-              </p>
+              {edit === false ? (
+                <p>{community.description}</p>
+              ) : (
+                <EditDescription
+                  autofocus
+                  data={community}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  setEdit={setEdit}
+                ></EditDescription>
+              )}
 
               <Box fontWeight="600" fontSize={20}>
                 Related Topics
@@ -116,9 +159,7 @@ export default function AboutMe() {
                 Community Owner
               </Box>
               {owner.username !== undefined ? (
-                <p className="font-weight-normal">
-                  @{owner.username}
-                </p>
+                <p className="font-weight-normal">@{owner.username}</p>
               ) : null}
             </div>
           </div>

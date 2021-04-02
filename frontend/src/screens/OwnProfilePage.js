@@ -18,6 +18,8 @@ export default function OwnProfilePage({ personId }) {
   const [refresh, setRefresh] = useState(true);
   const [numFollowers, setNumFollowers] = useState(0);
   const [badge, setBadge] = useState();
+  const [profileBanner, setProfileBanner] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
     if (personId) {
@@ -29,7 +31,9 @@ export default function OwnProfilePage({ personId }) {
     Api.getPersonById(personId)
       .done((currentPerson) => {
         setCurrentPerson(currentPerson);
-        setBadge(currentPerson.badgeDisplaying.image);
+        setBadge(currentPerson.badgeDisplaying);
+        setProfileBanner(currentPerson.profileBanner);
+        setProfilePicture(currentPerson.profilePicture);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -48,18 +52,22 @@ export default function OwnProfilePage({ personId }) {
       if (currentPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <div style={{ margin: "auto" }}>
-              <CreatePostCard
-                personId={personId}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                profilePicture={currentPerson.profilePicture}
-              />
-              <PostList
-                personId={personId}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
+            <div style={{ margin: "auto", }}>
+              <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+                <CreatePostCard
+                  personId={personId}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  profilePicture={currentPerson.profilePicture}
+                />
+                </div>
+                <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+                <PostList
+                  personId={personId}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
+              </div>
             </div>
           </div>
         );
@@ -90,9 +98,14 @@ export default function OwnProfilePage({ personId }) {
             setTabValue={setTabValue}
             username={currentPerson.username}
             numFollowers={numFollowers}
-            profilePicture={currentPerson.profilePicture}
-            profileBanner={currentPerson.profileBanner}
+            profilePicture={profilePicture}
+            profileBanner={profileBanner}
             badge={badge}
+            setProfileBanner ={setProfileBanner}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            personId={personId}
+            setProfilePicture={setProfilePicture}
           />
           {handleTabView(tabValue)}
         </div>

@@ -30,7 +30,7 @@ export default function SearchPersonResultList({
                   margin: "auto",
                 }}
               >
-                No channels found
+                No users found
               </h3>
             </div>
           )}

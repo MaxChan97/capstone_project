@@ -49,7 +49,7 @@ export default function MakeCommentCard({ data, refresh, setRefresh }) {
     if (currentUser) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, refresh]);
 
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
@@ -81,6 +81,25 @@ export default function MakeCommentCard({ data, refresh, setRefresh }) {
 
   const [comment, setComment] = React.useState("");
 
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (comment.trim() === "") {
+        alert.show("Comment cannot be empty");
+      } else {
+        Api.createCommentForProfilePosts(data.id, currentUser, comment)
+          .done(() => {
+            alert.show("Comment successfully created!");
+            setComment("");
+            setRefresh(!refresh);
+          })
+          .fail((xhr, status, error) => {
+            alert.show("Something went wrong, please try again!");
+          });
+      }
+    }
+  }
+
   return isAdmin == false ? (
     <div
       style={{
@@ -105,13 +124,9 @@ export default function MakeCommentCard({ data, refresh, setRefresh }) {
         noValidate
         autoComplete="off"
       >
-        <div class="col-md-9">
+        <div>
           <div
             class="card-body"
-            style={{
-              minWidth: "80ch",
-              maxWidth: "80ch",
-            }}
           >
             <div class="post">
               <div class="user-block">
@@ -127,6 +142,7 @@ export default function MakeCommentCard({ data, refresh, setRefresh }) {
                     fullWidth
                     value={comment}
                     onChange={handleComment}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </div>

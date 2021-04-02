@@ -184,6 +184,48 @@ export default {
     });
   },
 
+  editPersonProfilePicture(id, profilePicture) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/profilePicture/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        profilePicture: profilePicture,
+      }),
+    });
+  },
+
+  editPersonProfileBanner(id, profileBanner) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/profileBanner/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        profileBanner: profileBanner,
+      }),
+    });
+  },
+
+  editPersonDescription(id, description) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/description/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        description: description,
+      }),
+    });
+  },
+
   editProfilePost(personId, postId, postBody) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/post/person/" + personId + "/edit/" + postId,
@@ -675,6 +717,36 @@ export default {
     });
   },
 
+  updateCompletedOnboarding(personId, topicInterests, DoB, incomeRange) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/onboarding",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        DoB: DoB,
+        incomeRange: incomeRange,
+        topicInterests: topicInterests,
+      }),
+    });
+  },
+
+  updateSkipOnboarding(personId){
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/skipOnboarding",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        id: personId,
+      }),
+    });
+  },
+
   updateExplicitAndChat(personId, explicit, chatIsPaid) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/settings",
@@ -738,6 +810,48 @@ export default {
         topicEnums: topicEnums,
         communityProfilePicture: communityProfilePicture,
         communityBanner: communityBanner,
+      }),
+    });
+  },
+
+  editCommunityProfilePicture(communityId, communityProfilePicture) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/profilePicture/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityProfilePicture: communityProfilePicture,
+      }),
+    });
+  },
+
+  editCommunityBanner(communityId, communityBanner) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/banner/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityBanner: communityBanner,
+      }),
+    });
+  },
+
+  editCommunityDescription(communityId, communityDescription) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/description/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityDescription: communityDescription,
       }),
     });
   },
@@ -890,6 +1004,17 @@ export default {
   searchCommunityByName(searchString) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/community/query?name=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  searchPostByBody(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/query?searchTerm=" + searchString,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -1110,21 +1235,6 @@ export default {
     });
   },
 
-  removeBadge(personId) {
-    return jQuery.ajax({
-      url:
-        this.SERVER_PREFIX +
-        "/person/changeBadge/person/" +
-        personId +
-        "/badge/0",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      type: "PUT",
-    });
-  },
-
   createAdmin(username, email) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/1",
@@ -1137,6 +1247,17 @@ export default {
         username: username,
         email: email,
       }),
+    });
+  },
+
+  getAllPerson() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
     });
   },
 
