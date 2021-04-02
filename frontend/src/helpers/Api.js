@@ -1012,6 +1012,17 @@ export default {
     });
   },
 
+  searchPostByBody(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/query?searchTerm=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   banPersonFromCommunity(communityId, personId, ownerId) {
     return jQuery.ajax({
       url:

@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
 import SearchCommunityResultList from "../components/SearchPage/SearchCommunityResultList";
 import SearchPersonResultList from "../components/SearchPage/SearchPersonResultList";
+import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
 import { useSelector } from "react-redux";
 
 const StyledTabs = withStyles({
@@ -55,6 +56,12 @@ export default function SearchPage({ searchString, searchRefresh }) {
   );
   const [communityPageCount, setCommunityPageCount] = useState(0);
 
+  const [postOffset, setPostOffset] = useState(1);
+  const [postResults, setPostResults] = useState([]);
+  const [postPaginatedResults, setPostPaginatedResults] = useState([]);
+  const [postPageCount, setPostPageCount] = useState(0);
+  const [postRefresh, setPostRefresh] = useState(true);
+
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -102,6 +109,25 @@ export default function SearchPage({ searchString, searchRefresh }) {
     setCommunityPaginatedResults(slice);
   }, [communityOffset, communityResults]);
 
+  useEffect(() => {
+    Api.searchPostByBody(searchString)
+      .done((postObjects) => {
+        setPostResults(postObjects.reverse());
+        setPostPageCount(Math.ceil(postObjects.length / perPage));
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, [searchRefresh, postRefresh]);
+
+  useEffect(() => {
+    const slice = postResults.slice(
+      (postOffset - 1) * perPage,
+      (postOffset - 1) * perPage + perPage
+    );
+    setPostPaginatedResults(slice);
+  }, [postOffset, postResults]);
+
   const handlePersonPageClick = (e) => {
     const selectedPage = e.selected;
     setPersonOffset(selectedPage + 1);
@@ -110,6 +136,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const handleCommunityPageClick = (e) => {
     const selectedPage = e.selected;
     setCommunityOffset(selectedPage + 1);
+  };
+
+  const handlePostPageClick = (e) => {
+    const selectedPage = e.selected;
+    setPostOffset(selectedPage + 1);
   };
 
   const handleTabValueChange = (event, newValue) => {
@@ -125,12 +156,22 @@ export default function SearchPage({ searchString, searchRefresh }) {
           handlePersonPageClick={handlePersonPageClick}
         />
       );
-    } else {
+    } else if (tabValue === 1) {
       return (
         <SearchCommunityResultList
           communityList={communityPaginatedResults}
           communityPageCount={communityPageCount}
           handleCommunityPageClick={handleCommunityPageClick}
+        />
+      );
+    } else {
+      return (
+        <SearchPostResultList
+          postList={postPaginatedResults}
+          postPageCount={postPageCount}
+          handlePostPageClick={handlePostPageClick}
+          postRefresh={postRefresh}
+          setPostRefresh={setPostRefresh}
         />
       );
     }
@@ -145,8 +186,9 @@ export default function SearchPage({ searchString, searchRefresh }) {
       </div>
       <div style={{ marginBottom: "2%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
-          <StyledTab label="Channels" />
+          <StyledTab label="Users" />
           <StyledTab label="Communities" />
+          <StyledTab label="Posts" />
         </StyledTabs>
       </div>
       <div style={{ width: "80%", margin: "auto" }}>

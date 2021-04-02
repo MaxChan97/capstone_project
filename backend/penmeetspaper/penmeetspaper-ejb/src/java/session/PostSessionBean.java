@@ -313,4 +313,27 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
         return p;
     }
+    
+    @Override
+    public List<Post> searchPostByBody(String searchTerm) throws NoResultException, NotValidException {
+        Query q;
+        if (searchTerm != null) {
+            q = em.createQuery("SELECT p FROM Post p WHERE LOWER(p.body) LIKE :searchTerm");
+            q.setParameter("searchTerm", "%" + searchTerm.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT p FROM Post p");
+        }
+        List<Post> postList = q.getResultList();
+        System.out.println(postList.size());
+        for (Post p : postList) {
+            if (p.getPostCommunity() == null) {
+                // not a community post
+                p = getPostById(p.getId());
+            } else {
+                // a community post
+                p = getPostById(p.getId(), true);
+            }
+        }
+        return postList;
+    }
 }
