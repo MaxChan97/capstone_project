@@ -76,7 +76,7 @@ export default function EditDescription({
                 <ColorButton
                     style={{
                         outline: "none",
-                        marginRight: "3%",
+                        marginRight: "2%",
                         backgroundColor: "#FFFFFF",
                         color: "#4A5056",
                     }}
@@ -92,7 +92,7 @@ export default function EditDescription({
                 <ColorButton
                     style={{
                         outline: "none",
-                        marginRight: "3%",
+                        marginRight: "10%",
                         textAlign: "right",
                     }}
                     variant="contained"
