@@ -7,6 +7,7 @@ import SearchCommunityResultList from "../components/SearchPage/SearchCommunityR
 import SearchPersonResultList from "../components/SearchPage/SearchPersonResultList";
 import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
 import { useSelector } from "react-redux";
+import { animateScroll } from "react-scroll";
 
 const StyledTabs = withStyles({
   indicator: {
@@ -121,6 +122,10 @@ export default function SearchPage({ searchString, searchRefresh }) {
   }, [searchRefresh, postRefresh]);
 
   useEffect(() => {
+    scrollToTopOfResultList();
+  }, [personPaginatedResults, communityPaginatedResults, postPaginatedResults]);
+
+  useEffect(() => {
     const slice = postResults.slice(
       (postOffset - 1) * perPage,
       (postOffset - 1) * perPage + perPage
@@ -176,6 +181,10 @@ export default function SearchPage({ searchString, searchRefresh }) {
       );
     }
   };
+
+  function scrollToTopOfResultList() {
+    animateScroll.scrollToTop();
+  }
 
   return (
     <div className="content-wrapper">
