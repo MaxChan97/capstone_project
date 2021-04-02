@@ -279,8 +279,6 @@ export default function CustomiseProfile() {
     } else {
       incomeRangeStr = incomeRange.value;
     }
-    console.log(typeof moment(DoB).format("dd/MM/yyyy"));
-    console.log(incomeRange);
     Api.editPersonProfileInformation(
       currentUser,
       username,
