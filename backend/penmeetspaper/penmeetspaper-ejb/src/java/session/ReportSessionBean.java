@@ -5,11 +5,14 @@
  */
 package session;
 
+import entity.Person;
 import entity.Report;
+import enumeration.ReportStateEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +28,9 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     @PersistenceContext
     EntityManager em;
 
+    @EJB
+    PersonSessionBeanLocal personSB;
+
     private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
         if (reportId == null) {
             throw new NotValidException(ReportSessionBeanLocal.MISSING_REPORT_ID);
@@ -39,9 +45,27 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         return report;
     }
 
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(ReportSessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(ReportSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
+    }
+
     @Override
-    public Report createReport(Report report) {
+    public Report createReport(Report report, Long reporterId) throws NoResultException, NotValidException {
+        report.setReportState(ReportStateEnum.PENDING);
         report.setDateSubmitted(new Date());
+
+        Person reporter = emGetPerson(reporterId);
+
         em.persist(report);
         em.flush();
         return report;
