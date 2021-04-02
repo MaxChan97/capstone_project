@@ -1249,4 +1249,15 @@ export default {
       }),
     });
   },
+
+  getAllPerson() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };
