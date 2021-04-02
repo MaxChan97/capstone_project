@@ -580,7 +580,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             resultList = personList;
         } else {
             for (int i = 0; i < 10; i++) {
-                Person p = resultList.get(i);
+                Person p = personList.get(i);
                 resultList.add(p);
             }
         }
