@@ -51,7 +51,7 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
     if (currentUser) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, refresh]);
 
   function loadData(currentUser) {
     Api.getPersonById(currentUser)

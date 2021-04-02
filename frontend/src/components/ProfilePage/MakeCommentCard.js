@@ -49,7 +49,7 @@ export default function MakeCommentCard({ data, refresh, setRefresh }) {
     if (currentUser) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, refresh]);
 
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
