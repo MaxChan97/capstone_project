@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import profileLogo from "../assets/channelDashboardSidebar/profile.png";
+import backLogo from "../assets/channelDashboardSidebar/back.png";
 import BNBLogo from "../assets/BNB Logo.png";
 
 export default function CommunityDashboardSidebar() {
@@ -43,6 +44,20 @@ export default function CommunityDashboardSidebar() {
             role="menu"
             data-accordion="false"
           >
+            <li className="nav-item">
+              <Link to={"/community/" + communityId} className="nav-link">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={backLogo} className="nav-icon" alt="backLogo" />
+                  <p className="ml-2">Back</p>
+                </div>
+              </Link>
+            </li>
             <li className="nav-item">
               {location.pathname.split("/")[
                 location.pathname.split("/").length - 1
