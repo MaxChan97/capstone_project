@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
+import { Decoder, Encoder, tools, Reader } from "ts-ebml";
 const prettyMilliseconds = require("pretty-ms");
 
 const ColorButton = withStyles((theme) => ({
@@ -27,6 +28,22 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+// Attributes needed for stream
+const url = "rtmp://broadcast.api.video/s/d74762c5-c2bd-4408-abe7-17d63b69852d";
+const socketio_address = "http://localhost:1437";
+const width = 750;
+const height = 450;
+const frameRate = 15;
+const audioBitRate = 22050;
+
+// Setting things up
+
+var socket;
+var state = "stop";
+var imageCapture;
+var recordedChunks = [];
+var mediaRecorder;
 
 export default function StreamPage() {
   const alert = useAlert();
@@ -52,9 +69,6 @@ export default function StreamPage() {
   const [streamEnded, setStreamEnded] = useState(false);
 
   useEffect(() => {
-    connectServer();
-    requestMedia();
-
     return function cleanup() {
       if (streamId != undefined) {
         Api.endStream(streamId)
@@ -80,7 +94,7 @@ export default function StreamPage() {
   }, [start]);
 
   function stopStream() {
-    if (mediaRecorder) {
+    if (mediaRecorder && mediaRecorder.state != "inactive") {
       mediaRecorder.stop();
     }
   }
@@ -90,21 +104,6 @@ export default function StreamPage() {
       socket.disconnect();
     }
   }
-
-  // Attributes needed for stream
-  const url =
-    "rtmp://broadcast.api.video/s/d74762c5-c2bd-4408-abe7-17d63b69852d";
-  const socketio_address = "http://localhost:1437";
-  const width = 750;
-  const height = 450;
-  const frameRate = 15;
-  const audioBitRate = 22050;
-
-  // Setting things up
-  var mediaRecorder;
-  var socket;
-  var state = "stop";
-  var imageCapture;
 
   const videoRef = useRef(null);
 
@@ -178,6 +177,7 @@ export default function StreamPage() {
         frameRate: { ideal: frameRate },
       },
     };
+    var options = { mimeType: "video/webm; codecs=vp9" };
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
@@ -186,7 +186,7 @@ export default function StreamPage() {
         showVideo(stream);
         socket.emit("config_rtmpDestination", url);
         socket.emit("start", "start");
-        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder = new MediaRecorder(stream, options);
         mediaRecorder.start(250);
         mediaRecorder.onstop = function (e) {
           //alert.show("mediaRecorder stopped: " + e);
@@ -203,6 +203,7 @@ export default function StreamPage() {
         };
         mediaRecorder.ondataavailable = function (e) {
           socket.emit("binarystream", e.data);
+          recordedChunks.push(e.data);
           state = "start";
           //alert.show("data avail");
         };
@@ -214,6 +215,59 @@ export default function StreamPage() {
   }
 
   //function takeThumbnailPhoto() {}
+
+  function readAsArrayBuffer(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(blob);
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = (ev) => {
+        reject(ev.error);
+      };
+    });
+  }
+
+  function injectMetadataAndDownload(blob) {
+    const decoder = new Decoder();
+    const reader = new Reader();
+    reader.logging = false;
+    reader.drop_default_duration = false;
+
+    // load webm blob and inject metadata
+    readAsArrayBuffer(blob).then((buffer) => {
+      const elms = decoder.decode(buffer);
+      elms.forEach((elm) => {
+        reader.read(elm);
+      });
+      reader.stop();
+
+      let refinedMetadataBuf = tools.makeMetadataSeekable(
+        reader.metadatas,
+        reader.duration,
+        reader.cues
+      );
+      let body = buffer.slice(reader.metadataSize);
+      let result = new Blob([refinedMetadataBuf, body], { type: blob.type });
+
+      var url = URL.createObjectURL(result);
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = streamTitle + ".webm";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  function downloadVideo() {
+    var blob = new Blob(recordedChunks, {
+      type: "video/webm",
+    });
+    injectMetadataAndDownload(blob);
+  }
 
   function handleContinueDialogOpen() {
     setShowContinueDialog(true);
@@ -270,6 +324,8 @@ export default function StreamPage() {
       setStreamTitle(tempStreamTitle);
       setStreamDescription(tempStreamDescription);
       setStreamSubscribersOnly(tempStreamSubscribersOnly);
+      connectServer();
+      requestMedia();
     }
   }
 
@@ -296,6 +352,8 @@ export default function StreamPage() {
     Api.endStream(streamId)
       .then(() => {
         setStreamEnded(true);
+        stopStream();
+        disconnectServer();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -643,8 +701,28 @@ export default function StreamPage() {
       );
     } else {
       return (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginLeft: "-40px",
+          }}
+        >
           <b>Stream Ended</b>
+          <ColorButton
+            style={{
+              height: "40px",
+              width: "200px",
+              outline: "none",
+              marginTop: "10px",
+            }}
+            color="primary"
+            variant="contained"
+            onClick={downloadVideo}
+          >
+            Download Stream
+          </ColorButton>
         </div>
       );
     }
