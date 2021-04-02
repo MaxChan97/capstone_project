@@ -1139,4 +1139,15 @@ export default {
       }),
     });
   },
+
+  getTopTrends() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/trend/topAllTime",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

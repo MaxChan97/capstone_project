@@ -13,7 +13,8 @@ import postPoll from "../../../assets/postPoll.png";
 import CreatePollCard from "./CreatePollCard";
 import CircularProgressWithLabel from "../../../components/CircularProgressWithLabel.js";
 import { useSelector } from "react-redux";
-
+import ReactHashtag from "react-hashtag";
+import PropTypes from "prop-types";
 var uuid = require("uuid");
 
 export default function CreatePostCard({
@@ -190,10 +191,12 @@ export default function CreatePostCard({
                   placeholder="What's new?"
                   multiline
                   fullWidth
-                  InputProps={{ disableUnderline: true }}
                   value={post}
                   onChange={handlePost}
                   autoFocus
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
                 />
                 {post !== "" ? (
                   <p style={{ textAlign: "right" }}>{post.length}/2048</p>

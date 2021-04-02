@@ -7,10 +7,11 @@ import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/FeedPage/PostListOfFollowing";
+import TrendsCard from "../components/FeedPage/TrendsCard";
+
 import Api from "../helpers/Api";
 
 export default function FeedPage() {
-
   const horizontalList = [
     {
       name: "Carl",
@@ -78,11 +79,11 @@ export default function FeedPage() {
   ];
 
   const [topTenContributors, setTopTenContributors] = useState([]);
+  const [topTrends, setTopTrends] = useState([]);
   const [horizontalMenu, setHorizontalMenu] = useState(horizontalList);
 
   const currentUser = useSelector((state) => state.currentUser);
 
- 
   useEffect(() => {}, [horizontalMenu]);
 
   useEffect(() => {
@@ -103,6 +104,14 @@ export default function FeedPage() {
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+    Api.getTopTrends()
+      .done((topAllTime) => {
+        console.log(topAllTime);
+        setTopTrends(topAllTime);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
   }
 
   return (
@@ -117,10 +126,14 @@ export default function FeedPage() {
           <div className="col-md-9 mt-4">
             <PostListOfFollowing></PostListOfFollowing>
           </div>
-          
+
           <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
-            <LeaderboardCard data={topTenContributors} />
-            {console.log(topTenContributors)}
+            <div className="row">
+              <LeaderboardCard data={topTenContributors} />
+            </div>
+            <div className="row">
+              <TrendsCard data={topTrends} />
+            </div>
           </div>
         </div>
       </div>

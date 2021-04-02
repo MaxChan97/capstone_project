@@ -7,9 +7,8 @@ export default function ProfileGroup({
   username,
   numFollowers,
   profilePicture,
-  badge
+  badge,
 }) {
-  console.log(badge);
   return (
     <div
       style={{
@@ -18,7 +17,7 @@ export default function ProfileGroup({
         justifyContent: "center",
         alignItems: "center",
         width: "30%",
-        marginLeft: "20px"
+        marginLeft: "20px",
       }}
     >
       <img
@@ -50,7 +49,7 @@ export default function ProfileGroup({
         </p>
       </div>
       <img
-        style={{ height: "35px", marginLeft: "20px", marginTop:"-20px"}}
+        style={{ height: "35px", marginLeft: "20px", marginTop: "-20px" }}
         src={badge}
       />
     </div>

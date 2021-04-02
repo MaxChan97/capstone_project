@@ -284,7 +284,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                         style={{ color: "#3B21CB", cursor: "pointer" }}
                         onClick={() => alert.show(hashtagValue)}
                       >
-                        {hashtagValue}
+                        <b>{hashtagValue}</b>
                       </span>
                     )}
                   >
