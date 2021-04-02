@@ -47,4 +47,8 @@ public interface AdministratorSessionBeanLocal {
 
     public void unbanPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException;
 
+    public void banPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
+
+    public void unbanPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
+
 }
