@@ -82,6 +82,24 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
 
   const [comment, setComment] = React.useState("");
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (comment.trim() === "") {
+        //alert.show("Reply cannot be empty");
+      } else {
+        Api.createReplyForProfileComment(commentData.id, currentUser, comment)
+          .done(() => {
+            alert.show("Reply successfully created!");
+            setComment("");
+            setRefresh(!refresh);
+          })
+          .fail((xhr, status, error) => {
+            alert.show("Something went wrong, please try again!");
+          });
+      }
+    }
+  }
+
   return isAdmin == false ? (
     <div
       style={{
@@ -97,13 +115,10 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
         noValidate
         autoComplete="off"
       >
-        <div class="col-md-9">
+        <div >
           <div
             class="card-body"
-            style={{
-              minWidth: "75ch",
-              maxWidth: "75ch",
-            }}
+            style={{marginBottom: -20}}
           >
             <div class="post">
               <div class="user-block">
@@ -121,6 +136,7 @@ export default function ReplyCommentCard({ commentData, refresh, setRefresh }) {
                         size="small"
                         value={comment}
                         onChange={handleComment}
+                        onKeyDown={handleKeyDown}
                       />
                     </div>
                   </span>

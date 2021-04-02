@@ -10,6 +10,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
+import BNBLogo from "../../assets/BNB Logo.png";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -256,13 +258,35 @@ export default function ChatSidebar({
   }
 
   return (
-    <aside className="main-sidebar sidebar-light-primary elevation-1">
-      <h3
-        style={{ textAlign: "left", paddingLeft: "15px", paddingTop: "18px" }}
+    <aside
+      className="main-sidebar sidebar-light-primary elevation-1"
+      style={{ paddingTop: "10px" }}
+    >
+      <div>
+        <Link to="/feed">
+          <img
+            style={{ height: "40px", display: "flex", paddingLeft: "24px" }}
+            src={BNBLogo}
+            alt="BNB Logo"
+          />
+        </Link>
+      </div>
+      <h5
+        style={{
+          textAlign: "left",
+          paddingLeft: "24px",
+          paddingTop: "10px",
+          fontWeight: "bold",
+          fontSize: "18px",
+        }}
       >
         Chat
-      </h3>
-      <Paper component="form" className={classes.root}>
+      </h5>
+      {/*<Paper
+        component="form"
+        className={classes.root}
+        style={{ marginBottom: "27.5px" }}
+      >
         <div
           style={{ outline: "none" }}
           className={classes.iconButton}
@@ -275,8 +299,8 @@ export default function ChatSidebar({
           placeholder="Search chats"
           onChange={(e) => {}}
         />
-      </Paper>
-      <hr style={{ marginTop: "27.5px", marginBottom: "0px" }} />
+      </Paper>*/}
+      <hr style={{ marginBottom: "0px", marginTop: "0px" }} />
       <div className="sidebar">
         <nav>
           {renderNewChat()}

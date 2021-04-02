@@ -717,7 +717,7 @@ export default {
     });
   },
 
-  updateCompletedOnboarding(personId, topicInterests, DoB, incomeRange){
+  updateCompletedOnboarding(personId, topicInterests, DoB, incomeRange) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/onboarding",
       headers: {
@@ -733,7 +733,7 @@ export default {
     });
   },
 
-  updateSkipOnboarding(personId) {
+  updateSkipOnboarding(personId){
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/skipOnboarding",
       headers: {
@@ -743,7 +743,7 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         id: personId,
-      })
+      }),
     });
   },
 
@@ -810,6 +810,48 @@ export default {
         topicEnums: topicEnums,
         communityProfilePicture: communityProfilePicture,
         communityBanner: communityBanner,
+      }),
+    });
+  },
+
+  editCommunityProfilePicture(communityId, communityProfilePicture) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/profilePicture/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityProfilePicture: communityProfilePicture,
+      }),
+    });
+  },
+
+  editCommunityBanner(communityId, communityBanner) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/banner/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityBanner: communityBanner,
+      }),
+    });
+  },
+
+  editCommunityDescription(communityId, communityDescription) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/description/" + communityId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityDescription: communityDescription,
       }),
     });
   },

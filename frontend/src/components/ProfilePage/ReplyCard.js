@@ -116,7 +116,6 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        width: "max-content",
       }}
     >
       <div >
@@ -133,14 +132,10 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
         />
         <div
           class="card-body"
-          style={{
-            minWidth: "72ch",
-            maxWidth: "72ch",
-          }}
+          style={{marginBottom: -40}}
         >
           <div class="post">
-            <Divider variant="middle" />
-            <br></br>
+            <Divider variant="middle"/>
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img
@@ -159,13 +154,13 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
 
                 <span class="description">
                   {" "}
-                  {moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}
-                  <span>&nbsp; </span>
+                  {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+                
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
               {isAdmin == false && data.author.id == currentUser ? (
-                <div style={{ textAlign: "right", marginRight: "3%" }}>
+                <div style={{ textAlign: "right", }}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"
@@ -222,20 +217,6 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
       </div>
     </div>
   ) : (
-    <div
-      class="card-body"
-      style={{
-        minWidth: "80ch",
-        maxWidth: "80ch",
-      }}
-    >
-      <Divider
-        variant="middle"
-        style={{
-          width: "65ch",
-        }}
-      />
-      <p>[Reply does not exist/deleted!]</p>
-    </div>
+    ""
   );
 }

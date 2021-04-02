@@ -69,38 +69,120 @@ public class PersonResource {
 
         for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
             String topicInterest = topicInterestsJsonArray.getString(i);
-            if ("REAL_ESTATE".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.REAL_ESTATE);
-            } else if ("STOCKS".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.STOCKS);
-            } else if ("FUTURES".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.FUTURES);
-            } else if ("CRYPTOCURRENCY".equals(topicInterest)) {
-                topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+            if (null != topicInterest) {
+                switch (topicInterest) {
+                    case "INVESTMENTS":
+                        topicInterests.add(TopicEnum.INVESTMENTS);
+                        break;
+
+                    case "STOCKS":
+                        topicInterests.add(TopicEnum.STOCKS);
+                        break;
+
+                    case "SAVINGS":
+                        topicInterests.add(TopicEnum.SAVINGS);
+                        break;
+
+                    case "CAREER":
+                        topicInterests.add(TopicEnum.CAREER);
+                        break;
+
+                    case "ETF":
+                        topicInterests.add(TopicEnum.ETF);
+                        break;
+
+                    case "ROBOADVISORS":
+                        topicInterests.add(TopicEnum.ROBOADVISORS);
+                        break;
+
+                    case "TRADING":
+                        topicInterests.add(TopicEnum.TRADING);
+                        break;
+
+                    case "INSURANCE":
+                        topicInterests.add(TopicEnum.INSURANCE);
+                        break;
+
+                    case "BROKERAGES":
+                        topicInterests.add(TopicEnum.BROKERAGES);
+                        break;
+
+                    case "RETIREMENT":
+                        topicInterests.add(TopicEnum.RETIREMENT);
+                        break;
+
+                    case "SALARY":
+                        topicInterests.add(TopicEnum.SALARY);
+                        break;
+
+                    case "CPF":
+                        topicInterests.add(TopicEnum.CPF);
+                        break;
+
+                    case "BTO":
+                        topicInterests.add(TopicEnum.BTO);
+                        break;
+
+                    case "UTILITIES_BILL":
+                        topicInterests.add(TopicEnum.UTILITIES_BILL);
+                        break;
+
+                    case "REAL_ESTATE":
+                        topicInterests.add(TopicEnum.REAL_ESTATE);
+                        break;
+
+                    case "FUTURES":
+                        topicInterests.add(TopicEnum.FUTURES);
+                        break;
+
+                    case "CRYPTOCURRENCY":
+                        topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                        break;
+
+                    case "CREDITCARDS":
+                        topicInterests.add(TopicEnum.CREDITCARDS);
+                        break;
+
+                    case "BANKING":
+                        topicInterests.add(TopicEnum.BANKING);
+                        break;
+
+                    case "REITS":
+                        topicInterests.add(TopicEnum.REITS);
+                        break;
+
+                    case "BLOCKCHAIN":
+                        topicInterests.add(TopicEnum.BLOCKCHAIN);
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
         return topicInterests;
     }
 
-    private IncomeRangeEnum convertToIncomeRangeEnum(String str) throws NotValidException {
-        if (str.equals("NOT_EARNING")) {
-            return IncomeRangeEnum.NOT_EARNING;
-        } else if (str.equals("LOW")) {
-            return IncomeRangeEnum.LOW;
-        } else if (str.equals("MIDDLE_LOW")) {
-            return IncomeRangeEnum.MIDDLE_LOW;
-        } else if (str.equals("MIDDLE")) {
-            return IncomeRangeEnum.MIDDLE;
-        } else if (str.equals("MIDDLE_HIGH")) {
-            return IncomeRangeEnum.MIDDLE_HIGH;
-        } else if (str.equals("HIGH")) {
-            return IncomeRangeEnum.HIGH;
-        } else if (str.equals("CRA")) {
-            return IncomeRangeEnum.CRA;
+    private IncomeRangeEnum convertToIncomeRangeEnum(String str) {
+        switch (str) {
+            case "NOT_EARNING":
+                return IncomeRangeEnum.NOT_EARNING;
+            case "LOW":
+                return IncomeRangeEnum.LOW;
+            case "MIDDLE_LOW":
+                return IncomeRangeEnum.MIDDLE_LOW;
+            case "MIDDLE":
+                return IncomeRangeEnum.MIDDLE;
+            case "MIDDLE_HIGH":
+                return IncomeRangeEnum.MIDDLE_HIGH;
+            case "HIGH":
+                return IncomeRangeEnum.HIGH;
+            case "CRA":
+                return IncomeRangeEnum.CRA;
+            default:
+                return IncomeRangeEnum.NOT_SPECIFIED;
         }
-
-        throw new NotValidException("could not match income range");
     }
 
     // Main Business logic -------------------------------------
@@ -403,7 +485,7 @@ public class PersonResource {
         }
 
     }
-    
+
     @PUT
     @Path("/profilePicture/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -411,7 +493,7 @@ public class PersonResource {
     public Response editPersonProfilePicture(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String profilePicture = jsonObject.getString("profilePicture");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setProfilePicture(profilePicture);
@@ -421,7 +503,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
-    
+
     @PUT
     @Path("/profileBanner/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -429,7 +511,7 @@ public class PersonResource {
     public Response editPersonProfileBanner(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String profileBanner = jsonObject.getString("profileBanner");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setProfileBanner(profileBanner);
@@ -439,7 +521,7 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
-    
+
     @PUT
     @Path("/description/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -447,7 +529,7 @@ public class PersonResource {
     public Response editPersonDescription(@PathParam("id") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
         String description = jsonObject.getString("description");
-        
+
         try {
             Person p = personSB.getPersonById(personId);
             p.setDescription(description);

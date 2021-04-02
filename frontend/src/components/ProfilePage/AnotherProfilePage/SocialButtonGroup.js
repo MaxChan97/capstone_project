@@ -341,7 +341,7 @@ export default function SocialButtonGroup({
               )}
             </div>
             <p style={{ marginBottom: "2px" }}>
-              Ad-free viewing on {username}'s channel.
+              Ad-free viewing on {username}'s profile.
             </p>
             <p style={{ marginBottom: "2px" }}>
               Chat during Subscriber-Only Mode.
@@ -519,5 +519,7 @@ export default function SocialButtonGroup({
       {renderUnsubscribeDialog()}
       {renderResubscribeDialog()}
     </div>
-  ):("");
+  ) : (
+    ""
+  );
 }

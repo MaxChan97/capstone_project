@@ -30,7 +30,7 @@ export default function SearchCard({ searchTerm, setSearchTerm }) {
   return (
     <div className="card card-primary mx-2">
       <div className="card-body">
-        <p className="font-weight-light">Search channels you subscribe to</p>
+        <p className="font-weight-light">Search users you subscribe to</p>
         <div className="my-3">
           <Paper component="form" className={classes.root}>
             <InputBase

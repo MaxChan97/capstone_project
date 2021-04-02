@@ -167,6 +167,60 @@ public class CommunityResource {
             return buildError(e, 400);
         }
     }
+    
+    @PUT
+    @Path("/profilePicture/{communityId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editCommunityProfilePicture(@PathParam("communityId") Long communityId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String communityProfilePicture = jsonObject.getString("communityProfilePicture");
+        
+        try {
+            Community comm = communitySB.getCommunityById(communityId);
+            comm.setCommunityProfilePicture(communityProfilePicture);
+            communitySB.updateCommunity(comm);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+    
+    @PUT
+    @Path("/banner/{communityId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editCommunityBanner(@PathParam("communityId") Long communityId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String communityBanner = jsonObject.getString("communityBanner");
+        
+        try {
+            Community comm = communitySB.getCommunityById(communityId);
+            comm.setCommunityBanner(communityBanner);
+            communitySB.updateCommunity(comm);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+    
+    @PUT
+    @Path("/description/{communityId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editCommunityDescription(@PathParam("communityId") Long communityId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String description = jsonObject.getString("communityDescription");
+        
+        try {
+            Community comm = communitySB.getCommunityById(communityId);
+            comm.setDescription(description);
+            communitySB.updateCommunity(comm);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
     @PUT
     @Path("/{communityId}/person/{personId}/follow")

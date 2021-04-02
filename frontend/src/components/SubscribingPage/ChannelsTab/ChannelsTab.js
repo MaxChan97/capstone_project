@@ -79,14 +79,14 @@ export default function ChannelsTab() {
         }}
       >
         <h4 style={{ fontWeight: "bold" }}>
-          Channels subscribed ({subscribingList.length})
+          Users subscribed ({subscribingList.length})
         </h4>
         <Paper component="form" className={classes.inputDiv}>
           <InputBase
             color="secondary"
             value={searchTerm}
             className={classes.input}
-            placeholder="Search Channels"
+            placeholder="Search Users"
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}

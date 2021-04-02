@@ -60,7 +60,7 @@ export default function FollowingCard({
     )
   ) : (
     <Box className={styles.noFollowersText}>
-      <p>You do not follow any channels!</p>
+      <p>You do not follow any users!</p>
     </Box>
   );
 }

@@ -11,14 +11,13 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "82ch",
   },
   inline: {
     display: "inline",
   },
 }));
 
-export default function ReplyList({repliesData, refresh, setRefresh }) {
+export default function ReplyList({ repliesData, refresh, setRefresh }) {
   const classes = useStyles();
   const alert = useAlert();
 
@@ -37,18 +36,18 @@ export default function ReplyList({repliesData, refresh, setRefresh }) {
     */
   }
 
-  return repliesData? (
+  return repliesData ? (
     <List className={classes.root}>
       {repliesData.map((data) => (
         <div>
-          <ListItem alignItems="flex-start">
-            <ReplyCard key={data.id} data={data} refresh={refresh}
-                setRefresh={setRefresh} />
-          </ListItem>
+
+          <ReplyCard key={data.id} data={data} refresh={refresh}
+            setRefresh={setRefresh} />
+
         </div>
       ))}
-    </List>
+      </List>
   ) : (
-      <p></p>
-    );
+    <p></p>
+  );
 }
