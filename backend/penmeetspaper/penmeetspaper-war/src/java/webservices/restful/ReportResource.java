@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import entity.Report;
+import enumeration.ReportStateEnum;
 import enumeration.ReportTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -16,7 +17,9 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -45,20 +48,18 @@ public class ReportResource {
 
     private ReportTypeEnum convertToReportTypeEnum(String str) throws NotValidException {
         switch (str) {
-            case "NOT_EARNING":
+            case "USER_REPORT":
                 return ReportTypeEnum.USER_REPORT;
-            case "LOW":
+            case "COMMUNITY_REPORT":
                 return ReportTypeEnum.COMMUNITY_REPORT;
-            case "MIDDLE_LOW":
+            case "POST_REPORT":
                 return ReportTypeEnum.POST_REPORT;
-            case "MIDDLE":
+            case "COMMENT_REPORT":
                 return ReportTypeEnum.COMMENT_REPORT;
-            case "MIDDLE_HIGH":
+            case "REPLY_REPORT":
                 return ReportTypeEnum.REPLY_REPORT;
-            case "HIGH":
+            case "STREAM_REPORT":
                 return ReportTypeEnum.STREAM_REPORT;
-            case "CRA":
-                return ReportTypeEnum.SYSTEM_REPORT;
             default:
                 throw new NotValidException("Report type required");
         }
@@ -92,5 +93,27 @@ public class ReportResource {
             return buildError(e, 400);
         }
     } // end createAdmin
+
+    @PUT
+    @Path("/{id}/settleReport")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response settleReport(@PathParam("id") Long reportId, String jsonString) {
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+        String action = jsonObject.getString("action");
+
+        try {
+
+            if (action.equals("RESOLVED")) {
+                reportSB.setReportState(reportId, ReportStateEnum.RESOLVED);
+            } else {
+                reportSB.setReportState(reportId, ReportStateEnum.VOID);
+            }
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    } // end resolveReport
 
 }

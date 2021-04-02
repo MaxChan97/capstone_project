@@ -107,4 +107,13 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         return resultList;
 
     } // end getAllReports
+
+    @Override
+    public void setReportState(Long reportId, ReportStateEnum state) throws NoResultException, NotValidException {
+        Report report = emGetReport(reportId);
+        report.setReportState(state);
+
+        // end to create admin log
+        em.flush();
+    }
 }
