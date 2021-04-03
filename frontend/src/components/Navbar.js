@@ -72,6 +72,21 @@ function Navbar({
     confirmStartStreamDialogOpen,
     setConfirmStartStreamDialogOpen,
   ] = useState(false);
+
+  const [title, setTitle] = useState();
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const [description, setDescription] = useState();
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
+
+  const [video, setVideo] = useState("");
+  const [refresh, setRefresh] = useState(true);
+
+  const [uploadDialog, setShowUploadDialog] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -128,6 +143,81 @@ function Navbar({
           >
             Confirm
           </ColorButton>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  function handleUploadDialogOpen() {
+    setShowUploadDialog(true);
+  }
+
+  function handleUploadDialogClose() {
+    setShowUploadDialog(false);
+  }
+
+  // const handleUpload = () => {
+  //   Api.uploadVideo(title, description, video)
+  //     .done(() => {
+  //       alert.show("Video uploaded successfully!");
+  //       setRefresh(!refresh);
+  //       handleUploadDialogClose();
+  //     })
+  //     .fail((xhr, status, error) => {
+  //       //alert.show("Something went wrong, please try again!");
+  //       alert.show(xhr.responseJSON.error);
+  //     });
+  // };
+
+  function renderUploadDialog() {
+    return (
+      <Dialog open={uploadDialog} onClose={handleUploadDialogClose}>
+        <DialogTitle id="confirm-start-stream-dialog-title">
+          <b>Upload Video</b>
+        </DialogTitle>
+        <DialogActions>
+          <div className="container">
+        <div className="row ml-1">
+          <form >
+            <div className="ml-2 mr-4">
+              <div className="form-group">
+                <label htmlFor="inputTitle">Title</label>
+                <input
+                  type="text"
+                  id="inputTitle"
+                  // required
+                  style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
+                  className="form-control"
+                  value={title}
+                  onChange={handleTitleChange}
+                />
+              </div>
+              <div className="form-group">
+                  <label htmlFor="inputDescription">Description</label>
+                  <textarea
+                    className="form-control"
+                    value={description}
+                    style={{ width: "400px",height:"100px",marginTop: "13px", marginBottom: "20px" }}
+                    onChange={handleDescriptionChange}
+                  />
+                </div>
+            </div>
+          </form>
+          </div>
+          <div className="row mr-3 mb-2" style={{float:"right"}}>
+          <Button style={{ outline: "none" }} onClick={handleUploadDialogClose}>
+            Cancel
+          </Button>
+          <ColorButton
+            style={{ outline: "none" }}
+            color="primary"
+            variant="contained"
+            // onClick={handleUpload}
+          >
+            UPLOAD
+          </ColorButton>
+          </div>
+          </div>
         </DialogActions>
       </Dialog>
     );
@@ -226,7 +316,7 @@ function Navbar({
         <Link onClick={onClickStreamButton}>
           <img src={liveLogo} alt="liveLogo" />
         </Link>
-        <Link to="/">
+        <Link onClick={handleUploadDialogOpen}>
           <img src={uploadLogo} alt="uploadLogo" />
         </Link>
         <Link to={"/chat/" + currentUser}>
@@ -247,6 +337,7 @@ function Navbar({
         </Link>
       </div>
       {renderStartStreamDialog()}
+      {renderUploadDialog()}
     </nav>
   );
 }

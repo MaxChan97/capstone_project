@@ -35,337 +35,337 @@ import javax.persistence.Query;
 @Stateless
 public class PostSessionBean implements PostSessionBeanLocal {
 
-  @PersistenceContext
-  private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-  @EJB
-  private PersonSessionBeanLocal personSB;
+    @EJB
+    private PersonSessionBeanLocal personSB;
 
-  @EJB
-  private CommunitySessionBeanLocal cSB;
+    @EJB
+    private CommunitySessionBeanLocal cSB;
 
-  @EJB
-  private TrendSessionBeanLocal trendSB;
+    @EJB
+    private TrendSessionBeanLocal trendSB;
 
-  // Helper methods to check and retrieve entities
-  private Post emGetPost(Long postId) throws NoResultException, NotValidException {
-    if (postId == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
+    // Helper methods to check and retrieve entities
+    private Post emGetPost(Long postId) throws NoResultException, NotValidException {
+        if (postId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
+        }
+
+        Post post = em.find(Post.class, postId);
+
+        if (post == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+
+        return post;
     }
 
-    Post post = em.find(Post.class, postId);
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
+        }
 
-    if (post == null) {
-      throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
     }
 
-    return post;
-  }
+    private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
+        if (communityId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_COMMUNITY_ID);
+        }
 
-  private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
-    if (personId == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_PERSON_ID);
+        Community community = em.find(Community.class, communityId);
+
+        if (community == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+
+        return community;
     }
 
-    Person person = em.find(Person.class, personId);
+    @Override
+    public void checkPostCredentials(Long postId, Long personId) throws NotValidException, NoResultException {
+        Post post = emGetPost(postId);
 
-    if (person == null) {
-      throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_PERSON);
+        if (!Objects.equals(post.getAuthor().getId(), personId)) {
+            throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
+        }
     }
 
-    return person;
-  }
-
-  private Community emGetCommunity(Long communityId) throws NoResultException, NotValidException {
-    if (communityId == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_COMMUNITY_ID);
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        return personSB.getPersonById(p.getId());
     }
 
-    Community community = em.find(Community.class, communityId);
-
-    if (community == null) {
-      throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+    private void detachLikes(List<Person> likes) throws NoResultException, NotValidException {
+        for (Person person : likes) {
+            person = getDetachedPerson(person);
+        }
     }
 
-    return community;
-  }
-
-  @Override
-  public void checkPostCredentials(Long postId, Long personId) throws NotValidException, NoResultException {
-    Post post = emGetPost(postId);
-
-    if (!Objects.equals(post.getAuthor().getId(), personId)) {
-      throw new NotValidException(PostSessionBeanLocal.INVALID_CREDENTIALS);
-    }
-  }
-
-  private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
-    return personSB.getPersonById(p.getId());
-  }
-
-  private void detachLikes(List<Person> likes) throws NoResultException, NotValidException {
-    for (Person person : likes) {
-      person = getDetachedPerson(person);
-    }
-  }
-
-  private Community getDetachCommunity(Community c) throws NoResultException, NotValidException {
-    return cSB.getCommunityByIdForPost(c.getId());
-  }
-
-  // Main logic ---------------------------------------------------------------------
-  @Override
-  public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
-
-    if (post == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+    private Community getDetachCommunity(Community c) throws NoResultException, NotValidException {
+        return cSB.getCommunityByIdForPost(c.getId());
     }
 
-    //Parse post body for hashtags
-    String[] words = post.getBody().split(" ");
-    HashSet<String> hashtags = new HashSet<String>();
-    for (String word : words) {
-      if (!word.isEmpty() && word.startsWith("#") && word.length() > 1) {
-        hashtags.add(word);
-      }
+    // Main logic ---------------------------------------------------------------------
+    @Override
+    public void createPostForPerson(Long personId, Post post) throws NoResultException, NotValidException {
+
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        //Parse post body for hashtags
+        String[] words = post.getBody().split(" ");
+        HashSet<String> hashtags = new HashSet<String>();
+        for (String word : words) {
+            if (!word.isEmpty() && word.startsWith("#") && word.length() > 1) {
+                hashtags.add(word);
+            }
+        }
+
+        List<Long> trends = new ArrayList<>();
+        for (String hashtag : hashtags) {
+            try {
+                Trend trend = trendSB.getTrend(hashtag);
+
+                //Trend already exists
+                //Get trend, add relationships and persist
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date date = cal.getTime();
+                trend.getDateCount().put(date, trend.getDateCount().get(date) + 1);
+                trends.add(trend.getId());
+                post.getTrends().add(trend);
+                trend.getPosts().add(post);
+
+            } catch (NoResultException e) {
+                //Create a new trend, add relationships and persist
+                Trend newTrend = trendSB.createTrend(hashtag);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date date = cal.getTime();
+                newTrend.getDateCount().put(date, new Long(1));
+                post.getTrends().add(newTrend);
+                newTrend.getPosts().add(post);
+                em.persist(newTrend);
+            }
+        }
+
+        Person poster = emGetPerson(personId);
+
+        post.setAuthor(poster);
+
+        em.persist(post);
+        poster.getPosts().add(post);
+
+        personSB.addContributorPointsToPerson(personId, 3.0);
+        personSB.checkBadgeQualification(personId);
+        em.flush();
+
+    } // end createPostForPerson
+
+    @Override
+    public void createPostForCommunity(Post post, Long personId, Long communityId)
+            throws NoResultException, NotValidException {
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        Person person = emGetPerson(personId);
+        Community community = emGetCommunity(communityId);
+
+        post.setAuthor(person);
+        post.setPostCommunity(community);
+
+        em.persist(post);
+        person.getPosts().add(post);
+        community.getPosts().add(post);
+
+        personSB.addContributorPointsToPerson(personId, 3.0);
+        personSB.checkBadgeQualification(personId);
+        em.flush();
+
+    } // end createPostForCommunity
+
+    @Override
+    public List<Post> searchPostByTitle(String title) throws NoResultException, NotValidException {
+        Query q;
+        if (title != null) {
+            q = em.createQuery("SELECT p FROM Post p WHERE " + "LOWER(p.title) LIKE :title");
+            q.setParameter("title", "%" + title.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT p FROM Post p");
+        }
+        List<Post> posts = q.getResultList();
+
+        for (Post p : posts) {
+            p = getPostById(p.getId());
+        }
+
+        return posts;
+
+    } // end searchPostByTitle
+
+    @Override
+    public void updatePost(Post post) throws NoResultException, NotValidException {
+        if (post == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        Post oldPost = emGetPost(post.getId());
+
+        oldPost.setTitle(post.getTitle());
+        oldPost.setBody(post.getBody());
+        em.flush();
+
+    } // end updatePost
+
+    @Override
+    public void deletePostForPerson(Long postId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+
+        // unlinking
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        em.remove(post);
     }
 
-    List<Long> trends = new ArrayList<>();
-    for (String hashtag : hashtags) {
-      try {
-        Trend trend = trendSB.getTrend(hashtag);
+    @Override
+    public void deletePostForCommunity(Long postId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+        Community c = post.getPostCommunity();
 
-        //Trend already exists
-        //Get trend, add relationships and persist
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date date = cal.getTime();
-        trend.getDateCount().put(date, trend.getDateCount().get(date) + 1);
-        trends.add(trend.getId());
-        post.getTrends().add(trend);
-        trend.getPosts().add(post);
+        person.getPosts().remove(post);
+        post.setAuthor(null);
 
-      } catch (NoResultException e) {
-        //Create a new trend, add relationships and persist
-        Trend newTrend = trendSB.createTrend(hashtag);
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date date = cal.getTime();
-        newTrend.getDateCount().put(date, new Long(1));
-        post.getTrends().add(newTrend);
-        newTrend.getPosts().add(post);
-        em.persist(newTrend);
-      }
+        c.getPosts().remove(post);
+        post.setPostCommunity(null);
+
+        em.remove(post);
     }
 
-    Person poster = emGetPerson(personId);
+    @Override
+    public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
 
-    post.setAuthor(poster);
+        if (post.getLikes().contains(person)) {
+            return;
+        }
 
-    em.persist(post);
-    poster.getPosts().add(post);
+        post.getLikes().add(person);
 
-    personSB.addContributorPointsToPerson(personId, 3.0);
-    personSB.checkBadgeQualification(personId);
-    em.flush();
+    } // end likePost
 
-  } // end createPostForPerson
+    @Override
+    public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = emGetPerson(personId);
 
-  @Override
-  public void createPostForCommunity(Post post, Long personId, Long communityId)
-          throws NoResultException, NotValidException {
-    if (post == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
-    }
+        if (!post.getLikes().contains(person)) {
+            return;
+        }
 
-    Person person = emGetPerson(personId);
-    Community community = emGetCommunity(communityId);
+        post.getLikes().remove(person);
 
-    post.setAuthor(person);
-    post.setPostCommunity(community);
+    } // end unlikePost
 
-    em.persist(post);
-    person.getPosts().add(post);
-    community.getPosts().add(post);
+    @Override
+    public Post getPostById(Long postId) throws NoResultException, NotValidException {
+        Post p = emGetPost(postId);
+        em.detach(p);
+        em.detach(p.getAuthor());
+        p.setTrends(null);
 
-    personSB.addContributorPointsToPerson(personId, 3.0);
-    personSB.checkBadgeQualification(personId);
-    em.flush();
+        Person postAuthor = p.getAuthor();
+        p.setAuthor(getDetachedPerson(postAuthor));
 
-  } // end createPostForCommunity
+        List<Comment> comments = p.getComments();
 
-  @Override
-  public List<Post> searchPostByTitle(String title) throws NoResultException, NotValidException {
-    Query q;
-    if (title != null) {
-      q = em.createQuery("SELECT p FROM Post p WHERE " + "LOWER(p.title) LIKE :title");
-      q.setParameter("title", "%" + title.toLowerCase() + "%");
-    } else {
-      q = em.createQuery("SELECT p FROM Post p");
-    }
-    List<Post> posts = q.getResultList();
+        detachLikes(p.getLikes());
 
-    for (Post p : posts) {
-      p = getPostById(p.getId());
-    }
+        for (Comment c : comments) {
+            Person commentAuthor = c.getAuthor();
 
-    return posts;
+            if (commentAuthor != null) {
 
-  } // end searchPostByTitle
+                c.setAuthor(getDetachedPerson(commentAuthor));
 
-  @Override
-  public void updatePost(Post post) throws NoResultException, NotValidException {
-    if (post == null) {
-      throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
-    }
+            }
 
-    Post oldPost = emGetPost(post.getId());
+            detachLikes(c.getLikes());
 
-    oldPost.setTitle(post.getTitle());
-    oldPost.setBody(post.getBody());
-    em.flush();
+            List<Reply> replies = c.getReplies();
 
-  } // end updatePost
+            for (Reply r : replies) {
+                Person replyAuthor = r.getAuthor();
 
-  @Override
-  public void deletePostForPerson(Long postId) throws NoResultException, NotValidException {
-    Post post = emGetPost(postId);
-    Person person = post.getAuthor();
+                if (replyAuthor != null) {
 
-    // unlinking
-    person.getPosts().remove(post);
-    post.setAuthor(null);
+                    r.setAuthor(getDetachedPerson(replyAuthor));
 
-    em.remove(post);
-  }
+                }
 
-  @Override
-  public void deletePostForCommunity(Long postId) throws NoResultException, NotValidException {
-    Post post = emGetPost(postId);
-    Person person = post.getAuthor();
-    Community c = post.getPostCommunity();
-
-    person.getPosts().remove(post);
-    post.setAuthor(null);
-
-    c.getPosts().remove(post);
-    post.setPostCommunity(null);
-
-    em.remove(post);
-  }
-
-  @Override
-  public void likePost(Long postId, Long personId) throws NoResultException, NotValidException {
-    Post post = emGetPost(postId);
-    Person person = emGetPerson(personId);
-
-    if (post.getLikes().contains(person)) {
-      return;
-    }
-
-    post.getLikes().add(person);
-
-  } // end likePost
-
-  @Override
-  public void unlikePost(Long postId, Long personId) throws NoResultException, NotValidException {
-    Post post = emGetPost(postId);
-    Person person = emGetPerson(personId);
-
-    if (!post.getLikes().contains(person)) {
-      return;
-    }
-
-    post.getLikes().remove(person);
-
-  } // end unlikePost
-
-  @Override
-  public Post getPostById(Long postId) throws NoResultException, NotValidException {
-    Post p = emGetPost(postId);
-    em.detach(p);
-    em.detach(p.getAuthor());
-    p.setTrends(null);
-
-    Person postAuthor = p.getAuthor();
-    p.setAuthor(getDetachedPerson(postAuthor));
-
-    List<Comment> comments = p.getComments();
-
-    detachLikes(p.getLikes());
-
-    for (Comment c : comments) {
-      Person commentAuthor = c.getAuthor();
-
-      if (commentAuthor != null) {
-
-        c.setAuthor(getDetachedPerson(commentAuthor));
-
-      }
-
-      detachLikes(c.getLikes());
-
-      List<Reply> replies = c.getReplies();
-
-      for (Reply r : replies) {
-        Person replyAuthor = r.getAuthor();
-
-        if (replyAuthor != null) {
-
-          r.setAuthor(getDetachedPerson(replyAuthor));
+                detachLikes(r.getLikes());
+            }
 
         }
 
-        detachLikes(r.getLikes());
-      }
+        Poll poll = p.getPoll();
+        if (poll != null) {
+            // detachPosts
+            Set<Person> pollers = poll.getPollers();
 
-    }
+            for (Person person : pollers) {
+                person = getDetachedPerson(person);
+            }
 
-    Poll poll = p.getPoll();
-    if (poll != null) {
-      // detachPosts
-      Set<Person> pollers = poll.getPollers();
-
-      for (Person person : pollers) {
-        person = getDetachedPerson(person);
-      }
-
-      for (PersonAnswer pa : poll.getOptions().values()) {
-        List<Person> answeredBy = pa.getAnsweredBy();
-        for (Person person : answeredBy) {
-          person = getDetachedPerson(person);
+            for (PersonAnswer pa : poll.getOptions().values()) {
+                List<Person> answeredBy = pa.getAnsweredBy();
+                for (Person person : answeredBy) {
+                    person = getDetachedPerson(person);
+                }
+            }
         }
-      }
+
+        return p;
+    } // end getPostById
+
+    @Override
+    public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException {
+        Post p = getPostById(postId);
+
+        Community c = p.getPostCommunity();
+
+        if (c != null) {
+            System.out.println(c.getId());
+            if (withCommunity) {
+                p.setPostCommunity(getDetachCommunity(c));
+            } else {
+                p.setPostCommunity(null);
+            }
+        } else {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
+        }
+        return p;
     }
 
-    return p;
-  } // end getPostById
-
-  @Override
-  public Post getPostById(Long postId, boolean withCommunity) throws NoResultException, NotValidException {
-    Post p = getPostById(postId);
-
-    Community c = p.getPostCommunity();
-
-    if (c != null) {
-      System.out.println(c.getId());
-      if (withCommunity) {
-        p.setPostCommunity(getDetachCommunity(c));
-      } else {
-        p.setPostCommunity(null);
-      }
-    } else {
-      throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_COMMUNITY);
-    }
-    return p;
-  }
-    
     @Override
     public List<Post> searchPostByBody(String searchTerm) throws NoResultException, NotValidException {
         Query q;
@@ -387,5 +387,25 @@ public class PostSessionBean implements PostSessionBeanLocal {
             }
         }
         return postList;
+    }
+
+    @Override
+    public void deletePost(Long postId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+
+        Community c = post.getPostCommunity();
+
+        // unlinking
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        if (c != null) {
+            c.getPosts().remove(post);
+            post.setPostCommunity(null);
+        }
+
+        em.remove(post);
+        em.flush();
     }
 }
