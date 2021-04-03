@@ -206,7 +206,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
@@ -228,7 +228,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
@@ -251,7 +251,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
@@ -278,7 +278,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);

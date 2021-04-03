@@ -138,7 +138,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         report.setReportState(state);
 
         Date now = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
 
         Administrator admin = emGetAdmin(adminId);
