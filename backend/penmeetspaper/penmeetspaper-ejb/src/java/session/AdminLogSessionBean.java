@@ -33,6 +33,20 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
     @EJB
     ReportSessionBeanLocal reportSB;
 
+    private Administrator emGetAdmin(Long adminId) throws NoResultException, NotValidException {
+        if (adminId == null) {
+            throw new NotValidException(AdministratorSessionBeanLocal.MISSING_ADMIN_ID);
+        }
+
+        Administrator admin = em.find(Administrator.class, adminId);
+
+        if (admin == null) {
+            throw new NoResultException(AdministratorSessionBeanLocal.CANNOT_FIND_ADMIN);
+        }
+
+        return admin;
+    }
+
     private AdminLog emGetAdminLog(Long adminLogId) throws NoResultException, NotValidException {
         if (adminLogId == null) {
             throw new NotValidException(AdminLogSessionBeanLocal.MISSING_ADMINLOG_ID);
@@ -66,6 +80,7 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
         return al;
     }
 
+    @Override
     public AdminLog getAdminLogById(Long adminLogId) throws NoResultException, NotValidException {
         AdminLog a = emGetAdminLog(adminLogId);
         em.detach(a);
@@ -85,6 +100,7 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
 
     }
 
+    @Override
     public List<AdminLog> getAllAdminLogs() throws NoResultException, NotValidException {
         Query q = em.createQuery("SELECT a FROM  AdminLog a");
         List<AdminLog> resultList = q.getResultList();
@@ -95,4 +111,18 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
 
         return resultList;
     }
+
+    @Override
+    public List<AdminLog> getAdminLogByAdminId(Long adminId) throws NoResultException, NotValidException {
+        Administrator admin = emGetAdmin(adminId);
+
+        List<AdminLog> resultList = admin.getLogs();
+
+        for (AdminLog a : resultList) {
+            a = getAdminLogById(a.getId());
+        }
+
+        return resultList;
+    }
+
 }
