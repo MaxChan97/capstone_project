@@ -406,5 +406,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
 
         em.remove(post);
+        em.flush();
     }
 }
