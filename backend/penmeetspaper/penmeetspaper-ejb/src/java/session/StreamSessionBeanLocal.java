@@ -18,9 +18,11 @@ import javax.ejb.Local;
 @Local
 public interface StreamSessionBeanLocal {
     
-    public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid) throws NoResultException, NotValidException;
+    public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid, String accessUrl, String thumbnailUrl) throws NoResultException, NotValidException;
     
     public void endStream(Long streamId);
+    
+    public Stream getStreamById(Long streamId) throws NoResultException, NotValidException;
     
     public List<Stream> getOngoingStreams() throws NoResultException, NotValidException;
     

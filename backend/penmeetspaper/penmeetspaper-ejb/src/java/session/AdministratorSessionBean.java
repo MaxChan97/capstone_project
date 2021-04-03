@@ -43,6 +43,15 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
     @EJB
     PostSessionBeanLocal postSB;
 
+    @EJB
+    CommentSessionBeanLocal commentSB;
+
+    @EJB
+    ReplySessionBeanLocal replySB;
+
+    @EJB
+    CommunitySessionBeanLocal CommunitySB;
+
     private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
         if (reportId == null) {
             throw new NotValidException(ReportSessionBeanLocal.MISSING_REPORT_ID);
@@ -280,7 +289,6 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         postSB.deletePost(postId);
 
         Administrator admin = emGetAdmin(adminId);
-        Post post = emGetPost(postId);
         AdminLog log = new AdminLog();
         log.setAdmin(admin);
         log.setAdminLogsType(AdminLogsTypeEnum.DELETE_POST);
@@ -288,7 +296,91 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setDateCreated(now);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
-        String desc = String.format("%s deleted post (%o) on %s. Reason: %s", admin.getUsername(), post.getId(), strDate, description);
+        String desc = String.format("%s deleted post (%o) on %s. Reason: %s", admin.getUsername(), postId, strDate, description);
+        log.setDescription(desc);
+
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
+        }
+
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+        em.flush();
+    }
+
+    @Override
+    public void deleteComment(Long adminId, Long commentId, String description, Long reportId) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+
+        commentSB.deleteComment(commentId);
+
+        Administrator admin = emGetAdmin(adminId);
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.DELETE_COMMENT);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s deleted comment (%o) on %s. Reason: %s", admin.getUsername(), commentId, strDate, description);
+        log.setDescription(desc);
+
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
+        }
+
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+        em.flush();
+    }
+
+    @Override
+    public void deleteReply(Long adminId, Long replyId, String description, Long reportId) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+
+        replySB.deleteReply(replyId);
+
+        Administrator admin = emGetAdmin(adminId);
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.DELETE_REPLY);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s deleted comment (%o) on %s. Reason: %s", admin.getUsername(), replyId, strDate, description);
+        log.setDescription(desc);
+
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
+        }
+
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+        em.flush();
+    }
+
+    @Override
+    public void deleteGommunity(Long adminId, Long communityId, String description, Long reportId) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+
+        CommunitySB.deleteCommunity(communityId);
+
+        Administrator admin = emGetAdmin(adminId);
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.DELETE_COMMUNITY);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s deleted community (%o) on %s. Reason: %s", admin.getUsername(), communityId, strDate, description);
         log.setDescription(desc);
 
         if (reportId != null) {

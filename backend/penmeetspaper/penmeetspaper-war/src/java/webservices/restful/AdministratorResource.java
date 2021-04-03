@@ -173,4 +173,101 @@ public class AdministratorResource {
             return buildError(e, 400);
         }
     }
+
+    @PUT
+    @Path("/{id}/deletePost")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePost(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long postId = Long.parseLong(jsonObject.getString("postId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.deletePost(adminId, postId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    } // end deletePost
+
+    @PUT
+    @Path("/{id}/deleteComment")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteComment(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long commentId = Long.parseLong(jsonObject.getString("commentId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.deleteComment(adminId, commentId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/deleteReply")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteReply(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long replyId = Long.parseLong(jsonObject.getString("replyId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.deleteReply(adminId, replyId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    } // end deleteReply
+
+    @PUT
+    @Path("/{id}/deleteCommunity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCommunity(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long communityId = Long.parseLong(jsonObject.getString("communityId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.deleteGommunity(adminId, communityId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }
