@@ -6,11 +6,16 @@
 package session;
 
 import entity.AdminLog;
+import entity.Administrator;
+import entity.Report;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -21,6 +26,26 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    AdministratorSessionBeanLocal adminSB;
+
+    @EJB
+    ReportSessionBeanLocal reportSB;
+
+    private Administrator emGetAdmin(Long adminId) throws NoResultException, NotValidException {
+        if (adminId == null) {
+            throw new NotValidException(AdministratorSessionBeanLocal.MISSING_ADMIN_ID);
+        }
+
+        Administrator admin = em.find(Administrator.class, adminId);
+
+        if (admin == null) {
+            throw new NoResultException(AdministratorSessionBeanLocal.CANNOT_FIND_ADMIN);
+        }
+
+        return admin;
+    }
 
     private AdminLog emGetAdminLog(Long adminLogId) throws NoResultException, NotValidException {
         if (adminLogId == null) {
@@ -36,6 +61,16 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
         return report;
     }
 
+    private Administrator getDetachedAdmin(Administrator a) throws NoResultException, NotValidException {
+        return adminSB.getAdminById(a.getId());
+    }
+
+    private Report getDetachedReportForAdminLog(Report r) throws NoResultException, NotValidException {
+        Report report = reportSB.getReportById(r.getId());
+        report.setReporter(null);
+        return report;
+    }
+
     @Override
     public AdminLog persistAdminLog(AdminLog al) {
 
@@ -44,4 +79,50 @@ public class AdminLogSessionBean implements AdminLogSessionBeanLocal {
 
         return al;
     }
+
+    @Override
+    public AdminLog getAdminLogById(Long adminLogId) throws NoResultException, NotValidException {
+        AdminLog a = emGetAdminLog(adminLogId);
+        em.detach(a);
+        em.detach(a.getAdmin());
+
+        Administrator admin = a.getAdmin();
+        a.setAdmin(getDetachedAdmin(admin));
+
+        Report r = a.getReport();
+
+        if (r != null) {
+            em.detach(r);
+            a.setReport(getDetachedReportForAdminLog(r));
+        }
+
+        return a;
+
+    }
+
+    @Override
+    public List<AdminLog> getAllAdminLogs() throws NoResultException, NotValidException {
+        Query q = em.createQuery("SELECT a FROM  AdminLog a");
+        List<AdminLog> resultList = q.getResultList();
+
+        for (AdminLog a : resultList) {
+            a = getAdminLogById(a.getId());
+        }
+
+        return resultList;
+    }
+
+    @Override
+    public List<AdminLog> getAdminLogByAdminId(Long adminId) throws NoResultException, NotValidException {
+        Administrator admin = emGetAdmin(adminId);
+
+        List<AdminLog> resultList = admin.getLogs();
+
+        for (AdminLog a : resultList) {
+            a = getAdminLogById(a.getId());
+        }
+
+        return resultList;
+    }
+
 }

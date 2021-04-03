@@ -9,16 +9,19 @@ import entity.Administrator;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.AdministratorSessionBeanLocal;
@@ -80,4 +83,94 @@ public class AdministratorResource {
         }
     }
 
+    @GET
+    @Path("/{id}/isDeactivated")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response isAdminDeactivated(@PathParam("id") Long adminId) {
+        Boolean res;
+        try {
+            adminSB.checkAdminDeactivated(adminId);
+            res = false;
+            return Response.status(200).entity(res).build();
+        } catch (NotValidException e) {
+            res = true;
+            return Response.status(200).entity(res).build();
+        } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllAdmin() {
+        try {
+            List<Administrator> results = adminSB.getAllAdmin();
+            GenericEntity<List<Administrator>> entity = new GenericEntity<List<Administrator>>(results) {
+            };
+            return Response.status(200).entity(entity).build();
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAdminById(@PathParam("id") Long adminId) {
+        try {
+            Administrator a = adminSB.getAdminById(adminId);
+            return Response.status(200).entity(a).type(MediaType.APPLICATION_JSON).build();
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/banPerson")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response banPerson(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.banPersonFromLogin(adminId, personId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/unbanPerson")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unbanPerson(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            adminSB.unbanPersonFromLogin(adminId, personId, description, reportId);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
 }

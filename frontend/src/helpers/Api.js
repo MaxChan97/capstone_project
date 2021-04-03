@@ -1336,4 +1336,26 @@ export default {
       type: "GET",
     });
   },
+
+  getTopTrends() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/trend/topAllTime",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getTodaysTrends() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/trend/topToday",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

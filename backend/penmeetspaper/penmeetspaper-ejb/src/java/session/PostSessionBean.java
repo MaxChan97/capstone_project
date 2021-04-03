@@ -12,8 +12,13 @@ import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
+import entity.Trend;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -38,6 +43,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @EJB
     private CommunitySessionBeanLocal cSB;
+
+    @EJB
+    private TrendSessionBeanLocal trendSB;
 
     // Helper methods to check and retrieve entities
     private Post emGetPost(Long postId) throws NoResultException, NotValidException {
@@ -111,6 +119,49 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
         if (post == null) {
             throw new NotValidException(PostSessionBeanLocal.MISSING_POST);
+        }
+
+        //Parse post body for hashtags
+        String[] words = post.getBody().split(" ");
+        HashSet<String> hashtags = new HashSet<String>();
+        for (String word : words) {
+            if (!word.isEmpty() && word.startsWith("#") && word.length() > 1) {
+                hashtags.add(word);
+            }
+        }
+
+        List<Long> trends = new ArrayList<>();
+        for (String hashtag : hashtags) {
+            try {
+                Trend trend = trendSB.getTrend(hashtag);
+
+                //Trend already exists
+                //Get trend, add relationships and persist
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date date = cal.getTime();
+                trend.getDateCount().put(date, trend.getDateCount().get(date) + 1);
+                trends.add(trend.getId());
+                post.getTrends().add(trend);
+                trend.getPosts().add(post);
+
+            } catch (NoResultException e) {
+                //Create a new trend, add relationships and persist
+                Trend newTrend = trendSB.createTrend(hashtag);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date date = cal.getTime();
+                newTrend.getDateCount().put(date, new Long(1));
+                post.getTrends().add(newTrend);
+                newTrend.getPosts().add(post);
+                em.persist(newTrend);
+            }
         }
 
         Person poster = emGetPerson(personId);
@@ -240,6 +291,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post p = emGetPost(postId);
         em.detach(p);
         em.detach(p.getAuthor());
+        p.setTrends(null);
 
         Person postAuthor = p.getAuthor();
         p.setAuthor(getDetachedPerson(postAuthor));
@@ -313,7 +365,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
         return p;
     }
-    
+
     @Override
     public List<Post> searchPostByBody(String searchTerm) throws NoResultException, NotValidException {
         Query q;
@@ -335,5 +387,25 @@ public class PostSessionBean implements PostSessionBeanLocal {
             }
         }
         return postList;
+    }
+
+    @Override
+    public void deletePost(Long postId) throws NoResultException, NotValidException {
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+
+        Community c = post.getPostCommunity();
+
+        // unlinking
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        if (c != null) {
+            c.getPosts().remove(post);
+            post.setPostCommunity(null);
+        }
+
+        em.remove(post);
+        em.flush();
     }
 }

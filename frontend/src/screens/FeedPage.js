@@ -7,9 +7,11 @@ import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
 import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/FeedPage/PostListOfFollowing";
+import TrendsCard from "../components/FeedPage/TrendsCard";
+
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import Modal from 'react-bootstrap/Modal'
+import Modal from "react-bootstrap/Modal";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Select from "react-select";
 import moment from "moment";
@@ -24,7 +26,6 @@ import {
   DialogActions,
   Button,
 } from "@material-ui/core";
-
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -64,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 600,
   },
 }));
-
 
 export default function FeedPage() {
   const alert = useAlert();
@@ -181,7 +181,6 @@ export default function FeedPage() {
     console.log(event.target.value);
   };
 
-
   const [topicInterests, setTopicInterests] = useState();
   const handleTopicInterestsChange = (selectedOptions) => {
     let tempSelectedOptions = [];
@@ -192,16 +191,15 @@ export default function FeedPage() {
   };
 
   const [topTenContributors, setTopTenContributors] = useState([]);
+  const [topTrends, setTopTrends] = useState([]);
+  const [todaysTrends, setTodaysTrends] = useState([]);
   const [horizontalMenu, setHorizontalMenu] = useState(horizontalList);
 
   const currentUser = useSelector((state) => state.currentUser);
-  const [
-    OnboardingDialogueOpen,
-    setOnboardingDialogueOpen,
-  ] = useState(false);
+  const [OnboardingDialogueOpen, setOnboardingDialogueOpen] = useState(false);
 
   // Modal
-  useEffect(() => { }, [horizontalMenu]);
+  useEffect(() => {}, [horizontalMenu]);
   useEffect(() => {
     if (currentUser) {
       loadData();
@@ -217,7 +215,7 @@ export default function FeedPage() {
     let incomeRangeStr;
     let topicInterestsArr;
     if (incomeRange == undefined) {
-      incomeRangeStr = ""
+      incomeRangeStr = "";
     } else {
       incomeRangeStr = incomeRange.value;
     }
@@ -226,7 +224,7 @@ export default function FeedPage() {
     } else {
       topicInterestsArr = topicInterests;
     }
-    console.log("YESYESYES")
+    console.log("YESYESYES");
     console.log(topicInterests);
     Api.updateCompletedOnboarding(
       currentUser,
@@ -254,6 +252,21 @@ export default function FeedPage() {
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
+    Api.getTopTrends()
+      .done((topAllTime) => {
+        setTopTrends(topAllTime);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+    Api.getTodaysTrends()
+      .done((topToday) => {
+        console.log(topToday);
+        setTodaysTrends(topToday);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
   }
 
   function toTitleCase(str) {
@@ -270,15 +283,14 @@ export default function FeedPage() {
     return { value: x, label: toTitleCase(x) };
   }
 
-
   //const handleOnboardingDialogueClose = () => setOnboardingDialogueOpen(false);
   const handleOnboardingDialogueOpen = () => setOnboardingDialogueOpen(true);
 
   function handleOnboardingDialogueSkip() {
-    console.log("skip")
+    console.log("skip");
     Api.updateSkipOnboarding(currentUser)
       .done(() => {
-        console.log("Skipped")
+        console.log("Skipped");
         setOnboardingDialogueOpen(false);
       })
       .fail((xhr, status, error) => {
@@ -286,22 +298,20 @@ export default function FeedPage() {
       });
   }
 
-
-
   function initiateOnboardingDialogue(e) {
     // Check if new user
-    Api.getPersonById(currentUser)
-      .done((currentPerson) => {
-        //e.preventDefault();
-        if (!currentPerson.completedOnboarding) {
-          handleOnboardingDialogueOpen();
-        }
-      })
+    Api.getPersonById(currentUser).done((currentPerson) => {
+      //e.preventDefault();
+      if (!currentPerson.completedOnboarding) {
+        handleOnboardingDialogueOpen();
+      }
+    });
   }
 
   function renderOnboardingDialogue() {
     return (
-      <Dialog contentClassName="customerModalStyle"
+      <Dialog
+        contentClassName="customerModalStyle"
         open={OnboardingDialogueOpen}
         onHide={handleOnboardingDialogueSkip}
         backdrop="static"
@@ -315,8 +325,8 @@ export default function FeedPage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="confirm-start-stream-dialog-description">
-            Let's get to know each other.
-            Sharing a little info will help us customize better content for you.
+            Let's get to know each other. Sharing a little info will help us
+            customize better content for you.
           </DialogContentText>
           <form>
             <div className="card-body">
@@ -350,44 +360,43 @@ export default function FeedPage() {
                     classNamePrefix="select"
                   />
                 ) : (
-                    <Select
-                      name="incomes"
-                      options={incomes}
-                      onChange={setIncomeRange}
-                      classNamePrefix="select"
-                    />
-                  )}
+                  <Select
+                    name="incomes"
+                    options={incomes}
+                    onChange={setIncomeRange}
+                    classNamePrefix="select"
+                  />
+                )}
               </div>
               <div className="form-group">
-                    <label htmlFor="inputInterests">Interests</label>
-                    {topicInterests !== undefined ? (
-                      <Select
-                        value={topicInterests.map((x) => MakeOption(x))}
-                        isMulti
-                        required
-                        name="topics"
-                        options={topics}
-                        onChange={(selectedOptions) =>
-                          handleTopicInterestsChange(selectedOptions)
-                        }
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                      />
-                    ) : (
-                      <Select
-                        isMulti
-                        name="topics"
-                        options={topics}
-                        onChange={(selectedOptions) =>
-                          handleTopicInterestsChange(selectedOptions)
-                        }
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                      />
-                    )}
-                  </div>
+                <label htmlFor="inputInterests">Interests</label>
+                {topicInterests !== undefined ? (
+                  <Select
+                    value={topicInterests.map((x) => MakeOption(x))}
+                    isMulti
+                    required
+                    name="topics"
+                    options={topics}
+                    onChange={(selectedOptions) =>
+                      handleTopicInterestsChange(selectedOptions)
+                    }
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
+                ) : (
+                  <Select
+                    isMulti
+                    name="topics"
+                    options={topics}
+                    onChange={(selectedOptions) =>
+                      handleTopicInterestsChange(selectedOptions)
+                    }
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
+                )}
+              </div>
             </div>
-
           </form>
         </DialogContent>
         <DialogActions>
@@ -402,9 +411,7 @@ export default function FeedPage() {
             color="primary"
             variant="contained"
             type="submit"
-            onClick={
-              handleSubmit
-            }
+            onClick={handleSubmit}
           >
             Confirm
           </ColorButton>
@@ -412,7 +419,6 @@ export default function FeedPage() {
       </Dialog>
     );
   }
-
 
   return (
     <div className="content-wrapper">
@@ -429,8 +435,12 @@ export default function FeedPage() {
           </div>
 
           <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
-            <LeaderboardCard data={topTenContributors} />
-            {console.log(topTenContributors)}
+            <div className="row">
+              <LeaderboardCard data={topTenContributors} />
+            </div>
+            <div className="row">
+              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
+            </div>
           </div>
         </div>
       </div>

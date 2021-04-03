@@ -64,7 +64,7 @@ public class Post implements Serializable, Comparable<Post> {
     @OneToOne
     private Poll poll;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "posts")
     private List<Trend> trends = new ArrayList<>();
 
     private String fileName;

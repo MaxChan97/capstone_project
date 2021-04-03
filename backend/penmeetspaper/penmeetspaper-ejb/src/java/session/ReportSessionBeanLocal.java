@@ -6,6 +6,7 @@
 package session;
 
 import entity.Report;
+import enumeration.ReportStateEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.List;
@@ -32,5 +33,7 @@ public interface ReportSessionBeanLocal {
     public List<Report> getAllReports() throws NoResultException, NotValidException;
 
     public Report createReport(Report report, Long reporterId) throws NoResultException, NotValidException;
+
+    public void setReportState(Long reportId, ReportStateEnum state, Long adminId) throws NoResultException, NotValidException;
 
 }
