@@ -12,7 +12,7 @@ import EditPostModal from "../../components/ProfilePage/EditPostModal";
 import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal";
 import FileTypes from "../../components/FileTypes.js";
 import MakeCommentCardForFeed from "../../components/ProfilePage/MakeCommentCardForFeed";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed";
 import EditPost from "../../components/ProfilePage/EditPost";
 //import Poll from "react-polls";
@@ -194,9 +194,7 @@ export default function CommunityPostCard({
           setRefresh={setRefresh}
         />
 
-        <div
-          class="card"
-        >
+        <div class="card">
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -223,7 +221,6 @@ export default function CommunityPostCard({
                   <span class="description">
                     {" "}
                     {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-       
                     {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>
@@ -283,10 +280,17 @@ export default function CommunityPostCard({
                   </div>
                 ))}
 
-              {edit == false ? (<p>{data.body}</p>) : <EditPost autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditPost>}
+              {edit == false ? (
+                <p>{data.body}</p>
+              ) : (
+                <EditPost
+                  autofocus
+                  data={data}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  setEdit={setEdit}
+                ></EditPost>
+              )}
 
               {/*}
               {data.poll != undefined && pollAnswers != [] ? (
@@ -359,21 +363,32 @@ export default function CommunityPostCard({
               setRefresh={setRefresh}
               post={data}
             ></CommentListForFeed>
-            <div style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-            }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               {data.comments.length > 2 ? (
-                <Tooltip title="Click to view full post and all comments" aria-label="View full post">
+                <Tooltip
+                  title="Click to view full post and all comments"
+                  aria-label="View full post"
+                >
                   <Link
                     to={"/community/post/" + data.id}
-                    style={{ color: "#3B21CB", margin: "0, auto", textAlign: "center" }}
+                    style={{
+                      color: "#3B21CB",
+                      margin: "0, auto",
+                      textAlign: "center",
+                    }}
                   >
                     View all comments
-
-                </Link>
-                </Tooltip>) : ("")}
+                  </Link>
+                </Tooltip>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>

@@ -118,7 +118,7 @@ export default function ProfileGroup({
                   src={tempPicture}
                 />
               )}
-              <br/>
+              <br />
               <div>
                 <style type="text/css">
                   {`

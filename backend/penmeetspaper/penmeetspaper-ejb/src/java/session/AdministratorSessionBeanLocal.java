@@ -25,7 +25,7 @@ public interface AdministratorSessionBeanLocal {
     public final static String MASTER_CREATED = "Master already created";
 
     public final static String MISSING_ADMIN_ID = "Missing Admin ID";
-    public final static String CANNOT_FIND_ADMIN = "Could not find Admino";
+    public final static String CANNOT_FIND_ADMIN = "Could not find Admin";
     public final static String NO_CREDENTIALS = "No permissions for this action";
     public final static String MASTER_ADMIN_NO_DEACT = "Cannot deactivate master admin";
 
@@ -46,5 +46,9 @@ public interface AdministratorSessionBeanLocal {
     public void banPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException;
 
     public void unbanPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException;
+
+    public void banPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
+
+    public void unbanPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException;
 
 }

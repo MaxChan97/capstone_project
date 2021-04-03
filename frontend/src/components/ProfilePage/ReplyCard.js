@@ -136,6 +136,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
         >
           <div class="post">
             <Divider variant="middle"/>
+            <br></br>
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
                 <img

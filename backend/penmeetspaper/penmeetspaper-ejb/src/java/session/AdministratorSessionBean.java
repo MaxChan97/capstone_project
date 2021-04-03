@@ -8,6 +8,7 @@ package session;
 import entity.AdminLog;
 import entity.Administrator;
 import entity.Person;
+import entity.Report;
 import enumeration.AdminLogsTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -37,6 +38,20 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
     @EJB
     AdminLogSessionBeanLocal adminLogSB;
+
+    private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
+        if (reportId == null) {
+            throw new NotValidException(ReportSessionBeanLocal.MISSING_REPORT_ID);
+        }
+
+        Report report = em.find(Report.class, reportId);
+
+        if (report == null) {
+            throw new NoResultException(ReportSessionBeanLocal.CANNOT_FIND_REPORT);
+        }
+
+        return report;
+    }
 
     private void checkUsernameTaken(String username) throws NotValidException {
         Query q = em.createQuery("SELECT a from Administrator a WHERE a.username =:username");
@@ -191,7 +206,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
@@ -213,13 +228,65 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String strDate = dateFormat.format(now);
         String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
         adminLogSB.persistAdminLog(log);
 
         admin.getLogs().add(log);
+    } // end unbanPersonFromLogin
+
+    @Override
+    public void banPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
+        Report report = emGetReport(reportId);
+        checkAdminDeactivated(adminId);
+        personSB.banPersonFromLogin(personId);
+
+        Administrator admin = emGetAdmin(adminId);
+        Person person = personSB.getPersonById(personId);
+
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
+        log.setDescription(desc);
+        log.setReport(report);
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+        em.flush();
+
+    } // end banPersonFromLogin
+
+    @Override
+    public void unbanPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+        Report report = emGetReport(reportId);
+
+        personSB.unbanPersonFromLogin(personId);
+
+        Administrator admin = emGetAdmin(adminId);
+        Person person = personSB.getPersonById(personId);
+
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
+        log.setDescription(desc);
+        log.setReport(report);
+        adminLogSB.persistAdminLog(log);
+
+        admin.getLogs().add(log);
+        em.flush();
     } // end unbanPersonFromLogin
 
 }

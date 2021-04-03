@@ -1012,6 +1012,17 @@ export default {
     });
   },
 
+  searchPostByBody(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/query?searchTerm=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   banPersonFromCommunity(communityId, personId, ownerId) {
     return jQuery.ajax({
       url:
@@ -1236,6 +1247,28 @@ export default {
         username: username,
         email: email,
       }),
+    });
+  },
+
+  getAllPerson() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getTopTrends() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/trend/topAllTime",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
     });
   },
 };

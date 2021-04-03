@@ -15,6 +15,8 @@ import { useAlert } from "react-alert";
 import { storage } from "../firebase";
 import MyCommunitiesCard from "../components/CommunityPage/MyCommunitiesCard";
 import TopCommunitiesCard from "../components/CommunityPage/TopCommunitiesCard";
+import { Link } from "react-router-dom";
+
 var uuid = require("uuid");
 
 const ColorButton = withStyles((theme) => ({
@@ -90,21 +92,23 @@ export default function CreateCommunity() {
                     alignItems: "center",
                   }}
                 >
-                  <ColorButton
-                    style={{
-                      height: "35px",
-                      width: "300px",
-                      outline: "none",
-                      float: "right",
-                      fontWeight: "600",
-                    }}
-                    href="/createCommunity"
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                  >
-                    Create Community
-                  </ColorButton>
+                  <Link to="/createCommunity">
+                    <ColorButton
+                      style={{
+                        height: "35px",
+                        width: "300px",
+                        outline: "none",
+                        float: "right",
+                        fontWeight: "600",
+                      }}
+
+                      variant="contained"
+                      color="primary"
+                      type="button"
+                    >
+                      Create Community
+                    </ColorButton>
+                  </Link>
                 </div>
               </div>
             </div>
