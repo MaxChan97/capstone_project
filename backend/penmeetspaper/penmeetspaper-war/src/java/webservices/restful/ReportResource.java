@@ -95,9 +95,9 @@ public class ReportResource {
     } // end createReport
 
     @PUT
-    @Path("/{id}/settleReport")
+    @Path("/{id}/changeReportState")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response settleReport(@PathParam("id") Long reportId, String jsonString) {
+    public Response changeReportState(@PathParam("id") Long reportId, String jsonString) {
 
         JsonObject jsonObject = createJsonObject(jsonString);
         String action = jsonObject.getString("action");
