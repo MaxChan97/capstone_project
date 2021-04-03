@@ -7,7 +7,9 @@ package session;
 
 import entity.AdminLog;
 import entity.Administrator;
+import entity.Community;
 import entity.Person;
+import entity.Post;
 import entity.Report;
 import enumeration.AdminLogsTypeEnum;
 import exception.NoResultException;
@@ -51,6 +53,20 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         }
 
         return report;
+    }
+
+    private Post emGetPost(Long postId) throws NoResultException, NotValidException {
+        if (postId == null) {
+            throw new NotValidException(PostSessionBeanLocal.MISSING_POST_ID);
+        }
+
+        Post post = em.find(Post.class, postId);
+
+        if (post == null) {
+            throw new NoResultException(PostSessionBeanLocal.CANNOT_FIND_POST);
+        }
+
+        return post;
     }
 
     private void checkUsernameTaken(String username) throws NotValidException {
@@ -196,7 +212,8 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
     }
 
     @Override
-    public void banPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException {
+    public void banPersonFromLogin(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
+
         checkAdminDeactivated(adminId);
         personSB.banPersonFromLogin(personId);
 
@@ -212,52 +229,12 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         String strDate = dateFormat.format(now);
         String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
-        adminLogSB.persistAdminLog(log);
 
-        admin.getLogs().add(log);
-    } // end banPersonFromLogin
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
+        }
 
-    @Override
-    public void unbanPersonFromLogin(Long adminId, Long personId, String description) throws NoResultException, NotValidException {
-        checkAdminDeactivated(adminId);
-        personSB.unbanPersonFromLogin(personId);
-
-        Administrator admin = emGetAdmin(adminId);
-        Person person = personSB.getPersonById(personId);
-
-        AdminLog log = new AdminLog();
-        log.setAdmin(admin);
-        log.setAdminLogsType(AdminLogsTypeEnum.UNBAN_USER);
-        Date now = new Date();
-        log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String strDate = dateFormat.format(now);
-        String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
-        log.setDescription(desc);
-        adminLogSB.persistAdminLog(log);
-
-        admin.getLogs().add(log);
-    } // end unbanPersonFromLogin
-
-    @Override
-    public void banPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
-        Report report = emGetReport(reportId);
-        checkAdminDeactivated(adminId);
-        personSB.banPersonFromLogin(personId);
-
-        Administrator admin = emGetAdmin(adminId);
-        Person person = personSB.getPersonById(personId);
-
-        AdminLog log = new AdminLog();
-        log.setAdmin(admin);
-        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
-        Date now = new Date();
-        log.setDateCreated(now);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String strDate = dateFormat.format(now);
-        String desc = String.format("%s banned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
-        log.setDescription(desc);
-        log.setReport(report);
         adminLogSB.persistAdminLog(log);
 
         admin.getLogs().add(log);
@@ -266,9 +243,8 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
     } // end banPersonFromLogin
 
     @Override
-    public void unbanPersonFromLoginReport(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
+    public void unbanPersonFromLogin(Long adminId, Long personId, String description, Long reportId) throws NoResultException, NotValidException {
         checkAdminDeactivated(adminId);
-        Report report = emGetReport(reportId);
 
         personSB.unbanPersonFromLogin(personId);
 
@@ -284,11 +260,36 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         String strDate = dateFormat.format(now);
         String desc = String.format("%s unbanned user %s (%o) on %s. Reason: %s", admin.getUsername(), person.getUsername(), person.getId(), strDate, description);
         log.setDescription(desc);
-        log.setReport(report);
+
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
+        }
+
         adminLogSB.persistAdminLog(log);
 
         admin.getLogs().add(log);
         em.flush();
     } // end unbanPersonFromLogin
 
+    public void deletePost(Long adminId, Long postId, String description) throws NoResultException, NotValidException {
+        checkAdminDeactivated(adminId);
+
+        Post post = emGetPost(postId);
+        Person person = post.getAuthor();
+
+        Community c = post.getPostCommunity();
+
+        // unlinking
+        person.getPosts().remove(post);
+        post.setAuthor(null);
+
+        if (c != null) {
+            c.getPosts().remove(post);
+            post.setPostCommunity(null);
+        }
+
+        em.remove(post);
+
+    }
 }

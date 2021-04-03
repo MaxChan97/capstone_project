@@ -114,11 +114,7 @@ public class AdministratorResource {
         }
 
         try {
-            if (reportId == null) {
-                adminSB.banPersonFromLogin(adminId, personId, description);
-            } else {
-                adminSB.banPersonFromLoginReport(adminId, personId, description, reportId);
-            }
+            adminSB.banPersonFromLogin(adminId, personId, description, reportId);
             return Response.status(204).build();
 
         } catch (NotValidException | NoResultException e) {
@@ -142,11 +138,7 @@ public class AdministratorResource {
         }
 
         try {
-            if (reportId == null) {
-                adminSB.unbanPersonFromLogin(adminId, personId, description);
-            } else {
-                adminSB.unbanPersonFromLoginReport(adminId, personId, description, reportId);
-            }
+            adminSB.unbanPersonFromLogin(adminId, personId, description, reportId);
             return Response.status(204).build();
 
         } catch (NotValidException | NoResultException e) {
