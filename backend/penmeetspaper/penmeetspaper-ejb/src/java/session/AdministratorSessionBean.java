@@ -178,7 +178,6 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         Administrator admin = emGetAdmin(aId);
         em.detach(admin);
 
-        em.detach(admin.getLogs());
         admin.setLogs(null);
 
         return admin;
@@ -274,6 +273,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         em.flush();
     } // end unbanPersonFromLogin
 
+    @Override
     public void deletePost(Long adminId, Long postId, String description, Long reportId) throws NoResultException, NotValidException {
         checkAdminDeactivated(adminId);
 

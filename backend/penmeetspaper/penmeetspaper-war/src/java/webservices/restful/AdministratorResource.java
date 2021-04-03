@@ -9,6 +9,7 @@ import entity.Administrator;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -20,6 +21,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.AdministratorSessionBeanLocal;
@@ -94,6 +96,32 @@ public class AdministratorResource {
             res = true;
             return Response.status(200).entity(res).build();
         } catch (NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllAdmin() {
+        try {
+            List<Administrator> results = adminSB.getAllAdmin();
+            GenericEntity<List<Administrator>> entity = new GenericEntity<List<Administrator>>(results) {
+            };
+            return Response.status(200).entity(entity).build();
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAdminById(@PathParam("id") Long adminId) {
+        try {
+            Administrator a = adminSB.getAdminById(adminId);
+            return Response.status(200).entity(a).type(MediaType.APPLICATION_JSON).build();
+        } catch (NotValidException | NoResultException e) {
             return buildError(e, 400);
         }
     }
