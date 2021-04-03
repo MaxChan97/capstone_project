@@ -135,13 +135,22 @@ public class AdministratorResource {
         Long personId = Long.parseLong(jsonObject.getString("personId"));
         String description = jsonObject.getString("description");
 
+        Long reportId = null;
         try {
-            adminSB.unbanPersonFromLogin(adminId, personId, description);
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            if (reportId == null) {
+                adminSB.unbanPersonFromLogin(adminId, personId, description);
+            } else {
+                adminSB.unbanPersonFromLoginReport(adminId, personId, description, reportId);
+            }
             return Response.status(204).build();
 
         } catch (NotValidException | NoResultException e) {
             return buildError(e, 400);
         }
     }
-
 }
