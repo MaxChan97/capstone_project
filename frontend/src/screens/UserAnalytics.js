@@ -61,7 +61,37 @@ export default function UserAnalytics() {
   const [earnings, setEarnings] = useState();
   const [earningsArray, setEarningsArray] = useState();
 
+  const [interestsDemographics, setInterestsDemographics] = useState();
+
   useEffect(() => {
+    Api.getFollowers(currentUser)
+      .done((followers) => {
+        let interestsDemographics = [];
+        let noOfInterests = 0;
+        for (const prop in followers) {
+          for (const ti of followers[prop]["follower"]["topicInterests"]) {
+            let found = false;
+            for (const interest of interestsDemographics) {
+              if (ti in interest) {
+                interest["y"] += 1;
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              let newInterest = {};
+              newInterest["name"] = ti;
+              newInterest["y"] = 1;
+              interestsDemographics.push(newInterest);
+            }
+          }
+        }
+        setInterestsDemographics(interestsDemographics);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+
     Api.getPersonById(currentUser)
       .done((person) => {
         setUsername(person.username);
@@ -106,9 +136,7 @@ export default function UserAnalytics() {
             activeFollowers = element[1];
           }
         });
-        console.log(followersArray);
 
-        // console.log(Date.UTC(2010, 0, 1));
         setPrevActiveFollowers(prevActiveFollowers);
         setActiveFollowers(activeFollowers);
         setFollowersArray(followersArray);
@@ -221,7 +249,7 @@ export default function UserAnalytics() {
     },
   ]);
 
-  const parseOptionsPie = (seriesData) => {
+  const createOptionsPie = (seriesData) => {
     return {
       chart: {
         plotBackgroundColor: null,
@@ -230,7 +258,7 @@ export default function UserAnalytics() {
         type: "pie",
       },
       title: {
-        text: "Viewer demographics",
+        text: "Your Followers' Interests",
       },
       tooltip: {
         pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
@@ -252,7 +280,7 @@ export default function UserAnalytics() {
       },
       series: [
         {
-          name: "Brands",
+          name: "Percent",
           colorByPoint: true,
           data: seriesData,
         },
@@ -260,46 +288,9 @@ export default function UserAnalytics() {
     };
   };
 
-  const optionsPie = parseOptionsPie([
-    {
-      name: "Chrome",
-      y: 61.41,
-      sliced: true,
-      selected: true,
-    },
-    {
-      name: "Internet Explorer",
-      y: 11.84,
-    },
-    {
-      name: "Firefox",
-      y: 10.85,
-    },
-    {
-      name: "Edge",
-      y: 4.67,
-    },
-    {
-      name: "Safari",
-      y: 4.18,
-    },
-    {
-      name: "Sogou Explorer",
-      y: 1.64,
-    },
-    {
-      name: "Opera",
-      y: 1.6,
-    },
-    {
-      name: "QQ",
-      y: 1.2,
-    },
-    {
-      name: "Other",
-      y: 2.61,
-    },
-  ]);
+  const optionsPie = createOptionsPie(interestsDemographics);
+  //sliced = true;
+  //selected = true;
 
   return (
     <div className="content-wrapper">
