@@ -148,9 +148,12 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         if (state.equals(ReportStateEnum.RESOLVED)) {
             log.setAdminLogsType(AdminLogsTypeEnum.RESOLVE_REPORT);
             desc = String.format("%s resolved report (%o) on %s.", admin.getUsername(), report.getId(), strDate);
-        } else {
+        } else if (state.equals(ReportStateEnum.VOID)) {
             log.setAdminLogsType(AdminLogsTypeEnum.VOID_REPORT);
             desc = String.format("%s voided report (%o) on %s.", admin.getUsername(), report.getId(), strDate);
+        } else {
+            log.setAdminLogsType(AdminLogsTypeEnum.REOPEN_REPORT);
+            desc = String.format("%s reopened report (%o) on %s.", admin.getUsername(), report.getId(), strDate);
         }
         log.setDateCreated(now);
         log.setDescription(desc);

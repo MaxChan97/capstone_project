@@ -108,8 +108,10 @@ public class ReportResource {
 
             if (action.equals("RESOLVED")) {
                 reportSB.setReportState(reportId, ReportStateEnum.RESOLVED, adminId);
-            } else {
+            } else if (action.equals("VOID")) {
                 reportSB.setReportState(reportId, ReportStateEnum.VOID, adminId);
+            } else {
+                reportSB.setReportState(reportId, ReportStateEnum.PENDING, adminId);
             }
             return Response.status(204).build();
 
