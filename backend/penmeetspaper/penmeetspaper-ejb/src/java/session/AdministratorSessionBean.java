@@ -7,7 +7,6 @@ package session;
 
 import entity.AdminLog;
 import entity.Administrator;
-import entity.Community;
 import entity.Person;
 import entity.Post;
 import entity.Report;
@@ -40,6 +39,9 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
     @EJB
     AdminLogSessionBeanLocal adminLogSB;
+
+    @EJB
+    PostSessionBeanLocal postSB;
 
     private Report emGetReport(Long reportId) throws NoResultException, NotValidException {
         if (reportId == null) {
@@ -272,24 +274,31 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         em.flush();
     } // end unbanPersonFromLogin
 
-    public void deletePost(Long adminId, Long postId, String description) throws NoResultException, NotValidException {
+    public void deletePost(Long adminId, Long postId, String description, Long reportId) throws NoResultException, NotValidException {
         checkAdminDeactivated(adminId);
 
+        postSB.deletePost(postId);
+
+        Administrator admin = emGetAdmin(adminId);
         Post post = emGetPost(postId);
-        Person person = post.getAuthor();
+        AdminLog log = new AdminLog();
+        log.setAdmin(admin);
+        log.setAdminLogsType(AdminLogsTypeEnum.DELETE_POST);
+        Date now = new Date();
+        log.setDateCreated(now);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(now);
+        String desc = String.format("%s deleted post (%o) on %s. Reason: %s", admin.getUsername(), post.getId(), strDate, description);
+        log.setDescription(desc);
 
-        Community c = post.getPostCommunity();
-
-        // unlinking
-        person.getPosts().remove(post);
-        post.setAuthor(null);
-
-        if (c != null) {
-            c.getPosts().remove(post);
-            post.setPostCommunity(null);
+        if (reportId != null) {
+            Report report = emGetReport(reportId);
+            log.setReport(report);
         }
 
-        em.remove(post);
+        adminLogSB.persistAdminLog(log);
 
+        admin.getLogs().add(log);
+        em.flush();
     }
 }
