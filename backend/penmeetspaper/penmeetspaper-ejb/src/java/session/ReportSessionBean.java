@@ -87,6 +87,8 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         report.setDateSubmitted(new Date());
 
         Person reporter = emGetPerson(reporterId);
+        report.setReporter(reporter);
+        reporter.getReports().add(report);
 
         em.persist(report);
         em.flush();
