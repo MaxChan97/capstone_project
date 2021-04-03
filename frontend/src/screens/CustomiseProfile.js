@@ -107,7 +107,7 @@ export default function CustomiseProfile() {
     }
     setTopicInterests(tempSelectedOptions);
   };
-  
+
   const [description, setAbout] = useState();
   const handleAboutChange = (event) => {
     setAbout(event.target.value);
@@ -329,17 +329,17 @@ export default function CustomiseProfile() {
                           />
                         </div>
                       ) : (
-                        <img
-                          style={{
-                            resizeMode: "repeat",
-                            height: 130,
-                            width: 130,
-                            borderRadius: "50%",
-                            display: "block",
-                          }}
-                          src={profilePicture || defaultDP}
-                        />
-                      )}
+                          <img
+                            style={{
+                              resizeMode: "repeat",
+                              height: 130,
+                              width: 130,
+                              borderRadius: "50%",
+                              display: "block",
+                            }}
+                            src={profilePicture || defaultDP}
+                          />
+                        )}
                     </div>
                     <div className="col-sm-8">
                       <label
@@ -384,15 +384,15 @@ export default function CustomiseProfile() {
                   <CircularProgressWithLabel value={bannerProgress} size={80} />
                 </div>
               ) : (
-                <img
-                  style={{
-                    resizeMode: "repeat",
-                    height: 80,
-                    width: 512,
-                  }}
-                  src={profileBanner || defaultBanner}
-                />
-              )}
+                  <img
+                    style={{
+                      resizeMode: "repeat",
+                      height: 80,
+                      width: 512,
+                    }}
+                    src={profileBanner || defaultBanner}
+                  />
+                )}
               <Box fontWeight="fontWeightRegular" m={1}>
                 File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
               </Box>
@@ -431,9 +431,11 @@ export default function CustomiseProfile() {
                     <input
                       type="text"
                       id="inputUsername"
-                      // required
                       className="form-control"
                       value={username}
+                      required="required"
+                      oninvalid="this.setCustomValidity('Please enter username');"
+                      oninput="setCustomValidity('')"
                       onChange={handleUsernameChange}
                     />
                   </div>
@@ -465,13 +467,13 @@ export default function CustomiseProfile() {
                         classNamePrefix="select"
                       />
                     ) : (
-                      <Select
-                        name="incomes"
-                        options={incomes}
-                        onChange={setIncomeRange}
-                        classNamePrefix="select"
-                      />
-                    )}
+                        <Select
+                          name="incomes"
+                          options={incomes}
+                          onChange={setIncomeRange}
+                          classNamePrefix="select"
+                        />
+                      )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputAbout">About</label>
@@ -488,8 +490,8 @@ export default function CustomiseProfile() {
                         {description.length}/255
                       </p>
                     ) : (
-                      <p style={{ textAlign: "right" }}>0/255</p>
-                    )}
+                        <p style={{ textAlign: "right" }}>0/255</p>
+                      )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="inputInterests">Interests</label>
@@ -506,17 +508,17 @@ export default function CustomiseProfile() {
                         classNamePrefix="select"
                       />
                     ) : (
-                      <Select
-                        isMulti
-                        name="topics"
-                        options={topics}
-                        onChange={(selectedOptions) =>
-                          handleTopicInterestsChange(selectedOptions)
-                        }
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                      />
-                    )}
+                        <Select
+                          isMulti
+                          name="topics"
+                          options={topics}
+                          onChange={(selectedOptions) =>
+                            handleTopicInterestsChange(selectedOptions)
+                          }
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                        />
+                      )}
                   </div>
                   <div className="form-group">
                     <ColorButton
