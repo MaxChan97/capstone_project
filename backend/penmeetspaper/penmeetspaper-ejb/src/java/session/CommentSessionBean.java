@@ -158,4 +158,13 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
         comment.getLikes().remove(person);
     }
+
+    @Override
+    public void deleteComment(Long commentId) throws NoResultException, NotValidException {
+
+        Comment commentToDelete = emGetComment(commentId);
+
+        commentToDelete.setBody("Commment Deleted By Admin");
+        commentToDelete.setAuthor(null);
+    }
 }

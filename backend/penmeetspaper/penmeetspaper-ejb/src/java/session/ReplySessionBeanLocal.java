@@ -41,4 +41,6 @@ public interface ReplySessionBeanLocal {
 
     public void unlikeReply(Long replyId, Long personId) throws NoResultException, NotValidException;
 
+    public void deleteReply(Long replyId) throws NoResultException, NotValidException;
+
 }
