@@ -160,7 +160,9 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
         Administrator admin = emGetAdmin(aId);
         em.detach(admin);
 
-        // nullifying for marshalling done hereS
+        em.detach(admin.getLogs());
+        admin.setLogs(null);
+
         return admin;
     } // end getAdminById
 
