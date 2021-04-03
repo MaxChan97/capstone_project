@@ -21,7 +21,9 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { makeStyles } from '@material-ui/core/styles';
 import { isOverflown } from '@material-ui/data-grid';
-
+import moment from "moment";
+import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 const ColorButton = withStyles((theme) => ({
     root: {
         color: theme.palette.getContrastText("#3B21CB"),
@@ -159,26 +161,29 @@ renderCellExpand.propTypes = {
     ]),
 };
 
-
-export default function AdminList() {
+export default function UsersList() {
+    const alert = useAlert();
     const [rows, setRows] = useState(null);
-
+    const currentUser = useSelector((state) => state.currentUser);
     useEffect(() => {
         loadData();
     }, []);
 
     function loadData() {
-        Api.getAllAdmin()
+        Api.getAllPerson()
             .done((list) => {
                 setRows(list);
             })
             .fail(() => {
-                alert.show("Unable to load!");
+                alert.show("Error!");
             });
     }
     const [confirmBanDialogOpen, setConfirmBanDialogOpen] = React.useState(false);
-    const banPerson = () => {
+    const [currentPerson, setCurrentPerson] = React.useState(null);
+
+    function banPerson() {
         openBanPersonModal();
+
     };
 
     function openBanPersonModal() {
@@ -189,49 +194,60 @@ export default function AdminList() {
         setConfirmBanDialogOpen(false);
     }
 
+    function handleClick(id) {
+
+        Api.getPersonById(id)
+            .done((currentPerson) => {
+                setCurrentPerson(currentPerson);
+                banPerson();
+            });
+
+    }
+
     function handleBanPerson() {
+        if(currentPerson.isBannedFromLogin == false) {
+            Api.banPersonFromLogin(currentUser, currentPerson.id, reason, null)
+            .done((list) => {
+                alert.show("User is banned from login");
+                setReason("");
+            })
+            .fail(() => {
+                setReason("");
+                alert.show("Error!");
+            });
+        }
     }
 
     const [reason, setReason] = useState("");
     const handleReasonChange = (event) => {
         setReason(event.target.value);
     };
-
-    const [currentAdmin, setCurrentAdmin] = React.useState(null);
-    function handleClick(id) {
-
-        Api.getAdminById(id)
-            .done((a) => {
-                setCurrentAdmin(a);
-                banPerson();
-            });
-
-    }
-
     const columns = [
         { field: 'id', headerName: 'ID', width: 120, renderCell: renderCellExpand, },
         { field: 'username', headerName: 'Username', width: 250, renderCell: renderCellExpand, },
         //{ field: 'createdDate', headerName: 'Date Joined', width: 270 },
         { field: 'email', headerName: 'Email', width: 300, renderCell: renderCellExpand, },
+        /*{ field: 'contributorPoints', headerName: 'Contributor Points', width: 220, renderCell:  renderCellExpand, },*/
         {
             field: 'nothing',
-            headerName: 'View Logs',
+            headerName: 'View Profile',
             sortable: false,
             filterable: false,
-            width: 150,
+            width: 154,
+
             renderCell: (params) => (
                 <div>
-                    <Link to={"/admin/log/" + `${params.getValue('id') || ''}`}>
-                        <i className="far fa-eye" style={{ marginLeft: 30, color: "#3B21CB", }}></i>
+                    <Link to={"/profile/" + `${params.getValue('id') || ''}`}>
+                        <i className="far fa-eye" style={{ marginLeft: 35, color: "#3B21CB", }}></i>
                     </Link>
                 </div>
             ),
-        },
 
+        },
         {
             field: 'nothing2',
-            headerName: 'Deactivate',
-            width: 150,
+            headerName: 'Ban User',
+            width: 140,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -255,6 +271,7 @@ export default function AdminList() {
                             alt="banLogo"
                             onClick={(event) => handleClick(params.getValue('id'))}
                         />
+
                     </button>
 
                 </div>
@@ -264,50 +281,50 @@ export default function AdminList() {
 
 
     return rows != null ? (
-        <div>
-            {currentAdmin != null ? (
-                <Dialog
-                    open={confirmBanDialogOpen}
-                    onClose={closeBanPersonModal}
-                    aria-labelledby="confirm-delete-dialog-title"
-                    aria-describedby="confirm-delete-dialog-description"
-                >
-                    <DialogTitle id="confirm-delete-dialog-title">
-                        Deactivate Administrator Account {" "}
-                        <i class='fas fa-user-shield'></i>
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="confirm-delete-dialog-description">
-                            <p>Are you sure you want to deactivate {currentAdmin.username}'s account?
-                         {" "} {currentAdmin.username} will no longer have admin login access after deactivation. </p>
-                        </DialogContentText>
-                        <p htmlFor="inputReason">Enter a reason for accountability: </p>
-                        <input
-                            type="text"
-                            id="inputReason"
-                            className="form-control"
-                            value={reason}
-                            required="required"
-                            onChange={handleReasonChange}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button style={{ outline: "none" }} onClick={closeBanPersonModal}>
-                            Cancel
-                    </Button>
-                        <ColorButton
-                            style={{ outline: "none" }}
-                            onClick={handleBanPerson}
-                            color="primary"
-                            variant="contained"
-                            autoFocus
-                        >
-                            Confirm
-                    </ColorButton>
-                    </DialogActions>
-                </Dialog>) : (" ")}
-            <div class="card bg-white">
-                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Administrators Master List</h5>
+        <div style={{ paddingTop: "24px" }}>
+            <div class="card bg-white" >
+                {currentPerson != null ? (
+                    <Dialog
+                        open={confirmBanDialogOpen}
+                        onClose={closeBanPersonModal}
+                        aria-labelledby="confirm-delete-dialog-title"
+                        aria-describedby="confirm-delete-dialog-description"
+                    >
+                        <DialogTitle id="confirm-delete-dialog-title">
+                            Ban User From Login {" "} <i class='fas fa-user-shield'></i>
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="confirm-delete-dialog-description">
+                                Are you sure you want to ban {currentPerson.username} from login? {" "}
+                                {currentPerson.username} will no longer have login access after a ban.
+                            </DialogContentText>
+                            <p htmlFor="inputReason">Enter a reason for accountability: </p>
+                            <input
+                                type="text"
+                                id="inputReason"
+                                className="form-control"
+                                value={reason}
+                                required="required"
+                                onChange={handleReasonChange}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{ outline: "none" }} onClick={closeBanPersonModal}>
+                                Cancel
+                            </Button>
+                            <ColorButton
+                                style={{ outline: "none" }}
+                                onClick={handleBanPerson}
+                                color="primary"
+                                variant="contained"
+                                autoFocus
+                            >
+                                Confirm
+                            </ColorButton>
+                        </DialogActions>
+                    </Dialog>
+                ) : (" ")}
+                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Users Master List</h5>
 
                 <div style={{ display: 'flex', height: 510, width: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
