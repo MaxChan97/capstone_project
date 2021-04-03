@@ -44,9 +44,11 @@ public class StreamResource {
         String streamTitle = jsonObject.getString("streamTitle");
         String streamDescription = jsonObject.getString("streamDescription");
         Boolean isPaid = jsonObject.getBoolean("subscribersOnly");
+        String accessUrl = jsonObject.getString("accessUrl");
+        String thumbnailUrl = jsonObject.getString("thumbnailUrl");
 
         try {
-            Stream newStream = streamSBLocal.createStream(streamerId, streamTitle, streamDescription, isPaid);
+            Stream newStream = streamSBLocal.createStream(streamerId, streamTitle, streamDescription, isPaid, accessUrl, thumbnailUrl);
             return Response.status(200).entity(newStream).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
@@ -63,6 +65,20 @@ public class StreamResource {
         try {
             streamSBLocal.endStream(streamId);
             return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/{streamId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStreamById(@PathParam("streamId") Long streamId) {
+        try {
+            Stream stream = streamSBLocal.getStreamById(streamId);
+            return Response.status(200).entity(stream).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();

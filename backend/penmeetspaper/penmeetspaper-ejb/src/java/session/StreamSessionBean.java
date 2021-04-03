@@ -37,7 +37,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
     }
     
     @Override
-    public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid) throws NoResultException, NotValidException {
+    public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid, String accessUrl, String thumbnailUrl) throws NoResultException, NotValidException {
         Person streamer = em.find(Person.class, streamerId);
         
         LiveChat liveChat = new LiveChat();
@@ -52,6 +52,8 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         newStream.setDate(new Date());
         newStream.setHasEnded(false);
         newStream.setLiveChat(liveChat);
+        newStream.setAccessUrl(accessUrl);
+        newStream.setThumbnailUrl(thumbnailUrl);
         em.persist(newStream);
         
         streamer.getStreams().add(newStream);
@@ -67,6 +69,13 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
     public void endStream(Long streamId) {
         Stream stream = em.find(Stream.class, streamId);
         stream.setHasEnded(true);
+    }
+    
+    @Override
+    public Stream getStreamById(Long streamId) throws NoResultException, NotValidException {
+        Stream stream = em.find(Stream.class, streamId);
+        stream.setStreamer(getDetachedPerson(stream.getStreamer()));
+        return stream;
     }
     
     @Override
