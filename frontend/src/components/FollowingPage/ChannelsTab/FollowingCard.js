@@ -29,7 +29,6 @@ export default function FollowingCard({
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    console.log(followingList);
     const results = followingList.filter((channel) =>
       channel["publisher"].username.toLowerCase().includes(searchTerm)
     );
@@ -40,7 +39,7 @@ export default function FollowingCard({
     searchResults.length > 0 ? (
       <GridList
         cols={4}
-        className={styles.subscribingList}
+        className={styles.followingList}
         style={{
           justifyContent: "flex-start",
         }}

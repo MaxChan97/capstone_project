@@ -17,6 +17,8 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { Decoder, Encoder, tools, Reader } from "ts-ebml";
+import { storage } from "../firebase";
+var uuid = require("uuid");
 const prettyMilliseconds = require("pretty-ms");
 
 const ColorButton = withStyles((theme) => ({
@@ -30,20 +32,29 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 // Attributes needed for stream
-const url = "rtmp://broadcast.api.video/s/d74762c5-c2bd-4408-abe7-17d63b69852d";
-const socketio_address = "http://localhost:1437";
-const width = 750;
-const height = 450;
-const frameRate = 15;
-const audioBitRate = 22050;
+var url = "rtmp://broadcast.api.video/s/d74762c5-c2bd-4408-abe7-17d63b69852d";
+var socketio_address = "http://localhost:1437";
+var width = 750;
+var height = 450;
+var frameRate = 15;
+var audioBitRate = 22050;
 
 // Setting things up
-
 var socket;
 var state = "stop";
 var imageCapture;
 var recordedChunks = [];
 var mediaRecorder;
+
+// api.video stuff
+var accessToken;
+var expiresIn;
+var refreshToken;
+var tokenType;
+var authorization;
+var liveStreamId;
+var streamKey;
+var accessUrl;
 
 export default function StreamPage() {
   const alert = useAlert();
@@ -69,6 +80,18 @@ export default function StreamPage() {
   const [streamEnded, setStreamEnded] = useState(false);
 
   useEffect(() => {
+    Api.authenticateForApiVideo()
+      .then((response) => {
+        accessToken = response.access_token;
+        expiresIn = response.expires_in;
+        refreshToken = response.refresh_token;
+        tokenType = response.token_type;
+        authorization = tokenType + " " + accessToken;
+        console.log(accessToken);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     return function cleanup() {
       if (streamId != undefined) {
         Api.endStream(streamId)
@@ -80,8 +103,16 @@ export default function StreamPage() {
       if (start != 0) {
         clearInterval(window.streamTimer);
       }
+      recordedChunks = [];
       stopStream();
       disconnectServer();
+      if (liveStreamId != undefined) {
+        Api.deleteStreamOnApiVideo(liveStreamId, authorization)
+          .then((response) => {})
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     };
   }, []);
 
@@ -181,8 +212,8 @@ export default function StreamPage() {
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
-        //let mediaStreamTrack = stream.getVideoTracks()[0];
-        //imageCapture = new ImageCapture(mediaStreamTrack);
+        let mediaStreamTrack = stream.getVideoTracks()[0];
+        imageCapture = new ImageCapture(mediaStreamTrack);
         showVideo(stream);
         socket.emit("config_rtmpDestination", url);
         socket.emit("start", "start");
@@ -213,8 +244,6 @@ export default function StreamPage() {
         state = "stop";
       });
   }
-
-  //function takeThumbnailPhoto() {}
 
   function readAsArrayBuffer(blob) {
     return new Promise((resolve, reject) => {
@@ -267,6 +296,57 @@ export default function StreamPage() {
       type: "video/webm",
     });
     injectMetadataAndDownload(blob);
+  }
+
+  async function takePhotoAndUpload() {
+    var imageBlob = await imageCapture.takePhoto();
+    imageBlob.lastModifiedDate = new Date();
+    imageBlob.name = uuid.v4() + "." + imageBlob.type.split("/")[1];
+    const uploadTask = storage
+      .ref(`streamThumbnails/${imageBlob.name}`)
+      .put(imageBlob);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.error(error);
+      },
+      () => {
+        storage
+          .ref("streamThumbnails")
+          .child(imageBlob.name)
+          .getDownloadURL()
+          .then((thumbnailUrl) => {
+            Api.startStream(
+              currentUser,
+              streamTitle,
+              streamDescription,
+              streamSubscribersOnly,
+              accessUrl,
+              thumbnailUrl
+            )
+              .then((stream) => {
+                setStreamId(stream.id);
+                setStart(Date.now());
+                /*Api.uploadThumbnailOnApiVideo(
+                  liveStreamId,
+                  authorization,
+                  imageBlob.name,
+                  imageBlob
+                )
+                  .then((response) => {
+                    console.log(response);
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });*/
+              })
+              .fail((xhr, status, error) => {
+                alert.show(xhr.responseJSON.error);
+              });
+          });
+      }
+    );
   }
 
   function handleContinueDialogOpen() {
@@ -324,26 +404,25 @@ export default function StreamPage() {
       setStreamTitle(tempStreamTitle);
       setStreamDescription(tempStreamDescription);
       setStreamSubscribersOnly(tempStreamSubscribersOnly);
-      connectServer();
-      requestMedia();
+      Api.createStreamOnApiVideo(tempStreamTitle, authorization)
+        .then((response) => {
+          url = "rtmp://broadcast.api.video/s/" + response.streamKey;
+          liveStreamId = response.liveStreamId;
+          streamKey = response.streamKey;
+          accessUrl = response.assets.player;
+          connectServer();
+          requestMedia();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }
 
-  function handleStartStream() {
+  async function handleStartStream() {
     handleStartStreamDialogClose();
-    Api.startStream(
-      currentUser,
-      streamTitle,
-      streamDescription,
-      streamSubscribersOnly
-    )
-      .then((stream) => {
-        setStreamId(stream.id);
-        setStart(Date.now());
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
+    // take photo, upload the photo and put the URL in here
+    await takePhotoAndUpload();
   }
 
   function handleEndStream() {
@@ -354,6 +433,13 @@ export default function StreamPage() {
         setStreamEnded(true);
         stopStream();
         disconnectServer();
+        if (liveStreamId != undefined) {
+          Api.deleteStreamOnApiVideo(liveStreamId, authorization)
+            .then((response) => {})
+            .catch((err) => {
+              console.error(err);
+            });
+        }
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);

@@ -733,7 +733,7 @@ export default {
     });
   },
 
-  updateSkipOnboarding(personId){
+  updateSkipOnboarding(personId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/skipOnboarding",
       headers: {
@@ -1144,7 +1144,14 @@ export default {
     });
   },
 
-  startStream(streamerId, streamTitle, streamDescription, subscribersOnly) {
+  startStream(
+    streamerId,
+    streamTitle,
+    streamDescription,
+    subscribersOnly,
+    accessUrl,
+    thumbnailUrl
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/" + streamerId,
       headers: {
@@ -1156,6 +1163,8 @@ export default {
         streamTitle: streamTitle,
         streamDescription: streamDescription,
         subscribersOnly: subscribersOnly,
+        accessUrl: accessUrl,
+        thumbnailUrl: thumbnailUrl,
       }),
     });
   },
@@ -1186,6 +1195,17 @@ export default {
     });
   },
 
+  getStreamById(streamId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   getOngoingStreams() {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/ongoing",
@@ -1205,6 +1225,62 @@ export default {
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  authenticateForApiVideo() {
+    return jQuery.ajax({
+      url: "https://ws.api.video/auth/api-key",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        apiKey: "dtB2Sqlankxjt0h9gET3oIDB7IPzd5hPNVg7EpVlOoj",
+      }),
+    });
+  },
+
+  createStreamOnApiVideo(streamTitle, authorization) {
+    return jQuery.ajax({
+      url: "https://ws.api.video/live-streams",
+      headers: {
+        Accept: "application/vnd.api.video+json",
+        "Content-Type": "application/json",
+        Authorization: authorization,
+      },
+      type: "POST",
+      data: JSON.stringify({
+        name: streamTitle,
+        record: false,
+        public: true,
+      }),
+    });
+  },
+
+  uploadThumbnailOnApiVideo(liveStreamId, authorization, imageName, imageBlob) {
+    return jQuery.ajax({
+      url: "https://ws.api.video/live-streams/" + liveStreamId + "/thumbnail",
+      headers: {
+        Accept: "application/vnd.api.video+json",
+        "Content-Type": "multipart/form-data",
+        Authorization: authorization,
+      },
+      type: "POST",
+      data: JSON.stringify({
+        file: [imageName, imageBlob],
+      }),
+    });
+  },
+
+  deleteStreamOnApiVideo(liveStreamId, authorization) {
+    return jQuery.ajax({
+      url: "https://ws.api.video/live-streams/" + liveStreamId,
+      headers: {
+        Authorization: authorization,
+      },
+      type: "DELETE",
     });
   },
 

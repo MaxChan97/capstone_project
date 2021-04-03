@@ -51,6 +51,12 @@ public class Stream implements Serializable {
 
     @Column(nullable = false)
     private boolean hasEnded;
+    
+    @Column(nullable = false)
+    private String accessUrl;
+    
+    @Column(nullable = false)
+    private String thumbnailUrl;
 
     // unidirectional
     @OneToOne
@@ -194,6 +200,34 @@ public class Stream implements Serializable {
     @Override
     public String toString() {
         return "entity.Stream[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the accessUrl
+     */
+    public String getAccessUrl() {
+        return accessUrl;
+    }
+
+    /**
+     * @param accessUrl the accessUrl to set
+     */
+    public void setAccessUrl(String accessUrl) {
+        this.accessUrl = accessUrl;
+    }
+
+    /**
+     * @return the thumbnailUrl
+     */
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    /**
+     * @param thumbnailUrl the thumbnailUrl to set
+     */
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
 }
