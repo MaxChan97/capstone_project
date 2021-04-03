@@ -14,6 +14,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -76,6 +77,23 @@ public class AdministratorResource {
             return Response.status(204).build();
 
         } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{id}/isDeactivated")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response isAdminDeactivated(@PathParam("id") Long adminId) {
+        Boolean res;
+        try {
+            adminSB.checkAdminDeactivated(adminId);
+            res = false;
+            return Response.status(200).entity(res).build();
+        } catch (NotValidException e) {
+            res = true;
+            return Response.status(200).entity(res).build();
+        } catch (NoResultException e) {
             return buildError(e, 400);
         }
     }
