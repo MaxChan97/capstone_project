@@ -192,6 +192,7 @@ export default function FeedPage() {
 
   const [topTenContributors, setTopTenContributors] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
+  const [todaysTrends, setTodaysTrends] = useState([]);
   const [horizontalMenu, setHorizontalMenu] = useState(horizontalList);
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -253,8 +254,15 @@ export default function FeedPage() {
       });
     Api.getTopTrends()
       .done((topAllTime) => {
-        console.log(topAllTime);
         setTopTrends(topAllTime);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+    Api.getTodaysTrends()
+      .done((topToday) => {
+        console.log(topToday);
+        setTodaysTrends(topToday);
       })
       .fail((xhr, status, error) => {
         alert("Error");
@@ -431,7 +439,7 @@ export default function FeedPage() {
               <LeaderboardCard data={topTenContributors} />
             </div>
             <div className="row">
-              <TrendsCard data={topTrends} />
+              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
             </div>
           </div>
         </div>

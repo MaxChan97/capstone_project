@@ -72,5 +72,24 @@ public class TrendResource {
 
     return Response.status(200).entity(jsonArray).type(MediaType.APPLICATION_JSON).build();
   }
+  
+  @GET
+  @Path("/topToday")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getTodaysTrends() {
+    List<Trend> topTrends = trendSessionBean.getTodaysTrends();
+    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+    for (Trend t : topTrends) {
+      Long noOfOccurrences = new Long(0);
+      for (Long value : t.getDateCount().values()) {
+        noOfOccurrences += value;
+      }
+      JsonObjectBuilder trendBuilder = Json.createObjectBuilder().add("id", t.getId()).add("hashtag", t.getHashTag()).add("count", noOfOccurrences.toString());
+      arrayBuilder.add(trendBuilder);
+    }
+    JsonArray jsonArray = arrayBuilder.build();
+
+    return Response.status(200).entity(jsonArray).type(MediaType.APPLICATION_JSON).build();
+  }
 
 }

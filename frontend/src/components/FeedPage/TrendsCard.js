@@ -1,22 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function TrendsCard({ data }) {
+export default function TrendsCard({ topTrends, todaysTrends }) {
+  const isInTopTrends = (hashtag) => {
+    for (let trend in topTrends) {
+      if (trend.hashtag === hashtag) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
-    data && (
+    topTrends &&
+    topTrends.length > 0 && (
       <div className="card">
         <div className="card-body">
           <h5 className="card-title font-weight-bold">Trends</h5>
           <p className="card-text"></p>
         </div>
         <ul className="list-group list-group-flush">
-          {data &&
-            data.map((trend, index) => {
+          {topTrends &&
+            topTrends.map((trend, index) => {
               return (
-                <li key={index} className="list-group-item">
+                <a
+                  href="#"
+                  key={index}
+                  className="list-group-item list-group-item-action"
+                >
                   <p className="text-muted m-0">Trending in Singapore</p>
                   <p className="font-weight-bold m-0">{trend.hashtag}</p>
-                  <p className="text-muted m-0">{trend.count} Tweets</p>
-                </li>
+                  <p className="text-muted m-0">{trend.count} Posts</p>
+                </a>
+              );
+            })}
+          {todaysTrends &&
+            todaysTrends.map((trend, index) => {
+              return (
+                isInTopTrends(trend.hashtag) && (
+                  <a
+                    href="#"
+                    key={index}
+                    className="list-group-item list-group-item-action"
+                  >
+                    <p className="text-muted m-0">Trending today</p>
+                    <p className="font-weight-bold m-0">{trend.hashtag}</p>
+                    <p className="text-muted m-0">{trend.count} Posts</p>
+                  </a>
+                )
               );
             })}
         </ul>

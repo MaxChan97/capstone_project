@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 import { Switch } from "react-router";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
@@ -37,7 +37,6 @@ import ViewCommunityMembers from "./screens/ViewCommunityMembers";
 import CommunityFeed from "./screens/CommunityFeed";
 import CommunityDashboardSidebar from "./components/CommunityDashboardSidebar";
 import BannedPage from "./screens/BannedPage";
-import PageNotFound from "./screens/ErrorPage";
 import UserAnalytics from "./screens/UserAnalytics";
 import AdminSideBar from "./components/AdminSideBar";
 import AdminInboxPage from "./screens/AdminInboxPage";
@@ -48,7 +47,7 @@ import AdminManagementPage from "./screens/AdminManagementPage";
 import AdminLogin from "./screens/AdminLogin";
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import AdminNavBar from "./components/AdminNavBar";
 import ReportDetails from "./components/AdminPage/ReportDetails";
 import AdminLog from "./components/AdminPage/AdminLog";

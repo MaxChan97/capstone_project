@@ -25,4 +25,6 @@ public interface TrendSessionBeanLocal {
 
   public List<Trend> getTopTrends();
 
+  public List<Trend> getTodaysTrends();
+
 }
