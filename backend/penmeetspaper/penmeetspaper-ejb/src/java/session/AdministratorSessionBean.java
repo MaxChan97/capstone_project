@@ -225,7 +225,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         AdminLog log = new AdminLog();
         log.setAdmin(admin);
-        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
+        log.setAdminLogsType(AdminLogsTypeEnum.UNBAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -275,7 +275,7 @@ public class AdministratorSessionBean implements AdministratorSessionBeanLocal {
 
         AdminLog log = new AdminLog();
         log.setAdmin(admin);
-        log.setAdminLogsType(AdminLogsTypeEnum.BAN_USER);
+        log.setAdminLogsType(AdminLogsTypeEnum.UNBAN_USER);
         Date now = new Date();
         log.setDateCreated(now);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

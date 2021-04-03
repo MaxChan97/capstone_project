@@ -98,4 +98,50 @@ public class AdministratorResource {
         }
     }
 
+    @PUT
+    @Path("/{id}/banPerson")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response banPerson(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        String description = jsonObject.getString("description");
+
+        Long reportId = null;
+        try {
+            reportId = Long.parseLong(jsonObject.getString("reportId"));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            if (reportId == null) {
+                adminSB.banPersonFromLogin(adminId, personId, description);
+            } else {
+                adminSB.banPersonFromLoginReport(adminId, personId, description, reportId);
+            }
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @PUT
+    @Path("/{id}/unbanPerson")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unbanPerson(@PathParam("id") Long adminId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        String description = jsonObject.getString("description");
+
+        try {
+            adminSB.unbanPersonFromLogin(adminId, personId, description);
+            return Response.status(204).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }
