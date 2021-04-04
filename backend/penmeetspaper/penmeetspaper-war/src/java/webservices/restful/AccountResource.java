@@ -37,6 +37,9 @@ public class AccountResource {
     public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
         try {
             Person p = accountSessionLocal.login(email, password);
+            if (p == null) {
+                throw new NotValidException(AccountSessionBeanLocal.PERSON_BANNED_FROM_LOGIN);
+            }
             return Response.status(200).entity(
                     p
             ).type(MediaType.APPLICATION_JSON).build();

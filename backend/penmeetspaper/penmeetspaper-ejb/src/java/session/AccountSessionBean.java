@@ -51,7 +51,7 @@ public class AccountSessionBean implements AccountSessionBeanLocal {
             Person p = (Person) q.getSingleResult();
             p = personSB.getPersonById(p.getId());
             if (p.isIsBannedFromLogin()) {
-                throw new NotValidException(AccountSessionBeanLocal.PERSON_BANNED_FROM_LOGIN);
+                return null;
             }
             return p;
         } catch (Exception e) {
