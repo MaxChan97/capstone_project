@@ -162,12 +162,13 @@ renderCellExpand.propTypes = {
 };
 
 export default function UsersList() {
+    const [refresh, setRefresh] = React.useState(false);
     const alert = useAlert();
     const [rows, setRows] = useState(null);
     const currentUser = useSelector((state) => state.currentUser);
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refresh]);
 
     function loadData() {
         Api.getAllPerson()
@@ -179,11 +180,11 @@ export default function UsersList() {
             });
     }
     const [confirmBanDialogOpen, setConfirmBanDialogOpen] = React.useState(false);
+    const [confirmUnbanDialogOpen, setConfirmUnbanDialogOpen] = React.useState(false);
     const [currentPerson, setCurrentPerson] = React.useState(null);
 
     function banPerson() {
         openBanPersonModal();
-
     };
 
     function openBanPersonModal() {
@@ -192,6 +193,22 @@ export default function UsersList() {
 
     function closeBanPersonModal() {
         setConfirmBanDialogOpen(false);
+        setReason("");
+        setCurrentPerson(null);
+    }
+
+    function unbanPerson() {
+        openUnbanPersonModal();
+    };
+
+    function openUnbanPersonModal() {
+        setConfirmUnbanDialogOpen(true);
+    }
+
+    function closeUnbanPersonModal() {
+        setConfirmUnbanDialogOpen(false);
+        setReason("");
+        setCurrentPerson(null);
     }
 
     function handleClick(id) {
@@ -199,22 +216,42 @@ export default function UsersList() {
         Api.getPersonById(id)
             .done((currentPerson) => {
                 setCurrentPerson(currentPerson);
-                banPerson();
+                if (currentPerson.isBannedFromLogin == false) {
+                    banPerson();
+                } else {
+                    unbanPerson();
+                }
             });
 
     }
 
     function handleBanPerson() {
-        if(currentPerson.isBannedFromLogin == false) {
+        if (currentPerson.isBannedFromLogin == false) {
             Api.banPersonFromLogin(currentUser, currentPerson.id, reason, null)
-            .done((list) => {
-                alert.show("User is banned from login");
-                setReason("");
-            })
-            .fail(() => {
-                setReason("");
-                alert.show("Error!");
-            });
+                .done((list) => {
+                    alert.show("User is banned from login");
+                    closeBanPersonModal();
+                    setRefresh(!refresh);
+                })
+                .fail(() => {
+                    closeBanPersonModal();
+                    alert.show("Error!");
+                });
+        }
+    }
+
+    function handleUnbanPerson() {
+        if (currentPerson.isBannedFromLogin == true) {
+            Api.unbanPersonFromLogin(currentUser, currentPerson.id, reason, null)
+                .done((list) => {
+                    alert.show("User is unbanned from login");
+                    closeUnbanPersonModal()
+                    setRefresh(!refresh);
+                })
+                .fail(() => {
+                    closeUnbanPersonModal()
+                    alert.show("Error!");
+                });
         }
     }
 
@@ -246,33 +283,29 @@ export default function UsersList() {
         },
         {
             field: 'nothing2',
-            headerName: 'Ban User',
-            width: 140,
+            headerName: 'Ban/Unban',
+            width: 150,
             sortable: false,
             filterable: false,
+            description: "Blue means user is not banned from login. Pink means user is banned from login",
             renderCell: (params) => (
                 <div>
-                    <button
-                        style={{
-                            height: "25px",
-                            width: "25px",
-                            backgroundColor: "transparent",
-                            borderColor: "transparent",
-                            marginLeft: 18,
-                            outline: "none",
-                        }}
-                    >
-                        <img
-                            style={{
-                                height: "25px",
-                                width: "25px",
-                            }}
-                            src={ban}
-                            alt="banLogo"
-                            onClick={(event) => handleClick(params.getValue('id'))}
-                        />
-
-                    </button>
+                    {params.getValue('isBannedFromLogin') == true ? (
+                        <div>
+                            <Link>
+                                <i class='fas fa-user-times'
+                                    style={{ marginLeft: 35, color: "#EA3F79", }}
+                                    onClick={(event) => handleClick(params.getValue('id'))}
+                                ></i> </Link>
+                        </div>
+                    ) : (
+                        <div>
+                            <Link>
+                                <i class='fas fa-user-check'
+                                    style={{ marginLeft: 35, color: "#3B21CB", }}
+                                    onClick={(event) => handleClick(params.getValue('id'))}
+                                ></i> </Link>
+                        </div>)}
 
                 </div>
             ),
@@ -315,6 +348,48 @@ export default function UsersList() {
                             <ColorButton
                                 style={{ outline: "none" }}
                                 onClick={handleBanPerson}
+                                color="primary"
+                                variant="contained"
+                                autoFocus
+                            >
+                                Confirm
+                            </ColorButton>
+                        </DialogActions>
+                    </Dialog>
+                ) : (" ")}
+                {currentPerson != null ? (
+                    <Dialog
+                        open={confirmUnbanDialogOpen}
+                        onClose={closeUnbanPersonModal}
+                        aria-labelledby="confirm-delete-dialog-title"
+                        aria-describedby="confirm-delete-dialog-description"
+                    >
+                        <DialogTitle id="confirm-delete-dialog-title">
+                            Unban User From Login {" "} <i class='fas fa-user-shield'></i>
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="confirm-delete-dialog-description">
+                                {currentPerson.username} was previously banned from login.
+                                Are you sure you want to unban {currentPerson.username} from login? {" "}
+                                {currentPerson.username} will regain login access after confirmation.
+                            </DialogContentText>
+                            <p htmlFor="inputReason">Enter a reason for accountability: </p>
+                            <input
+                                type="text"
+                                id="inputReason"
+                                className="form-control"
+                                value={reason}
+                                required="required"
+                                onChange={handleReasonChange}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{ outline: "none" }} onClick={closeUnbanPersonModal}>
+                                Cancel
+                            </Button>
+                            <ColorButton
+                                style={{ outline: "none" }}
+                                onClick={handleUnbanPerson}
                                 color="primary"
                                 variant="contained"
                                 autoFocus

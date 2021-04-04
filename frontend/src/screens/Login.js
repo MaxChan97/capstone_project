@@ -99,6 +99,8 @@ export default function Login() {
       .fail((xhr, status, error) => {
         if (xhr.responseJSON.error === "Invalid credentials") {
           alert.show("Invalid credentials, please try again");
+        } else if (xhr.responseJSON.error === "Person banned from Login") {
+          history.push("/banned");
         }
       });
   }

@@ -195,15 +195,18 @@ export default function AllAdminLogs() {
             });
     }
 
+    const formatAdminId = {
+        width: 180,
+        headerName: 'Admin',
+        renderCell: (params) => ("" + params.getValue('admin').username),
+        //valueFormatter: ({ value }) => value.id,
+    };
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 80, renderCell: renderCellExpand },
-        { field: 'admin', headerName: 'Admin', width: 200, renderCell: renderCellExpand,
-        valueFormatter: (params) => (params.value.id),},
-        { field: 'adminLogsType', headerName: 'Log Type', width: 250, renderCell:(params) => (
-            <p>{String(params.getValue('adminLogsType'))}</p>),},
-        { field: 'no', headerName: 'Date', width: 200, type: 'date', renderCell:(params) => (
-            <p>{moment(params.getValue('dateCreated')).format("DD/MM/YYYY")}</p>),},
-        { field: 'description', headerName: 'Description', width: 530, renderCell: renderCellExpand, },
+        { field: 'admin', ...formatAdminId },
+        { field: 'adminLogsType', headerName: 'Log Type', width: 240, renderCell: renderCellExpand, },
+        { field: 'description', headerName: 'Description', width: 700, renderCell: renderCellExpand, },
 
     ];
 
@@ -211,7 +214,7 @@ export default function AllAdminLogs() {
     return isAdmin == true && rows != null ? (
         <div>
             <div className="content-wrapper">
-                <div className="container">
+                <div style={{paddingLeft:"20px", paddingRight:"20px"}} >
                     <div className="row">
                         <div className="col-md-12 mt-4" style={{ textAlign: "centre", margin: "auto" }}>
 

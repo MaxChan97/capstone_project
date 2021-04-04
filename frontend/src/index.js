@@ -22,7 +22,6 @@ import allReducers from "./redux/reducers";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-import "antd/dist/antd.css";
 //Font Awesome
 import "admin-lte/plugins/fontawesome-free/css/all.min.css";
 //Theme style (comes with Bootstrap css)
