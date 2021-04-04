@@ -92,7 +92,7 @@ export default function CreateAnotherAdmin() {
       style={{ paddingTop: "24px", paddingLeft: "17px" }}
       className="content-wrapper"
     >
-      <div class="col-md-9" style={{ textAlign: "left", margin: "auto" }}>
+      <div class="col-md-10" style={{ textAlign: "left", margin: "auto" }}>
         <div class="card card-primary">
           <form
             onSubmit={handleSubmit}
@@ -103,7 +103,10 @@ export default function CreateAnotherAdmin() {
             <div class="card-body">
               <Box fontWeight="fontWeightBold" fontSize={25}>
                 Create a new admin account
+                {" "}
+                <i class='fas fa-user-shield'></i>
               </Box>
+              <p>An automated email with the admin login credentials will be sent to the admin's email address</p>
               <br></br>
               <div className="form-group">
                 <label htmlFor="inputUsername">Username</label>

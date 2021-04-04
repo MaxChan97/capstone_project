@@ -1358,4 +1358,81 @@ export default {
       type: "GET",
     });
   },
+
+  getAllAdmin() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getAllAdminLogs() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/adminLog/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getAdminLogByAdminId(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/adminLog/admin/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getAdminById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  banPersonFromLogin(adminId, personId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/banPerson",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        personId: personId, 
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  unbanPersonFromLogin(adminId, personId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/unbanPerson",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        personId: personId, 
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
 };

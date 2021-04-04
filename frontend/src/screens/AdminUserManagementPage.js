@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { logOut } from "../redux/actions/index";
 import Banned from "./AdminBannedAccessPage";
+import UsersList from "../components/AdminPage/UsersList";
 
 export default function AdminUserManagementPage() {
   const dispatch = useDispatch();
@@ -13,17 +14,13 @@ export default function AdminUserManagementPage() {
 
   return isAdmin == true ? (
     <div className="content-wrapper">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1>User Management</h1>
+      <div >
+        <div className="col-md-12 mt-4">
+          <UsersList></UsersList>
+        </div>
       </div>
     </div>
-  ): (
+  ) : (
     <Banned></Banned>
   );
 }

@@ -10,6 +10,9 @@ import { BrowserRouter } from "react-router-dom";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
+// LiveChat box stuff
+import { ThemeProvider } from "@livechat/ui-kit";
+
 // Redux Imports
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
@@ -56,17 +59,19 @@ const options = {
 };
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <BrowserRouter>
-        <React.StrictMode>
-          <AlertProvider template={AlertTemplate} {...options}>
-            <App />
-          </AlertProvider>
-        </React.StrictMode>
-      </BrowserRouter>
-    </PersistGate>
-  </Provider>,
+  <ThemeProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <React.StrictMode>
+            <AlertProvider template={AlertTemplate} {...options}>
+              <App />
+            </AlertProvider>
+          </React.StrictMode>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 

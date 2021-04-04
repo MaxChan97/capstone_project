@@ -26,7 +26,7 @@ export default function AdminManagementPage() {
 
   return isAdmin == true ? (
     <div className="content-wrapper">
-      <div className="container">
+      <div >
         <div className="row">
           <div className="col-md-12 mt-4" style={{ textAlign: "left", }}>
 

@@ -21,6 +21,7 @@ public interface AccountSessionBeanLocal {
     public final static String MISSING_EMAIL = "Missing person email";
     public final static String MISSING_PASSWORD = "Missing person password";
     public final static String INVALID_CREDENTIALS = "Invalid credentials";
+    public final static String PERSON_BANNED_FROM_LOGIN = "Person banned from Login";
 
     public Person login(String email, String password) throws NoResultException, NotValidException;
 

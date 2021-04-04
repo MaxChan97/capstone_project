@@ -256,7 +256,7 @@ function App() {
               component={ReportDetails}
             />
 
-            <Route exact path="/admin/log" component={AdminLog} />
+            <Route exact path="/admin/log/:adminId" component={AdminLog} />
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
             {/*<Route component={PageNotFound} />*/}

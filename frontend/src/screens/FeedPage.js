@@ -31,6 +31,8 @@ const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText("#3B21CB"),
     backgroundColor: "#3B21CB",
+    justifyContent: 'center',
+    alignItems: 'center',
     "&:hover": {
       backgroundColor: "#260eab",
     },
@@ -199,7 +201,7 @@ export default function FeedPage() {
   const [OnboardingDialogueOpen, setOnboardingDialogueOpen] = useState(false);
 
   // Modal
-  useEffect(() => {}, [horizontalMenu]);
+  useEffect(() => { }, [horizontalMenu]);
   useEffect(() => {
     if (currentUser) {
       loadData();
@@ -215,7 +217,7 @@ export default function FeedPage() {
     let incomeRangeStr;
     let topicInterestsArr;
     if (incomeRange == undefined) {
-      incomeRangeStr = "";
+      incomeRangeStr = "NOT_EARNING";
     } else {
       incomeRangeStr = incomeRange.value;
     }
@@ -286,17 +288,17 @@ export default function FeedPage() {
   //const handleOnboardingDialogueClose = () => setOnboardingDialogueOpen(false);
   const handleOnboardingDialogueOpen = () => setOnboardingDialogueOpen(true);
 
-  function handleOnboardingDialogueSkip() {
-    console.log("skip");
-    Api.updateSkipOnboarding(currentUser)
-      .done(() => {
-        console.log("Skipped");
-        setOnboardingDialogueOpen(false);
-      })
-      .fail((xhr, status, error) => {
-        alert.show("Error skipping onboarding");
-      });
-  }
+  // function handleOnboardingDialogueSkip() {
+  //   console.log("skip");
+  //   Api.updateSkipOnboarding(currentUser)
+  //     .done(() => {
+  //       console.log("Skipped");
+  //       setOnboardingDialogueOpen(false);
+  //     })
+  //     .fail((xhr, status, error) => {
+  //       alert.show("Error skipping onboarding");
+  //     });
+  // }
 
   function initiateOnboardingDialogue(e) {
     // Check if new user
@@ -313,7 +315,7 @@ export default function FeedPage() {
       <Dialog
         contentClassName="customerModalStyle"
         open={OnboardingDialogueOpen}
-        onHide={handleOnboardingDialogueSkip}
+        onHide={handleSubmit}
         backdrop="static"
         keyboard={false}
         size="sm"
@@ -360,13 +362,13 @@ export default function FeedPage() {
                     classNamePrefix="select"
                   />
                 ) : (
-                  <Select
-                    name="incomes"
-                    options={incomes}
-                    onChange={setIncomeRange}
-                    classNamePrefix="select"
-                  />
-                )}
+                    <Select
+                      name="incomes"
+                      options={incomes}
+                      onChange={setIncomeRange}
+                      classNamePrefix="select"
+                    />
+                  )}
               </div>
               <div className="form-group">
                 <label htmlFor="inputInterests">Interests</label>
@@ -384,33 +386,34 @@ export default function FeedPage() {
                     classNamePrefix="select"
                   />
                 ) : (
-                  <Select
-                    isMulti
-                    name="topics"
-                    options={topics}
-                    onChange={(selectedOptions) =>
-                      handleTopicInterestsChange(selectedOptions)
-                    }
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                  />
-                )}
+                    <Select
+                      isMulti
+                      name="topics"
+                      options={topics}
+                      onChange={(selectedOptions) =>
+                        handleTopicInterestsChange(selectedOptions)
+                      }
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
+                  )}
               </div>
             </div>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
+          {/* <Button
             style={{ outline: "none" }}
             onClick={handleOnboardingDialogueSkip}
           >
             Skip
-          </Button>
+          </Button> */}
           <ColorButton
             style={{ outline: "none" }}
             color="primary"
             variant="contained"
             type="submit"
+            centered
             onClick={handleSubmit}
           >
             Confirm

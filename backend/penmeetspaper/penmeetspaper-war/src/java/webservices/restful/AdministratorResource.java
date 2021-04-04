@@ -132,13 +132,13 @@ public class AdministratorResource {
     public Response banPerson(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        Long personId = new Long(jsonObject.getInt("personId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
@@ -156,13 +156,13 @@ public class AdministratorResource {
     public Response unbanPerson(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        Long personId = new Long(jsonObject.getInt("personId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
@@ -180,13 +180,13 @@ public class AdministratorResource {
     public Response deletePost(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long postId = Long.parseLong(jsonObject.getString("postId"));
+        Long postId = new Long(jsonObject.getInt("postId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
@@ -204,13 +204,13 @@ public class AdministratorResource {
     public Response deleteComment(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long commentId = Long.parseLong(jsonObject.getString("commentId"));
+        Long commentId = new Long(jsonObject.getInt("commentId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
@@ -228,13 +228,13 @@ public class AdministratorResource {
     public Response deleteReply(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long replyId = Long.parseLong(jsonObject.getString("replyId"));
+        Long replyId = new Long(jsonObject.getInt("replyId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
@@ -252,13 +252,13 @@ public class AdministratorResource {
     public Response deleteCommunity(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long communityId = Long.parseLong(jsonObject.getString("communityId"));
+        Long communityId = new Long(jsonObject.getInt("communityId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
