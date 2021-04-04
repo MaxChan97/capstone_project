@@ -132,7 +132,7 @@ public class AdministratorResource {
     public Response banPerson(@PathParam("id") Long adminId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Long personId = Long.parseLong(jsonObject.getString("personId"));
+        Long personId = new Long(jsonObject.getInt("personId"));
         String description = jsonObject.getString("description");
 
         Long reportId = null;
