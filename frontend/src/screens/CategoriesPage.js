@@ -3,6 +3,7 @@ import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { logOut } from "../redux/actions/index";
 import { useDispatch } from "react-redux";
+import TradingViewWidget, { Themes } from "react-tradingview-widget";
 
 export default function CategoriesPage() {
   const dispatch = useDispatch();
@@ -13,14 +14,13 @@ export default function CategoriesPage() {
 
   return (
     <div className="content-wrapper">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1>Categories Page</h1>
+      <h1>Categories Page</h1>
+      <div className="container">
+        <div className="row">
+          <div className="col-8">
+            <TradingViewWidget symbol="BITBAY:BTCUSDT" theme={Themes.DARK} />
+          </div>
+        </div>
       </div>
     </div>
   );
