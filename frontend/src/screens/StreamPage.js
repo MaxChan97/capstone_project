@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import LiveChatBox from "../components/StreamPage/LiveChatBox";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
@@ -921,6 +922,18 @@ export default function StreamPage() {
             </div>
             {renderUtilityButtonGroup()}
           </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            flexGrow: "1",
+            alignItems: "center",
+            paddingTop: "18px",
+            paddingRight: "18px",
+          }}
+        >
+          <LiveChatBox />
         </div>
       </div>
 
