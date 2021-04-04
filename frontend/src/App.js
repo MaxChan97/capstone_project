@@ -54,6 +54,7 @@ import AdminNavBar from "./components/AdminNavBar";
 import ReportDetails from "./components/AdminPage/ReportDetails";
 import AdminLog from "./components/AdminPage/AdminLog";
 import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
+import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 
 function App() {
   let location = useLocation();
@@ -66,7 +67,8 @@ function App() {
     if (
       location.pathname === "/login" ||
       location.pathname === "/register" ||
-      location.pathname === "/admin/login"
+      location.pathname === "/admin/login" ||
+      location.pathname === "/banned"
     ) {
       return "";
     } else if (isAdmin == true) {
@@ -270,6 +272,7 @@ function App() {
             <Route exact path="/admin/log/:adminId" component={AdminLog} />
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
+            <Route exact path="/banned" component={BannedFromLoginPage} />
             {/*<Route component={PageNotFound} />*/}
           </div>
         </div>

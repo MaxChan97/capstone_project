@@ -1206,6 +1206,31 @@ export default {
     });
   },
 
+  getLiveChatByStreamId(streamId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/liveChat/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  sendLiveChatMessage(streamId, senderId, messageBody) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/liveChat/" + streamId + "/" + senderId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        messageBody: messageBody,
+      }),
+    });
+  },
+
   getOngoingStreams() {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/ongoing",

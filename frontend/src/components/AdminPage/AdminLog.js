@@ -182,9 +182,7 @@ export default function AdminLog() {
     const columns = [
         { field: 'id', headerName: 'ID', width: 90, renderCell: renderCellExpand, },
         { field: 'adminLogsType', headerName: 'Log Type', width: 240, renderCell: renderCellExpand, },
-        { field: 'dateCreated', headerName: 'Date', width: 200, type: 'date',  renderCell:(params) => (
-            <p>{moment(params.getValue('dateCreated')).format("DD/MM/YYYY")}</p>),},
-        { field: 'description', headerName: 'Description', width: 530, renderCell: renderCellExpand, },
+        { field: 'description', headerName: 'Description', width: 750, renderCell: renderCellExpand, },
 
     ];
 

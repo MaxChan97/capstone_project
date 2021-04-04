@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import entity.LiveChat;
 import entity.Stream;
 import java.io.StringReader;
 import java.util.List;
@@ -79,6 +80,37 @@ public class StreamResource {
         try {
             Stream stream = streamSBLocal.getStreamById(streamId);
             return Response.status(200).entity(stream).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/liveChat/{streamId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLiveChatByStreamId(@PathParam("streamId") Long streamId) {
+        try {
+            LiveChat liveChat = streamSBLocal.getLiveChatByStreamId(streamId);
+            return Response.status(200).entity(liveChat).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @POST
+    @Path("/liveChat/{streamId}/{senderId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendLiveChatMessage(@PathParam("streamId") Long streamId, @PathParam("senderId") Long senderId, String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject jsonObject = reader.readObject();
+        String messageBody = jsonObject.getString("messageBody");
+        try {
+            streamSBLocal.sendLiveChatMessage(streamId, senderId, messageBody);
+            return Response.status(204).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
