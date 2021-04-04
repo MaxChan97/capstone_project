@@ -126,7 +126,7 @@ public class AdministratorResource {
         }
     }
 
-    @POST
+    @PUT
     @Path("/{id}/banPerson")
     @Produces(MediaType.APPLICATION_JSON)
     public Response banPerson(@PathParam("id") Long adminId, String jsonString) {
