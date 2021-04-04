@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridColumnIcon, GridToolbar } from '@material-ui/data-grid';
 import { useHistory, Redirect } from "react-router";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,7 +13,9 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { makeStyles } from '@material-ui/core/styles';
 import { isOverflown } from '@material-ui/data-grid';
-
+import { useParams } from "react-router";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import moment from "moment";
 import {
     Button,
     Dialog,
@@ -38,7 +40,7 @@ const useStyles = makeStyles(() => ({
         },
     },
 }));
-//to exppand overflowed cells
+//to expand overflowed cells
 const GridCellExpand = React.memo(function GridCellExpand(props) {
     const { width, value } = props;
     const wrapper = React.useRef(null);
@@ -161,7 +163,7 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 
-
+/*
 const rows = [
     { id: 1, adminLogsType: 'RESOLVE_REPORT', dateCreated: '12/1/2021', description: "Resolved report on errant user" },
     { id: 2, adminLogsType: 'VOID_REPORT', dateCreated: '22/1/2021', description: "False report that is invalid" },
@@ -172,32 +174,54 @@ const rows = [
     { id: 7, adminLogsType: 'DELETE_REPLY', dateCreated: '5/10/2021', description: "lorem ipsum" },
     { id: 8, adminLogsType: 'DELETE_COMMUNNITY', dateCreated: '6/8/2020', description: "lorem ipsum" },
 ];
-
+*/
 
 export default function AdminLog() {
     const isAdmin = useSelector((state) => state.isAdmin);
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90, },
-        { field: 'adminLogsType', headerName: 'Log Type', width: 240 },
-        { field: 'dateCreated', headerName: 'Date', width: 200,  type: 'date',},
+        { field: 'id', headerName: 'ID', width: 90, renderCell: renderCellExpand, },
+        { field: 'adminLogsType', headerName: 'Log Type', width: 240, renderCell: renderCellExpand, },
+        { field: 'dateCreated', headerName: 'Date', width: 200, type: 'date',  renderCell:(params) => (
+            <p>{moment(params.getValue('dateCreated')).format("DD/MM/YYYY")}</p>),},
         { field: 'description', headerName: 'Description', width: 530, renderCell: renderCellExpand, },
 
     ];
 
+    const { adminId } = useParams();
+    const [admin, setAdmin] = useState(null);
 
-    return isAdmin == true ? (
+    const [rows, setRows] = useState(null);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    function loadData() {
+        Api.getAdminLogByAdminId(adminId)
+            .done((list) => {
+                setRows(list);
+            });
+
+        Api.getAdminById(adminId)
+            .done((a) => {
+                setAdmin(a);
+            })
+
+
+    }
+    return isAdmin == true && rows != null && admin != null ? (
         <div>
             <div className="content-wrapper">
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-12 mt-4" style={{ textAlign: "centre", margin:"auto"}}>
-                           
+                        <div className="col-md-12 mt-4" style={{ textAlign: "centre", margin: "auto" }}>
+
                         </div>
                     </div>
                     <div className="col-md-12 mt-4">
                         <div class="card bg-white">
-                            <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8", }}>Admin Logs For admin2</h5>
+                            <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8", }}>Admin Logs For {admin.username}</h5>
 
                             <div style={{ display: 'flex', height: 510, width: '100%' }}>
                                 <div style={{ flexGrow: 1 }}>
@@ -214,6 +238,8 @@ export default function AdminLog() {
             </div>
         </div>
     ) : (
-        <Banned></Banned>
+        <div style={{ margin: "auto", textAlign: "center" }}>
+            <CircularProgress />
+        </div>
     );
 }

@@ -49,4 +49,10 @@ public interface AdministratorSessionBeanLocal {
 
     public void deletePost(Long adminId, Long postId, String description, Long reportId) throws NoResultException, NotValidException;
 
+    public void deleteGommunity(Long adminId, Long communityId, String description, Long reportId) throws NoResultException, NotValidException;
+
+    public void deleteReply(Long adminId, Long replyId, String description, Long reportId) throws NoResultException, NotValidException;
+
+    public void deleteComment(Long adminId, Long commentId, String description, Long reportId) throws NoResultException, NotValidException;
+
 }

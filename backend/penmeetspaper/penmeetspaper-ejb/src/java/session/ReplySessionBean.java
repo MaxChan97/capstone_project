@@ -159,4 +159,13 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         reply.getLikes().remove(person);
     }
 
+    @Override
+    public void deleteReply(Long replyId) throws NoResultException, NotValidException {
+
+        Reply reply = emGetReply(replyId);
+
+        reply.setBody("Reply Deleted By Admin");
+        reply.setAuthor(null);
+    }
+
 }
