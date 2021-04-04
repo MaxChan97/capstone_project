@@ -8,6 +8,7 @@ import Api from "../../helpers/Api";
 import tick from "../../assets/tick.png";
 import Button from "react-bootstrap/Button";
 import EditDescription from "./EditDescription";
+import {Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -234,6 +235,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
           <div class="card card-primary">
             <div class="card-body">
               <div style={{ color: "#3B21CB" }}>
+              <Link to ="/MyCommunities" style={{ color: '#3B21CB' }}>
                 <strong>
                   LEVEL{" "}
                   {getLevel(
@@ -243,6 +245,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
                     )
                   )}
                 </strong>
+                </Link>
               </div>
 
               <p>
