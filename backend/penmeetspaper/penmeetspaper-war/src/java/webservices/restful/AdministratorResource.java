@@ -138,7 +138,7 @@ public class AdministratorResource {
         Long reportId = null;
         try {
             reportId = Long.parseLong(jsonObject.getString("reportId"));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | ClassCastException e) {
         }
 
         try {
