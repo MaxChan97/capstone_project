@@ -6,6 +6,7 @@
 package session;
 
 import entity.LiveChat;
+import entity.LiveMessage;
 import entity.Person;
 import entity.Stream;
 import exception.NoResultException;
@@ -31,18 +32,18 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
         return personSB.getPersonById(p.getId());
     }
-    
+
     @Override
     public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid, String accessUrl, String thumbnailUrl) throws NoResultException, NotValidException {
         Person streamer = em.find(Person.class, streamerId);
-        
+
         LiveChat liveChat = new LiveChat();
         em.persist(liveChat);
-        
+
         Stream newStream = new Stream();
         newStream.setStreamer(streamer);
         newStream.setTitle(streamTitle);
@@ -55,51 +56,79 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         newStream.setAccessUrl(accessUrl);
         newStream.setThumbnailUrl(thumbnailUrl);
         em.persist(newStream);
-        
+
         streamer.getStreams().add(newStream);
-        
+
         em.flush();
-        
+
         newStream.setStreamer(getDetachedPerson(newStream.getStreamer()));
-        
+
         return newStream;
     }
-    
+
     @Override
     public void endStream(Long streamId) {
         Stream stream = em.find(Stream.class, streamId);
         stream.setHasEnded(true);
     }
-    
+
     @Override
     public Stream getStreamById(Long streamId) throws NoResultException, NotValidException {
         Stream stream = em.find(Stream.class, streamId);
         stream.setStreamer(getDetachedPerson(stream.getStreamer()));
         return stream;
     }
-    
+
+    @Override
+    public LiveChat getLiveChatByStreamId(Long streamId) throws NoResultException, NotValidException {
+        Stream stream = em.find(Stream.class, streamId);
+        LiveChat liveChat = stream.getLiveChat();
+        for (LiveMessage liveMessage : liveChat.getLiveMessages()) {
+            liveMessage.setSender(getDetachedPerson(liveMessage.getSender()));
+        }
+        return liveChat;
+    }
+
+    @Override
+    public void sendLiveChatMessage(Long streamId, Long senderId, String messageBody) {
+        Stream stream = em.find(Stream.class, streamId);
+        LiveChat liveChat = stream.getLiveChat();
+
+        LiveMessage liveMessage = new LiveMessage();
+        Person sender = em.find(Person.class, senderId);
+        liveMessage.setBody(messageBody);
+        liveMessage.setDate(new Date());
+        liveMessage.setSender(sender);
+        em.persist(liveMessage);
+        
+        liveChat.getLiveMessages().add(liveMessage);
+    }
+
     @Override
     public List<Stream> getOngoingStreams() throws NoResultException, NotValidException {
         Query query = em.createQuery("SELECT s FROM Stream s WHERE s.hasEnded = false");
         List<Stream> streams = query.getResultList();
         for (Stream stream : streams) {
             stream.setStreamer(getDetachedPerson(stream.getStreamer()));
-            
+
             List<Person> viewers = new ArrayList<>();
             for (Person viewer : stream.getViewers()) {
                 viewers.add(getDetachedPerson(viewer));
             }
             stream.setViewers(viewers);
-            
+
             List<Person> kickedUsers = new ArrayList<>();
             for (Person kickedUser : stream.getKickedUsers()) {
                 kickedUsers.add(getDetachedPerson(kickedUser));
             }
             stream.setKickedUsers(kickedUsers);
+            
+            em.detach(stream);
+            stream.setLiveChat(null);
         }
         return streams;
     }
-    
+
     @Override
     public List<Stream> getPersonOngoingStreams(Long personId) throws NoResultException, NotValidException {
         Query query = em.createQuery("SELECT s FROM Stream s WHERE s.streamer.id = :personId AND s.hasEnded = false");
@@ -107,13 +136,13 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         List<Stream> streams = query.getResultList();
         for (Stream stream : streams) {
             stream.setStreamer(getDetachedPerson(stream.getStreamer()));
-            
+
             List<Person> viewers = new ArrayList<>();
             for (Person viewer : stream.getViewers()) {
                 viewers.add(getDetachedPerson(viewer));
             }
             stream.setViewers(viewers);
-            
+
             List<Person> kickedUsers = new ArrayList<>();
             for (Person kickedUser : stream.getKickedUsers()) {
                 kickedUsers.add(getDetachedPerson(kickedUser));
@@ -122,7 +151,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         }
         return streams;
     }
-    
+
     @Override
     public void editStreamInfo(Long streamId, String newStreamTitle, String newStreamDescription) {
         Stream stream = em.find(Stream.class, streamId);

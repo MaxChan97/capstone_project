@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.LiveChat;
 import entity.Stream;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -23,6 +24,10 @@ public interface StreamSessionBeanLocal {
     public void endStream(Long streamId);
     
     public Stream getStreamById(Long streamId) throws NoResultException, NotValidException;
+    
+    public LiveChat getLiveChatByStreamId(Long streamId) throws NoResultException, NotValidException;
+    
+    public void sendLiveChatMessage(Long streamId, Long senderId, String messageBody);
     
     public List<Stream> getOngoingStreams() throws NoResultException, NotValidException;
     

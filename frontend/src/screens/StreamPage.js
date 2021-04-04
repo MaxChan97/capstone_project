@@ -860,7 +860,7 @@ export default function StreamPage() {
   function renderStreamDetails(title, description) {
     if (videoStart === true) {
       return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", width: "90%" }}>
           <div
             style={{ display: "flex", flexDirection: "row", marginTop: "18px" }}
           >
@@ -933,7 +933,7 @@ export default function StreamPage() {
             paddingRight: "18px",
           }}
         >
-          <LiveChatBox />
+          <LiveChatBox streamId={streamId} />
         </div>
       </div>
 
