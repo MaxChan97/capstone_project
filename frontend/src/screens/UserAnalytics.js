@@ -72,7 +72,7 @@ export default function UserAnalytics() {
           for (const ti of followers[prop]["follower"]["topicInterests"]) {
             let found = false;
             for (const interest of interestsDemographics) {
-              if (ti in interest) {
+              if (ti.replace("_", " ") == interest["name"]) {
                 interest["y"] += 1;
                 found = true;
                 break;
@@ -80,7 +80,7 @@ export default function UserAnalytics() {
             }
             if (!found) {
               let newInterest = {};
-              newInterest["name"] = ti;
+              newInterest["name"] = ti.replace("_", " ");
               newInterest["y"] = 1;
               interestsDemographics.push(newInterest);
             }

@@ -1412,7 +1412,7 @@ export default {
       },
       type: "PUT",
       data: JSON.stringify({
-        personId: personId, 
+        personId: personId,
         description: description,
         reportId: reportId,
       }),
@@ -1428,11 +1428,21 @@ export default {
       },
       type: "PUT",
       data: JSON.stringify({
-        personId: personId, 
+        personId: personId,
         description: description,
         reportId: reportId,
       }),
     });
   },
 
+  getTopCommunities() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/community/topCommunities",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

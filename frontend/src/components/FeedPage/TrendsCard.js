@@ -29,7 +29,7 @@ export default function TrendsCard({ topTrends, todaysTrends }) {
                 >
                   <p className="text-muted m-0">Trending in Singapore</p>
                   <p className="font-weight-bold m-0">{trend.hashtag}</p>
-                  <p className="text-muted m-0">{trend.count} Posts</p>
+                  <p className="text-muted m-0">{trend.count} mentions</p>
                 </a>
               );
             })}
@@ -44,7 +44,7 @@ export default function TrendsCard({ topTrends, todaysTrends }) {
                   >
                     <p className="text-muted m-0">Trending today</p>
                     <p className="font-weight-bold m-0">{trend.hashtag}</p>
-                    <p className="text-muted m-0">{trend.count} Posts</p>
+                    <p className="text-muted m-0">{trend.count} mentions</p>
                   </a>
                 )
               );

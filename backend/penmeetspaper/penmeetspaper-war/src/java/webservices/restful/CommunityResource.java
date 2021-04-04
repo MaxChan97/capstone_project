@@ -341,5 +341,21 @@ public class CommunityResource {
             return buildError(e, 400);
         }
     }
+    
+    @GET
+    @Path("/topCommunities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTopCommunities() {
+        try {
+            List<Community> results = communitySB.getTopCommunities();
+            GenericEntity<List<Community>> entity = new GenericEntity<List<Community>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+
+    }
 
 }

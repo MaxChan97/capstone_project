@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import LeaderboardCard from "../components/FeedPage/LeaderboardCard";
-import LiveHorizontalMenu from "../components/FeedPage/LiveHorizontalMenu";
-import CreatePostCard from "../components/CommunityPage/CreatePostCard";
-import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
-import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/CommunityPage/PostListOfFollowing";
 import YourCommunitiesCard from "../components/CommunityPage/YourCommunitiesCard";
-import MyCommunitiesCard from "../components/CommunityPage/MyCommunitiesCard";
 import TopCommunitiesCard from "../components/CommunityPage/TopCommunitiesCard";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import Api from "../helpers/Api";
 
 export default function CommunityFeedPage() {
-
   const ColorButton = withStyles((theme) => ({
     root: {
       color: theme.palette.getContrastText("#3B21CB"),
@@ -26,21 +20,19 @@ export default function CommunityFeedPage() {
     },
   }))(Button);
 
-  const leaderboardList = [
-    { name: "WallStreetBets", rank: "1" },
-    { name: "HUATHUAT", rank: "2" },
-    { name: "STONKS", rank: "3" },
-    { name: "Bullish", rank: "4" },
-    { name: "Cryptocurrency101", rank: "5" },
-    { name: "ETFs", rank: "6" },
-    { name: "Bitcoin", rank: "7" },
-    { name: "Finance1010", rank: "8" },
-    { name: "AngPao", rank: "9" },
-  ];
-
-  const [leaderboard, setLeaderboard] = useState(leaderboardList);
-
   const currentUser = useSelector((state) => state.currentUser);
+  const [topCommunities, setTopCommunities] = useState([]);
+
+  useEffect(() => {
+    Api.getTopCommunities()
+      .done((topCommunities) => {
+        setTopCommunities(topCommunities);
+        console.log(topCommunities);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error!");
+      });
+  }, []);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -48,15 +40,16 @@ export default function CommunityFeedPage() {
 
   return (
     <div className="content-wrapper">
-      <div style={{paddingLeft:"10px", paddingRight:"10px"}} >
-
+      <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
         <div className="row">
           <div className="col-md-9 mt-4">
-            <PostListOfFollowing></PostListOfFollowing>
+            <PostListOfFollowing />
           </div>
 
-          <div className="col-md-3 mt-4" style={{ textAlign: "left", paddingTop: "10px" }}>
-
+          <div
+            className="col-md-3 mt-4"
+            style={{ textAlign: "left", paddingTop: "10px" }}
+          >
             <div className="card card-primary">
               <div className="card-body">
                 <div
@@ -75,22 +68,18 @@ export default function CommunityFeedPage() {
                         float: "right",
                         fontWeight: "600",
                       }}
-
                       variant="contained"
                       color="primary"
                       type="button"
                     >
                       Create Community
-                  </ColorButton>
+                    </ColorButton>
                   </Link>
                 </div>
               </div>
             </div>
-            <YourCommunitiesCard></YourCommunitiesCard>
-            <div className="card card-primary">
-              <TopCommunitiesCard data={leaderboard} />
-            </div>
-
+            <YourCommunitiesCard />
+            <TopCommunitiesCard data={topCommunities} />
           </div>
         </div>
       </div>

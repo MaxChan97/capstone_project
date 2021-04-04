@@ -33,6 +33,7 @@ import NewPassword from "./screens/NewPassword";
 import MyCommunities from "./screens/MyCommunitiesPage";
 import CommunityPostWithComments from "./components/CommunityPage/CommunityPostWithComments";
 import SearchPage from "./screens/SearchPage";
+import TrendsPage from "./screens/TrendsPage";
 import ManageCommunityMembers from "./screens/ManageCommunityMembers";
 import ViewCommunityMembers from "./screens/ViewCommunityMembers";
 import CommunityFeed from "./screens/CommunityFeed";
@@ -217,6 +218,16 @@ function App() {
               path="/search"
               render={() => (
                 <SearchPage
+                  searchString={searchString}
+                  searchRefresh={searchRefresh}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/trend"
+              render={() => (
+                <TrendsPage
                   searchString={searchString}
                   searchRefresh={searchRefresh}
                 />

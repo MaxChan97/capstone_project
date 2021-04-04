@@ -15,8 +15,6 @@ import { useAlert } from "react-alert";
 import { storage } from "../../firebase";
 import MyCommunitiesCardForFeed from "../../components/CommunityPage/MyCommunitiesCardForFeed";
 
-var uuid = require("uuid");
-
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText("#3B21CB"),

@@ -17,6 +17,7 @@ import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 import Poll from "react-polls";
 import EditPost from "./EditPost";
+import ReactHashtag from "react-hashtag";
 
 const ITEM_HEIGHT = 30;
 
@@ -212,9 +213,7 @@ export default function ProfilePostWithComments() {
             refresh={refresh}
             setRefresh={setRefresh}
           />
-          <div
-            class="card"
-          >
+          <div class="card">
             <div class="card-body">
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -232,7 +231,6 @@ export default function ProfilePostWithComments() {
                     <span class="description">
                       {" "}
                       {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-            
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>
@@ -289,10 +287,17 @@ export default function ProfilePostWithComments() {
                       </p>
                     </div>
                   ))}
-                {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditPost>}
+                {edit == false ? (
+                  <p>{data.body}</p>
+                ) : (
+                  <EditPost
+                    autofocus
+                    data={data}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    setEdit={setEdit}
+                  ></EditPost>
+                )}
                 {data.poll != undefined && pollAnswers != [] ? (
                   votedAnswer == undefined ? (
                     <div>
