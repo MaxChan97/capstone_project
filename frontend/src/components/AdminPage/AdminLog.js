@@ -204,6 +204,8 @@ export default function AdminLog() {
         Api.getAdminById(adminId)
             .done((a) => {
                 setAdmin(a);
+                console.log(a.isMaster);
+                console.log(a.isDeactivated);
             })
 
 
@@ -211,10 +213,10 @@ export default function AdminLog() {
     return isAdmin == true && rows != null && admin != null ? (
         <div>
             <div className="content-wrapper">
-                <div className="container">
+                <div >
                     <div className="row">
                         <div className="col-md-12 mt-4" style={{ textAlign: "centre", margin: "auto" }}>
-
+                        
                         </div>
                     </div>
                     <div className="col-md-12 mt-4">

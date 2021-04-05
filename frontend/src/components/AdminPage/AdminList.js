@@ -161,11 +161,12 @@ renderCellExpand.propTypes = {
 
 
 export default function AdminList() {
+    const [refresh, setRefresh] = React.useState(false);
     const [rows, setRows] = useState(null);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [refresh]);
 
     function loadData() {
         Api.getAllAdmin()
@@ -187,10 +188,23 @@ export default function AdminList() {
 
     function closeBanPersonModal() {
         setConfirmBanDialogOpen(false);
+        setCurrentAdmin(null);
         setReason("");
     }
 
     function handleBanPerson() {
+        if (currentAdmin.isDeactivated == false) {
+            Api.deactivateAdmin(currentAdmin.id)
+                .done((list) => {
+                    alert.show("Admin account is deactivated!");
+                    closeBanPersonModal()
+                    setRefresh(!refresh);
+                })
+                .fail(() => {
+                    closeBanPersonModal()
+                    alert.show("Error!");
+                });
+        }
     }
 
     const [reason, setReason] = useState("");
@@ -230,36 +244,12 @@ export default function AdminList() {
         },
 
         {
-            field: 'nothing2',
+            field: 'isMaster',
             headerName: 'Deactivate',
             width: 150,
             sortable: false,
             filterable: false,
-            renderCell: (params) => (
-                <div>
-                    <button
-                        style={{
-                            height: "25px",
-                            width: "25px",
-                            backgroundColor: "transparent",
-                            borderColor: "transparent",
-                            marginLeft: 18,
-                            outline: "none",
-                        }}
-                    >
-                        <img
-                            style={{
-                                height: "25px",
-                                width: "25px",
-                            }}
-                            src={ban}
-                            alt="banLogo"
-                            onClick={(event) => handleClick(params.getValue('id'))}
-                        />
-                    </button>
-
-                </div>
-            ),
+          
         }
     ];
 
@@ -282,6 +272,7 @@ export default function AdminList() {
                             <p>Are you sure you want to deactivate {currentAdmin.username}'s account?
                          {" "} {currentAdmin.username} will no longer have admin login access after deactivation. </p>
                         </DialogContentText>
+                        {/*
                         <p htmlFor="inputReason">Enter a reason for accountability: </p>
                         <input
                             type="text"
@@ -291,6 +282,7 @@ export default function AdminList() {
                             required="required"
                             onChange={handleReasonChange}
                         />
+                        */}
                     </DialogContent>
                     <DialogActions>
                         <Button style={{ outline: "none" }} onClick={closeBanPersonModal}>
@@ -309,7 +301,6 @@ export default function AdminList() {
                 </Dialog>) : (" ")}
             <div class="card bg-white">
                 <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Administrators Master List</h5>
-
                 <div style={{ display: 'flex', height: 510, width: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid rows={rows} columns={columns} pageSize={7}

@@ -198,6 +198,8 @@ export default function AllAdminLogs() {
     const formatAdminId = {
         width: 180,
         headerName: 'Admin',
+        sortable: false,
+        filterable: false,
         renderCell: (params) => ("" + params.getValue('admin').username),
         //valueFormatter: ({ value }) => value.id,
     };
@@ -206,7 +208,7 @@ export default function AllAdminLogs() {
         { field: 'id', headerName: 'ID', width: 80, renderCell: renderCellExpand },
         { field: 'admin', ...formatAdminId },
         { field: 'adminLogsType', headerName: 'Log Type', width: 240, renderCell: renderCellExpand, },
-        { field: 'description', headerName: 'Description', width: 700, renderCell: renderCellExpand, },
+        { field: 'description', headerName: 'Description', width: 800, renderCell: renderCellExpand, },
 
     ];
 

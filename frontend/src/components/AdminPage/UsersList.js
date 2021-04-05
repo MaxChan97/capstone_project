@@ -260,10 +260,14 @@ export default function UsersList() {
         setReason(event.target.value);
     };
     const columns = [
-        { field: 'id', headerName: 'ID', width: 120, renderCell: renderCellExpand, },
-        { field: 'username', headerName: 'Username', width: 250, renderCell: renderCellExpand, },
+        { field: 'id', headerName: 'ID', width: 90, renderCell: renderCellExpand, },
+        { field: 'username', headerName: 'Username', width: 200, renderCell: renderCellExpand, },
         //{ field: 'createdDate', headerName: 'Date Joined', width: 270 },
-        { field: 'email', headerName: 'Email', width: 300, renderCell: renderCellExpand, },
+        { field: 'email', headerName: 'Email', width: 290, renderCell: renderCellExpand, },
+        { field: 'createdDate', headerName: 'Joined', width: 150,  sortable: false,
+        filterable: false, description: "Date joined" },
+        { field: 'contributorPoints', headerName: 'Contributor', width: 149, description: "Contributor points" },
+        { field: 'contentCreatorPoints', headerName: 'Creator',width: 120, description: "Content Creator points"  },
         /*{ field: 'contributorPoints', headerName: 'Contributor Points', width: 220, renderCell:  renderCellExpand, },*/
         {
             field: 'nothing',
@@ -315,6 +319,14 @@ export default function UsersList() {
 
     return rows != null ? (
         <div style={{ paddingTop: "24px" }}>
+            <div class="info-box col-md-2" style={{  color: "#3B21CB", }}>
+                <span class="info-box-icon elevation-1"><i class="fas fa-user"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Total Users</span>
+                    <span class="info-box-number">{rows.length}</span>
+                </div>
+            </div>
             <div class="card bg-white" >
                 {currentPerson != null ? (
                     <Dialog
@@ -399,8 +411,8 @@ export default function UsersList() {
                         </DialogActions>
                     </Dialog>
                 ) : (" ")}
-                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Users Master List</h5>
-
+                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Users Master List
+                </h5>
                 <div style={{ display: 'flex', height: 510, width: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid rows={rows} columns={columns} pageSize={7}
@@ -411,6 +423,7 @@ export default function UsersList() {
                     </div>
                 </div>
             </div>
+
         </div>
     ) : (
         <div style={{ margin: "auto", textAlign: "center" }}>
