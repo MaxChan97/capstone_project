@@ -39,7 +39,7 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
     }
     List<Trend> trends = q.getResultList();
     if (trends.size() > 0) {
-      //Returns managed entity
+      //Returns managed trend
       return trends.get(0);
     } else {
       throw new NoResultException(TrendSessionBeanLocal.CANNOT_FIND_TREND);
@@ -53,7 +53,7 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
     List<Trend> trends = q.getResultList();
     trends.sort((t1, t2) -> t2.getPosts().size() + t2.getStreams().size() - t1.getPosts().size() - t1.getStreams().size());
     for (Trend t : trends) {
-      //Returns unmanaged entity
+      //Returns unmanaged trend
       em.detach(t);
       t.setPosts(null);
       t.setStreams(null);
@@ -66,9 +66,8 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
     Query q;
     q = em.createQuery("SELECT t FROM Trend t");
     List<Trend> trends = q.getResultList();
-//    trends.sort((t1, t2) -> t2.getPosts().size() + t2.getStreams().size() - t1.getPosts().size() - t1.getStreams().size());
     for (Trend t : trends) {
-      //Returns unmanaged entity
+      //Returns unmanaged trend
       em.detach(t);
       t.setPosts(null);
       t.setStreams(null);
@@ -79,9 +78,7 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
     Date date = cal.getTime();
-    System.out.println(trends);
     trends = trends.stream().filter(t -> t.getDateCount().containsKey(date)).sorted((t1, t2) -> t2.getDateCount().get(date).compareTo(t1.getDateCount().get(date))).collect(Collectors.toList());
-    System.out.println(trends);
 
     return trends.subList(0, Math.min(4, trends.size()));
   }
@@ -98,8 +95,37 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
     newTrend.setDateCount(dateCount);
     em.persist(newTrend);
     em.flush();
-    //Returns managed entity
+    //Returns managed trend
     return newTrend;
+  }
+
+  @Override
+  public Trend insertHashtag(String hashtag) {
+
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    Date date = cal.getTime();
+
+    try {
+      Trend trend = getTrend(hashtag);
+      //Trend already exists
+      //Get trend, add relationships and persist
+      trend.getDateCount().put(date, trend.getDateCount().getOrDefault(date, new Long(0)) + 1);
+      em.flush();
+      //Returns managed trend
+      return trend;
+    } catch (NoResultException e) {
+      //Trend does not exists
+      //Create a new trend, add relationships and persist
+      Trend newTrend = createTrend(hashtag);
+      newTrend.getDateCount().put(date, new Long(1));
+      em.flush();
+      //Returns managed trend
+      return newTrend;
+    }
   }
 
 }

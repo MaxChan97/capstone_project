@@ -18,11 +18,13 @@ import FileTypes from "../../components/FileTypes.js";
 import Poll from "react-polls";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
+import { useHistory } from "react-router-dom";
 
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostWithComments() {
   //for menu button
+  let history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const { postId } = useParams();
@@ -288,7 +290,22 @@ export default function ProfilePostWithComments() {
                     </div>
                   ))}
                 {edit == false ? (
-                  <p>{data.body}</p>
+                  <p>
+                    <ReactHashtag
+                      renderHashtag={(hashtagValue) => (
+                        <span
+                          style={{ color: "#3B21CB", cursor: "pointer" }}
+                          onClick={() =>
+                            history.push("/trend/" + hashtagValue.slice(1))
+                          }
+                        >
+                          <b>{hashtagValue}</b>
+                        </span>
+                      )}
+                    >
+                      {data.body}
+                    </ReactHashtag>
+                  </p>
                 ) : (
                   <EditPost
                     autofocus

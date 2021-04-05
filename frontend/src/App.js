@@ -225,16 +225,7 @@ function App() {
                 />
               )}
             />
-            <Route
-              exact
-              path="/trend"
-              render={() => (
-                <TrendsPage
-                  searchString={searchString}
-                  searchRefresh={searchRefresh}
-                />
-              )}
-            />
+            <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
             <Route exact path="/community" component={CommunityFeed} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />

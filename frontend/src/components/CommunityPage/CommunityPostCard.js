@@ -15,6 +15,8 @@ import MakeCommentCardForFeed from "../../components/ProfilePage/MakeCommentCard
 import Tooltip from "@material-ui/core/Tooltip";
 import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed";
 import EditPost from "../../components/ProfilePage/EditPost";
+import ReactHashtag from "react-hashtag";
+import { useHistory } from "react-router-dom";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
@@ -26,6 +28,7 @@ export default function CommunityPostCard({
   setRefresh,
   community,
 }) {
+  let history = useHistory();
   const alert = useAlert();
 
   //for menu button
@@ -281,7 +284,22 @@ export default function CommunityPostCard({
                 ))}
 
               {edit == false ? (
-                <p>{data.body}</p>
+                <p>
+                  <ReactHashtag
+                    renderHashtag={(hashtagValue) => (
+                      <span
+                        style={{ color: "#3B21CB", cursor: "pointer" }}
+                        onClick={() =>
+                          history.push("/trend/" + hashtagValue.slice(1))
+                        }
+                      >
+                        <b>{hashtagValue}</b>
+                      </span>
+                    )}
+                  >
+                    {data.body}
+                  </ReactHashtag>
+                </p>
               ) : (
                 <EditPost
                   autofocus

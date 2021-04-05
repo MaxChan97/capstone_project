@@ -14,10 +14,11 @@ import FileTypes from "../../components/FileTypes.js";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
 import MakeCommentCardForFeed from "../../components/ProfilePage/MakeCommentCardForFeed";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed";
 import EditPost from "../../components/ProfilePage/EditPost";
-
+import ReactHashtag from "react-hashtag";
+import { useHistory } from "react-router-dom";
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({
@@ -27,6 +28,7 @@ export default function ProfilePostCard({
   setRefresh,
   community,
 }) {
+  let history = useHistory();
   const alert = useAlert();
   const isAdmin = useSelector((state) => state.isAdmin);
   //for menu button
@@ -194,9 +196,7 @@ export default function ProfilePostCard({
           setRefresh={setRefresh}
         />
 
-        <div
-          class="card"
-        >
+        <div class="card">
           <div class="card-body">
             <div class="post">
               <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -206,7 +206,10 @@ export default function ProfilePostCard({
                     src={data.author.profilePicture || defaultDP}
                   />
                   <span class="username">
-                    <Link to={"/profile/" + data.author.id} style={{ color: "#3B21CB", }}>
+                    <Link
+                      to={"/profile/" + data.author.id}
+                      style={{ color: "#3B21CB" }}
+                    >
                       {data.author.username}
                     </Link>
                   </span>
@@ -214,7 +217,6 @@ export default function ProfilePostCard({
                   <span class="description">
                     {" "}
                     {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                   
                     {moment.utc(formatDate).fromNow()}
                   </span>
                 </div>
@@ -272,10 +274,32 @@ export default function ProfilePostCard({
                     </p>
                   </div>
                 ))}
-              {edit == false ? (<p>{data.body}</p>) : <EditPost autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditPost>}
+              {edit == false ? (
+                <p>
+                  <ReactHashtag
+                    renderHashtag={(hashtagValue) => (
+                      <span
+                        style={{ color: "#3B21CB", cursor: "pointer" }}
+                        onClick={() =>
+                          history.push("/trend/" + hashtagValue.slice(1))
+                        }
+                      >
+                        <b>{hashtagValue}</b>
+                      </span>
+                    )}
+                  >
+                    {data.body}
+                  </ReactHashtag>
+                </p>
+              ) : (
+                <EditPost
+                  autofocus
+                  data={data}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  setEdit={setEdit}
+                ></EditPost>
+              )}
               {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
@@ -317,7 +341,7 @@ export default function ProfilePostCard({
             */}
               <p>
                 {liked == true ? (
-                  <Link onClick={handleUnlike} style={{ color: "#3B21CB", }}>
+                  <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
                 ) : (
@@ -327,12 +351,16 @@ export default function ProfilePostCard({
                 )}
 
                 <span>
-                  <Tooltip title="Click to view full post" aria-label="View full post">
+                  <Tooltip
+                    title="Click to view full post"
+                    aria-label="View full post"
+                  >
                     <Link
                       to={"/community/post/" + data.id}
                       style={{ marginLeft: 10, color: "black" }}
                     >
-                      <i class="fas fa-comments mr-1"></i> {data.comments.length}
+                      <i class="fas fa-comments mr-1"></i>{" "}
+                      {data.comments.length}
                     </Link>
                   </Tooltip>
                 </span>
@@ -350,23 +378,32 @@ export default function ProfilePostCard({
               post={data}
             ></CommentListForFeed>
 
-            <div style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-            }}>
-
-
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               {data.comments.length > 2 ? (
-                <Tooltip title="Click to view full post and all comments" aria-label="View full post">
+                <Tooltip
+                  title="Click to view full post and all comments"
+                  aria-label="View full post"
+                >
                   <Link
                     to={"/community/post/" + data.id}
-                    style={{ color: "#3B21CB", margin: "0, auto", textAlign: "center" }}
+                    style={{
+                      color: "#3B21CB",
+                      margin: "0, auto",
+                      textAlign: "center",
+                    }}
                   >
                     View all comments
-
-                </Link>
-                </Tooltip>) : ("")}
+                  </Link>
+                </Tooltip>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>

@@ -14,7 +14,8 @@ import CommentList from "../../components/ProfilePage/CommentList";
 import EditPostModal from "../../components/ProfilePage/EditPostModal";
 import DeleteCommPostModal from "../../components/CommunityPage/DeleteCommPostModal";
 import moment from "moment";
-
+import ReactHashtag from "react-hashtag";
+import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 
@@ -24,6 +25,7 @@ const ITEM_HEIGHT = 30;
 
 export default function CommunityPostWithComments() {
   //for menu button
+  let history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const { postId } = useParams();
@@ -166,28 +168,31 @@ export default function CommunityPostWithComments() {
               <div class="post">
                 <div style={{ display: "flex", alignItems: "baseline" }}>
                   <div class="user-block">
-                  <img src={data.postCommunity.communityProfilePicture || defaultDP} />
+                    <img
+                      src={
+                        data.postCommunity.communityProfilePicture || defaultDP
+                      }
+                    />
                     <span class="username">
-                    <Link
-                      to={"/community/" + data.postCommunity.id}
-                      style={{ color: "#3B21CB", fontSize: "18px" }}
-                    >
-                      {data.postCommunity.name}
-                    </Link>
-                    <span>&nbsp;</span>
-                    <span>&nbsp;</span>
-                    <span>&nbsp;</span>
-                    <Link
-                      to={"/profile/" + data.author.id}
-                      style={{ color: "gray", fontSize: "13px" }}
-                    >
-                      Posted by @ {data.author.username}
-                    </Link>
-                  </span>
+                      <Link
+                        to={"/community/" + data.postCommunity.id}
+                        style={{ color: "#3B21CB", fontSize: "18px" }}
+                      >
+                        {data.postCommunity.name}
+                      </Link>
+                      <span>&nbsp;</span>
+                      <span>&nbsp;</span>
+                      <span>&nbsp;</span>
+                      <Link
+                        to={"/profile/" + data.author.id}
+                        style={{ color: "gray", fontSize: "13px" }}
+                      >
+                        Posted by @ {data.author.username}
+                      </Link>
+                    </span>
                     <span class="description">
                       {" "}
                       {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                    
                       {moment.utc(formatDate).fromNow()}
                     </span>
                   </div>
@@ -245,13 +250,35 @@ export default function CommunityPostWithComments() {
                       </p>
                     </div>
                   ))}
-                {edit == false ? (<p>{data.body}</p>) : <EditPost  autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditPost>}
+                {edit == false ? (
+                  <p>
+                    <ReactHashtag
+                      renderHashtag={(hashtagValue) => (
+                        <span
+                          style={{ color: "#3B21CB", cursor: "pointer" }}
+                          onClick={() =>
+                            history.push("/trend/" + hashtagValue.slice(1))
+                          }
+                        >
+                          <b>{hashtagValue}</b>
+                        </span>
+                      )}
+                    >
+                      {data.body}
+                    </ReactHashtag>
+                  </p>
+                ) : (
+                  <EditPost
+                    autofocus
+                    data={data}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    setEdit={setEdit}
+                  ></EditPost>
+                )}
                 <p>
                   {liked == true ? (
-                    <Link onClick={handleUnlike} style={{color: "#3B21CB",}}>
+                    <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
                   ) : (

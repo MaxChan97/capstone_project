@@ -19,6 +19,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { Decoder, Encoder, tools, Reader } from "ts-ebml";
 import { storage } from "../firebase";
+import ReactHashtag from "react-hashtag";
+
 var uuid = require("uuid");
 const prettyMilliseconds = require("pretty-ms");
 
@@ -864,7 +866,17 @@ export default function StreamPage() {
           <div
             style={{ display: "flex", flexDirection: "row", marginTop: "18px" }}
           >
-            <h5 style={{ margin: "0px" }}>{title}</h5>
+            <h5 style={{ margin: "0px" }}>
+              <ReactHashtag
+                renderHashtag={(hashtagValue) => (
+                  <span style={{ color: "#3B21CB" }}>
+                    <b>{hashtagValue}</b>
+                  </span>
+                )}
+              >
+                {title}
+              </ReactHashtag>
+            </h5>
             {streamSubscribersOnly === true ? (
               <p
                 style={{
@@ -880,7 +892,17 @@ export default function StreamPage() {
               ""
             )}
           </div>
-          <p>{description}</p>
+          <p>
+            <ReactHashtag
+              renderHashtag={(hashtagValue) => (
+                <span style={{ color: "#3B21CB" }}>
+                  <b>{hashtagValue}</b>
+                </span>
+              )}
+            >
+              {description}
+            </ReactHashtag>
+          </p>
         </div>
       );
     }
