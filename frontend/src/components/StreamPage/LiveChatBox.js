@@ -24,7 +24,7 @@ import { useAlert } from "react-alert";
 import { db } from "../../firebase";
 import { liveChatRefreshListener } from "../../helpers/FirebaseApi";
 
-export default function LiveChatBox({ streamId }) {
+export default function LiveChatBox({ streamId, streamEnded }) {
   const alert = useAlert();
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -112,7 +112,7 @@ export default function LiveChatBox({ streamId }) {
   }
 
   return (
-    <div style={{ width: "380px", height: 400 }}>
+    <div style={{ width: "380px", height: "300px" }}>
       <TitleBar
         title="Chat"
         style={{
@@ -125,7 +125,7 @@ export default function LiveChatBox({ streamId }) {
       />
       <hr style={{ borderTop: "1px solid #E9E9E9", margin: 0 }} />
       <MessageList active>{renderMessages(liveMessages)}</MessageList>
-      {streamId != undefined ? (
+      {streamId != undefined && streamEnded === false ? (
         <TextComposer
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}

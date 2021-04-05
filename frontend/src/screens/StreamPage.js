@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import LiveChatBox from "../components/StreamPage/LiveChatBox";
+import LivePollInput from "../components/StreamPage/LivePollInput";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
@@ -931,9 +932,11 @@ export default function StreamPage() {
             alignItems: "center",
             paddingTop: "18px",
             paddingRight: "18px",
+            paddingBottom: "18px",
           }}
         >
-          <LiveChatBox streamId={streamId} />
+          <LiveChatBox streamId={streamId} streamEnded={streamEnded} />
+          <LivePollInput streamId={streamId} streamEnded={streamEnded} />
         </div>
       </div>
 
