@@ -29,7 +29,7 @@ public class LivePoll implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
@@ -39,7 +39,7 @@ public class LivePoll implements Serializable {
     private boolean isActive;
 
     @ManyToMany
-    @MapKeyColumn(name = "option")
+    @MapKeyColumn(name = "options")
     private Map<String, PersonAnswer> options = new HashMap();
 
     @ManyToMany
