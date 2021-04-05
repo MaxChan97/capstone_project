@@ -1470,4 +1470,16 @@ export default {
       type: "GET",
     });
   },
+
+  
+  deactivateAdmin(adminId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/1/deactivate/" + adminId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
 };
