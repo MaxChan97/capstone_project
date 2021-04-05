@@ -136,11 +136,10 @@ export default function CommunityPostWithComments() {
           display: "flex",
           flexDirection: "column",
           textAlign: "left",
-          width: "max-content",
           margin: "auto",
         }}
       >
-        <div class="col-md-9" style={{ marginTop: "20px" }}>
+        <div class="col-md-9" style={{ paddingTop: "20px", margin:"auto"}}>
           <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -159,10 +158,6 @@ export default function CommunityPostWithComments() {
 
           <div
             class="card"
-            style={{
-              minWidth: "80ch",
-              maxWidth: "80ch",
-            }}
           >
             <div class="card-body">
               <div class="post">
