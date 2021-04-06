@@ -21,6 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { makeStyles } from '@material-ui/core/styles';
 import { isOverflown } from '@material-ui/data-grid';
+import { useAlert } from "react-alert";
 
 const ColorButton = withStyles((theme) => ({
     root: {
@@ -162,6 +163,7 @@ renderCellExpand.propTypes = {
 
 export default function AdminList() {
     const [refresh, setRefresh] = React.useState(false);
+    const alert = useAlert();
     const [rows, setRows] = useState(null);
 
     useEffect(() => {
@@ -193,7 +195,7 @@ export default function AdminList() {
     }
 
     function handleBanPerson() {
-        if (currentAdmin.isDeactivated == false) {
+        if (currentAdmin.deactivated == false) {
             Api.deactivateAdmin(currentAdmin.id)
                 .done((list) => {
                     alert.show("Admin account is deactivated!");
@@ -227,7 +229,7 @@ export default function AdminList() {
         { field: 'id', headerName: 'ID', width: 120, renderCell: renderCellExpand, },
         { field: 'username', headerName: 'Username', width: 250, renderCell: renderCellExpand, },
         //{ field: 'createdDate', headerName: 'Date Joined', width: 270 },
-        { field: 'email', headerName: 'Email', width: 300, renderCell: renderCellExpand, },
+        { field: 'email', headerName: 'Email', width: 400, renderCell: renderCellExpand, },
         {
             field: 'nothing',
             headerName: 'View Logs',
@@ -249,7 +251,39 @@ export default function AdminList() {
             width: 150,
             sortable: false,
             filterable: false,
-          
+            renderCell: (params) => (
+                <div>
+                    {params.getValue('master') == true ? (
+                        <div>
+                            <i class='fas fa-user-check' 
+                                style={{ marginLeft: 35, color: "gray", }}
+                            ></i>
+
+                        </div>
+                    ) : ("")}
+
+                    {params.getValue('master') == false && params.getValue('deactivated') == false ? (
+                        <div>
+                            <Link>
+                                <i class='fas fa-user-check'
+                                    style={{ marginLeft: 35, color: "#3B21CB", }}
+                                    onClick={(event) => handleClick(params.getValue('id'))}
+                                ></i>
+                            </Link>
+                        </div>
+                    ) : ("")}
+                    {params.getValue('master') == false && params.getValue('deactivated') == true ? (
+                        <div>
+
+                            <i class='fas fa-user-times'
+                                style={{ marginLeft: 35, color: "#EA3F79", }}
+                            ></i>
+                        </div>
+                    ) : ("")}
+
+
+                </div>
+            ),
         }
     ];
 

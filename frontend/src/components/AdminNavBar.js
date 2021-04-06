@@ -47,14 +47,14 @@ function AdminNavBar({
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [currentPerson, setCurrentPerson] = useState({});
+  const [currentAdmin, setCurrentAdmin] = useState(null);
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
     if (currentUser) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, location.pathname]);
 
   if (currentUser === null) {
     return <Redirect to="/admin/login" />;
@@ -77,12 +77,13 @@ function AdminNavBar({
   }
 
   function loadData(currentUser) {
-    Api.getPersonById(currentUser)
-      .done((currentPerson) => {
-        setCurrentPerson(currentPerson);
+    Api.getAdminById(currentUser)
+      .done((a) => {
+        setCurrentAdmin(a);
+        handleBanned(a)
       })
       .fail((xhr, status, error) => {
-        alert.show("This user does not exist!");
+        alert.show("This admin does not exist!");
       });
   }
 
@@ -91,6 +92,14 @@ function AdminNavBar({
     dispatch(logOut());
     dispatch(setIsAdmin(null));
     history.push("/admin/login");
+  }
+
+  function handleBanned(a) {
+    if (a.deactivated == true) {
+      dispatch(logOut());
+      dispatch(setIsAdmin(null));
+      history.push("/admin/deactivated");
+    }
   }
 
   return (
@@ -156,7 +165,7 @@ function AdminNavBar({
           <img src={chatLogo} alt="chatLogo" />
         </Link>
           */}
-        <Link to="/">
+        <Link to="/admin/inbox">
           <img src={notificationLogo} alt="notificationLogo" />
         </Link>
         <Link onClick={handleLogOut}>

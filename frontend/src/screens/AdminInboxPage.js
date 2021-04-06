@@ -27,8 +27,8 @@ export default function AdminInboxPage() {
     Api.getAdminById(currentUser)
       .done((a) => {
         setAdmin(a);
-        console.log(a.username);
-        console.log(a.isDeactivated);
+        console.log(a);
+        console.log(a.master);
       })
   }
   const [formatDate, setFormatDate] = useState();

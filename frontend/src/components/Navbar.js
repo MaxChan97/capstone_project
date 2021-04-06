@@ -68,6 +68,7 @@ function Navbar({
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentPerson, setCurrentPerson] = useState({});
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [
     confirmStartStreamDialogOpen,
     setConfirmStartStreamDialogOpen,
@@ -90,10 +91,10 @@ function Navbar({
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && isAdmin == false) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, location.pathname]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -177,46 +178,46 @@ function Navbar({
         </DialogTitle>
         <DialogActions>
           <div className="container">
-        <div className="row ml-1">
-          <form >
-            <div className="ml-2 mr-4">
-              <div className="form-group">
-                <label htmlFor="inputTitle">Title</label>
-                <input
-                  type="text"
-                  id="inputTitle"
-                  // required
-                  style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
-                  className="form-control"
-                  value={title}
-                  onChange={handleTitleChange}
-                />
-              </div>
-              <div className="form-group">
-                  <label htmlFor="inputDescription">Description</label>
-                  <textarea
-                    className="form-control"
-                    value={description}
-                    style={{ width: "400px",height:"100px",marginTop: "13px", marginBottom: "20px" }}
-                    onChange={handleDescriptionChange}
-                  />
+            <div className="row ml-1">
+              <form >
+                <div className="ml-2 mr-4">
+                  <div className="form-group">
+                    <label htmlFor="inputTitle">Title</label>
+                    <input
+                      type="text"
+                      id="inputTitle"
+                      // required
+                      style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
+                      className="form-control"
+                      value={title}
+                      onChange={handleTitleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="inputDescription">Description</label>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      style={{ width: "400px", height: "100px", marginTop: "13px", marginBottom: "20px" }}
+                      onChange={handleDescriptionChange}
+                    />
+                  </div>
                 </div>
+              </form>
             </div>
-          </form>
-          </div>
-          <div className="row mr-3 mb-2" style={{float:"right"}}>
-          <Button style={{ outline: "none" }} onClick={handleUploadDialogClose}>
-            Cancel
+            <div className="row mr-3 mb-2" style={{ float: "right" }}>
+              <Button style={{ outline: "none" }} onClick={handleUploadDialogClose}>
+                Cancel
           </Button>
-          <ColorButton
-            style={{ outline: "none" }}
-            color="primary"
-            variant="contained"
-            // onClick={handleUpload}
-          >
-            UPLOAD
+              <ColorButton
+                style={{ outline: "none" }}
+                color="primary"
+                variant="contained"
+              // onClick={handleUpload}
+              >
+                UPLOAD
           </ColorButton>
-          </div>
+            </div>
           </div>
         </DialogActions>
       </Dialog>
@@ -243,6 +244,7 @@ function Navbar({
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
         setCurrentPerson(currentPerson);
+        handleBannedPerson(currentPerson)
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -259,6 +261,14 @@ function Navbar({
     e.preventDefault();
     if (location.pathname !== "/stream") {
       handleStartStreamDialogOpen();
+    }
+  }
+
+  function handleBannedPerson(p) {
+    if (p.isBannedFromLogin == true) {
+      dispatch(logOut());
+      dispatch(setIsAdmin(null));
+      history.push("/banned");
     }
   }
 

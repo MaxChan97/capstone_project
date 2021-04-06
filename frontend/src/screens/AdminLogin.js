@@ -104,6 +104,9 @@ export default function AdminLogin() {
             if (xhr.responseJSON.error === "Invalid credentials") {
               alert.show("Invalid credentials, please try again");
             }
+            if (xhr.responseJSON.error === "Admin is deactivated") {
+                history.push("/admin/deactivated");
+              }
           });
     }
     const isAdmin = useSelector((state) => state.isAdmin);
