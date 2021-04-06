@@ -162,6 +162,13 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
     setFormatDate(changedDate);
   }
 
+  function MouseOver(event) {
+    event.target.style.textDecoration = 'underline';
+  }
+  function MouseOut(event) {
+    event.target.style.textDecoration = "";
+  }
+
   useEffect(() => {
     if (data) {
       checkedLiked();
@@ -391,6 +398,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                       margin: "0, auto",
                       textAlign: "center",
                     }}
+                    onMouseEnter={MouseOver}
+                    onMouseLeave={MouseOut}
                   >
                     View all comments
                   </Link>
