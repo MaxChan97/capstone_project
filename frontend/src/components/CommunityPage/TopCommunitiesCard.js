@@ -14,7 +14,7 @@ export default function TopCommunitiesCard({ data }) {
                 key={index}
                 class="list-group-item list-group-item-action p-1"
               >
-                <a href="#">
+                <a href={"/community/" + community["id"]}>
                   <div className="container-fluid" style={{ color: "black" }}>
                     <div className="row m-3">
                       <div className="col-md-4">
