@@ -266,7 +266,11 @@ function App() {
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
             <Route exact path="/banned" component={BannedFromLoginPage} />
-            <Route exact path="/admin/deactivated" component={AdminDeactivatedPage} />
+            <Route
+              exact
+              path="/admin/deactivated"
+              component={AdminDeactivatedPage}
+            />
             {/*<Route component={PageNotFound} />*/}
           </div>
         </div>
