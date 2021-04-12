@@ -61,9 +61,8 @@ export default function AdminDeactivatedPage() {
                                 That's why we've developed a set of <Link style={{ textDecoration: "underline", color: "#3B21CB",}}>Community Standards</Link> that outline what is and
                                 is not allowed on Bull&Bear.
                             </p>
-                            <b>Please check your email for more information.</b>
-                            <p>
-                                Please email <Link style={{ textDecoration: "underline", color: "#3B21CB", }}>bullandbearcapstone@gmail.com</Link> for further clarification.</p>
+                            <b>
+                                Please email <Link style={{ textDecoration: "underline", color: "#3B21CB", }}>bullandbearcapstone@gmail.com</Link> for further clarification.</b>
                         </div>
                     </div>
                 </div>

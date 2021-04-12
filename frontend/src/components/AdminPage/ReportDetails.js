@@ -30,7 +30,7 @@ export default function ReportDetails() {
         <div className="content-wrapper">
             <div className="container mt-3">
                 <div className="row">
-                    <div className="col-md-8 mt-3">
+                    <div className="col-md-12 mt-3" style={{margin:"auto"}}>
                         <div className="card card-primary">
                             <div className="card-body">
                                 <Box fontWeight="fontWeightMedium" fontSize={23}>

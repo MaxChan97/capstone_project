@@ -11,6 +11,7 @@ import SortReportDropdown from "../components/AdminPage/SortReportDropdown";
 import Banned from "./AdminBannedAccessPage";
 import moment from "moment";
 import CircularProgress from '@material-ui/core/CircularProgress'; 
+import ReportList from "../components/AdminPage/ReportList";
 
 export default function AdminInboxPage() {
   const dispatch = useDispatch();
@@ -27,8 +28,6 @@ export default function AdminInboxPage() {
     Api.getAdminById(currentUser)
       .done((a) => {
         setAdmin(a);
-        console.log(a);
-        console.log(a.master);
       })
   }
   const [formatDate, setFormatDate] = useState();
@@ -45,16 +44,16 @@ export default function AdminInboxPage() {
   */
   return isAdmin == true && admin != null ? (
     <div className="content-wrapper">
-      <div className="container mt-3">
-        <div className="row">
-          <div className="col-md-8 mt-3">
-
+      <div>
+        <div className="row" >
+          <div className="col-md-9 mt-4" style={{paddingLeft:"20px"}}>
+          <ReportList></ReportList>
           </div>
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
+          <div className="col-md-3 mt-4" style={{ textAlign: "left", paddingRight:"20px" }}>
             <div class="callout callout-info" style={{lineHeight: "10px",}}>
               <h5>{admin.username}</h5>
               <p>{admin.email}</p>
-              <p>Joined since: {moment(formatDate).format("DD/MM/YYYY")}</p>
+              <p>Joined: {moment(formatDate).format("DD/MM/YYYY")}</p>
             </div>
           </div>
         </div>
