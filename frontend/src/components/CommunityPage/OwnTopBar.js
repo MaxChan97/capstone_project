@@ -10,6 +10,7 @@ import { storage } from "../../firebase";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel.js";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
+import { useSelector } from "react-redux";
 
 var uuid = require("uuid");
 
@@ -81,7 +82,7 @@ export default function TopBar({
   };
 
   const alert = useAlert();
-
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [editedBanner, setEditedBanner] = useState(false);
   const [bannerProgress, setBannerProgress] = useState(0);
 
@@ -189,7 +190,7 @@ export default function TopBar({
               ) : null}
             </div>
           )}
-          {editedBanner === false ? (
+          {isAdmin == false && editedBanner === false ? (
             <ColorButton
               style={{
                 height: "35px",
