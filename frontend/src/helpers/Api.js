@@ -1482,4 +1482,33 @@ export default {
       type: "PUT",
     });
   },
+
+  createReport(messageBody, reporterId, reportTypeEnum, reportedContentId,  category) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/report",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        messageBody: messageBody,
+        reporterId: reporterId,
+        reportTypeEnum: reportTypeEnum,
+        reportedContentId: reportedContentId,
+        category: category,
+      }),
+    });
+  },
+
+  getAllReports() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/report/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };
