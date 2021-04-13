@@ -6,10 +6,6 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
 
 import TabPanel from "../components/UserAnalyticsPage/TabPanel";
 import StatisticsCard from "../components/UserAnalyticsPage/StatisticsCard";
@@ -38,6 +34,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const createLineChartOptions = (title, yAxisTitle, seriesData) => {
+  return {
+    title: {
+      text: title,
+    },
+    time: {
+      useUTC: false,
+    },
+    yAxis: {
+      title: {
+        text: yAxisTitle,
+      },
+    },
+    series: seriesData,
+    xAxis: {
+      type: "datetime",
+    },
+    legend: {
+      enabled: false,
+    },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            legend: {
+              enabled: false,
+            },
+          },
+        },
+      ],
+    },
+  };
+};
+
 export default function UserAnalytics() {
   const classes = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
@@ -47,27 +80,64 @@ export default function UserAnalytics() {
 
   const [prevActiveSubscribers, setPrevActiveSubscribers] = useState();
   const [activeSubscribers, setActiveSubscribers] = useState();
-  const [subscribersArray, setSubscribersArray] = useState();
+  const [subscribersChartOptions, setSubscribersChartOptions] = useState(
+    createLineChartOptions("Subscribers", "No. of Subscribers", [
+      {
+        name: "Subscribers",
+        data: [],
+      },
+    ])
+  );
 
   const [prevActiveFollowers, setPrevActiveFollowers] = useState();
   const [activeFollowers, setActiveFollowers] = useState();
-  const [followersArray, setFollowersArray] = useState();
+  const [followersChartOptions, setFollowersChartOptions] = useState(
+    createLineChartOptions("Followers", "No. of Followers", [
+      {
+        name: "Followers",
+        data: [],
+      },
+    ])
+  );
 
   const [prevViews, setPrevViews] = useState();
   const [views, setViews] = useState();
-  const [viewsArray, setViewsArray] = useState();
+  const [viewsChartOptions, setViewsChartOptions] = useState(
+    createLineChartOptions("Views", "No. of views", [
+      {
+        name: "Views",
+        data: [],
+      },
+    ])
+  );
 
   const [prevEarnings, setPrevEarnings] = useState();
   const [earnings, setEarnings] = useState();
-  const [earningsArray, setEarningsArray] = useState();
+  const [earningsChartOptions, setEarningsChartOptions] = useState(
+    createLineChartOptions("Earnings", "Total earnings", [
+      {
+        name: "Earnings",
+        data: [],
+      },
+    ])
+  );
 
-  const [interestsDemographics, setInterestsDemographics] = useState();
+  const [interestsOptions, setInterestsOptions] = useState();
+  const [incomeOptions, setIncomeOptions] = useState();
 
   useEffect(() => {
     Api.getFollowers(currentUser)
       .done((followers) => {
         let interestsDemographics = [];
-        let noOfInterests = 0;
+        let incomeDemographics = {
+          NOT_EARNING: 0,
+          LOW: 0,
+          MIDDLE_LOW: 0,
+          MIDDLE: 0,
+          MIDDLE_HIGH: 0,
+          HIGH: 0,
+          CRA: 0,
+        };
         for (const prop in followers) {
           for (const ti of followers[prop]["follower"]["topicInterests"]) {
             let found = false;
@@ -85,8 +155,15 @@ export default function UserAnalytics() {
               interestsDemographics.push(newInterest);
             }
           }
+          if (followers[prop]["follower"].hasOwnProperty("incomeRange")) {
+            let newIncome = followers[prop]["follower"]["incomeRange"];
+            incomeDemographics[newIncome] = incomeDemographics[newIncome] + 1;
+          }
         }
-        setInterestsDemographics(interestsDemographics);
+        setInterestsOptions(createPieChartOptions(interestsDemographics));
+        setIncomeOptions(
+          createBarChartOptions(Object.values(incomeDemographics))
+        );
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -116,7 +193,16 @@ export default function UserAnalytics() {
         });
         setPrevActiveSubscribers(prevActiveSubscribers);
         setActiveSubscribers(activeSubscribers);
-        setSubscribersArray(subscribersArray);
+        console.log(subscribersArray);
+        setSubscribersChartOptions({
+          ...subscribersChartOptions,
+          series: [
+            {
+              name: "Subscribers",
+              data: subscribersArray,
+            },
+          ],
+        });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -136,10 +222,17 @@ export default function UserAnalytics() {
             activeFollowers = element[1];
           }
         });
-
         setPrevActiveFollowers(prevActiveFollowers);
         setActiveFollowers(activeFollowers);
-        setFollowersArray(followersArray);
+        setFollowersChartOptions({
+          ...followersChartOptions,
+          series: [
+            {
+              name: "Followers",
+              data: followersArray,
+            },
+          ],
+        });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -161,7 +254,15 @@ export default function UserAnalytics() {
         });
         setPrevViews(prevViews);
         setViews(views);
-        setViewsArray(viewsArray);
+        setViewsChartOptions({
+          ...viewsChartOptions,
+          series: [
+            {
+              name: "Views",
+              data: viewsArray,
+            },
+          ],
+        });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -183,7 +284,15 @@ export default function UserAnalytics() {
         });
         setPrevEarnings(prevEarnings);
         setEarnings(earnings);
-        setEarningsArray(earningsArray);
+        setEarningsChartOptions({
+          ...earningsChartOptions,
+          series: [
+            {
+              name: "Earnings",
+              data: earningsArray,
+            },
+          ],
+        });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -198,58 +307,7 @@ export default function UserAnalytics() {
     setValue(newValue);
   };
 
-  const parseOptions = (title, yAxisTitle, seriesData) => {
-    return {
-      title: {
-        text: title,
-      },
-      time: {
-        useUTC: false,
-      },
-      yAxis: {
-        title: {
-          text: yAxisTitle,
-        },
-      },
-      series: seriesData,
-      xAxis: {
-        type: "datetime",
-      },
-      legend: {
-        enabled: false,
-      },
-    };
-  };
-
-  const subscribersOptions = parseOptions("Subscribers", "No. of Subscribers", [
-    {
-      name: "Subscribers",
-      data: subscribersArray,
-    },
-  ]);
-
-  const followersOptions = parseOptions("Followers", "No. of Followers", [
-    {
-      name: "Followers",
-      data: followersArray,
-    },
-  ]);
-
-  const viewsOptions = parseOptions("Views", "No. of views", [
-    {
-      name: "Views",
-      data: viewsArray,
-    },
-  ]);
-
-  const earningsOptions = parseOptions("Earnings", "Total earnings", [
-    {
-      name: "Earnings",
-      data: earningsArray,
-    },
-  ]);
-
-  const createOptionsPie = (seriesData) => {
+  const createPieChartOptions = (seriesData) => {
     return {
       chart: {
         plotBackgroundColor: null,
@@ -285,12 +343,88 @@ export default function UserAnalytics() {
           data: seriesData,
         },
       ],
+      responsive: {
+        rules: [
+          {
+            condition: {
+              maxWidth: 500,
+            },
+            chartOptions: {
+              legend: {
+                enabled: false,
+              },
+            },
+          },
+        ],
+      },
     };
   };
 
-  const optionsPie = createOptionsPie(interestsDemographics);
-  //sliced = true;
-  //selected = true;
+  const createBarChartOptions = (incomeData) => {
+    return {
+      chart: {
+        type: "bar",
+      },
+      title: {
+        text: "Your Followers' Income Range",
+      },
+      subtitle: {
+        text: "Annual income",
+      },
+      xAxis: {
+        categories: [
+          "Not Earning",
+          "0-25K",
+          "25-45K",
+          "45-90K",
+          "90-150K",
+          "150-200K",
+          ">200K",
+        ],
+        title: {
+          text: null,
+        },
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "Followers",
+          align: "high",
+        },
+        labels: {
+          overflow: "justify",
+        },
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true,
+          },
+        },
+      },
+      legend: {
+        layout: "vertical",
+        align: "right",
+        verticalAlign: "top",
+        x: -40,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+          Highcharts.defaultOptions.legend.backgroundColor || "#FFFFFF",
+        shadow: true,
+      },
+      credits: {
+        enabled: false,
+      },
+      series: [
+        {
+          name: "Income range",
+          data: incomeData,
+        },
+      ],
+    };
+  };
 
   return (
     <div className="content-wrapper">
@@ -356,25 +490,25 @@ export default function UserAnalytics() {
                   <TabPanel value={value} index={0}>
                     <HighchartsReact
                       highcharts={Highcharts}
-                      options={subscribersOptions}
+                      options={subscribersChartOptions}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={1}>
                     <HighchartsReact
                       highcharts={Highcharts}
-                      options={followersOptions}
+                      options={followersChartOptions}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={2}>
                     <HighchartsReact
                       highcharts={Highcharts}
-                      options={viewsOptions}
+                      options={viewsChartOptions}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={3}>
                     <HighchartsReact
                       highcharts={Highcharts}
-                      options={earningsOptions}
+                      options={earningsChartOptions}
                     />
                   </TabPanel>
                 </div>
@@ -383,28 +517,23 @@ export default function UserAnalytics() {
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
+          <div class="col-6">
             <div class="card">
               <div class="card-body">
-                <HighchartsReact highcharts={Highcharts} options={optionsPie} />
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={interestsOptions}
+                />
               </div>
             </div>
           </div>
-          <div class="col-4">
+          <div class="col-6">
             <div class="card">
               <div class="card-body">
-                <Typography variant="h6" className={classes.title}>
-                  Topics your viewers are also interested in:
-                </Typography>
-                <div className={classes.demo}>
-                  <List>
-                    {[0, 1, 2, 3].map((item, index) => (
-                      <ListItem key={index}>
-                        <ListItemText primary="Single-line item" />
-                      </ListItem>
-                    ))}
-                  </List>
-                </div>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={incomeOptions}
+                />
               </div>
             </div>
           </div>
