@@ -180,27 +180,20 @@ export default function UserAnalytics() {
     Api.getSubscribersAnalytics(currentUser)
       .done((subscribersAnalytics) => {
         let subscribersArray = Object.entries(subscribersAnalytics);
-        let date = new Date();
-        let today = date.getTime();
-        let yesterday = today - 86400000;
-        let todaysSubscribers = 0;
-        let yesterdaysSubscribers = 0;
-        subscribersArray
-          .sort(function (a, b) {
-            return a[0].parseInt(a[0], 10) - b[0].parseInt(b[0], 10);
-          })
-          .forEach((element) => {
-            element[0] = parseInt(element[0], 10);
-            if (element[0] <= today) {
-              todaysSubscribers = element[1];
-            }
-            if (element[0] <= yesterday) {
-              yesterdaysSubscribers = element[1];
-            }
-          });
-
-        setPrevActiveSubscribers(todaysSubscribers);
-        setActiveSubscribers(yesterdaysSubscribers);
+        let latestTime = 0;
+        let prevActiveSubscribers = 0;
+        let activeSubscribers = 0;
+        subscribersArray.forEach((element) => {
+          element[0] = parseInt(element[0], 10);
+          if (element[0] > latestTime) {
+            latestTime = element[0];
+            prevActiveSubscribers = activeSubscribers;
+            activeSubscribers = element[1];
+          }
+        });
+        setPrevActiveSubscribers(prevActiveSubscribers);
+        setActiveSubscribers(activeSubscribers);
+        console.log(subscribersArray);
         setSubscribersChartOptions({
           ...subscribersChartOptions,
           series: [
@@ -218,27 +211,19 @@ export default function UserAnalytics() {
     Api.getFollowersAnalytics(currentUser)
       .done((followersAnalytics) => {
         let followersArray = Object.entries(followersAnalytics);
-        let date = new Date();
-        let today = date.getTime();
-        let yesterday = today - 86400000;
-        let todaysFollowers = 0;
-        let yesterdaysFollowers = 0;
-        followersArray
-          .sort(function (a, b) {
-            return a[0].parseInt(a[0], 10) - b[0].parseInt(b[0], 10);
-          })
-          .forEach((element) => {
-            element[0] = parseInt(element[0], 10);
-            if (element[0] <= today) {
-              todaysFollowers = element[1];
-            }
-            if (element[0] <= yesterday) {
-              yesterdaysFollowers = element[1];
-            }
-          });
-
-        setPrevActiveFollowers(yesterdaysFollowers);
-        setActiveFollowers(todaysFollowers);
+        let latestTime = 0;
+        let prevActiveFollowers = 0;
+        let activeFollowers = 0;
+        followersArray.forEach((element) => {
+          element[0] = parseInt(element[0], 10);
+          if (element[0] > latestTime) {
+            latestTime = element[0];
+            prevActiveFollowers = activeFollowers;
+            activeFollowers = element[1];
+          }
+        });
+        setPrevActiveFollowers(prevActiveFollowers);
+        setActiveFollowers(activeFollowers);
         setFollowersChartOptions({
           ...followersChartOptions,
           series: [
@@ -256,27 +241,19 @@ export default function UserAnalytics() {
     Api.getViewersAnalytics(currentUser)
       .done((viewersAnalytics) => {
         let viewsArray = Object.entries(viewersAnalytics);
-        let date = new Date();
-        let today = date.getTime();
-        let yesterday = today - 86400000;
-        let todaysViews = 0;
-        let yesterdaysViews = 0;
-        viewsArray
-          .sort(function (a, b) {
-            return a[0].parseInt(a[0], 10) - b[0].parseInt(b[0], 10);
-          })
-          .forEach((element) => {
-            element[0] = parseInt(element[0], 10);
-            if (element[0] <= today) {
-              todaysViews = element[1];
-            }
-            if (element[0] <= yesterday) {
-              yesterdaysViews = element[1];
-            }
-          });
-
-        setPrevViews(todaysViews);
-        setViews(yesterdaysViews);
+        let latestTime = 0;
+        let prevViews = 0;
+        let views = 0;
+        viewsArray.forEach((element) => {
+          element[0] = parseInt(element[0], 10);
+          if (element[0] > latestTime) {
+            latestTime = element[0];
+            prevViews = views;
+            views = element[1];
+          }
+        });
+        setPrevViews(prevViews);
+        setViews(views);
         setViewsChartOptions({
           ...viewsChartOptions,
           series: [
@@ -294,31 +271,19 @@ export default function UserAnalytics() {
     Api.getEarningsAnalytics(currentUser)
       .done((earningsAnalytics) => {
         let earningsArray = Object.entries(earningsAnalytics);
-        let tally = 0;
+        let latestTime = 0;
+        let prevEarnings = 0;
+        let earnings = 0;
         earningsArray.forEach((element) => {
           element[0] = parseInt(element[0], 10);
-          tally += element[0];
-          element[0] = tally;
+          if (element[0] > latestTime) {
+            latestTime = element[0];
+            prevEarnings = earnings;
+            earnings = element[1];
+          }
         });
-        let date = new Date();
-        let today = date.getTime();
-        let yesterday = today - 86400000;
-        let todaysTotalEarnings = 0;
-        let yesterdaysTotalEarnings = 0;
-        earningsArray
-          .sort(function (a, b) {
-            return a[0] - b[0];
-          })
-          .forEach((element) => {
-            if (element[0] <= today) {
-              todaysTotalEarnings = element[1];
-            }
-            if (element[0] <= yesterday) {
-              yesterdaysTotalEarnings = element[1];
-            }
-          });
-        setPrevEarnings(yesterdaysTotalEarnings);
-        setEarnings(todaysTotalEarnings);
+        setPrevEarnings(prevEarnings);
+        setEarnings(earnings);
         setEarningsChartOptions({
           ...earningsChartOptions,
           series: [
