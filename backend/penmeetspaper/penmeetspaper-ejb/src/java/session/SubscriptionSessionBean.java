@@ -103,7 +103,6 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
       Date date = cal.getTime();
       Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
-      System.out.println("resubscribe" + newSubscriberCount);
       publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
 
       return;
@@ -136,8 +135,10 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
     Date date = cal.getTime();
     Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
-    System.out.println("new subscribe" + newSubscriberCount);
     publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
+    
+    Double earnings = publisher.getPricingPlan();
+    publisher.getEarningsAnalytics().getEarnings().put(date, earnings);
 
   }
 

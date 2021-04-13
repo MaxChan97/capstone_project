@@ -24,7 +24,9 @@ import { useLocation } from "react-router-dom";
 import Api from "../helpers/Api";
 import logout from "../assets/logout 1.svg";
 import { logOut, setIsAdmin } from "../redux/actions/index";
-import BNBLogo from "../assets/BNB Logo.png";
+import firebase from "firebase";
+import FileUploader from "react-firebase-file-uploader";
+import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -84,8 +86,11 @@ function Navbar({
     setDescription(event.target.value);
   };
 
-  const [video, setVideo] = useState("");
   const [refresh, setRefresh] = useState(true);
+  const [fileName, setFileName] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
+  const [fileType, setFileType] = useState("");
+  const [progress, setProgress] = useState();
 
   const [uploadDialog, setShowUploadDialog] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
@@ -158,7 +163,7 @@ function Navbar({
   }
 
   // const handleUpload = () => {
-  //   Api.uploadVideo(title, description, video)
+  //   Api.uploadVideo(title, description, fileName, fileUrl, fileType)
   //     .done(() => {
   //       alert.show("Video uploaded successfully!");
   //       setRefresh(!refresh);
@@ -170,6 +175,33 @@ function Navbar({
   //     });
   // };
 
+  function handleUploadStart() {
+    setProgress(0);
+  }
+
+  function handleUploadError() {
+    alert("error");
+  }
+
+  function handleUploadSuccess(filename) {
+    firebase
+      .storage()
+      .ref("videos")
+      .child(filename)
+      .getDownloadURL()
+      .then((url) => {
+        setFileUrl(url);
+        setProgress(100);
+        setFileName(filename);
+        var suffix = filename.split(".")[1];
+        setFileType("video/" + suffix);
+      });
+  }
+
+  function handleProgress(progress) {
+    setProgress(progress);
+  }
+
   function renderUploadDialog() {
     return (
       <Dialog open={uploadDialog} onClose={handleUploadDialogClose}>
@@ -179,17 +211,58 @@ function Navbar({
         <DialogActions>
           <div className="container">
             <div className="row ml-1">
-              <form >
+              <form>
                 <div className="ml-2 mr-4">
+                  <div className="form-group">
+                    {progress >= 0 && progress < 100 ? (
+                      <div className="d-flex justify-content-center">
+                        <CircularProgressWithLabel value={progress} />
+                      </div>
+                    ) : (
+                      fileUrl && (
+                        <div className="d-flex justify-content-center">
+                          <iframe height="100%" src={fileUrl}></iframe>
+                        </div>
+                      )
+                    )}
+                    <div className="row mt-2 justify-content-center">
+                      <label
+                        className="btn"
+                        style={{
+                          height: "40px",
+                          width: "220px",
+                          backgroundColor: "#3B21CB",
+                          color: "white",
+                          textAlign: "center",
+                        }}
+                      >
+                        Choose Video to Upload
+                        <FileUploader
+                          hidden
+                          accept="video/*"
+                          randomizeFilename={true}
+                          storageRef={firebase.storage().ref("videos")}
+                          onUploadStart={handleUploadStart}
+                          onUploadError={handleUploadError}
+                          onUploadSuccess={handleUploadSuccess}
+                          onProgress={handleProgress}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="form-group">
                     <label htmlFor="inputTitle">Title</label>
                     <input
                       type="text"
                       id="inputTitle"
                       // required
-                      style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
+                      style={{
+                        width: "400px",
+                        marginTop: "13px",
+                        marginBottom: "20px",
+                      }}
                       className="form-control"
-                      value={title}
                       onChange={handleTitleChange}
                     />
                   </div>
@@ -198,7 +271,12 @@ function Navbar({
                     <textarea
                       className="form-control"
                       value={description}
-                      style={{ width: "400px", height: "100px", marginTop: "13px", marginBottom: "20px" }}
+                      style={{
+                        width: "400px",
+                        height: "100px",
+                        marginTop: "13px",
+                        marginBottom: "20px",
+                      }}
                       onChange={handleDescriptionChange}
                     />
                   </div>
@@ -206,17 +284,20 @@ function Navbar({
               </form>
             </div>
             <div className="row mr-3 mb-2" style={{ float: "right" }}>
-              <Button style={{ outline: "none" }} onClick={handleUploadDialogClose}>
+              <Button
+                style={{ outline: "none" }}
+                onClick={handleUploadDialogClose}
+              >
                 Cancel
-          </Button>
+              </Button>
               <ColorButton
                 style={{ outline: "none" }}
                 color="primary"
                 variant="contained"
-              // onClick={handleUpload}
+                // onClick={handleUpload}
               >
-                UPLOAD
-          </ColorButton>
+                Confirm
+              </ColorButton>
             </div>
           </div>
         </DialogActions>
@@ -244,7 +325,7 @@ function Navbar({
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
         setCurrentPerson(currentPerson);
-        handleBannedPerson(currentPerson)
+        handleBannedPerson(currentPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
