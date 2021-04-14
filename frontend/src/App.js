@@ -55,6 +55,7 @@ import ReportDetails from "./components/AdminPage/ReportDetails";
 import AdminLog from "./components/AdminPage/AdminLog";
 import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
 import BannedFromLoginPage from "./screens/BannedFromLoginPage";
+import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
 
 function App() {
   let location = useLocation();
@@ -68,7 +69,8 @@ function App() {
       location.pathname === "/login" ||
       location.pathname === "/register" ||
       location.pathname === "/admin/login" ||
-      location.pathname === "/banned"
+      location.pathname === "/banned" ||
+      location.pathname === "/admin/deactivated"
     ) {
       return "";
     } else if (isAdmin == true) {
@@ -225,16 +227,7 @@ function App() {
                 />
               )}
             />
-            <Route
-              exact
-              path="/trend"
-              render={() => (
-                <TrendsPage
-                  searchString={searchString}
-                  searchRefresh={searchRefresh}
-                />
-              )}
-            />
+            <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
             <Route exact path="/community" component={CommunityFeed} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />
@@ -273,6 +266,11 @@ function App() {
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
             <Route exact path="/banned" component={BannedFromLoginPage} />
+            <Route
+              exact
+              path="/admin/deactivated"
+              component={AdminDeactivatedPage}
+            />
             {/*<Route component={PageNotFound} />*/}
           </div>
         </div>

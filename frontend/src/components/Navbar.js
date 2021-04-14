@@ -26,6 +26,9 @@ import logout from "../assets/logout 1.svg";
 import { logOut, setIsAdmin } from "../redux/actions/index";
 import BNBLogo from "../assets/BNB Logo.png";
 import { useAlert } from "react-alert";
+import firebase from "firebase";
+import FileUploader from "react-firebase-file-uploader";
+import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -70,6 +73,7 @@ function Navbar({
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentPerson, setCurrentPerson] = useState({});
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [
     confirmStartStreamDialogOpen,
     setConfirmStartStreamDialogOpen,
@@ -85,17 +89,20 @@ function Navbar({
     setDescription(event.target.value);
   };
 
-  const [video, setVideo] = useState("");
   const [refresh, setRefresh] = useState(true);
+  const [fileName, setFileName] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
+  const [fileType, setFileType] = useState("");
+  const [progress, setProgress] = useState();
 
   const [uploadDialog, setShowUploadDialog] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && isAdmin == false) {
       loadData(currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, location.pathname]);
 
   if (currentUser === null) {
     return <Redirect to="/login" />;
@@ -159,7 +166,7 @@ function Navbar({
   }
 
   // const handleUpload = () => {
-  //   Api.uploadVideo(title, description, video)
+  //   Api.uploadVideo(title, description, fileName, fileUrl, fileType)
   //     .done(() => {
   //       alert.show("Video uploaded successfully!");
   //       setRefresh(!refresh);
@@ -170,6 +177,33 @@ function Navbar({
   //       alert.show(xhr.responseJSON.error);
   //     });
   // };
+
+  function handleUploadStart() {
+    setProgress(0);
+  }
+
+  function handleUploadError() {
+    alert("error");
+  }
+
+  function handleUploadSuccess(filename) {
+    firebase
+      .storage()
+      .ref("videos")
+      .child(filename)
+      .getDownloadURL()
+      .then((url) => {
+        setFileUrl(url);
+        setProgress(100);
+        setFileName(filename);
+        var suffix = filename.split(".")[1];
+        setFileType("video/" + suffix);
+      });
+  }
+
+  function handleProgress(progress) {
+    setProgress(progress);
+  }
 
   function renderUploadDialog() {
     return (
@@ -182,6 +216,44 @@ function Navbar({
             <div className="row ml-1">
               <form>
                 <div className="ml-2 mr-4">
+                  <div className="form-group">
+                    {progress >= 0 && progress < 100 ? (
+                      <div className="d-flex justify-content-center">
+                        <CircularProgressWithLabel value={progress} />
+                      </div>
+                    ) : (
+                      fileUrl && (
+                        <div className="d-flex justify-content-center">
+                          <iframe height="100%" src={fileUrl}></iframe>
+                        </div>
+                      )
+                    )}
+                    <div className="row mt-2 justify-content-center">
+                      <label
+                        className="btn"
+                        style={{
+                          height: "40px",
+                          width: "220px",
+                          backgroundColor: "#3B21CB",
+                          color: "white",
+                          textAlign: "center",
+                        }}
+                      >
+                        Choose Video to Upload
+                        <FileUploader
+                          hidden
+                          accept="video/*"
+                          randomizeFilename={true}
+                          storageRef={firebase.storage().ref("videos")}
+                          onUploadStart={handleUploadStart}
+                          onUploadError={handleUploadError}
+                          onUploadSuccess={handleUploadSuccess}
+                          onProgress={handleProgress}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="form-group">
                     <label htmlFor="inputTitle">Title</label>
                     <input
@@ -228,7 +300,7 @@ function Navbar({
                 variant="contained"
                 // onClick={handleUpload}
               >
-                UPLOAD
+                Confirm
               </ColorButton>
             </div>
           </div>
@@ -257,6 +329,7 @@ function Navbar({
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
         setCurrentPerson(currentPerson);
+        handleBannedPerson(currentPerson);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -273,6 +346,14 @@ function Navbar({
     e.preventDefault();
     if (location.pathname !== "/stream") {
       handleStartStreamDialogOpen();
+    }
+  }
+
+  function handleBannedPerson(p) {
+    if (p.isBannedFromLogin == true) {
+      dispatch(logOut());
+      dispatch(setIsAdmin(null));
+      history.push("/banned");
     }
   }
 

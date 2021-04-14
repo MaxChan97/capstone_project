@@ -1,23 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
-import defaultDP from "../assets/Default Dp logo.svg";
-import defaultBanner from "../assets/Profile Banner Image.png";
-import Select from "react-select";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import { storage } from "../firebase";
 import MyCommunitiesCard from "../components/CommunityPage/MyCommunitiesCard";
 import TopCommunitiesCard from "../components/CommunityPage/TopCommunitiesCard";
 import { Link } from "react-router-dom";
-
-var uuid = require("uuid");
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -30,34 +22,29 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 export default function CreateCommunity() {
-  const leaderboardList = [
-    { name: "WallStreetBets", rank: "1" },
-    { name: "HUATHUAT", rank: "2" },
-    { name: "STONKS", rank: "3" },
-    { name: "Bullish", rank: "4" },
-    { name: "Cryptocurrency101", rank: "5" },
-    { name: "ETFs", rank: "6" },
-    { name: "Bitcoin", rank: "7" },
-    { name: "Finance1010", rank: "8" },
-    { name: "AngPao", rank: "9" },
-  ];
-
   const alert = useAlert();
-  const [leaderboard, setLeaderboard] = useState(leaderboardList);
-
   const currentUser = useSelector((state) => state.currentUser);
+
+  const [currentPerson, setCurrentPerson] = useState({});
   const [
     followingAndOwnedCommunities,
     setFollowingAndOwnedCommunityList,
   ] = useState([]);
-
-  const [currentPerson, setCurrentPerson] = useState({});
+  const [topCommunities, setTopCommunities] = useState([]);
 
   useEffect(() => {
     if (currentUser) {
       loadData(currentUser);
       console.log(currentUser);
     }
+    Api.getTopCommunities()
+      .done((topCommunities) => {
+        setTopCommunities(topCommunities);
+        console.log(topCommunities);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error!");
+      });
   }, [currentUser]);
 
   if (currentUser === null) {
@@ -101,7 +88,6 @@ export default function CreateCommunity() {
                         float: "right",
                         fontWeight: "600",
                       }}
-
                       variant="contained"
                       color="primary"
                       type="button"
@@ -112,9 +98,7 @@ export default function CreateCommunity() {
                 </div>
               </div>
             </div>
-            <div className="card card-primary">
-              <TopCommunitiesCard data={leaderboard} />
-            </div>
+            <TopCommunitiesCard data={topCommunities} />
           </div>
         </div>
       </div>

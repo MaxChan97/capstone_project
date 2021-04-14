@@ -11,16 +11,19 @@ import enumeration.ReportTypeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.ReportSessionBeanLocal;
@@ -75,6 +78,7 @@ public class ReportResource {
         String reporterIdStr = jsonObject.getString("reporterId");
         String reportTypeStr = jsonObject.getString("reportTypeEnum");
         String reportedContentId = jsonObject.getString("reportedContentId");
+        String category = jsonObject.getString("category");
 
         Long reporterId = Long.parseLong(reporterIdStr);
 
@@ -85,6 +89,7 @@ public class ReportResource {
             report.setMessageBody(messageBody);
             report.setReportContentId(reportedContentId);
             report.setReportType(reportType);
+            report.setCategory(category);
 
             reportSB.createReport(report, reporterId);
             return Response.status(204).build();
@@ -119,5 +124,33 @@ public class ReportResource {
             return buildError(e, 400);
         }
     } // end settleReport
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeReportState(@PathParam("id") Long reportId) {
+        try {
+            Report res = reportSB.getReportById(reportId);
+            return Response.status(200).entity(res).type(MediaType.APPLICATION_JSON).build();
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllAdminLogs() {
+        try {
+            List<Report> results = reportSB.getAllReports();
+
+            GenericEntity<List<Report>> entity = new GenericEntity<List<Report>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
 
 }

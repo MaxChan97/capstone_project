@@ -81,6 +81,13 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         return admin;
     }
 
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        Person person = new Person();
+        person.setId(p.getId());
+        person.setUsername(p.getUsername());
+        return person;
+    }
+
     @Override
     public Report createReport(Report report, Long reporterId) throws NoResultException, NotValidException {
         report.setReportState(ReportStateEnum.PENDING);
@@ -114,6 +121,8 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         Report report = emGetReport(reportId);
 
         em.detach(report);
+        Person p = report.getReporter();
+        report.setReporter(getDetachedPerson(p));
 
         return report;
 
@@ -121,7 +130,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
 
     @Override
     public List<Report> getAllReports() throws NoResultException, NotValidException {
-        Query q = em.createQuery("SELECT a FROM  Administrator a");
+        Query q = em.createQuery("SELECT r FROM  Report r");
         List<Report> resultList = q.getResultList();
 
         for (Report r : resultList) {

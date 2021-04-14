@@ -27,4 +27,6 @@ public interface TrendSessionBeanLocal {
 
   public List<Trend> getTodaysTrends();
 
+  public Trend insertHashtag(String hashtag);
+
 }

@@ -23,7 +23,7 @@ export default function TrendsCard({ topTrends, todaysTrends }) {
             topTrends.map((trend, index) => {
               return (
                 <a
-                  href="#"
+                  href={"/trend/" + trend.hashtag.slice(1)}
                   key={index}
                   className="list-group-item list-group-item-action"
                 >
@@ -38,7 +38,7 @@ export default function TrendsCard({ topTrends, todaysTrends }) {
               return (
                 isInTopTrends(trend.hashtag) && (
                   <a
-                    href="#"
+                    href={"/trend/" + trend.hashtag.slice(1)}
                     key={index}
                     className="list-group-item list-group-item-action"
                   >

@@ -14,6 +14,7 @@ import Api from "../../../helpers/Api";
 import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import ReportPerson from "../ReportPerson";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -518,6 +519,12 @@ export default function SocialButtonGroup({
       {renderSubscribeDialog()}
       {renderUnsubscribeDialog()}
       {renderResubscribeDialog()}
+      <ReportPerson
+      id={id}
+      username={username}
+      refresh={refresh}
+      setRefresh={setRefresh}
+      anotherPerson={anotherPerson}></ReportPerson>
     </div>
   ) : (
     ""

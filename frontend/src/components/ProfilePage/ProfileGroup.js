@@ -28,6 +28,7 @@ export default function ProfileGroup({
   setRefresh,
 }) {
   const alert = useAlert();
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [editedPicture, setEditedPicture] = useState(false);
   const [tempPicture, setTempPicture] = useState(profilePicture);
   const [profileProgress, setProfileProgress] = useState(0);
@@ -246,7 +247,7 @@ export default function ProfileGroup({
         marginLeft: "20px",
       }}
     >
-      {String(personId) === String(currentUser) ? (
+      {isAdmin == false && String(personId) === String(currentUser) ? (
         <div className="button-container">
           <img
             className="rounded-circle"

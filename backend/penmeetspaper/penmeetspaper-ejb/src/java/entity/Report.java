@@ -36,6 +36,9 @@ public class Report implements Serializable {
     @Column(nullable = false)
     private String messageBody;
 
+    @Column
+    private String category;
+
     @Enumerated(EnumType.STRING)
     private ReportStateEnum reportState;
 
@@ -106,6 +109,20 @@ public class Report implements Serializable {
 
     public void setReporter(Person reporter) {
         this.reporter = reporter;
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override

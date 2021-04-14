@@ -161,7 +161,7 @@ renderCellExpand.propTypes = {
 };
 
 
-export default function AdminList() {
+export default function ReportList() {
     const [refresh, setRefresh] = React.useState(false);
     const alert = useAlert();
     const [rows, setRows] = useState(null);
@@ -171,9 +171,9 @@ export default function AdminList() {
     }, [refresh]);
 
     function loadData() {
-        Api.getAllAdmin()
+        Api.getAllReports()
             .done((list) => {
-                setRows(list);
+                setRows(list.reverse());
             })
             .fail(() => {
                 alert.show("Unable to load!");
@@ -226,65 +226,27 @@ export default function AdminList() {
     }
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 120, renderCell: renderCellExpand, },
-        { field: 'username', headerName: 'Username', width: 250, renderCell: renderCellExpand, },
+        { field: 'id', headerName: 'ID', width: 100, renderCell: renderCellExpand, },
+        { field: 'reportType', headerName: 'Type', width: 200, renderCell: renderCellExpand, },
         //{ field: 'createdDate', headerName: 'Date Joined', width: 270 },
-        { field: 'email', headerName: 'Email', width: 400, renderCell: renderCellExpand, },
+        { field: 'reportState', headerName: 'Status', width: 200, renderCell: renderCellExpand, },
+        { field: 'category', headerName: 'Category', width: 200, renderCell: renderCellExpand, },
+        { field: 'dateSubmitted', headerName: 'Date', width: 150,  sortable: false,
+        filterable: false, description: "Date report was submitted" },
         {
             field: 'nothing',
-            headerName: 'View Logs',
+            headerName: 'Review',
             sortable: false,
             filterable: false,
-            width: 150,
+            width: 119,
             renderCell: (params) => (
                 <div>
-                    <Link to={"/admin/log/" + `${params.getValue('id') || ''}`}>
-                        <i className="far fa-eye" style={{ marginLeft: 30, color: "#3B21CB", }}></i>
+                    <Link to={"/admin/reportDetails"}>
+                        <i className="far fa-eye" style={{ marginLeft: 20, color: "#3B21CB", }}></i>
                     </Link>
                 </div>
             ),
         },
-
-        {
-            field: 'isMaster',
-            headerName: 'Deactivate',
-            width: 150,
-            sortable: false,
-            filterable: false,
-            renderCell: (params) => (
-                <div>
-                    {params.getValue('master') == true ? (
-                        <div>
-                            <i class='fas fa-user-check' 
-                                style={{ marginLeft: 35, color: "gray", }}
-                            ></i>
-
-                        </div>
-                    ) : ("")}
-
-                    {params.getValue('master') == false && params.getValue('deactivated') == false ? (
-                        <div>
-                            <Link>
-                                <i class='fas fa-user-check'
-                                    style={{ marginLeft: 35, color: "#3B21CB", }}
-                                    onClick={(event) => handleClick(params.getValue('id'))}
-                                ></i>
-                            </Link>
-                        </div>
-                    ) : ("")}
-                    {params.getValue('master') == false && params.getValue('deactivated') == true ? (
-                        <div>
-
-                            <i class='fas fa-user-times'
-                                style={{ marginLeft: 35, color: "#EA3F79", }}
-                            ></i>
-                        </div>
-                    ) : ("")}
-
-
-                </div>
-            ),
-        }
     ];
 
 
@@ -334,7 +296,6 @@ export default function AdminList() {
                     </DialogActions>
                 </Dialog>) : (" ")}
             <div class="card bg-white">
-                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Administrators Master List</h5>
                 <div style={{ display: 'flex', height: 510, width: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid rows={rows} columns={columns} pageSize={7}

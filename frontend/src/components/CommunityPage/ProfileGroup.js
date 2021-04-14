@@ -28,6 +28,7 @@ export default function ProfileGroup({
   communityOwner,
 }) {
   const alert = useAlert();
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [editedPicture, setEditedPicture] = useState(false);
   const [tempPicture, setTempPicture] = useState(communityPicture);
   const [pictureProgress, setPictureProgress] = useState(0);
@@ -249,7 +250,7 @@ export default function ProfileGroup({
         width: "30%",
       }}
     >
-      {String(communityOwner.id) === String(currentUser) ? (
+      {isAdmin == false && String(communityOwner.id) === String(currentUser) ? (
         <div className="button-container">
           <img
             className="rounded-circle"

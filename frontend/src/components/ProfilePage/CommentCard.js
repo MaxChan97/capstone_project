@@ -104,6 +104,13 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
     setFormatDate(changedDate);
   }
 
+  function MouseOver(event) {
+    event.target.style.textDecoration = 'underline';
+  }
+  function MouseOut(event) {
+    event.target.style.textDecoration = "";
+  }
+
   useEffect(() => {
     if (data && data.body == "Commment Deleted") {
       setDeleted(true);
@@ -136,7 +143,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
         />
         <div
           class="card-body"
-          style={{marginTop: -20}}
+          style={{ marginTop: -20 }}
         >
           <div class="post">
             <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -158,12 +165,12 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                 <span class="description">
                   {" "}
                   { /* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                
+
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
               {isAdmin == false && data.author.id == currentUser ? (
-                <div style={{ textAlign: "right",  }}>
+                <div style={{ textAlign: "right", }}>
                   <IconButton
                     style={{ outline: "none" }}
                     aria-label="more"
@@ -228,6 +235,8 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
                 <Link
                   style={{ fontSize: 15 }}
                   onClick={handleViewHideReplies}
+                  onMouseEnter={MouseOver}
+                  onMouseLeave={MouseOut}
                   style={{ color: "#3B21CB", fontSize: "14px" }}
                 >
                   Hide replies
@@ -247,6 +256,8 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               <Link
                 style={{ fontSize: 15 }}
                 onClick={handleViewHideReplies}
+                onMouseEnter={MouseOver}
+                onMouseLeave={MouseOut}
                 style={{ color: "#3B21CB", fontSize: "14px" }}
               >
                 Reply/View replies
@@ -259,6 +270,8 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               <Link
                 style={{ fontSize: 15 }}
                 onClick={handleViewHideReplies}
+                onMouseEnter={MouseOver}
+                onMouseLeave={MouseOut}
                 style={{ color: "#3B21CB", fontSize: "14px" }}
               >
                 View replies
@@ -267,11 +280,13 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               ""
             )}
 
-            {isAdmin == true &&  showReplies == true ? (
+            {isAdmin == true && showReplies == true ? (
               <div>
                 <Link
                   style={{ fontSize: 15 }}
                   onClick={handleViewHideReplies}
+                  onMouseEnter={MouseOver}
+                  onMouseLeave={MouseOut}
                   style={{ color: "#3B21CB", fontSize: "14px" }}
                 >
                   Hide replies

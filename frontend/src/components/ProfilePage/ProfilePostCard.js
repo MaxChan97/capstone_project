@@ -18,10 +18,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import CommentListForFeed from "./CommentListForFeed";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
+import { useHistory } from "react-router-dom";
 
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
+  let history = useHistory();
   const alert = useAlert();
 
   //for menu button
@@ -160,6 +162,13 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
     setFormatDate(changedDate);
   }
 
+  function MouseOver(event) {
+    event.target.style.textDecoration = 'underline';
+  }
+  function MouseOut(event) {
+    event.target.style.textDecoration = "";
+  }
+
   useEffect(() => {
     if (data) {
       checkedLiked();
@@ -173,7 +182,6 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
- 
       }}
     >
       <div>
@@ -275,7 +283,9 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                     renderHashtag={(hashtagValue) => (
                       <span
                         style={{ color: "#3B21CB", cursor: "pointer" }}
-                        onClick={() => alert.show(hashtagValue)}
+                        onClick={() =>
+                          history.push("/trend/" + hashtagValue.slice(1))
+                        }
                       >
                         <b>{hashtagValue}</b>
                       </span>
@@ -388,6 +398,8 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                       margin: "0, auto",
                       textAlign: "center",
                     }}
+                    onMouseEnter={MouseOver}
+                    onMouseLeave={MouseOut}
                   >
                     View all comments
                   </Link>
