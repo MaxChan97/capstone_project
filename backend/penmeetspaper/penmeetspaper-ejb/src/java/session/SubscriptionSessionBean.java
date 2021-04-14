@@ -12,6 +12,7 @@ import exception.NotValidException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,9 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
   @PersistenceContext
   private EntityManager em;
+
+  @EJB
+  private AnalyticsSessionBeanLocal analyticsSB;
 
   private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
     if (personId == null) {
@@ -127,19 +131,29 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
     subscriber.getSubscriptions().add(newSubscription);
     publisher.getPublications().add(newSubscription);
 
+    // Data collector
     Calendar cal = Calendar.getInstance();
     cal.set(Calendar.HOUR_OF_DAY, 0);
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
-
     Date date = cal.getTime();
+
+    // User-subscribers
     Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
     publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
-    
+
+    // Site-wide subscribers
+    Long oldCount = analyticsSB.getSiteWideAnalytics().getSubscribersCount().getOrDefault(date, new Long(0));
+    analyticsSB.getSiteWideAnalytics().getSubscribersCount().put(date, oldCount + 1);
+
+    // User-earnings
     Double earnings = publisher.getPricingPlan();
     publisher.getEarningsAnalytics().getEarnings().put(date, earnings);
-
+    
+    // Site-wide earnings
+    Double oldEarnings = analyticsSB.getSiteWideAnalytics().getRevenue().getOrDefault(date, new Double(0));
+    analyticsSB.getSiteWideAnalytics().getRevenue().put(date, oldEarnings + earnings);
   }
 
   @Override
