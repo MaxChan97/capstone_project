@@ -10,6 +10,7 @@ import feedLogo from "../assets/Feed Logo.svg";
 import subscribeLogo from "../assets/subscribeLogo.svg";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import BNBLogo from "../assets/BNB Logo.png";
+import ReportSystem from "./ReportSystem";
 
 function Sidebar() {
   let location = useLocation();
@@ -376,6 +377,17 @@ function Sidebar() {
                   </div>
                 </Link>
               )}
+            </li>
+            <li className="nav-item">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <ReportSystem></ReportSystem>
+              </div>
             </li>
           </ul>
         </nav>
