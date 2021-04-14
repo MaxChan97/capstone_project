@@ -7,6 +7,7 @@ package webservices.restful;
 
 import entity.EarningsAnalytics;
 import entity.FollowersAnalytics;
+import entity.SiteWideAnalytics;
 import entity.SubscribersAnalytics;
 import entity.ViewersAnalytics;
 import exception.NoResultException;
@@ -49,6 +50,78 @@ public class AnalyticsResource {
 
     return Response.status(statusCode).entity(exception)
             .type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/onboardingCount")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWideOnboardingAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Long> onboardingMap = new HashMap<>();
+    for (Map.Entry<Date, Long> entry : siteWideAnalytics.getOnboardingCount().entrySet()) {
+      onboardingMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(onboardingMap).type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/followersCount")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWideFollowersAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Long> followersMap = new HashMap<>();
+    for (Map.Entry<Date, Long> entry : siteWideAnalytics.getFollowersCount().entrySet()) {
+      followersMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(followersMap).type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/subscribersCount")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWideSubscribersAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Long> subscribersMap = new HashMap<>();
+    for (Map.Entry<Date, Long> entry : siteWideAnalytics.getSubscribersCount().entrySet()) {
+      subscribersMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(subscribersMap).type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/earnings")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWideEarningsAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Double> earningsMap = new HashMap<>();
+    for (Map.Entry<Date, Double> entry : siteWideAnalytics.getRevenue().entrySet()) {
+      earningsMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(earningsMap).type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/postsCount")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWidePostsAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Long> postsMap = new HashMap<>();
+    for (Map.Entry<Date, Long> entry : siteWideAnalytics.getPostsCount().entrySet()) {
+      postsMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(postsMap).type(MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/siteWideAnalytics/streamsCount")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getSiteWideStreamsAnalytics() {
+    SiteWideAnalytics siteWideAnalytics = analyticsSessionBean.getSiteWideAnalytics();
+    Map<Long, Long> streamsMap = new HashMap<>();
+    for (Map.Entry<Date, Long> entry : siteWideAnalytics.getStreamsCount().entrySet()) {
+      streamsMap.put(entry.getKey().getTime(), entry.getValue());
+    }
+    return Response.status(200).entity(streamsMap).type(MediaType.APPLICATION_JSON).build();
   }
 
   @GET

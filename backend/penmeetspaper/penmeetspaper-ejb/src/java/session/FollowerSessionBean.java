@@ -12,6 +12,7 @@ import exception.NotValidException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,9 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
 
   @PersistenceContext
   private EntityManager em;
+
+  @EJB
+  private AnalyticsSessionBeanLocal analyticsSB;
 
   private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
     if (personId == null) {
@@ -58,6 +62,14 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
     }
 
     return followList.get(0);
+
+  }
+  
+  private Long getFollowSize() {
+    Query q;
+    q = em.createQuery("SELECT f FROM Follow f");
+    List<Follow> followList = q.getResultList();
+    return new Long(followList.size());
 
   }
 
@@ -98,9 +110,14 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
-    
     Date date = cal.getTime();
+    
+    // User-followers
     publisher.getFollowersAnalytics().getFollowersCount().put(date, new Long(publisher.getFollowers().size()));
+
+    // Site-wide
+    analyticsSB.getSiteWideAnalytics().getFollowersCount().put(date, getFollowSize());
+
   }
 
   @Override
@@ -117,13 +134,13 @@ public class FollowerSessionBean implements FollowerSessionBeanLocal {
     follower.getFollowing().remove(followEntity);
 
     em.remove(followEntity);
-    
+
     Calendar cal = Calendar.getInstance();
     cal.set(Calendar.HOUR_OF_DAY, 0);
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
-    
+
     Date date = cal.getTime();
     publisher.getFollowersAnalytics().getFollowersCount().put(date, new Long(publisher.getFollowers().size()));
 
