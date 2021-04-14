@@ -58,6 +58,20 @@ export default function EditComment({
             });
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            Api.editProfilePostComment(data.id, currentUser, post)
+                .done(() => {
+                    alert.show("Edit success!");
+                    setRefresh(!refresh);
+                    setEdit(false);
+                })
+                .fail((xhr, status, error) => {
+                    alert.show("Something went wrong, please try again!");
+                });
+        }
+    }
+
     return (
         <div>
 
@@ -68,11 +82,12 @@ export default function EditComment({
                 onChange={handleEdit}
                 fullWidth={true}
                 variant="filled"
-                style= {{width:"98%"}}
+                style={{ width: "98%" }}
+                onKeyDown={handleKeyDown}
             />
             <br></br>
             <br></br>
-            <div style={{ alignItems: "baseline", textAlign:"right"}}>
+            <div style={{ alignItems: "baseline", textAlign: "right" }}>
                 <ColorButton
                     style={{
                         outline: "none",

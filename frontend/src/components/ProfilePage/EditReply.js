@@ -58,6 +58,20 @@ export default function EditReply({
             });
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            Api.editProfilePostReply(data.id, currentUser, post)
+            .done(() => {
+                alert.show("Edit success!");
+                setRefresh(!refresh);
+                setEdit(false);
+            })
+            .fail((xhr, status, error) => {
+                alert.show("Something went wrong, please try again!");
+            });
+        }
+    }
+
     return (
         <div>
 
@@ -69,11 +83,12 @@ export default function EditReply({
                 variant="filled"
                 size="small"
                 fullWidth
-                style= {{width:"95%"}}
+                style={{ width: "95%" }}
+                onKeyDown={handleKeyDown}
             />
             <br></br>
             <br></br>
-            <div style={{ alignItems: "baseline", textAlign:"right"}}>
+            <div style={{ alignItems: "baseline", textAlign: "right" }}>
                 <ColorButton
                     style={{
                         outline: "none",

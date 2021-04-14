@@ -11,7 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
 import Api from "../../helpers/Api";
-
+import ReportCommunity from "../../components/CommunityPage/ReportCommunity";
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText("#3B21CB"),
@@ -23,7 +23,7 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 
-export default function SocialButtonGroup({communityId, communityName, refresh, setRefresh}) {
+export default function SocialButtonGroup({ communityId, communityName, refresh, setRefresh }) {
   const alert = useAlert();
 
   //const [refresh, setRefresh] = useState(true);
@@ -86,7 +86,7 @@ export default function SocialButtonGroup({communityId, communityName, refresh, 
         alert.show(xhr.responseJSON.error);
       });
   }
-  
+
 
   return isAdmin == false ? (
     <div
@@ -127,7 +127,12 @@ export default function SocialButtonGroup({communityId, communityName, refresh, 
           Joined
         </Button>
       )}
-      
+
+      <ReportCommunity
+        id={communityId}
+        username={communityName}>
+      </ReportCommunity>
+
       <Dialog
         open={confirmLeaveDialogOpen}
         onClose={handleLeaveDialogClose}

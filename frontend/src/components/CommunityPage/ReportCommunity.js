@@ -30,20 +30,16 @@ const ColorButton = withStyles((theme) => ({
     },
 }))(Button);
 const categories = [
-    { value: "Posting inappropriate content", label: "Posting inappropriate content" },
-    { value: "Pretending to be someone", label: "Pretending to be someone" },
+    { value: "Spam or misleading", label: "Spam or misleading" },
+    { value: "Spreads false news", label: "Spreads false news" },
     { value: "Intellectual property infringement", label: "Intellectual property infringement" },
     { value: "Frauds and scams", label: "Frauds and scams" },
     { value: "Harassment or bullying", label: "Harassment or bullying" },
     { value: "Others", label: "Others" },
 ];
 
-export default function ReportPerson({
-    id,
-    username,
-    refresh,
-    setRefresh,
-    anotherPerson,
+export default function ReportCommunity({
+    id, username
 }) {
     const alert = useAlert();
     const [confirmBanDialogOpen, setConfirmBanDialogOpen] = React.useState(false);
@@ -83,8 +79,8 @@ export default function ReportPerson({
     }
 
     const [category, setCategory] = useState(null);
-    const [type, setType] = useState("USER_REPORT");
-    const [url, setUrl] = useState("/profile/" + id);
+    const [type, setType] = useState("COMMUNITY_REPORT");
+    const [url, setUrl] = useState("/community/" + id);
     function handleReportPerson() {
         console.log(reason);
         console.log(currentUser);
@@ -109,7 +105,7 @@ export default function ReportPerson({
 
 
 
-    return (
+    return id ?  (
         <div >
             <Dialog
                 open={confirmBanDialogOpen}
@@ -126,9 +122,10 @@ export default function ReportPerson({
                 <DialogContent style={{ overflowY: 'visible' }}>
                     <DialogContentText id="confirm-delete-dialog-description">
                         <p><i class='fas fa-exclamation-circle' style={{ color: "#EA3F79" }}></i>{" "} Help us understand what is happening.</p>
-                        <p style={{fontSize: 15}}>We will review the information you give us to help address
-                        any issues and to improve our services,
-                             subject to our Community Guidelines and Terms of Service.</p>
+                        <p style={{fontSize: 15}}>
+                             When something gets reported to Bull&Bear, we'll review it and remove anything that doesn't follow our
+                                  Community Standards. Please bear in mind that reporting something to Bull&Bear doesn't
+                                   guarantee that it will be removed. </p>
                     </DialogContentText>
                     <div className="form-group">
                         <label htmlFor="inputIncomeRange">Select a reason: </label>
@@ -171,7 +168,7 @@ export default function ReportPerson({
             <Button
                 style={{
                     height: "40px",
-                    width: "25px",
+                    width: "30px",
                     outline: "none",
                 }}
             >
@@ -195,19 +192,19 @@ export default function ReportPerson({
                     PaperProps={{
                         style: {
                             maxHeight: ITEM_HEIGHT * 4,
-                            width: "18ch",
+                            width: "20ch",
                         },
                     }}
                 >
                     <MenuItem value={1} onClick={handleReport}>
                         <div>
-                            <p>Report this user</p>
+                            <p>Report community</p>
                         </div>
                     </MenuItem>
                 </Menu>
             </Button>
 
         </div>
-    );
+    ): ("");
 
 }

@@ -16,6 +16,7 @@ import EditCommentModal from "./EditCommentModal";
 import DeleteCommentModal from "./DeleteCommentModal";
 import { useAlert } from "react-alert";
 import EditComment from "./EditComment";
+import ReportComment from "./ReportComment";
 
 const ITEM_HEIGHT = 30;
 
@@ -204,6 +205,12 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               ) : (
                 <span></span>
               )}
+               {isAdmin == false && data.author.id != currentUser ? (
+                  <div style={{ textAlign: "right" }}>
+                    <ReportComment
+                      data={data}
+                    ></ReportComment> </div>
+                ) : ("")}
             </div>
 
             {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditComment autofocus data={data}

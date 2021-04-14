@@ -19,6 +19,7 @@ import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed"
 import EditPost from "../../components/ProfilePage/EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
+import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({
@@ -262,6 +263,12 @@ export default function ProfilePostCard({
                 ) : (
                   <span></span>
                 )}
+                {isAdmin == false && data.author.id != currentUser ? (
+                  <div style={{ textAlign: "right" }}>
+                    <ReportCommPost
+                      data={data}
+                    ></ReportCommPost> </div>
+                ) : ("")}
               </div>
 
               {data.fileUrl &&

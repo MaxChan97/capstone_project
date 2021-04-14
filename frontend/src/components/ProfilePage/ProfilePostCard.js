@@ -19,6 +19,7 @@ import CommentListForFeed from "./CommentListForFeed";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
+import ReportPost from "./ReportPost";
 
 const ITEM_HEIGHT = 30;
 
@@ -202,63 +203,71 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
         <div class="card">
           <div class="card-body">
             <div class="post">
-              <div style={{ display: "flex", alignItems: "baseline" }}>
-                <div class="user-block">
-                  <img
-                    className="rounded-circle"
-                    src={data.author.profilePicture || defaultDP}
-                  />
-                  <span class="username">
-                    <Link
-                      to={"/profile/" + data.author.id}
-                      style={{ color: "#3B21CB" }}
-                    >
-                      {data.author.username}
-                    </Link>
-                  </span>
 
-                  <span class="description">
-                    {" "}
-                    {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                    {moment.utc(formatDate).fromNow()}
-                  </span>
-                </div>
-                {isAdmin == false && data.author.id == currentUser ? (
-                  <div style={{ textAlign: "right" }}>
-                    <IconButton
-                      style={{ outline: "none" }}
-                      aria-label="more"
-                      aria-controls="long-menu"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={open}
-                      onClose={handleClose}
-                      PaperProps={{
-                        style: {
-                          maxHeight: ITEM_HEIGHT * 4.5,
-                          width: "20ch",
-                        },
-                      }}
-                    >
-                      <MenuItem value={1} onClick={handleEdit}>
-                        <div>Edit Post</div>
-                      </MenuItem>
-                      <MenuItem value={2} onClick={handleDelete}>
-                        <div>Delete Post</div>
-                      </MenuItem>
-                    </Menu>
+                <div style={{ display: "flex", alignItems: "baseline" }}>
+                  <div class="user-block">
+                    <img
+                      className="rounded-circle"
+                      src={data.author.profilePicture || defaultDP}
+                    />
+                    <span class="username">
+                      <Link
+                        to={"/profile/" + data.author.id}
+                        style={{ color: "#3B21CB" }}
+                      >
+                        {data.author.username}
+                      </Link>
+                    </span>
+
+                    <span class="description">
+                      {" "}
+                      {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+                      {moment.utc(formatDate).fromNow()}
+                    </span>
                   </div>
-                ) : (
-                  <span></span>
-                )}
-              </div>
+
+                  {isAdmin == false && data.author.id == currentUser ? (
+                    <div style={{ textAlign: "right" }}>
+                      <IconButton
+                        style={{ outline: "none" }}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="long-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: "20ch",
+                          },
+                        }}
+                      >
+                        <MenuItem value={1} onClick={handleEdit}>
+                          <div>Edit Post</div>
+                        </MenuItem>
+                        <MenuItem value={2} onClick={handleDelete}>
+                          <div>Delete Post</div>
+                        </MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <span></span>
+                  )}
+                  {isAdmin == false && data.author.id != currentUser ? (
+                  <div style={{ textAlign: "right" }}>
+                    <ReportPost
+                      data={data}
+                    ></ReportPost> </div>
+                ) : ("")}
+                </div>
               {data.fileUrl &&
                 data.fileName &&
                 data.fileType &&
