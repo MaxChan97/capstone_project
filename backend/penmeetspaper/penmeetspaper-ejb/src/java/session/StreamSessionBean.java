@@ -7,13 +7,16 @@ package session;
 
 import entity.LiveChat;
 import entity.LiveMessage;
+import entity.LivePoll;
 import entity.Person;
+import entity.PersonAnswer;
 import entity.Stream;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -61,9 +64,21 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
 
         em.flush();
 
+        em.detach(newStream);
         newStream.setStreamer(getDetachedPerson(newStream.getStreamer()));
-
         return newStream;
+    }
+
+    @Override
+    public void addLivePollToStream(Long streamId, LivePoll livePoll) {
+        Stream stream = em.find(Stream.class, streamId);
+        stream.getPolls().add(livePoll);
+    }
+
+    @Override
+    public void endLivePoll(Long livePollId) {
+        LivePoll livePoll = em.find(LivePoll.class, livePollId);
+        livePoll.setIsActive(false);
     }
 
     @Override
@@ -75,8 +90,51 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
     @Override
     public Stream getStreamById(Long streamId) throws NoResultException, NotValidException {
         Stream stream = em.find(Stream.class, streamId);
+        em.detach(stream);
         stream.setStreamer(getDetachedPerson(stream.getStreamer()));
+
+        for (Person viewer : stream.getViewers()) {
+            viewer = getDetachedPerson(viewer);
+        }
+        
+        for (Person currentViewer : stream.getCurrentViewers()) {
+            currentViewer = getDetachedPerson(currentViewer);
+        }
+
+        for (Person kickedUser : stream.getKickedUsers()) {
+            kickedUser = getDetachedPerson(kickedUser);
+        }
+        em.detach(stream.getLiveChat());
+        stream.setLiveChat(null);
+        stream.setPolls(null);
         return stream;
+    }
+
+    @Override
+    public LivePoll getActiveLivePollByStreamId(Long streamId) throws NoResultException, NotValidException {
+        Stream stream = em.find(Stream.class, streamId);
+        List<LivePoll> livePolls = stream.getPolls();
+        for (LivePoll livePoll : livePolls) {
+            if (livePoll.isIsActive() == true) {
+                em.detach(livePoll);
+                Set<Person> pollers = livePoll.getPollers();
+
+                for (Person person : pollers) {
+                    person = getDetachedPerson(person);
+                }
+
+                for (PersonAnswer pa : livePoll.getOptions().values()) {
+                    em.detach(pa);
+                    List<Person> answeredBy = pa.getAnsweredBy();
+                    for (Person person : answeredBy) {
+                        person = getDetachedPerson(person);
+                    }
+                }
+                
+                return livePoll;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -84,6 +142,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         Stream stream = em.find(Stream.class, streamId);
         LiveChat liveChat = stream.getLiveChat();
         for (LiveMessage liveMessage : liveChat.getLiveMessages()) {
+            em.detach(liveMessage);
             liveMessage.setSender(getDetachedPerson(liveMessage.getSender()));
         }
         return liveChat;
@@ -100,7 +159,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         liveMessage.setDate(new Date());
         liveMessage.setSender(sender);
         em.persist(liveMessage);
-        
+
         liveChat.getLiveMessages().add(liveMessage);
     }
 
@@ -109,22 +168,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         Query query = em.createQuery("SELECT s FROM Stream s WHERE s.hasEnded = false");
         List<Stream> streams = query.getResultList();
         for (Stream stream : streams) {
-            stream.setStreamer(getDetachedPerson(stream.getStreamer()));
-
-            List<Person> viewers = new ArrayList<>();
-            for (Person viewer : stream.getViewers()) {
-                viewers.add(getDetachedPerson(viewer));
-            }
-            stream.setViewers(viewers);
-
-            List<Person> kickedUsers = new ArrayList<>();
-            for (Person kickedUser : stream.getKickedUsers()) {
-                kickedUsers.add(getDetachedPerson(kickedUser));
-            }
-            stream.setKickedUsers(kickedUsers);
-            
-            em.detach(stream);
-            stream.setLiveChat(null);
+            stream = getStreamById(stream.getId());
         }
         return streams;
     }
@@ -135,19 +179,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         query.setParameter("personId", personId);
         List<Stream> streams = query.getResultList();
         for (Stream stream : streams) {
-            stream.setStreamer(getDetachedPerson(stream.getStreamer()));
-
-            List<Person> viewers = new ArrayList<>();
-            for (Person viewer : stream.getViewers()) {
-                viewers.add(getDetachedPerson(viewer));
-            }
-            stream.setViewers(viewers);
-
-            List<Person> kickedUsers = new ArrayList<>();
-            for (Person kickedUser : stream.getKickedUsers()) {
-                kickedUsers.add(getDetachedPerson(kickedUser));
-            }
-            stream.setKickedUsers(kickedUsers);
+            stream = getStreamById(stream.getId());
         }
         return streams;
     }
@@ -157,5 +189,41 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         Stream stream = em.find(Stream.class, streamId);
         stream.setTitle(newStreamTitle);
         stream.setDescription(newStreamDescription);
+    }
+    
+    @Override
+    public void handleEnterStream(Long streamId, Long personId) {
+        Stream stream = em.find(Stream.class, streamId);
+        Person person = em.find(Person.class, personId);
+        
+        for (Person currentViewer : stream.getCurrentViewers()) {
+            if (currentViewer.getId() == person.getId()) {
+                // this person is already in the stream page, is just a refresh
+                return;
+            }
+        }
+        
+        for (Person viewer : stream.getViewers()) {
+            if (viewer.getId() == person.getId()) {
+                // This guy visited this page before
+                stream.getCurrentViewers().add(person);
+                stream.setViewerCount(stream.getViewerCount() + 1);
+                return;
+            }
+        }
+        
+        // New visitor
+        stream.getViewers().add(person);
+        stream.getCurrentViewers().add(person);
+        stream.setViewerCount(stream.getViewerCount() + 1);
+    }
+    
+    @Override
+    public void handleExitStream(Long streamId, Long personId) {
+        Stream stream = em.find(Stream.class, streamId);
+        Person person = em.find(Person.class, personId);
+        stream.setViewerCount(stream.getViewerCount() - 1);
+        boolean gotRemove = stream.getCurrentViewers().remove(person);
+        System.out.println(gotRemove);
     }
 }

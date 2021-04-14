@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -72,9 +73,13 @@ public class Stream implements Serializable {
   private Person streamer;
 
   // unidirectional
-  @OneToMany
-  @JoinColumn(name = "viewers_id")
+  @ManyToMany
+  @JoinTable(name="STREAM_VIEWERS")
   private List<Person> viewers = new ArrayList<>();
+  
+  @ManyToMany
+  @JoinTable(name="STREAM_CURRENTVIEWERS")
+  private List<Person> currentViewers = new ArrayList<>();
 
   // unidirectional
   @OneToMany
@@ -240,5 +245,19 @@ public class Stream implements Serializable {
   public void setThumbnailUrl(String thumbnailUrl) {
     this.thumbnailUrl = thumbnailUrl;
   }
+
+    /**
+     * @return the currentViewers
+     */
+    public List<Person> getCurrentViewers() {
+        return currentViewers;
+    }
+
+    /**
+     * @param currentViewers the currentViewers to set
+     */
+    public void setCurrentViewers(List<Person> currentViewers) {
+        this.currentViewers = currentViewers;
+    }
 
 }

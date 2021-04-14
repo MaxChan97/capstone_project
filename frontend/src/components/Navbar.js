@@ -25,6 +25,7 @@ import Api from "../helpers/Api";
 import logout from "../assets/logout 1.svg";
 import { logOut, setIsAdmin } from "../redux/actions/index";
 import BNBLogo from "../assets/BNB Logo.png";
+import { useAlert } from "react-alert";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -63,6 +64,7 @@ function Navbar({
   searchRefresh,
   setSearchRefresh,
 }) {
+  const alert = useAlert();
   let location = useLocation();
   const history = useHistory();
   const classes = useStyles();
@@ -177,46 +179,58 @@ function Navbar({
         </DialogTitle>
         <DialogActions>
           <div className="container">
-        <div className="row ml-1">
-          <form >
-            <div className="ml-2 mr-4">
-              <div className="form-group">
-                <label htmlFor="inputTitle">Title</label>
-                <input
-                  type="text"
-                  id="inputTitle"
-                  // required
-                  style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
-                  className="form-control"
-                  value={title}
-                  onChange={handleTitleChange}
-                />
-              </div>
-              <div className="form-group">
-                  <label htmlFor="inputDescription">Description</label>
-                  <textarea
-                    className="form-control"
-                    value={description}
-                    style={{ width: "400px",height:"100px",marginTop: "13px", marginBottom: "20px" }}
-                    onChange={handleDescriptionChange}
-                  />
+            <div className="row ml-1">
+              <form>
+                <div className="ml-2 mr-4">
+                  <div className="form-group">
+                    <label htmlFor="inputTitle">Title</label>
+                    <input
+                      type="text"
+                      id="inputTitle"
+                      // required
+                      style={{
+                        width: "400px",
+                        marginTop: "13px",
+                        marginBottom: "20px",
+                      }}
+                      className="form-control"
+                      value={title}
+                      onChange={handleTitleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="inputDescription">Description</label>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      style={{
+                        width: "400px",
+                        height: "100px",
+                        marginTop: "13px",
+                        marginBottom: "20px",
+                      }}
+                      onChange={handleDescriptionChange}
+                    />
+                  </div>
                 </div>
+              </form>
             </div>
-          </form>
-          </div>
-          <div className="row mr-3 mb-2" style={{float:"right"}}>
-          <Button style={{ outline: "none" }} onClick={handleUploadDialogClose}>
-            Cancel
-          </Button>
-          <ColorButton
-            style={{ outline: "none" }}
-            color="primary"
-            variant="contained"
-            // onClick={handleUpload}
-          >
-            UPLOAD
-          </ColorButton>
-          </div>
+            <div className="row mr-3 mb-2" style={{ float: "right" }}>
+              <Button
+                style={{ outline: "none" }}
+                onClick={handleUploadDialogClose}
+              >
+                Cancel
+              </Button>
+              <ColorButton
+                style={{ outline: "none" }}
+                color="primary"
+                variant="contained"
+                // onClick={handleUpload}
+              >
+                UPLOAD
+              </ColorButton>
+            </div>
           </div>
         </DialogActions>
       </Dialog>

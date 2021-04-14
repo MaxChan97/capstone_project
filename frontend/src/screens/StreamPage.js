@@ -15,11 +15,16 @@ import {
   TextField,
   Switch,
   Grid,
+  InputBase,
+  Paper,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { Decoder, Encoder, tools, Reader } from "ts-ebml";
 import { storage } from "../firebase";
+import { db } from "../firebase";
+import { streamRefreshListener } from "../helpers/FirebaseApi";
+import ban from "../assets/ban.svg";
 var uuid = require("uuid");
 const prettyMilliseconds = require("pretty-ms");
 
@@ -80,6 +85,41 @@ export default function StreamPage() {
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
   const [streamEnded, setStreamEnded] = useState(false);
+  const [stream, setStream] = useState();
+  const [streamRefresh, setStreamRefresh] = useState([]);
+
+  const [
+    streamCurrentViewersDialogOpen,
+    setStreamCurrentViewersDialogOpen,
+  ] = useState(false);
+  const [currentViewersSearchTerm, setCurrentViewersSearchTerm] = useState("");
+
+  const [streamViewsDialogOpen, setStreamViewsDialogOpen] = useState(false);
+  const [viewsSearchTerm, setViewsSearchTerm] = useState("");
+
+  useEffect(() => {
+    loadData(streamId);
+  }, [streamId, streamRefresh]);
+
+  function loadData(streamId) {
+    if (streamId != undefined) {
+      Api.getStreamById(streamId)
+        .then((stream) => {
+          setStream(stream);
+        })
+        .fail((xhr, status, error) => {
+          alert.show(xhr.responseJSON.error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    const unsubscribe = streamRefreshListener(setStreamRefresh);
+    const test = () => {
+      return unsubscribe();
+    };
+    return test;
+  }, []);
 
   useEffect(() => {
     Api.authenticateForApiVideo()
@@ -328,6 +368,7 @@ export default function StreamPage() {
               thumbnailUrl
             )
               .then((stream) => {
+                console.log(stream);
                 setStreamId(stream.id);
                 setStart(Date.now());
                 /*Api.uploadThumbnailOnApiVideo(
@@ -377,6 +418,23 @@ export default function StreamPage() {
 
   function handleEditInfoDialogOpen() {
     setShowEditInfoDialog(true);
+  }
+
+  function handleStreamCurrentViewersDialogOpen() {
+    setStreamCurrentViewersDialogOpen(true);
+  }
+
+  function handleStreamCurrentViewersDialogClose() {
+    setCurrentViewersSearchTerm("");
+    setStreamCurrentViewersDialogOpen(false);
+  }
+
+  function handleStreamViewsDialogOpen() {
+    setStreamViewsDialogOpen(true);
+  }
+
+  function handleStreamViewsDialogClose() {
+    setStreamViewsDialogOpen(false);
   }
 
   function handleEditInfoDialogCloseNoEdit() {
@@ -442,6 +500,16 @@ export default function StreamPage() {
               console.error(err);
             });
         }
+        db.collection("StreamRefresh")
+          .doc("en9EpFajcUExC4dvcF45")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("StreamRefresh")
+                .doc("en9EpFajcUExC4dvcF45")
+                .update({ streamRefresh: !doc.data().streamRefresh });
+            }
+          });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -724,6 +792,147 @@ export default function StreamPage() {
     );
   }
 
+  function renderCurrentViewersRow(currentViewer) {
+    return (
+      <div className="container">
+        <div
+          className="row"
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div className="col-md-3">
+            <img
+              className="img-fluid"
+              style={{
+                resizeMode: "repeat",
+                height: 40,
+                width: 40,
+                borderRadius: "50%",
+                display: "block",
+              }}
+              src={currentViewer.profilePicture}
+              alt="defaultDP"
+            />
+          </div>
+          <div className="col-md-7 mb-1" style={{ fontSize: "18px" }}>
+            {currentViewer.username}
+          </div>
+          <div className="col-md-2">
+            <button
+              style={{
+                height: "25px",
+                width: "25px",
+                backgroundColor: "transparent",
+                borderColor: "transparent",
+                outline: "none",
+                border: "none",
+              }}
+            >
+              <img
+                style={{
+                  height: "25px",
+                  width: "25px",
+                }}
+                src={ban}
+                alt="banLogo"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderCurrentViewersList() {
+    if (stream == undefined) {
+      return (
+        <h3
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No current viewers
+        </h3>
+      );
+    }
+    let searchResults = stream.currentViewers.filter((viewer) =>
+      viewer.username.toLowerCase().includes(currentViewersSearchTerm)
+    );
+    if (searchResults.length != 0) {
+      return searchResults.map((row, index) => (
+        <li key={index} class="list-group-item">
+          {renderCurrentViewersRow(row)}
+        </li>
+      ));
+    } else if (stream.currentViewers.length == 0) {
+      return (
+        <h3
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No current viewers
+        </h3>
+      );
+    } else {
+      return (
+        <h3
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No search results for "{currentViewersSearchTerm}"
+        </h3>
+      );
+    }
+  }
+
+  function renderStreamCurrentViewersDialog() {
+    return (
+      <Dialog
+        open={streamCurrentViewersDialogOpen}
+        onClose={handleStreamCurrentViewersDialogClose}
+      >
+        <DialogTitle id="confirm-end-stream-dialog-title">
+          Current Viewers
+        </DialogTitle>
+        <div className="my-3">
+          <Paper
+            component="form"
+            style={{
+              padding: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "#EAECEF",
+            }}
+          >
+            <InputBase
+              value={currentViewersSearchTerm}
+              style={{ marginLeft: "1%", flex: 1 }}
+              placeholder="Search current viewers"
+              onChange={(e) => {
+                setCurrentViewersSearchTerm(e.target.value);
+              }}
+            />
+          </Paper>
+        </div>
+        {renderCurrentViewersList()}
+      </Dialog>
+    );
+  }
+
+  function renderStreamViewsDialog() {}
+
   function renderUtilityButtonGroup() {
     if (streamId == undefined) {
       return (
@@ -816,46 +1025,103 @@ export default function StreamPage() {
     }
   }
 
-  function renderStreamDashboard(viewers, views, duration) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <p style={{ color: "#3B21CB", margin: "0px" }}>{viewers}</p>
-          <p style={{ fontWeight: "bold", margin: "0px" }}>Viewers</p>
-        </div>
+  function renderStreamDashboard(duration) {
+    if (stream != undefined) {
+      return (
         <div
           style={{
-            borderLeft: "1px solid gray",
-            height: "70%",
-            alignSelf: "center",
-            marginLeft: "18px",
-            marginRight: "18px",
+            display: "flex",
+            flexDirection: "row",
           }}
-        ></div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <p style={{ color: "#3B21CB", margin: "0px" }}>{views}</p>
-          <p style={{ fontWeight: "bold", margin: "0px" }}>Views</p>
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+            onClick={handleStreamCurrentViewersDialogOpen}
+          >
+            <p style={{ color: "#3B21CB", margin: "0px" }}>
+              {stream.viewerCount}
+            </p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Viewers</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "#3B21CB", margin: "0px" }}>
+              {stream.viewers.length}
+            </p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Views</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "#3B21CB", margin: "0px" }}>{duration}</p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Duration</p>
+          </div>
         </div>
+      );
+    } else {
+      return (
         <div
           style={{
-            borderLeft: "1px solid gray",
-            height: "70%",
-            alignSelf: "center",
-            marginLeft: "18px",
-            marginRight: "18px",
+            display: "flex",
+            flexDirection: "row",
           }}
-        ></div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <p style={{ color: "#3B21CB", margin: "0px" }}>{duration}</p>
-          <p style={{ fontWeight: "bold", margin: "0px" }}>Duration</p>
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <p style={{ color: "#3B21CB", margin: "0px" }}>0</p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Viewers</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "#3B21CB", margin: "0px" }}>0</p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Views</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "#3B21CB", margin: "0px" }}>{duration}</p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Duration</p>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   function renderStreamDetails(title, description) {
@@ -915,8 +1181,6 @@ export default function StreamPage() {
               }}
             >
               {renderStreamDashboard(
-                1000,
-                2000,
                 prettyMilliseconds(duration, { colonNotation: true })
               )}
               {renderStreamDetails(streamTitle, streamDescription)}
@@ -944,6 +1208,7 @@ export default function StreamPage() {
       {renderStartStreamDialog()}
       {renderEndStreamDialog()}
       {renderEditInfoDialog()}
+      {renderStreamCurrentViewersDialog()}
     </div>
   );
 }

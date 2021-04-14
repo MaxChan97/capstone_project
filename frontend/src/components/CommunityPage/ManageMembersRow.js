@@ -134,6 +134,8 @@ export default function ManageMembersRow({ member, refresh, setRefresh }) {
               width: "25px",
               backgroundColor: "transparent",
               borderColor: "transparent",
+              outline: "none",
+              border: "none",
             }}
           >
             <img

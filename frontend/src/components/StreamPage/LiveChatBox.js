@@ -36,6 +36,7 @@ export default function LiveChatBox({ streamId, streamEnded }) {
     if (streamId != undefined) {
       Api.getLiveChatByStreamId(streamId)
         .then((liveChat) => {
+          console.log(liveChat);
           setLiveMessages(liveChat.liveMessages);
         })
         .fail((xhr, status, error) => {

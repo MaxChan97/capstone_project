@@ -1217,6 +1217,62 @@ export default {
     });
   },
 
+  startLivePoll(streamId, livePollQuestion, livePollOptions) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/livePoll/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        livePollQuestion: livePollQuestion,
+        livePollOptions: livePollOptions,
+      }),
+    });
+  },
+
+  endLivePoll(livePollId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/livePoll/" + livePollId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  voteOnLivePoll(livePollId, personId, optionVoted) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX +
+        "/stream/livePoll/" +
+        livePollId +
+        "/person/" +
+        personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        optionVoted: optionVoted,
+      }),
+    });
+  },
+
+  getActiveLivePollByStreamId(streamId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/livePoll/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   sendLiveChatMessage(streamId, senderId, messageBody) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/liveChat/" + streamId + "/" + senderId,
@@ -1250,6 +1306,30 @@ export default {
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  handleEnterStream(streamId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX + "/stream/views/enter/" + streamId + "/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  handleExitStream(streamId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX + "/stream/views/exit/" + streamId + "/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
     });
   },
 

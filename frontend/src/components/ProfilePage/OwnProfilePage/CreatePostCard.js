@@ -67,6 +67,8 @@ export default function CreatePostCard({
       alert.show("Poll question cannot be empty");
     } else if (showPollInput === true && pollOptions.indexOf("") !== -1) {
       alert.show("One of your poll options is empty");
+    } else if (pollOptions.length < 2) {
+      alert.show("You must have at least 2 poll options");
     } else {
       Api.createPostForPerson(
         personId,
@@ -140,7 +142,7 @@ export default function CreatePostCard({
   }
 
   return isAdmin == false ? (
-    <div >
+    <div>
       <form
         onSubmit={handleSubmit}
         className={classes.root}
