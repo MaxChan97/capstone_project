@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import { useAlert } from "react-alert";
+
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Tabs from "@material-ui/core/Tabs";
@@ -73,6 +75,7 @@ const createLineChartOptions = (title, yAxisTitle, seriesData) => {
 
 export default function UserAnalytics() {
   const classes = useStyles();
+  const alert = useAlert();
   const currentUser = useSelector((state) => state.currentUser);
   const [value, setValue] = useState(0);
 
@@ -199,8 +202,8 @@ export default function UserAnalytics() {
             }
           });
 
-        setPrevActiveSubscribers(todaysSubscribers);
-        setActiveSubscribers(yesterdaysSubscribers);
+        setPrevActiveSubscribers(yesterdaysSubscribers);
+        setActiveSubscribers(todaysSubscribers);
         setSubscribersChartOptions({
           ...subscribersChartOptions,
           series: [

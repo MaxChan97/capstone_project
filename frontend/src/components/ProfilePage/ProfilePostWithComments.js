@@ -19,6 +19,7 @@ import Poll from "react-polls";
 import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
+import ReportPost from "./ReportPost";
 
 const ITEM_HEIGHT = 30;
 
@@ -224,12 +225,14 @@ export default function ProfilePostWithComments() {
                       className="rounded-circle"
                       src={data.author.profilePicture || defaultDP}
                     />
-                    <Link
-                      to={"/profile/" + data.author.id}
-                      style={{ marginLeft: 10, color: "#3B21CB" }}
-                    >
-                      {data.author.username}
-                    </Link>
+                    <span class="username">
+                      <Link
+                        to={"/profile/" + data.author.id}
+                        style={{ color: "#3B21CB" }}
+                      >
+                        {data.author.username}
+                      </Link>
+                    </span>
                     <span class="description">
                       {" "}
                       {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
@@ -271,7 +274,15 @@ export default function ProfilePostWithComments() {
                   ) : (
                     <span></span>
                   )}
+                  {isAdmin == false && data.author.id != currentUser ? (
+                    <div style={{ textAlign: "right" }}>
+                      <ReportPost
+                        data={data}
+                      ></ReportPost> </div>
+                  ) : ("")}
+
                 </div>
+
                 {data.fileUrl &&
                   data.fileName &&
                   data.fileType &&

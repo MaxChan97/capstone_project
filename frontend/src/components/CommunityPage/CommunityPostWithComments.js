@@ -18,7 +18,7 @@ import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
-
+import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 import EditPost from "../../components/ProfilePage/EditPost";
 
 const ITEM_HEIGHT = 30;
@@ -139,7 +139,7 @@ export default function CommunityPostWithComments() {
           margin: "auto",
         }}
       >
-        <div class="col-md-9" style={{ paddingTop: "20px", margin:"auto"}}>
+        <div class="col-md-9" style={{ paddingTop: "20px", margin: "auto" }}>
           <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -227,6 +227,13 @@ export default function CommunityPostWithComments() {
                   ) : (
                     <span></span>
                   )}
+
+                  {isAdmin == false && data.author.id != currentUser ? (
+                    <div style={{ textAlign: "right" }}>
+                      <ReportCommPost
+                        data={data}
+                      ></ReportCommPost> </div>
+                  ) : ("")}
                 </div>
                 {data.fileUrl &&
                   data.fileName &&

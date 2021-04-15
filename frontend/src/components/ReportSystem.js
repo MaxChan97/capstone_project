@@ -15,9 +15,12 @@ import {
 } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
-import Api from "../../helpers/Api";
+import Api from "../helpers/Api";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
+import Flag from "../assets/flags.svg";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import { Link, useLocation } from "react-router-dom";
 
 const ITEM_HEIGHT = 23;
 const ColorButton = withStyles((theme) => ({
@@ -30,20 +33,17 @@ const ColorButton = withStyles((theme) => ({
     },
 }))(Button);
 const categories = [
-    { value: "Posting inappropriate content", label: "Posting inappropriate content" },
-    { value: "Pretending to be someone", label: "Pretending to be someone" },
-    { value: "Intellectual property infringement", label: "Intellectual property infringement" },
-    { value: "Frauds and scams", label: "Frauds and scams" },
-    { value: "Harassment or bullying", label: "Harassment or bullying" },
+    { value: "Chat", label: "Chat"},
+    { value: "Community", label: "Community" },
+    { value: "Live Stream/Video", label: "Live Stream/Video" },
+    { value: "Login/Password", label: "Login/Password" },
+    { value: "Payment/Subscription", label: "Payment/Subscription" },
+    { value: "Posts", label: "Posts" },
+    { value: "Profile", label: "Profile" },
     { value: "Others", label: "Others" },
 ];
 
-export default function ReportPerson({
-    id,
-    username,
-    refresh,
-    setRefresh,
-    anotherPerson,
+export default function ReportSystem({
 }) {
     const alert = useAlert();
     const [confirmBanDialogOpen, setConfirmBanDialogOpen] = React.useState(false);
@@ -52,19 +52,8 @@ export default function ReportPerson({
         setReason(event.target.value);
     };
     const currentUser = useSelector((state) => state.currentUser);
-    //for menu button
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     const handleReport = () => {
-        setAnchorEl(null);
         banPerson();
     };
 
@@ -83,8 +72,8 @@ export default function ReportPerson({
     }
 
     const [category, setCategory] = useState(null);
-    const [type, setType] = useState("USER_REPORT");
-    const [url, setUrl] = useState("/profile/" + id);
+    const [type, setType] = useState("SYSTEM_REPORT");
+    const [url, setUrl] = useState("");
     function handleReportPerson() {
         console.log(reason);
         console.log(currentUser);
@@ -94,6 +83,9 @@ export default function ReportPerson({
         if (category == null) {
             closeBanPersonModal();
             alert.show("Please choose a reason");
+        } else if (reason == "") {
+            closeBanPersonModal();
+            alert.show("Please enter more details");
         } else {
             Api.createReport(reason, currentUser, type, url, category.value)
                 .done((list) => {
@@ -118,20 +110,22 @@ export default function ReportPerson({
                 aria-describedby="confirm-delete-dialog-description"
                 fullWidth={true}
                 maxWidth="md"
-                PaperProps={{ style: { overflowY: 'visible' } }}
             >
                 <DialogTitle id="confirm-delete-dialog-title">
-                    <i class='fas fa-bullhorn'></i> {" "}  Report {username}
+                    <i class='fas fa-bullhorn'></i> {" "}  Report System Issue
                 </DialogTitle>
                 <DialogContent style={{ overflowY: 'visible' }}>
                     <DialogContentText id="confirm-delete-dialog-description">
-                        <p><i class='fas fa-exclamation-circle' style={{ color: "#EA3F79" }}></i>{" "} Help us understand what is happening.</p>
-                        <p style={{fontSize: 15}}>We will review the information you give us to help address
-                        any issues and to improve our services,
-                             subject to our Community Guidelines and Terms of Service.</p>
+                        <p style={{ fontSize: 19 }}>
+                        <i class='fas fa-exclamation-circle' style={{ color: "#EA3F79" }}></i>{" "} What went wrong? Providing details helps us find the problem. 
+                        Reporting issues when they happen helps make Bull&Bear better, and we appreciate the time it takes to give us this information.
+                        <br></br> </p>
+                           <p style={{ fontSize: 16}}>As people send us reports about broken features, 
+                           we review them and sometimes get in touch for more info to help us resolve the problem. 
+                           While we don't reply to every report, we'll let you know if we need more details.</p>
                     </DialogContentText>
                     <div className="form-group">
-                        <label htmlFor="inputIncomeRange">Select a reason: </label>
+                        <label htmlFor="inputIncomeRange">Select a feature: </label>
 
                         <Select
                             name="categories"
@@ -143,7 +137,7 @@ export default function ReportPerson({
 
                     </div>
                     <p htmlFor="inputReason">Enter more details: </p>
-                    <input
+                    <textarea
                         type="text"
                         id="inputReason"
                         className="form-control"
@@ -167,45 +161,16 @@ export default function ReportPerson({
                     </ColorButton>
                 </DialogActions>
             </Dialog>
+            <Link className="nav-link" onClick={handleReport} style={{ color: "#4A5056", }}>
+                <img
+                    src={Flag}
+                    className="nav-icon"
+                    alt="ReportLogo"
 
-            <Button
-                style={{
-                    height: "40px",
-                    width: "25px",
-                    outline: "none",
-                }}
-            >
-
-
-                <IconButton
-                    style={{ outline: "none" }}
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                >
-                    <MoreVertIcon />
-                </IconButton>
-                <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                    PaperProps={{
-                        style: {
-                            maxHeight: ITEM_HEIGHT * 4,
-                            width: "18ch",
-                        },
-                    }}
-                >
-                    <MenuItem value={1} onClick={handleReport}>
-                        <div>
-                            <p>Report this user</p>
-                        </div>
-                    </MenuItem>
-                </Menu>
-            </Button>
+                />
+                {" "}
+                <p className="ml-1">Report</p>
+            </Link>
 
         </div>
     );

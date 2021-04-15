@@ -14,6 +14,7 @@ import EditReplyModal from "./EditReplyModal";
 import DeleteReplyModal from "./DeleteReplyModal";
 import { useAlert } from "react-alert";
 import EditReply from "./EditReply";
+import ReportReply from "./ReportReply";
 
 const options = ["Edit Reply", "Delete Reply"];
 
@@ -132,10 +133,10 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
         />
         <div
           class="card-body"
-          style={{marginBottom: -40}}
+          style={{ marginBottom: -40 }}
         >
           <div class="post">
-            <Divider variant="middle"/>
+            <Divider variant="middle" />
             <br></br>
             <div style={{ display: "flex", alignItems: "baseline" }}>
               <div class="user-block">
@@ -156,7 +157,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                 <span class="description">
                   {" "}
                   {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                
+
                   {moment.utc(formatDate).fromNow()}
                 </span>
               </div>
@@ -195,13 +196,19 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
               ) : (
                 <span></span>
               )}
+              {isAdmin == false && data.author.id != currentUser ? (
+                <div style={{ textAlign: "right" }}>
+                  <ReportReply
+                    data={data}
+                  ></ReportReply> </div>
+              ) : ("")}
             </div>
 
 
-            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditReply  autofocus data={data}
-                refresh={refresh}
-                setRefresh={setRefresh}
-                setEdit={setEdit}></EditReply>}
+            {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditReply autofocus data={data}
+              refresh={refresh}
+              setRefresh={setRefresh}
+              setEdit={setEdit}></EditReply>}
             <p style={{ marginLeft: 10 }}>
               {liked == true ? (
                 <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>

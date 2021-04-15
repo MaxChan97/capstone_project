@@ -45,6 +45,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
   @EJB
   private TrendSessionBeanLocal trendSB;
+  
+  @EJB
+  private AnalyticsSessionBeanLocal analyticsSB;
 
   // Helper methods to check and retrieve entities
   private Post emGetPost(Long postId) throws NoResultException, NotValidException {
@@ -141,6 +144,10 @@ public class PostSessionBean implements PostSessionBeanLocal {
       post.getTrends().add(trend);
       trend.getPosts().add(post);
     }
+    
+    // Site-wide posts
+    Long oldCount = analyticsSB.getSiteWideAnalytics().getPostsCount().getOrDefault(date, new Long(0));
+    analyticsSB.getSiteWideAnalytics().getPostsCount().put(date, oldCount + 1);
 
     Person poster = emGetPerson(personId);
 
@@ -171,6 +178,16 @@ public class PostSessionBean implements PostSessionBeanLocal {
     em.persist(post);
     person.getPosts().add(post);
     community.getPosts().add(post);
+    
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    Date date = cal.getTime();
+    // Site-wide posts
+    Long oldCount = analyticsSB.getSiteWideAnalytics().getPostsCount().getOrDefault(date, new Long(0));
+    analyticsSB.getSiteWideAnalytics().getPostsCount().put(date, oldCount + 1);
 
     personSB.addContributorPointsToPerson(personId, 3.0);
     personSB.checkBadgeQualification(personId);

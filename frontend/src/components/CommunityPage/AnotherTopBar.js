@@ -75,6 +75,7 @@ export default function TopBar({
         />
         <SocialButtonGroup
           communityId={communityId}
+          communityName={communityName}
           refresh={refresh}
           setRefresh={setRefresh}
         />

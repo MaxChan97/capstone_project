@@ -1551,7 +1551,6 @@ export default {
     });
   },
 
-  
   deactivateAdmin(adminId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/1/deactivate/" + adminId,
@@ -1563,7 +1562,13 @@ export default {
     });
   },
 
-  createReport(messageBody, reporterId, reportTypeEnum, reportedContentId,  category) {
+  createReport(
+    messageBody,
+    reporterId,
+    reportTypeEnum,
+    reportedContentId,
+    category
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report",
       headers: {
@@ -1584,6 +1589,72 @@ export default {
   getAllReports() {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWideOnboardingAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/onboardingCount",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWideFollowersAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/followersCount",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWideSubscribersAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/subscribersCount",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWideEarningsAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/earnings",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWidePostsAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/postsCount",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getSiteWideStreamsAnalytics() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/analytics/siteWideAnalytics/streamsCount",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

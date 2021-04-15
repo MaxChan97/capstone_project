@@ -19,6 +19,7 @@ import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
 //import Poll from "react-polls";
 import { useAlert } from "react-alert";
+import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 const ITEM_HEIGHT = 30;
 
 export default function CommunityPostCard({
@@ -270,6 +271,13 @@ export default function CommunityPostCard({
                 ) : (
                   <span></span>
                 )}
+
+                {isAdmin == false && data.author.id != currentUser ? (
+                  <div style={{ textAlign: "right" }}>
+                    <ReportCommPost
+                      data={data}
+                    ></ReportCommPost> </div>
+                ) : ("")}
               </div>
 
               {data.fileUrl &&

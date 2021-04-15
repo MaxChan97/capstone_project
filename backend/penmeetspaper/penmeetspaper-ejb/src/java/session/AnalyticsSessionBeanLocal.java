@@ -7,6 +7,7 @@ package session;
 
 import entity.EarningsAnalytics;
 import entity.FollowersAnalytics;
+import entity.SiteWideAnalytics;
 import entity.SubscribersAnalytics;
 import entity.ViewersAnalytics;
 import exception.NoResultException;
@@ -20,6 +21,10 @@ import javax.ejb.Local;
 @Local
 public interface AnalyticsSessionBeanLocal {
 
+  public void createSiteWideAnalytics();
+
+  public SiteWideAnalytics getSiteWideAnalytics();
+
   public FollowersAnalytics getFollowersAnalytics(Long personId) throws NoResultException, NotValidException;
 
   public SubscribersAnalytics getSubscribersAnalytics(Long personId) throws NoResultException, NotValidException;
@@ -27,5 +32,5 @@ public interface AnalyticsSessionBeanLocal {
   public EarningsAnalytics getEarningsAnalytics(Long personId) throws NoResultException, NotValidException;
 
   public ViewersAnalytics getViewersAnalytics(Long personId) throws NoResultException, NotValidException;
-  
+
 }
