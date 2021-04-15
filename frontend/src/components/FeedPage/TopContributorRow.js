@@ -2,7 +2,7 @@ import React from "react";
 import defaultDP from "../../assets/Default Dp logo.svg";
 import { Link } from "react-router-dom";
 
-export default function LeaderboardRow({ data, rank }) {
+export default function TopContributorRow({ data, rank }) {
   return (
     <Link to={"/profile/" + data.id}>
       <div className="container" style={{ color: "black" }}>

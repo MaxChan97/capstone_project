@@ -85,7 +85,7 @@ public interface PersonSessionBeanLocal {
 
     public List<Person> getTopTenContributors() throws NoResultException, NotValidException;
 
-    public List<Person> getTopTenStreamers() throws NoResultException;
+    public List<Person> getTopTenStreamers() throws NoResultException, NotValidException;
 
     public void checkBadgeQualification(Long personId) throws NotValidException, NoResultException;
 

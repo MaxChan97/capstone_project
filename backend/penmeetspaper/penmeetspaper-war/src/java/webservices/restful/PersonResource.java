@@ -728,7 +728,7 @@ public class PersonResource {
 
             return Response.status(200).entity(entity).build();
 
-        } catch (NoResultException e) {
+        } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
     } // end getTenTopStreamers
