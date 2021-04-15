@@ -98,7 +98,7 @@ export default function ReportReply({
                 })
                 .fail(() => {
                     closeBanPersonModal();
-                    alert.show("not done api got bug");
+                    alert.show("Error. Please try again later");
                 });
         }
     }
