@@ -1,12 +1,12 @@
 import React from "react";
-import LeaderboardRow from "./LeaderboardRow";
+import TopStreamerRow from "./TopStreamerRow";
 
-export default function LeaderboardCard({ data }) {
+export default function TopStreamerCard({ data }) {
   return (
     <div className="card card-primary">
       <div className="card-body">
         <p className="font-weight-bold" style={{ marginBottom: "-3px" }}>
-          Top Contributors
+          Top Streamers
         </p>
         <ul class="list-group list-group-flush">
           {data.map((row, index) => {
@@ -16,7 +16,7 @@ export default function LeaderboardCard({ data }) {
                 class="list-group-item"
                 style={{ borderBottom: "none" }}
               >
-                <LeaderboardRow data={row} rank={index} />
+                <TopStreamerRow data={row} rank={index} />
               </li>
             );
           })}

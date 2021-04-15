@@ -1400,6 +1400,17 @@ export default {
     });
   },
 
+  getTopTenStreamers() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/topTenStreamers",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   changeBadge(personId, badgeId) {
     return jQuery.ajax({
       url:

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import LeaderboardCard from "../components/FeedPage/LeaderboardCard";
+import TopContributorCard from "../components/FeedPage/TopContributorCard";
+import TopStreamerCard from "../components/FeedPage/TopStreamerCard";
 import LiveHorizontalMenu from "../components/FeedPage/LiveHorizontalMenu";
 import CreatePostCard from "../components/CommunityPage/CreatePostCard";
 import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
@@ -31,8 +32,8 @@ const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText("#3B21CB"),
     backgroundColor: "#3B21CB",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     "&:hover": {
       backgroundColor: "#260eab",
     },
@@ -193,6 +194,7 @@ export default function FeedPage() {
   };
 
   const [topTenContributors, setTopTenContributors] = useState([]);
+  const [topTenStreamers, setTopTenStreamers] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
   const [todaysTrends, setTodaysTrends] = useState([]);
   const [horizontalMenu, setHorizontalMenu] = useState(horizontalList);
@@ -201,7 +203,7 @@ export default function FeedPage() {
   const [OnboardingDialogueOpen, setOnboardingDialogueOpen] = useState(false);
 
   // Modal
-  useEffect(() => { }, [horizontalMenu]);
+  useEffect(() => {}, [horizontalMenu]);
   useEffect(() => {
     if (currentUser) {
       loadData();
@@ -250,6 +252,13 @@ export default function FeedPage() {
     Api.getTopTenContributors()
       .done((topTenContributors) => {
         setTopTenContributors(topTenContributors);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+    Api.getTopTenStreamers()
+      .done((topTenStreamers) => {
+        setTopTenStreamers(topTenStreamers);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -362,13 +371,13 @@ export default function FeedPage() {
                     classNamePrefix="select"
                   />
                 ) : (
-                    <Select
-                      name="incomes"
-                      options={incomes}
-                      onChange={setIncomeRange}
-                      classNamePrefix="select"
-                    />
-                  )}
+                  <Select
+                    name="incomes"
+                    options={incomes}
+                    onChange={setIncomeRange}
+                    classNamePrefix="select"
+                  />
+                )}
               </div>
               <div className="form-group">
                 <label htmlFor="inputInterests">Interests</label>
@@ -386,17 +395,17 @@ export default function FeedPage() {
                     classNamePrefix="select"
                   />
                 ) : (
-                    <Select
-                      isMulti
-                      name="topics"
-                      options={topics}
-                      onChange={(selectedOptions) =>
-                        handleTopicInterestsChange(selectedOptions)
-                      }
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  )}
+                  <Select
+                    isMulti
+                    name="topics"
+                    options={topics}
+                    onChange={(selectedOptions) =>
+                      handleTopicInterestsChange(selectedOptions)
+                    }
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
+                )}
               </div>
             </div>
           </form>
@@ -439,7 +448,10 @@ export default function FeedPage() {
 
           <div className="col-md-3 mt-4" style={{ textAlign: "left" }}>
             <div className="row">
-              <LeaderboardCard data={topTenContributors} />
+              <TopStreamerCard data={topTenStreamers} />
+            </div>
+            <div className="row">
+              <TopContributorCard data={topTenContributors} />
             </div>
             <div className="row">
               <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />

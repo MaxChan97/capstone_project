@@ -621,9 +621,9 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
             if (p1Points == p2Points) {
                 return 0;
             } else if (p1Points < p2Points) {
-                return -1;
-            } else {
                 return 1;
+            } else {
+                return -1;
             }
         });
 
