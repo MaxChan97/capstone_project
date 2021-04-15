@@ -57,6 +57,13 @@ import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
 import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
 
+import Payment from "./screens/PaymentPage";
+// Stripe
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ");
+
 function App() {
   let location = useLocation();
   const isAdmin = useSelector((state) => state.isAdmin);
@@ -148,6 +155,9 @@ function App() {
 
   return (
     <div className="App">
+      <Elements stripe={stripePromise}>
+      
+    
       <Switch>
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
@@ -229,6 +239,7 @@ function App() {
             />
             <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
             <Route exact path="/community" component={CommunityFeed} />
+            <Route exact path="/payment" component={Payment} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />
             <Route
@@ -275,6 +286,7 @@ function App() {
           </div>
         </div>
       </Switch>
+      </Elements>
     </div>
   );
 }

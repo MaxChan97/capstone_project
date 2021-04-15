@@ -357,6 +357,7 @@ export default function SocialButtonGroup({
           >
             Cancel
           </Button>
+          <Link to={"/payment"}>
           <ColorButton
             style={{ outline: "none" }}
             onClick={handleSubscribe}
@@ -366,6 +367,7 @@ export default function SocialButtonGroup({
           >
             Subscribe
           </ColorButton>
+          </Link>
         </DialogActions>
       </Dialog>
     );
