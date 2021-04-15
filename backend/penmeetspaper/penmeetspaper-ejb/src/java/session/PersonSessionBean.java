@@ -629,9 +629,13 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         List<Person> resultList = new ArrayList();
 
-        for (int i = 0; i < 10; i++) {
-            Person p = personList.get(i);
-            resultList.add(p);
+        if (personList.size() < 10) {
+            resultList = personList;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                Person p = personList.get(i);
+                resultList.add(p);
+            }
         }
 
         for (Person p : resultList) {
