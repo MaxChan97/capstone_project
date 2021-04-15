@@ -25,6 +25,7 @@ import { storage } from "../firebase";
 import { db } from "../firebase";
 import { streamRefreshListener } from "../helpers/FirebaseApi";
 import ban from "../assets/ban.svg";
+import unkick from "../assets/unkick.svg";
 import ReactHashtag from "react-hashtag";
 var uuid = require("uuid");
 const prettyMilliseconds = require("pretty-ms");
@@ -64,6 +65,10 @@ var liveStreamId;
 var streamKey;
 var accessUrl;
 
+// For kicking and unkicking users
+var userToKick;
+var userToUnkick;
+
 export default function StreamPage() {
   const alert = useAlert();
   const currentUser = useSelector((state) => state.currentUser);
@@ -97,6 +102,20 @@ export default function StreamPage() {
 
   const [streamViewsDialogOpen, setStreamViewsDialogOpen] = useState(false);
   const [viewsSearchTerm, setViewsSearchTerm] = useState("");
+
+  const [
+    streamKickedUsersDialogOpen,
+    setStreamKickedUsersDialogOpen,
+  ] = useState(false);
+  const [kickedUsersSearchTerm, setKickedUsersSearchTerm] = useState("");
+
+  const [confirmKickUserDialogOpen, setConfirmKickUserDialogOpen] = useState(
+    false
+  );
+  const [
+    confirmUnkickUserDialogOpen,
+    setConfirmUnkickUserDialogOpen,
+  ] = useState(false);
 
   useEffect(() => {
     loadData(streamId);
@@ -436,6 +455,30 @@ export default function StreamPage() {
 
   function handleStreamViewsDialogClose() {
     setStreamViewsDialogOpen(false);
+  }
+
+  function handleStreamKickedUsersDialogOpen() {
+    setStreamKickedUsersDialogOpen(true);
+  }
+
+  function handleStreamKickedUsersDialogClose() {
+    setStreamKickedUsersDialogOpen(false);
+  }
+
+  function handleConfirmKickUserDialogOpen() {
+    setConfirmKickUserDialogOpen(true);
+  }
+
+  function handleConfirmKickUserDialogClose() {
+    setConfirmKickUserDialogOpen(false);
+  }
+
+  function handleConfirmUnkickUserDialogOpen() {
+    setConfirmUnkickUserDialogOpen(true);
+  }
+
+  function handleConfirmUnkickUserDialogClose() {
+    setConfirmUnkickUserDialogOpen(false);
   }
 
   function handleEditInfoDialogCloseNoEdit() {
@@ -793,6 +836,60 @@ export default function StreamPage() {
     );
   }
 
+  function handleKickUser(personId) {
+    Api.kickUserFromStream(streamId, personId)
+      .then(() => {
+        db.collection("StreamRefresh")
+          .doc("en9EpFajcUExC4dvcF45")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("StreamRefresh")
+                .doc("en9EpFajcUExC4dvcF45")
+                .update({ streamRefresh: !doc.data().streamRefresh });
+            }
+          });
+        handleConfirmKickUserDialogClose();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
+  function renderConfirmKickUserDialog() {
+    if (userToKick != undefined) {
+      return (
+        <Dialog
+          open={confirmKickUserDialogOpen}
+          onClose={handleConfirmKickUserDialogClose}
+        >
+          <DialogTitle>Kick user</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Do you want to kick {userToKick.username} from your stream?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              style={{ outline: "none" }}
+              onClick={handleConfirmKickUserDialogClose}
+            >
+              Cancel
+            </Button>
+            <ColorButton
+              style={{ outline: "none" }}
+              onClick={() => handleKickUser(userToKick.id)}
+              color="primary"
+              variant="contained"
+            >
+              Confirm
+            </ColorButton>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+  }
+
   function renderCurrentViewersRow(currentViewer) {
     return (
       <div className="container">
@@ -831,6 +928,10 @@ export default function StreamPage() {
                 borderColor: "transparent",
                 outline: "none",
                 border: "none",
+              }}
+              onClick={() => {
+                userToKick = currentViewer;
+                handleConfirmKickUserDialogOpen();
               }}
             >
               <img
@@ -949,7 +1050,354 @@ export default function StreamPage() {
     );
   }
 
-  function renderStreamViewsDialog() {}
+  function renderViewsRow(view) {
+    return (
+      <div className="container">
+        <div
+          className="row"
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div className="col-md-3">
+            <img
+              className="img-fluid"
+              style={{
+                resizeMode: "repeat",
+                height: 40,
+                width: 40,
+                borderRadius: "50%",
+                display: "block",
+              }}
+              src={view.profilePicture}
+              alt="defaultDP"
+            />
+          </div>
+          <div className="col-md-7 mb-1" style={{ fontSize: "18px" }}>
+            {view.username}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderViewsList() {
+    if (stream == undefined) {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No views
+        </h5>
+      );
+    }
+    let searchResults = stream.viewers.filter((viewer) =>
+      viewer.username.toLowerCase().includes(viewsSearchTerm)
+    );
+    if (searchResults.length != 0) {
+      return searchResults.map((row, index) => (
+        <li key={index} class="list-group-item">
+          {renderViewsRow(row)}
+        </li>
+      ));
+    } else if (stream.viewers.length == 0) {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No views
+        </h5>
+      );
+    } else {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No search results for "{viewsSearchTerm}"
+        </h5>
+      );
+    }
+  }
+
+  function renderStreamViewsDialog() {
+    return (
+      <Dialog
+        open={streamViewsDialogOpen}
+        onClose={handleStreamViewsDialogClose}
+      >
+        <DialogTitle
+          style={{
+            paddingBottom: "0px",
+            paddingLeft: "18px",
+          }}
+        >
+          All Views
+        </DialogTitle>
+        <div
+          className="my-3"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "8px",
+            paddingLeft: "18px",
+            paddingRight: "18px",
+            minWidth: "23vw",
+          }}
+        >
+          <Paper
+            component="form"
+            style={{
+              padding: "2px 4px",
+              display: "flex",
+              alignItems: "flex-start",
+              backgroundColor: "#EAECEF",
+              marginBottom: "12px",
+              width: "200px",
+            }}
+          >
+            <InputBase
+              value={viewsSearchTerm}
+              style={{ marginLeft: "1%", flex: 1 }}
+              placeholder="Search views"
+              onChange={(e) => {
+                setViewsSearchTerm(e.target.value);
+              }}
+            />
+          </Paper>
+          {renderViewsList()}
+        </div>
+      </Dialog>
+    );
+  }
+
+  function handleUnkickUser(personId) {
+    Api.unkickUserFromStream(streamId, personId)
+      .then(() => {
+        db.collection("StreamRefresh")
+          .doc("en9EpFajcUExC4dvcF45")
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              db.collection("StreamRefresh")
+                .doc("en9EpFajcUExC4dvcF45")
+                .update({ streamRefresh: !doc.data().streamRefresh });
+            }
+          });
+        handleConfirmUnkickUserDialogClose();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
+  function renderConfirmUnkickUserDialog() {
+    if (userToUnkick != undefined) {
+      return (
+        <Dialog
+          open={confirmUnkickUserDialogOpen}
+          onClose={handleConfirmUnkickUserDialogClose}
+        >
+          <DialogTitle>Unkick user</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Do you want to unkick {userToUnkick.username} from your stream?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              style={{ outline: "none" }}
+              onClick={handleConfirmUnkickUserDialogClose}
+            >
+              Cancel
+            </Button>
+            <ColorButton
+              style={{ outline: "none" }}
+              onClick={() => handleUnkickUser(userToUnkick.id)}
+              color="primary"
+              variant="contained"
+            >
+              Confirm
+            </ColorButton>
+          </DialogActions>
+        </Dialog>
+      );
+    }
+  }
+
+  function renderKickedUsersRow(kickedUser) {
+    return (
+      <div className="container">
+        <div
+          className="row"
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div className="col-md-3">
+            <img
+              className="img-fluid"
+              style={{
+                resizeMode: "repeat",
+                height: 40,
+                width: 40,
+                borderRadius: "50%",
+                display: "block",
+              }}
+              src={kickedUser.profilePicture}
+              alt="defaultDP"
+            />
+          </div>
+          <div className="col-md-7 mb-1" style={{ fontSize: "18px" }}>
+            {kickedUser.username}
+          </div>
+          <div className="col-md-2">
+            <button
+              style={{
+                height: "25px",
+                width: "25px",
+                backgroundColor: "transparent",
+                borderColor: "transparent",
+                outline: "none",
+                border: "none",
+              }}
+              onClick={() => {
+                userToUnkick = kickedUser;
+                handleConfirmUnkickUserDialogOpen();
+              }}
+            >
+              <img
+                style={{
+                  height: "25px",
+                  width: "25px",
+                }}
+                src={unkick}
+                alt="banLogo"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderKickedUsersList() {
+    if (stream == undefined) {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No kicked users
+        </h5>
+      );
+    }
+    let searchResults = stream.kickedUsers.filter((kickedUser) =>
+      kickedUser.username.toLowerCase().includes(kickedUsersSearchTerm)
+    );
+    if (searchResults.length != 0) {
+      return searchResults.map((row, index) => (
+        <li key={index} class="list-group-item">
+          {renderKickedUsersRow(row)}
+        </li>
+      ));
+    } else if (stream.kickedUsers.length == 0) {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No kicked users
+        </h5>
+      );
+    } else {
+      return (
+        <h5
+          style={{
+            color: "gray",
+            textAlign: "center",
+            margin: "auto",
+          }}
+        >
+          No search results for "{kickedUsersSearchTerm}"
+        </h5>
+      );
+    }
+  }
+
+  function renderStreamKickedUsersDialog() {
+    return (
+      <Dialog
+        open={streamKickedUsersDialogOpen}
+        onClose={handleStreamKickedUsersDialogClose}
+      >
+        <DialogTitle
+          style={{
+            paddingBottom: "0px",
+            paddingLeft: "18px",
+          }}
+        >
+          Kicked Users
+        </DialogTitle>
+        <div
+          className="my-3"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "8px",
+            paddingLeft: "18px",
+            paddingRight: "18px",
+            minWidth: "23vw",
+          }}
+        >
+          <Paper
+            component="form"
+            style={{
+              padding: "2px 4px",
+              display: "flex",
+              alignItems: "flex-start",
+              backgroundColor: "#EAECEF",
+              marginBottom: "12px",
+              width: "200px",
+            }}
+          >
+            <InputBase
+              value={kickedUsersSearchTerm}
+              style={{ marginLeft: "1%", flex: 1 }}
+              placeholder="Search kicked users"
+              onChange={(e) => {
+                setKickedUsersSearchTerm(e.target.value);
+              }}
+            />
+          </Paper>
+          {renderKickedUsersList()}
+        </div>
+      </Dialog>
+    );
+  }
 
   function renderUtilityButtonGroup() {
     if (streamId == undefined) {
@@ -1074,11 +1522,40 @@ export default function StreamPage() {
               marginRight: "18px",
             }}
           ></div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              cursor: "pointer",
+            }}
+            onClick={handleStreamViewsDialogOpen}
+          >
             <p style={{ color: "#3B21CB", margin: "0px" }}>
               {stream.viewers.length}
             </p>
             <p style={{ fontWeight: "bold", margin: "0px" }}>Views</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              cursor: "pointer",
+            }}
+            onClick={handleStreamKickedUsersDialogOpen}
+          >
+            <p style={{ color: "#3B21CB", margin: "0px" }}>
+              {stream.kickedUsers.length}
+            </p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Kicked Users</p>
           </div>
           <div
             style={{
@@ -1124,6 +1601,19 @@ export default function StreamPage() {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <p style={{ color: "#3B21CB", margin: "0px" }}>0</p>
             <p style={{ fontWeight: "bold", margin: "0px" }}>Views</p>
+          </div>
+          <div
+            style={{
+              borderLeft: "1px solid gray",
+              height: "70%",
+              alignSelf: "center",
+              marginLeft: "18px",
+              marginRight: "18px",
+            }}
+          ></div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "#3B21CB", margin: "0px" }}>0</p>
+            <p style={{ fontWeight: "bold", margin: "0px" }}>Kicked Users</p>
           </div>
           <div
             style={{
@@ -1248,6 +1738,10 @@ export default function StreamPage() {
       {renderEndStreamDialog()}
       {renderEditInfoDialog()}
       {renderStreamCurrentViewersDialog()}
+      {renderConfirmKickUserDialog()}
+      {renderStreamKickedUsersDialog()}
+      {renderConfirmUnkickUserDialog()}
+      {renderStreamViewsDialog()}
     </div>
   );
 }

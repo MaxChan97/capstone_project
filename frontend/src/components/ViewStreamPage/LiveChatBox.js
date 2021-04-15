@@ -24,7 +24,7 @@ import { useAlert } from "react-alert";
 import { db } from "../../firebase";
 import { liveChatRefreshListener } from "../../helpers/FirebaseApi";
 
-export default function LiveChatBox({ streamId }) {
+export default function LiveChatBox({ streamId, isKicked }) {
   const alert = useAlert();
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -33,7 +33,7 @@ export default function LiveChatBox({ streamId }) {
   const [liveChatRefresh, setLiveChatRefresh] = useState([]);
 
   useEffect(() => {
-    if (streamId != undefined) {
+    if (streamId != undefined && isKicked === false) {
       Api.getLiveChatByStreamId(streamId)
         .then((liveChat) => {
           setLiveMessages(liveChat.liveMessages);

@@ -6,7 +6,7 @@ import Poll from "react-polls";
 import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 
-export default function LivePollBox({ streamId }) {
+export default function LivePollBox({ streamId, isKicked }) {
   const alert = useAlert();
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -17,7 +17,7 @@ export default function LivePollBox({ streamId }) {
   const [pollRefresh, setPollRefresh] = useState(true);
 
   useEffect(() => {
-    if (streamId != undefined) {
+    if (streamId != undefined && isKicked === false) {
       Api.getActiveLivePollByStreamId(streamId)
         .then((livePoll) => {
           setActivePoll(livePoll);

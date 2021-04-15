@@ -63,6 +63,8 @@ public class ReportResource {
                 return ReportTypeEnum.REPLY_REPORT;
             case "STREAM_REPORT":
                 return ReportTypeEnum.STREAM_REPORT;
+            case "SYSTEM_REPORT":
+                return ReportTypeEnum.SYSTEM_REPORT;
             default:
                 throw new NotValidException("Report type required");
         }
@@ -75,12 +77,12 @@ public class ReportResource {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String messageBody = jsonObject.getString("messageBody");
-        String reporterIdStr = jsonObject.getString("reporterId");
+        int reporterIdInt = jsonObject.getInt("reporterId");
         String reportTypeStr = jsonObject.getString("reportTypeEnum");
         String reportedContentId = jsonObject.getString("reportedContentId");
         String category = jsonObject.getString("category");
 
-        Long reporterId = Long.parseLong(reporterIdStr);
+        Long reporterId = new Long(reporterIdInt);
 
         Report report = new Report();
 
@@ -106,10 +108,10 @@ public class ReportResource {
 
         JsonObject jsonObject = createJsonObject(jsonString);
         String action = jsonObject.getString("action");
-        String adminIdStr = jsonObject.getString("adminId");
+        int adminIdInt = jsonObject.getInt("adminId");
 
         try {
-            Long adminId = Long.parseLong(adminIdStr);
+            Long adminId = new Long(adminIdInt);
 
             if (action.equals("RESOLVED")) {
                 reportSB.setReportState(reportId, ReportStateEnum.RESOLVED, adminId);

@@ -1333,6 +1333,29 @@ export default {
     });
   },
 
+  kickUserFromStream(streamId, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/kickUser/" + streamId + "/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
+  unkickUserFromStream(streamId, personId) {
+    return jQuery.ajax({
+      url:
+        this.SERVER_PREFIX + "/stream/unkickUser/" + streamId + "/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
+
   authenticateForApiVideo() {
     return jQuery.ajax({
       url: "https://ws.api.video/auth/api-key",

@@ -137,7 +137,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 
@@ -161,7 +161,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 
@@ -185,7 +185,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 
@@ -209,7 +209,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 
@@ -233,7 +233,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 
@@ -257,7 +257,7 @@ public class AdministratorResource {
 
         Long reportId = null;
         try {
-            reportId = Long.parseLong(jsonObject.getString("reportId"));
+            reportId = new Long(jsonObject.getInt("reportId"));
         } catch (NullPointerException | ClassCastException e) {
         }
 

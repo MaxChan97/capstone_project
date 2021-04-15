@@ -47,4 +47,6 @@ public interface StreamSessionBeanLocal {
     public void handleExitStream(Long streamId, Long personId);
     
     public void kickUserFromStream(Long streamId, Long personId);
+    
+    public void unkickUserFromStream(Long streamId, Long personId);
 }

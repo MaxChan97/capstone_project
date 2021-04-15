@@ -163,6 +163,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWideOnboardingAnalytics()
       .done((usersAnalytics) => {
+        // users are not cumulative, we make it cumulative
         let usersArray = Object.entries(usersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -176,10 +177,10 @@ export default function UserAnalytics() {
           .forEach((element) => {
             element[0] = parseInt(element[0], 10);
             if (element[0] <= today) {
-              todaysUsers = element[1];
+              todaysUsers += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysUsers = element[1];
+              yesterdaysUsers += element[1];
             }
           });
 
@@ -201,6 +202,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWideSubscribersAnalytics()
       .done((subscribersAnalytics) => {
+        // subscribers are not cumulative, we make it cumulative
         let subscribersArray = Object.entries(subscribersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -214,10 +216,10 @@ export default function UserAnalytics() {
           .forEach((element) => {
             element[0] = parseInt(element[0], 10);
             if (element[0] <= today) {
-              todaysSubscribers = element[1];
+              todaysSubscribers += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysSubscribers = element[1];
+              yesterdaysSubscribers += element[1];
             }
           });
 
@@ -239,6 +241,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWideFollowersAnalytics()
       .done((followersAnalytics) => {
+        // followers are cumulative
         let followersArray = Object.entries(followersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -277,6 +280,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWideEarningsAnalytics()
       .done((earningsAnalytics) => {
+        // earnings are not cumulative, we make it cumulative
         let earningsArray = Object.entries(earningsAnalytics);
         let tally = 0;
         earningsArray.forEach((element) => {
@@ -295,10 +299,10 @@ export default function UserAnalytics() {
           })
           .forEach((element) => {
             if (element[0] <= today) {
-              todaysTotalEarnings = element[1];
+              todaysTotalEarnings += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysTotalEarnings = element[1];
+              yesterdaysTotalEarnings += element[1];
             }
           });
         setPrevEarnings(yesterdaysTotalEarnings);
@@ -319,6 +323,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWidePostsAnalytics()
       .done((postsAnalytics) => {
+        // posts are not cumulative, we make it cumulative
         let postsArray = Object.entries(postsAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -332,10 +337,10 @@ export default function UserAnalytics() {
           .forEach((element) => {
             element[0] = parseInt(element[0], 10);
             if (element[0] <= today) {
-              todaysPosts = element[1];
+              todaysPosts += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysPosts = element[1];
+              yesterdaysPosts += element[1];
             }
           });
 
@@ -357,6 +362,7 @@ export default function UserAnalytics() {
 
     Api.getSiteWideStreamsAnalytics()
       .done((streamsAnalytics) => {
+        // streams are not cumulative, we make it cumulative
         let streamsArray = Object.entries(streamsAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -370,10 +376,10 @@ export default function UserAnalytics() {
           .forEach((element) => {
             element[0] = parseInt(element[0], 10);
             if (element[0] <= today) {
-              todaysStreams = element[1];
+              todaysStreams += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysStreams = element[1];
+              yesterdaysStreams += element[1];
             }
           });
 
@@ -459,7 +465,7 @@ export default function UserAnalytics() {
                     className={classes.tabs}
                   >
                     <Tab label="Users" {...a11yProps(0)} />
-                    <Tab label="Subscribers" {...a11yProps(1)} />
+                    <Tab label="Subscribes" {...a11yProps(1)} />
                     <Tab label="Followers" {...a11yProps(2)} />
                     <Tab label="Revenue" {...a11yProps(3)} />
                     <Tab label="Posts" {...a11yProps(4)} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
 import defaultDP from "../assets/Default Dp logo.svg";
@@ -28,6 +29,8 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+var isKicked = false;
 
 export default function ViewStreamPage() {
   const { streamId } = useParams();
@@ -61,9 +64,14 @@ export default function ViewStreamPage() {
     setConfirmResubscribeDialogOpen,
   ] = useState(false);
   const [streamEndedDialogOpen, setStreamEndedDialogOpen] = useState(false);
+  const [kickedFromStreamDialogOpen, setKickedFromStreamDialogOpen] = useState(
+    false
+  );
 
   useEffect(() => {
-    loadData(streamId);
+    if (isKicked === false) {
+      loadData(streamId);
+    }
   }, [streamRefresh]);
 
   useEffect(() => {
@@ -118,6 +126,27 @@ export default function ViewStreamPage() {
       .then((stream) => {
         if (stream.hasEnded === true) {
           handleStreamEndedDialogOpen();
+        }
+        if (stream.kickedUsers.some((person) => person.id == currentUser)) {
+          isKicked = true;
+          stream.accessUrl = "";
+          handleKickedFromStreamDialogOpen();
+          Api.handleExitStream(streamId, currentUser)
+            .then(() => {
+              db.collection("StreamRefresh")
+                .doc("en9EpFajcUExC4dvcF45")
+                .get()
+                .then((doc) => {
+                  if (doc.exists) {
+                    db.collection("StreamRefresh")
+                      .doc("en9EpFajcUExC4dvcF45")
+                      .update({ streamRefresh: !doc.data().streamRefresh });
+                  }
+                });
+            })
+            .fail((xhr, status, error) => {
+              alert.show(xhr.responseJSON.error);
+            });
         }
         setStream(stream);
       })
@@ -213,6 +242,14 @@ export default function ViewStreamPage() {
 
   function handleStreamEndedDialogClose() {
     setStreamEndedDialogOpen(false);
+  }
+
+  function handleKickedFromStreamDialogOpen() {
+    setKickedFromStreamDialogOpen(true);
+  }
+
+  function handleKickedFromStreamDialogClose() {
+    setKickedFromStreamDialogOpen(false);
   }
 
   function handleFollow() {
@@ -493,6 +530,28 @@ export default function ViewStreamPage() {
     );
   }
 
+  function renderKickedFromStreamDialog() {
+    return (
+      <Dialog open={kickedFromStreamDialogOpen}>
+        <DialogTitle>You have been kicked from this stream</DialogTitle>
+        <DialogContent>Please click ok to navigate to your feed</DialogContent>
+        <DialogActions>
+          <ColorButton
+            style={{ outline: "none" }}
+            onClick={() => {
+              history.push("/feed");
+            }}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            ok
+          </ColorButton>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   function renderFollowButton() {
     if (following === false) {
       return (
@@ -578,11 +637,13 @@ export default function ViewStreamPage() {
   function renderStreamInfo(stream) {
     return (
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <img
-          className="rounded-circle"
-          style={{ height: "38px", marginRight: "8px" }}
-          src={stream.streamer.profilePicture || defaultDP}
-        />
+        <Link to={"/profile/" + stream.streamer.id}>
+          <img
+            className="rounded-circle"
+            style={{ height: "38px", marginRight: "8px" }}
+            src={stream.streamer.profilePicture || defaultDP}
+          />
+        </Link>
         <div
           style={{
             display: "flex",
@@ -604,9 +665,14 @@ export default function ViewStreamPage() {
                 paddingTop: "2px",
               }}
             >
-              <p style={{ margin: 0, lineHeight: 1, fontWeight: "bold" }}>
-                {stream.streamer.username}
-              </p>
+              <Link
+                to={"/profile/" + stream.streamer.id}
+                style={{ color: "inherit" }}
+              >
+                <p style={{ margin: 0, lineHeight: 1, fontWeight: "bold" }}>
+                  {stream.streamer.username}
+                </p>
+              </Link>
               <p style={{ margin: 0, lineHeight: 1 }}>
                 {numFollowers} followers
               </p>
@@ -678,8 +744,8 @@ export default function ViewStreamPage() {
             paddingRight: "18px",
           }}
         >
-          <LiveChatBox streamId={stream.id} />
-          <LivePollBox streamId={stream.id} />
+          <LiveChatBox streamId={stream.id} isKicked={isKicked} />
+          <LivePollBox streamId={stream.id} isKicked={isKicked} />
         </div>
       </div>
       {renderUnFollowDialog()}
@@ -687,6 +753,7 @@ export default function ViewStreamPage() {
       {renderUnsubscribeDialog()}
       {renderResubscribeDialog()}
       {renderStreamEndedDialog()}
+      {renderKickedFromStreamDialog()}
     </div>
   ) : (
     ""
