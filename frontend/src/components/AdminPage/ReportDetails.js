@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@material-ui/core/Button";
@@ -9,13 +9,14 @@ import Box from "@material-ui/core/Box";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { typography } from '@material-ui/system';
+import { useParams } from "react-router";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function ReportDetails() {
     const dispatch = useDispatch();
+    const [refresh, setRefresh] = useState(false);
     const currentUser = useSelector((state) => state.currentUser);
-
-
-
+    const { reportId } = useParams();
     const ColorButton = withStyles((theme) => ({
         root: {
             color: theme.palette.getContrastText("#3B21CB"),
@@ -26,100 +27,129 @@ export default function ReportDetails() {
         },
     }))(Button);
 
-    return (
+    useEffect(() => {
+        if (reportId) {
+            loadData(reportId);
+        }
+    }, [reportId,refresh]);
+
+    const [formatDate, setFormatDate] = useState();
+    function changeDateFormat(r) {
+        //remove [UTC] suffix
+        var changedDate = r.dateSubmitted.substring(0, r.dateSubmitted.length - 5);
+        setFormatDate(changedDate);
+    }
+    const [data, setData] = useState(null);
+    
+    function loadData(reportId) {
+        Api.getReportById(reportId)
+            .done((r) => {
+                setData(r);
+                changeDateFormat(r);
+            })
+            .fail(() => {
+                //alert.show("Unable to load!");
+            });
+    }
+
+    function handleVoid(){
+        Api.changeReportState(data.id, "VOID", currentUser)
+            .done((r) => {
+                setRefresh(!refresh);
+            })
+            .fail(() => {
+                //alert.show("Unable to load!");
+            });
+    }
+
+    function handleResolve(){
+        Api.changeReportState(data.id, "RESOLVED", currentUser)
+            .done((r) => {
+                setRefresh(!refresh);
+            })
+            .fail(() => {
+                //alert.show("Unable to load!");
+            });
+    }
+
+    return data ? (
         <div className="content-wrapper">
-            <div className="container mt-3">
-                <div className="row">
-                    <div className="col-md-12 mt-3" style={{margin:"auto"}}>
-                        <div className="card card-primary">
-                            <div className="card-body">
-                                <Box fontWeight="fontWeightMedium" fontSize={23}>
-                                    Review Report: User report
-                                </Box>
-                                <Box fontWeight="fontWeightLight" fontSize={20}>
-                                    Report id: 1
-                                </Box>
+            <div className="container mt-3" style={{ paddingTop: 20, paddingBottom: 5 }}>
 
-                                <div style={{ display: "flex", alignItems: "baseline" }}>
-                                    <Box fontWeight="fontWeightLight" fontSize={20}>
-                                        Reported by:
-                                    </Box>
-                                &nbsp;
-                                <Link to={"/profile/" + 2} style={{ color: "#3B21CB", }}>User 2 </Link>
-                                </div>
-                                <div style={{ display: "flex", alignItems: "baseline" }}>
-                                    <Box fontWeight="fontWeightLight" fontSize={20}>
-                                        Reported on:
-                                    </Box>
-                                    &nbsp;
-                                    <Box fontWeight="fontWeightLight" fontSize={20}>
-                                        {moment().format("DD/MM/YYYY hh:mm:ss a")}
-                                    </Box>
-                                </div>
-                                <div style={{ display: "flex", alignItems: "baseline" }}>
-                                    <Box fontWeight="fontWeightLight" fontSize={20}>
-                                        Report status:
-                                    </Box>
-                                    &nbsp;
-                                    <Box fontWeight="fontWeightLight" fontSize={20}>
-                                        Pending
-                                    </Box>
-
-                                </div>
-                                <br>
-                                </br>
-                                <p>Report Reason: Frauds and scams</p>
-                                <Box fontWeight="fontWeightRegular" fontSize={20}>
-                                    User Message:
-                                </Box>
-
-                                <Box fontWeight="fontWeightRegular" fontSize={20}>
-                                    User is deceiving others to generate a financial or personal benefit
-                                    to the detriment of a third party or entity through
-                                    investment or financial scams
-                                </Box>
-                                <br></br>
-                                <Link style={{ color: "#3B21CB", }}>Reported Content/User</Link>
-                                <br></br>
-                                <br></br>
-                                <div style={{ textAlign: "right" }}>
-                                    <ColorButton
-                                        style={{
-                                            height: "30px",
-                                            width: "100px",
-                                            outline: "none",
-                                            marginRight: "3%",
-                                        }}
-                                        href="/admin/reportDetails"
-                                        variant="contained"
-                                        color="primary"
-                                        type="button"
-                                    >
-                                        Void
-                                    </ColorButton>
-                                    <ColorButton
-                                        style={{
-                                            height: "30px",
-                                            width: "100px",
-                                            outline: "none",
-                                            marginRight: "3%",
-                                            backgroundColor: "#EA3F79",
-                                        }}
-                                        href="/admin/reportDetails"
-                                        variant="contained"
-                                        color="primary"
-                                        type="button"
-                                    >
-                                        Resolve
-                                    </ColorButton>
-                                </div>
-
-                            </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="far fa-folder-open"></i>
+                                {" "} Review Report: {data.reportType}
+                            </h3>
                         </div>
-                    </div>
 
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-2">  Report id:</dt>
+                                <dd class="col-sm-10">{data.id}</dd>
+                                <dt class="col-sm-2"> Reported by: </dt>
+                                <dd class="col-sm-10"><Link to={"/profile/" + data.reporter.id} style={{ color: "#3B21CB", }}>{data.reporter.username}</Link></dd>
+                                <dt class="col-sm-2">Reported on: </dt>
+                                <dd class="col-sm-10">{moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}</dd>
+                                <dt class="col-sm-2">Report status:</dt>
+                                <dd class="col-sm-10">{data.reportState}</dd>
+                                {data.reportType != "SYSTEM_REPORT" ? (
+                                    <dt class="col-sm-2">Reason:</dt>
+                                ) : (<dt class="col-sm-2">Reported feature:</dt>)}
+                                <dd class="col-sm-10">{data.category}</dd>
+                                <dt class="col-sm-2">User message: </dt>
+                                <dd class="col-sm-10">{data.messageBody}</dd>
+                                {data.reportType != "SYSTEM_REPORT" ? (
+                                    <dd class="col-sm-9"> <Link to={data.reportContentId} style={{ color: "#3B21CB", }}><i class="fas fa-lightbulb"></i> {" "}View Reported Content/User</Link>
+                                    </dd>
+                                ) : ("")}
+                            </dl>
+                            {data.reportState == "PENDING" ? (
+                               
+                            <div style={{ textAlign: "right" }}>
+                                <ColorButton
+                                    style={{
+                                        height: "30px",
+                                        width: "100px",
+                                        outline: "none",
+                                        marginRight: "3%",
+                                    }}
+                                    variant="contained"
+                                    color="primary"
+                                    type="button"
+                                    onClick={handleVoid}
+                                >
+                                    Void
+                                </ColorButton>
+                                <ColorButton
+                                    style={{
+                                        height: "30px",
+                                        width: "100px",
+                                        outline: "none",
+                                        marginRight: "3%",
+                                        backgroundColor: "#EA3F79",
+                                    }}
+                                    variant="contained"
+                                    color="primary"
+                                    type="button"
+                                    onClick={handleResolve}
+                                >
+                                    Resolve
+                                </ColorButton>
+                            </div>
+                             ) : ("")}
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
+        </div>
+    ) : (
+        <div style={{ margin: "auto", textAlign: "center" }}>
+            <CircularProgress />
         </div>
     );
 }

@@ -319,14 +319,6 @@ export default function UsersList() {
 
     return rows != null ? (
         <div style={{ paddingTop: "24px" }}>
-            <div class="info-box col-md-2" style={{  color: "#3B21CB", }}>
-                <span class="info-box-icon elevation-1"><i class="fas fa-user"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">Total Users</span>
-                    <span class="info-box-number">{rows.length}</span>
-                </div>
-            </div>
             <div class="card bg-white" >
                 {currentPerson != null ? (
                     <Dialog

@@ -227,10 +227,10 @@ export default function ReportList() {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 100, renderCell: renderCellExpand, },
-        { field: 'reportType', headerName: 'Type', width: 200, renderCell: renderCellExpand, },
+        { field: 'reportType', headerName: 'Type', width: 240, renderCell: renderCellExpand, },
         //{ field: 'createdDate', headerName: 'Date Joined', width: 270 },
-        { field: 'reportState', headerName: 'Status', width: 200, renderCell: renderCellExpand, },
-        { field: 'category', headerName: 'Category', width: 200, renderCell: renderCellExpand, },
+        { field: 'reportState', headerName: 'Status', width: 150, renderCell: renderCellExpand, },
+        { field: 'category', headerName: 'Category', width: 320, renderCell: renderCellExpand, },
         { field: 'dateSubmitted', headerName: 'Date', width: 150,  sortable: false,
         filterable: false, description: "Date report was submitted" },
         {
@@ -241,7 +241,7 @@ export default function ReportList() {
             width: 119,
             renderCell: (params) => (
                 <div>
-                    <Link to={"/admin/reportDetails"}>
+                    <Link to={"/admin/reportDetails/" + `${params.getValue('id') || ''}`}>
                         <i className="far fa-eye" style={{ marginLeft: 20, color: "#3B21CB", }}></i>
                     </Link>
                 </div>

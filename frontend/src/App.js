@@ -269,7 +269,7 @@ function App() {
             />
             <Route
               exact
-              path="/admin/reportDetails"
+              path="/admin/reportDetails/:reportId"
               component={ReportDetails}
             />
 
