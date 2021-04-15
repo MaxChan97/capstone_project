@@ -292,4 +292,18 @@ public class StreamResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }
+    
+    @PUT
+    @Path("/kickUser/{streamId}/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response kickUserFromStream(@PathParam("streamId") Long streamId, @PathParam("personId") Long personId) {
+        try {
+            streamSBLocal.kickUserFromStream(streamId, personId);
+            return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }
