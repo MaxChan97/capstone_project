@@ -106,6 +106,7 @@ export default function OwnProfilePage({ personId }) {
             setRefresh={setRefresh}
             personId={personId}
             setProfilePicture={setProfilePicture}
+            user = {currentPerson}
           />
           {handleTabView(tabValue)}
         </div>

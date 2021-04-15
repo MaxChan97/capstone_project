@@ -73,7 +73,8 @@ export default function OwnProfileTopBar({
   refresh,
   setRefresh,
   personId,
-  setProfilePicture
+  setProfilePicture,
+  user
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -119,10 +120,7 @@ export default function OwnProfileTopBar({
   };
 
   const handleBannerChange = () => {
-    Api.editPersonProfileBanner(
-      personId,
-      profileBanner
-    )
+    Api.editPersonProfileBanner(personId, profileBanner)
       .done(() => {
         alert.show("Banner updated successfully!");
         setRefresh(!refresh);
@@ -243,7 +241,7 @@ export default function OwnProfileTopBar({
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        <ProfileManagementButtonGroup />
+        <ProfileManagementButtonGroup/>
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
