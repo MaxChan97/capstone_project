@@ -1699,4 +1699,34 @@ export default {
       type: "GET",
     });
   },
+
+  getReportById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/report/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  changeReportState(
+    reportId,
+    action,
+    adminId,
+  ) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/report/" + reportId + "/changeReportState",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        action: action,
+        adminId: adminId
+      }),
+    });
+  },
 };
