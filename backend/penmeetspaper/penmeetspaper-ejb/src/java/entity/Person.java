@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -165,17 +164,17 @@ public class Person implements Serializable {
     @OneToOne
     private Badge badgeDisplaying;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private FollowersAnalytics followersAnalytics = new FollowersAnalytics();
+    @OneToOne
+    private FollowersAnalytics followersAnalytics;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private SubscribersAnalytics subscribersAnalytics = new SubscribersAnalytics();
+    @OneToOne
+    private SubscribersAnalytics subscribersAnalytics;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private EarningsAnalytics earningsAnalytics = new EarningsAnalytics();
-
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private ViewersAnalytics viewersAnalytics = new ViewersAnalytics();
+    @OneToOne
+    private EarningsAnalytics earningsAnalytics;
+    
+    @OneToOne
+    private ViewersAnalytics viewersAnalytics;
 
     // Getters and Setters -----------------------------------------------------------
     public Person() {

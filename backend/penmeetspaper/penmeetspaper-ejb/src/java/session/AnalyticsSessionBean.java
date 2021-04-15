@@ -54,6 +54,38 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
   }
 
   @Override
+  public FollowersAnalytics createFollowersAnalytics() {
+    FollowersAnalytics followersAnalytics = new FollowersAnalytics();
+    em.persist(followersAnalytics);
+    em.flush();
+    return followersAnalytics;
+  }
+
+  @Override
+  public SubscribersAnalytics createSubscribersAnalytics() {
+    SubscribersAnalytics subscribersAnalytics = new SubscribersAnalytics();
+    em.persist(subscribersAnalytics);
+    em.flush();
+    return subscribersAnalytics;
+  }
+
+  @Override
+  public EarningsAnalytics createEarningsAnalytics() {
+    EarningsAnalytics earningsAnalytics = new EarningsAnalytics();
+    em.persist(earningsAnalytics);
+    em.flush();
+    return earningsAnalytics;
+  }
+
+  @Override
+  public ViewersAnalytics createViewersAnalytics() {
+    ViewersAnalytics viewersAnalytics = new ViewersAnalytics();
+    em.persist(viewersAnalytics);
+    em.flush();
+    return viewersAnalytics;
+  }
+
+  @Override
   public SubscribersAnalytics getSubscribersAnalytics(Long personId) throws NoResultException, NotValidException {
     Person person = emGetPerson(personId);
     return person.getSubscribersAnalytics();

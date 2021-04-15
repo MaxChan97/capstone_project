@@ -22,10 +22,10 @@ public class ViewersAnalytics implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  private HashMap<Date, Long> viewersCount = new HashMap<Date, Long>();
+  private HashMap<Date, Long> viewersCount = new HashMap<>();
 
   public ViewersAnalytics() {
   }
