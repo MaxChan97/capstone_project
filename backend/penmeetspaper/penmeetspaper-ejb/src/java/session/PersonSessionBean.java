@@ -280,6 +280,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setViewersAnalytics(null);
         person.setEarningsAnalytics(null);
         person.setStreams(null);
+        person.setReports(null);
 
         return person;
     } // end getPersonById

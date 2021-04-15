@@ -93,13 +93,12 @@ const incomes = [
   { value: "CRA", label: "200K and above" },
 ];
 
-export default function ProfileManagementButtonGroup() {
+export default function ProfileManagementButtonGroup({ refresh, setRefresh }) {
   const classes = useStyles();
   let history = useHistory();
   const alert = useAlert();
 
   const [currentPerson, setCurrentPerson] = useState({});
-  const [refresh, setRefresh] = useState(true);
   const [editDialog, setShowEditDialog] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState("");
@@ -213,13 +212,13 @@ export default function ProfileManagementButtonGroup() {
       description,
       topicInterests,
       profilePicture,
-      tempBanner
+      profileBanner
     )
       .done(() => {
-        alert.show("Profile updated successfully!");
-        history.push("/profile/" + currentUser);
+        alert.show("Update successful");
+        setRefresh(!refresh);
+        setShowEditDialog(false);
         setEditedBanner(false);
-        // window.location.reload()
       })
       .fail((xhr, status, error) => {
         //alert.show("Something went wrong, please try again!");
@@ -227,7 +226,7 @@ export default function ProfileManagementButtonGroup() {
       });
   };
 
-  const changeProfilePictureHandler = (event) => {
+  /*const changeProfilePictureHandler = (event) => {
     var oldName = event.target.files[0].name;
     var suffix = oldName.split(".")[1];
     var randomId = uuid.v4();
@@ -258,7 +257,8 @@ export default function ProfileManagementButtonGroup() {
     );
   };
 
-  const changeProfileBannerHandler = (event) => {
+  const changeProfileBannerHandler2 = (event) => {
+    console.log("change");
     var oldName = event.target.files[0].name;
     var suffix = oldName.split(".")[1];
     var randomId = uuid.v4();
@@ -288,7 +288,7 @@ export default function ProfileManagementButtonGroup() {
           });
       }
     );
-  };
+  };*/
 
   function handleCustomiseDialogOpen() {
     setShowEditDialog(true);
@@ -301,144 +301,21 @@ export default function ProfileManagementButtonGroup() {
 
   function renderCustomiseProfileDialog() {
     return (
-      <Dialog open={editDialog}>
-        <DialogTitle style={{ display: "flex", flexDirection: "column" }}>
+      <Dialog open={editDialog} onClose={handleCustomiseDialogClose}>
+        <DialogTitle
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "0px",
+          }}
+        >
           <b>Customise Profile</b>
         </DialogTitle>
         <DialogActions>
-          <div className="card-body">
-            <Box fontWeight="fontWeightBold" fontSize={18} ml={1} mb={2}>
-              Profile Picture
-            </Box>
-
-            <div style={{ display: "flex", alignItems: "baseline" }}>
-              <div className="container">
-                <div className="row">
-                  <div className="col-sm-3">
-                    {profileProgress > 0 && profileProgress < 100 ? (
-                      <div className="d-flex justify-content-center">
-                        <CircularProgressWithLabel
-                          value={profileProgress}
-                          size={130}
-                        />
-                      </div>
-                    ) : (
-                      <img
-                        style={{
-                          resizeMode: "repeat",
-                          height: 130,
-                          width: 130,
-                          borderRadius: "50%",
-                          display: "block",
-                        }}
-                        src={profilePicture || defaultDP}
-                      />
-                    )}
-                  </div>
-                  <div className="col-sm-8 ml-3 mt-4">
-                    <Box fontWeight="fontWeightRegular" fontSize={13.5} m={1}>
-                      It’s recommended to use a picture that’s at least 100 x
-                      100 pixels. JPEG or PNG only and cannot exceed 10MB.
-                    </Box>
-                    <div className=" d-flex justify-content-end">
-                      <label
-                        for="pp"
-                        className="btn"
-                        style={{
-                          height: "35px",
-                          width: "100px",
-                          outline: "none",
-                          fontWeight: "600",
-                          backgroundColor: "#3B21CB",
-                          color: "white",
-                          marginTop: "20px",
-                        }}
-                      >
-                        <p>UPLOAD</p>
-                        <input
-                          id="pp"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          style={{ display: "none" }}
-                          onChange={changeProfilePictureHandler}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <br></br>
-
-            <Box fontWeight="fontWeightBold" fontSize={18} ml={1} mb={2}>
-              Profile Banner
-            </Box>
-            {/* {editedBanner === true ? ( */}
-              <div>
-                {bannerProgress > 0 && bannerProgress < 100 ? (
-                  <div className="d-flex justify-content-center">
-                    <CircularProgressWithLabel
-                      value={bannerProgress}
-                      size={80}
-                    />
-                  </div>
-                ) : (
-                  <img
-                    style={{
-                      resizeMode: "repeat",
-                      height: 80,
-                      width: 512,
-                      marginLeft: "10px",
-                    }}
-                    src={profileBanner}
-                  />
-                )}
-              </div>
-            {/* ) : ( */}
-              {/* <img
-                style={{
-                  resizeMode: "repeat",
-                  height: 80,
-                  width: 512,
-                  marginLeft: "10px",
-                }}
-                src={profileBanner}
-              /> */}
-            {/* )} */}
-
-            <Box fontWeight="fontWeightRegular" fontSize={13.5} m={1}>
-              File format: JPEG or PNG (recommended 1024 x 160 , max 10MB)
-            </Box>
-            <div className=" d-flex justify-content-end">
-              <label
-                for="pb"
-                className="btn"
-                style={{
-                  height: "35px",
-                  width: "100px",
-                  outline: "none",
-                  fontWeight: "600",
-                  backgroundColor: "#3B21CB",
-                  color: "white",
-                  marginRight: "40px",
-                }}
-              >
-                <p>UPLOAD</p>
-                <input
-                  id="pb"
-                  type="file"
-                  name="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={changeProfileBannerHandler}
-                />
-              </label>
-            </div>
-
-            <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
-              Profile Details
-            </Box>
+          <div
+            className="card-body"
+            style={{ width: "30vw", paddingTop: "0px" }}
+          >
             <form onSubmit={(e) => handleSubmit(e)}>
               <div className="ml-2 mr-4">
                 <div className="form-group">
