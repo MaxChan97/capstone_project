@@ -33,4 +33,12 @@ public interface AnalyticsSessionBeanLocal {
 
   public ViewersAnalytics getViewersAnalytics(Long personId) throws NoResultException, NotValidException;
 
+  public FollowersAnalytics createFollowersAnalytics();
+
+  public SubscribersAnalytics createSubscribersAnalytics();
+
+  public EarningsAnalytics createEarningsAnalytics();
+
+  public ViewersAnalytics createViewersAnalytics();
+
 }

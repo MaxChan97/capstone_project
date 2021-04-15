@@ -22,10 +22,10 @@ public class EarningsAnalytics implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  private HashMap<Date, Double> earnings = new HashMap<Date, Double>();
+  private HashMap<Date, Double> earnings = new HashMap<>();
 
   public EarningsAnalytics() {
   }
