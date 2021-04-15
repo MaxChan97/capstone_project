@@ -182,6 +182,7 @@ export default function UserAnalytics() {
 
     Api.getSubscribersAnalytics(currentUser)
       .done((subscribersAnalytics) => {
+        // subscribers are cumulative
         let subscribersArray = Object.entries(subscribersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -220,6 +221,7 @@ export default function UserAnalytics() {
 
     Api.getFollowersAnalytics(currentUser)
       .done((followersAnalytics) => {
+        // followers are cumulative
         let followersArray = Object.entries(followersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -258,6 +260,7 @@ export default function UserAnalytics() {
 
     Api.getViewersAnalytics(currentUser)
       .done((viewersAnalytics) => {
+        // views are not cumulative, we make it cumulative
         let viewsArray = Object.entries(viewersAnalytics);
         let date = new Date();
         let today = date.getTime();
@@ -271,15 +274,15 @@ export default function UserAnalytics() {
           .forEach((element) => {
             element[0] = parseInt(element[0], 10);
             if (element[0] <= today) {
-              todaysViews = element[1];
+              todaysViews += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysViews = element[1];
+              yesterdaysViews += element[1];
             }
           });
 
-        setPrevViews(todaysViews);
-        setViews(yesterdaysViews);
+        setPrevViews(yesterdaysViews);
+        setViews(todaysViews);
         setViewsChartOptions({
           ...viewsChartOptions,
           series: [
@@ -296,6 +299,7 @@ export default function UserAnalytics() {
 
     Api.getEarningsAnalytics(currentUser)
       .done((earningsAnalytics) => {
+        // earnings are not cumulative, , we make it cumulative
         let earningsArray = Object.entries(earningsAnalytics);
         let tally = 0;
         earningsArray.forEach((element) => {
@@ -314,10 +318,10 @@ export default function UserAnalytics() {
           })
           .forEach((element) => {
             if (element[0] <= today) {
-              todaysTotalEarnings = element[1];
+              todaysTotalEarnings += element[1];
             }
             if (element[0] <= yesterday) {
-              yesterdaysTotalEarnings = element[1];
+              yesterdaysTotalEarnings += element[1];
             }
           });
         setPrevEarnings(yesterdaysTotalEarnings);
