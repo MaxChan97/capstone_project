@@ -91,6 +91,10 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
       newStream.getTrends().add(trend);
       trend.getStreams().add(newStream);
     }
+    
+    // Add contributor points
+    personSB.addCCPointsToPerson(streamerId, 10);
+    personSB.checkBadgeQualification(streamerId);
 
     em.flush();
 

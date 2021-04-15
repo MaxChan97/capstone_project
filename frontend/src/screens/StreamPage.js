@@ -867,7 +867,7 @@ export default function StreamPage() {
     );
     if (searchResults.length != 0) {
       return searchResults.map((row, index) => (
-        <li key={index} class="list-group-item">
+        <li key={index} class="list-group-item" style={{ width: "22vw" }}>
           {renderCurrentViewersRow(row)}
         </li>
       ));
@@ -904,10 +904,17 @@ export default function StreamPage() {
         open={streamCurrentViewersDialogOpen}
         onClose={handleStreamCurrentViewersDialogClose}
       >
-        <DialogTitle id="confirm-end-stream-dialog-title">
+        <DialogTitle style={{ paddingBottom: "0px" }}>
           Current Viewers
         </DialogTitle>
-        <div className="my-3">
+        <div
+          className="my-3"
+          style={{
+            paddingBottom: "18px",
+            paddingLeft: "18px",
+            paddingRight: "18px",
+          }}
+        >
           <Paper
             component="form"
             style={{
@@ -926,8 +933,8 @@ export default function StreamPage() {
               }}
             />
           </Paper>
+          {renderCurrentViewersList()}
         </div>
-        {renderCurrentViewersList()}
       </Dialog>
     );
   }
