@@ -6,7 +6,7 @@ import { useAlert } from "react-alert";
 import defaultDP from "../assets/Default Dp logo.svg";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import {
   Button,
   Dialog,
@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Chip,
 } from "@material-ui/core";
 import LiveChatBox from "../components/ViewStreamPage/LiveChatBox";
 import LivePollBox from "../components/ViewStreamPage/LivePollBox";
@@ -30,11 +31,23 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
+const useStyles = makeStyles((theme) => ({
+  chip: {
+    display: "flex",
+    justifyContent: "left",
+    flexWrap: "wrap",
+    "& > *": {
+      marginRight: theme.spacing(0.5),
+    },
+  },
+}));
+
 var isKicked = false;
 
 export default function ViewStreamPage() {
   const { streamId } = useParams();
   const alert = useAlert();
+  const classes = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const history = useHistory();
 
@@ -634,6 +647,16 @@ export default function ViewStreamPage() {
     }
   }
 
+  function toTitleCase(str) {
+    var i,
+      frags = str.split("_");
+    for (i = 0; i < frags.length; i++) {
+      frags[i] =
+        frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
+    }
+    return frags.join(" ");
+  }
+
   function renderStreamInfo(stream) {
     return (
       <div style={{ display: "flex", flexDirection: "row" }}>
@@ -679,6 +702,16 @@ export default function ViewStreamPage() {
               <p style={{ margin: 0, marginTop: "18px", lineHeight: 1 }}>
                 {stream.description}
               </p>
+              <b>Related Topics</b>
+              <div component="ul" className={classes.chip}>
+                {stream.relatedTopics.map((topics, index) => (
+                  <Chip
+                    label={toTitleCase(topics)}
+                    key={index}
+                    style={{ backgroundColor: "#FFFFFF" }}
+                  />
+                ))}
+              </div>
             </div>
             <div style={{ display: "flex", flexDirection: "row" }}>
               {renderFollowButton()}

@@ -17,8 +17,9 @@ import {
   Grid,
   InputBase,
   Paper,
+  Chip,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import { Decoder, Encoder, tools, Reader } from "ts-ebml";
 import { storage } from "../firebase";
@@ -27,6 +28,7 @@ import { streamRefreshListener } from "../helpers/FirebaseApi";
 import ban from "../assets/ban.svg";
 import unkick from "../assets/unkick.svg";
 import ReactHashtag from "react-hashtag";
+import Select from "react-select";
 var uuid = require("uuid");
 const prettyMilliseconds = require("pretty-ms");
 
@@ -39,6 +41,17 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+const useStyles = makeStyles((theme) => ({
+  chip: {
+    display: "flex",
+    justifyContent: "left",
+    flexWrap: "wrap",
+    "& > *": {
+      marginRight: theme.spacing(0.5),
+    },
+  },
+}));
 
 // Attributes needed for stream
 var url = "rtmp://broadcast.api.video/s/d74762c5-c2bd-4408-abe7-17d63b69852d";
@@ -69,8 +82,34 @@ var accessUrl;
 var userToKick;
 var userToUnkick;
 
+// For related topics
+const topics = [
+  { value: "INVESTMENTS", label: "Investments" },
+  { value: "STOCKS", label: "Stocks" },
+  { value: "SAVINGS", label: "Savings" },
+  { value: "CAREER", label: "Career" },
+  { value: "ETF", label: "ETF" },
+  { value: "ROBOADVISORS", label: "Robo-Advisors" },
+  { value: "TRADING", label: "Trading" },
+  { value: "INSURANCE", label: "Insurance" },
+  { value: "BROKERAGES", label: "Brokerages" },
+  { value: "RETIREMENT", label: "Retirement" },
+  { value: "SALARY", label: "Salary" },
+  { value: "CPF", label: "CPF" },
+  { value: "BTO", label: "BTO" },
+  { value: "UTILITIES_BILL", label: "Utilities Bill" },
+  { value: "REAL_ESTATE", label: "Real Estate" },
+  { value: "FUTURES", label: "Futures" },
+  { value: "CRYPTOCURRENCY", label: "Cryptocurrency" },
+  { value: "CREDITCARDS", label: "Credit Cards" },
+  { value: "BANKING", label: "Banking" },
+  { value: "REITS", label: "REITs" },
+  { value: "BLOCKCHAIN", label: "Blockchain" },
+];
+
 export default function StreamPage() {
   const alert = useAlert();
+  const classes = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const history = useHistory();
 
@@ -82,9 +121,11 @@ export default function StreamPage() {
   const [streamId, setStreamId] = useState();
   const [streamTitle, setStreamTitle] = useState("");
   const [streamDescription, setStreamDescription] = useState("");
+  const [streamRelatedTopics, setStreamRelatedTopics] = useState([]);
   const [streamSubscribersOnly, setStreamSubscribersOnly] = useState(false);
   const [tempStreamTitle, setTempStreamTitle] = useState("");
   const [tempStreamDescription, setTempStreamDescription] = useState("");
+  const [tempStreamRelatedTopics, setTempStreamRelatedTopics] = useState([]);
   const [tempStreamSubscribersOnly, setTempStreamSubscribersOnly] = useState(
     false
   );
@@ -385,7 +426,8 @@ export default function StreamPage() {
               streamDescription,
               streamSubscribersOnly,
               accessUrl,
-              thumbnailUrl
+              thumbnailUrl,
+              streamRelatedTopics
             )
               .then((stream) => {
                 console.log(stream);
@@ -508,6 +550,8 @@ export default function StreamPage() {
       setStreamTitle(tempStreamTitle);
       setStreamDescription(tempStreamDescription);
       setStreamSubscribersOnly(tempStreamSubscribersOnly);
+      setStreamRelatedTopics(tempStreamRelatedTopics);
+      console.log(tempStreamRelatedTopics);
       Api.createStreamOnApiVideo(tempStreamTitle, authorization)
         .then((response) => {
           url = "rtmp://broadcast.api.video/s/" + response.streamKey;
@@ -571,17 +615,56 @@ export default function StreamPage() {
         setStreamTitle(tempStreamTitle);
         setStreamDescription(tempStreamDescription);
         setStreamSubscribersOnly(tempStreamSubscribersOnly);
+        setStreamRelatedTopics(tempStreamRelatedTopics);
       } else {
-        Api.editStreamInfo(streamId, tempStreamTitle, tempStreamDescription)
+        Api.editStreamInfo(
+          streamId,
+          tempStreamTitle,
+          tempStreamDescription,
+          tempStreamRelatedTopics
+        )
           .then(() => {
             setStreamTitle(tempStreamTitle);
             setStreamDescription(tempStreamDescription);
+            setStreamRelatedTopics(tempStreamRelatedTopics);
+            db.collection("StreamRefresh")
+              .doc("en9EpFajcUExC4dvcF45")
+              .get()
+              .then((doc) => {
+                if (doc.exists) {
+                  db.collection("StreamRefresh")
+                    .doc("en9EpFajcUExC4dvcF45")
+                    .update({ streamRefresh: !doc.data().streamRefresh });
+                }
+              });
           })
           .fail((xhr, status, error) => {
             alert.show(xhr.responseJSON.error);
           });
       }
     }
+  }
+
+  function handleStreamRelatedTopicsChange(selectedOptions) {
+    let tempSelectedOptions = [];
+    for (var i = 0; i < selectedOptions.length; i++) {
+      tempSelectedOptions.push(selectedOptions[i].value);
+    }
+    setTempStreamRelatedTopics(tempSelectedOptions);
+  }
+
+  function toTitleCase(str) {
+    var i,
+      frags = str.split("_");
+    for (i = 0; i < frags.length; i++) {
+      frags[i] =
+        frags[i].charAt(0).toUpperCase() + frags[i].substr(1).toLowerCase();
+    }
+    return frags.join(" ");
+  }
+
+  function MakeOption(x) {
+    return { value: x, label: toTitleCase(x) };
   }
 
   function renderContinueDialog() {
@@ -615,11 +698,24 @@ export default function StreamPage() {
             }}
             required
           />
+          <b>Related Topics</b>
+          <Select
+            isMulti
+            name="topics"
+            options={topics}
+            onChange={(selectedOptions) =>
+              handleStreamRelatedTopicsChange(selectedOptions)
+            }
+            className="basic-multi-select"
+            classNamePrefix="select"
+            style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
+          />
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              marginTop: "13px",
             }}
           >
             <div>
@@ -708,6 +804,19 @@ export default function StreamPage() {
             }}
             required
           />
+          <b>Related Topics</b>
+          <Select
+            value={tempStreamRelatedTopics.map((x) => MakeOption(x))}
+            isMulti
+            name="topics"
+            options={topics}
+            onChange={(selectedOptions) =>
+              handleStreamRelatedTopicsChange(selectedOptions)
+            }
+            className="basic-multi-select"
+            classNamePrefix="select"
+            style={{ width: "400px", marginTop: "13px", marginBottom: "20px" }}
+          />
           {streamId == undefined ? (
             <div>
               <div
@@ -715,6 +824,7 @@ export default function StreamPage() {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
+                  marginTop: "13px",
                 }}
               >
                 <div>
@@ -1633,7 +1743,7 @@ export default function StreamPage() {
     }
   }
 
-  function renderStreamDetails(title, description) {
+  function renderStreamDetails(title, description, relatedTopics) {
     if (videoStart === true) {
       return (
         <div style={{ display: "flex", flexDirection: "column", width: "90%" }}>
@@ -1677,6 +1787,16 @@ export default function StreamPage() {
               {description}
             </ReactHashtag>
           </p>
+          <b>Related Topics</b>
+          <div component="ul" className={classes.chip}>
+            {relatedTopics.map((topics, index) => (
+              <Chip
+                label={toTitleCase(topics)}
+                key={index}
+                style={{ backgroundColor: "#FFFFFF" }}
+              />
+            ))}
+          </div>
         </div>
       );
     }
@@ -1712,7 +1832,11 @@ export default function StreamPage() {
               {renderStreamDashboard(
                 prettyMilliseconds(duration, { colonNotation: true })
               )}
-              {renderStreamDetails(streamTitle, streamDescription)}
+              {renderStreamDetails(
+                streamTitle,
+                streamDescription,
+                streamRelatedTopics
+              )}
             </div>
             {renderUtilityButtonGroup()}
           </div>

@@ -1150,7 +1150,8 @@ export default {
     streamDescription,
     subscribersOnly,
     accessUrl,
-    thumbnailUrl
+    thumbnailUrl,
+    relatedTopics
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/" + streamerId,
@@ -1165,11 +1166,12 @@ export default {
         subscribersOnly: subscribersOnly,
         accessUrl: accessUrl,
         thumbnailUrl: thumbnailUrl,
+        relatedTopics: relatedTopics,
       }),
     });
   },
 
-  editStreamInfo(streamId, streamTitle, streamDescription) {
+  editStreamInfo(streamId, streamTitle, streamDescription, relatedTopics) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/streamInfo/" + streamId,
       headers: {
@@ -1180,6 +1182,7 @@ export default {
       data: JSON.stringify({
         streamTitle: streamTitle,
         streamDescription: streamDescription,
+        relatedTopics: relatedTopics,
       }),
     });
   },
