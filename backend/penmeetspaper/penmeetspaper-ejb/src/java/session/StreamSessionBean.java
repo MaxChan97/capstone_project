@@ -12,6 +12,7 @@ import entity.Person;
 import entity.PersonAnswer;
 import entity.Stream;
 import entity.Trend;
+import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
 
   @Override
   public Stream createStream(Long streamerId, String streamTitle, String streamDescription, Boolean isPaid,
-      String accessUrl, String thumbnailUrl) throws NoResultException, NotValidException {
+      String accessUrl, String thumbnailUrl, List<TopicEnum> relatedTopics) throws NoResultException, NotValidException {
     Person streamer = em.find(Person.class, streamerId);
 
     LiveChat liveChat = new LiveChat();
@@ -68,6 +69,7 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
     newStream.setLiveChat(liveChat);
     newStream.setAccessUrl(accessUrl);
     newStream.setThumbnailUrl(thumbnailUrl);
+    newStream.setRelatedTopics(relatedTopics);
     em.persist(newStream);
 
     streamer.getStreams().add(newStream);
@@ -237,10 +239,11 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
   }
 
   @Override
-  public void editStreamInfo(Long streamId, String newStreamTitle, String newStreamDescription) {
+  public void editStreamInfo(Long streamId, String newStreamTitle, String newStreamDescription, List<TopicEnum> relatedTopics) {
     Stream stream = em.find(Stream.class, streamId);
     stream.setTitle(newStreamTitle);
     stream.setDescription(newStreamDescription);
+    stream.setRelatedTopics(relatedTopics);
   }
 
   @Override

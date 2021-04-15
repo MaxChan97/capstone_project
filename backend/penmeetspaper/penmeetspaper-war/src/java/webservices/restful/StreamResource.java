@@ -9,7 +9,9 @@ import entity.LiveChat;
 import entity.LivePoll;
 import entity.PersonAnswer;
 import entity.Stream;
+import enumeration.TopicEnum;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -44,6 +46,106 @@ public class StreamResource {
     private PersonAnswerSessionBeanLocal personAnswerSBLocal;
     @EJB
     private LivePollSessionBeanLocal livePollSBLocal;
+    
+    private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
+        List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+
+        for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
+            String topicInterest = topicInterestsJsonArray.getString(i);
+            if (null != topicInterest) {
+                switch (topicInterest) {
+                    case "INVESTMENTS":
+                        topicInterests.add(TopicEnum.INVESTMENTS);
+                        break;
+
+                    case "STOCKS":
+                        topicInterests.add(TopicEnum.STOCKS);
+                        break;
+
+                    case "SAVINGS":
+                        topicInterests.add(TopicEnum.SAVINGS);
+                        break;
+
+                    case "CAREER":
+                        topicInterests.add(TopicEnum.CAREER);
+                        break;
+
+                    case "ETF":
+                        topicInterests.add(TopicEnum.ETF);
+                        break;
+
+                    case "ROBOADVISORS":
+                        topicInterests.add(TopicEnum.ROBOADVISORS);
+                        break;
+
+                    case "TRADING":
+                        topicInterests.add(TopicEnum.TRADING);
+                        break;
+
+                    case "INSURANCE":
+                        topicInterests.add(TopicEnum.INSURANCE);
+                        break;
+
+                    case "BROKERAGES":
+                        topicInterests.add(TopicEnum.BROKERAGES);
+                        break;
+
+                    case "RETIREMENT":
+                        topicInterests.add(TopicEnum.RETIREMENT);
+                        break;
+
+                    case "SALARY":
+                        topicInterests.add(TopicEnum.SALARY);
+                        break;
+
+                    case "CPF":
+                        topicInterests.add(TopicEnum.CPF);
+                        break;
+
+                    case "BTO":
+                        topicInterests.add(TopicEnum.BTO);
+                        break;
+
+                    case "UTILITIES_BILL":
+                        topicInterests.add(TopicEnum.UTILITIES_BILL);
+                        break;
+
+                    case "REAL_ESTATE":
+                        topicInterests.add(TopicEnum.REAL_ESTATE);
+                        break;
+
+                    case "FUTURES":
+                        topicInterests.add(TopicEnum.FUTURES);
+                        break;
+
+                    case "CRYPTOCURRENCY":
+                        topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                        break;
+
+                    case "CREDITCARDS":
+                        topicInterests.add(TopicEnum.CREDITCARDS);
+                        break;
+
+                    case "BANKING":
+                        topicInterests.add(TopicEnum.BANKING);
+                        break;
+
+                    case "REITS":
+                        topicInterests.add(TopicEnum.REITS);
+                        break;
+
+                    case "BLOCKCHAIN":
+                        topicInterests.add(TopicEnum.BLOCKCHAIN);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        return topicInterests;
+    }
 
     @POST
     @Path("/{streamerId}")
@@ -57,9 +159,11 @@ public class StreamResource {
         Boolean isPaid = jsonObject.getBoolean("subscribersOnly");
         String accessUrl = jsonObject.getString("accessUrl");
         String thumbnailUrl = jsonObject.getString("thumbnailUrl");
+        JsonArray relatedTopicsJsonArray = jsonObject.getJsonArray("relatedTopics");
+        List<TopicEnum> relatedTopics = convertToTopicEnumList(relatedTopicsJsonArray);
 
         try {
-            Stream newStream = streamSBLocal.createStream(streamerId, streamTitle, streamDescription, isPaid, accessUrl, thumbnailUrl);
+            Stream newStream = streamSBLocal.createStream(streamerId, streamTitle, streamDescription, isPaid, accessUrl, thumbnailUrl, relatedTopics);
             return Response.status(200).entity(newStream).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
@@ -220,9 +324,11 @@ public class StreamResource {
         JsonObject jsonObject = reader.readObject();
         String newStreamTitle = jsonObject.getString("streamTitle");
         String newStreamDescription = jsonObject.getString("streamDescription");
-
+        JsonArray relatedTopicsJsonArray = jsonObject.getJsonArray("relatedTopics");
+        List<TopicEnum> relatedTopics = convertToTopicEnumList(relatedTopicsJsonArray);
+        
         try {
-            streamSBLocal.editStreamInfo(streamId, newStreamTitle, newStreamDescription);
+            streamSBLocal.editStreamInfo(streamId, newStreamTitle, newStreamDescription, relatedTopics);
             return Response.status(204).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
