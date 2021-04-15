@@ -851,7 +851,7 @@ export default function StreamPage() {
   function renderCurrentViewersList() {
     if (stream == undefined) {
       return (
-        <h3
+        <h5
           style={{
             color: "gray",
             textAlign: "center",
@@ -859,7 +859,7 @@ export default function StreamPage() {
           }}
         >
           No current viewers
-        </h3>
+        </h5>
       );
     }
     let searchResults = stream.currentViewers.filter((viewer) =>
@@ -867,13 +867,13 @@ export default function StreamPage() {
     );
     if (searchResults.length != 0) {
       return searchResults.map((row, index) => (
-        <li key={index} class="list-group-item" style={{ width: "22vw" }}>
+        <li key={index} class="list-group-item">
           {renderCurrentViewersRow(row)}
         </li>
       ));
     } else if (stream.currentViewers.length == 0) {
       return (
-        <h3
+        <h5
           style={{
             color: "gray",
             textAlign: "center",
@@ -881,11 +881,11 @@ export default function StreamPage() {
           }}
         >
           No current viewers
-        </h3>
+        </h5>
       );
     } else {
       return (
-        <h3
+        <h5
           style={{
             color: "gray",
             textAlign: "center",
@@ -893,7 +893,7 @@ export default function StreamPage() {
           }}
         >
           No search results for "{currentViewersSearchTerm}"
-        </h3>
+        </h5>
       );
     }
   }
@@ -904,15 +904,23 @@ export default function StreamPage() {
         open={streamCurrentViewersDialogOpen}
         onClose={handleStreamCurrentViewersDialogClose}
       >
-        <DialogTitle style={{ paddingBottom: "0px" }}>
+        <DialogTitle
+          style={{
+            paddingBottom: "0px",
+            paddingLeft: "18px",
+          }}
+        >
           Current Viewers
         </DialogTitle>
         <div
           className="my-3"
           style={{
-            paddingBottom: "18px",
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "8px",
             paddingLeft: "18px",
             paddingRight: "18px",
+            minWidth: "23vw",
           }}
         >
           <Paper
@@ -920,8 +928,10 @@ export default function StreamPage() {
             style={{
               padding: "2px 4px",
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
               backgroundColor: "#EAECEF",
+              marginBottom: "12px",
+              width: "200px",
             }}
           >
             <InputBase
@@ -1046,6 +1056,7 @@ export default function StreamPage() {
             style={{
               display: "flex",
               flexDirection: "column",
+              cursor: "pointer",
             }}
             onClick={handleStreamCurrentViewersDialogOpen}
           >
