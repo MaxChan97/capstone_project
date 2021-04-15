@@ -142,8 +142,11 @@ public class Person implements Serializable {
 
     // unidirectional
     @OneToMany
-    @JoinColumn(name = "paymentTransaction_id")
-    private List<PaymentTransaction> paymentTransactions = new ArrayList<>();
+    @JoinColumn(name = "paymentRecieved_id")
+    private List<PaymentTransaction> paymentsRecieved = new ArrayList<>();
+
+    @OneToMany(mappedBy = "personReceiving")
+    private List<PaymentTransaction> paymentsMade = new ArrayList<>();
 
     // unidirectional
     @OneToMany
@@ -172,7 +175,7 @@ public class Person implements Serializable {
 
     @OneToOne
     private EarningsAnalytics earningsAnalytics;
-    
+
     @OneToOne
     private ViewersAnalytics viewersAnalytics;
 
@@ -420,12 +423,32 @@ public class Person implements Serializable {
         this.reports = reports;
     }
 
-    public List<PaymentTransaction> getPaymentTransactions() {
-        return paymentTransactions;
+    /**
+     * @return the paymentsRecieved
+     */
+    public List<PaymentTransaction> getPaymentsRecieved() {
+        return paymentsRecieved;
     }
 
-    public void setPaymentTransactions(List<PaymentTransaction> paymentTransactions) {
-        this.paymentTransactions = paymentTransactions;
+    /**
+     * @param paymentsRecieved the paymentsRecieved to set
+     */
+    public void setPaymentsRecieved(List<PaymentTransaction> paymentsRecieved) {
+        this.paymentsRecieved = paymentsRecieved;
+    }
+
+    /**
+     * @return the paymentsMade
+     */
+    public List<PaymentTransaction> getPaymentsMade() {
+        return paymentsMade;
+    }
+
+    /**
+     * @param paymentsMade the paymentsMade to set
+     */
+    public void setPaymentsMade(List<PaymentTransaction> paymentsMade) {
+        this.paymentsMade = paymentsMade;
     }
 
     public List<PaymentCard> getPaymentCards() {

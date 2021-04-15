@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -38,6 +40,10 @@ public class PaymentTransaction implements Serializable {
 
     @Column(nullable = false)
     private String messageBody;
+
+    @ManyToOne
+    @JoinColumn(name = "personReceiving")
+    private Person personReceiving;
 
     public Long getId() {
         return id;
@@ -77,6 +83,20 @@ public class PaymentTransaction implements Serializable {
 
     public void setMessageBody(String messageBody) {
         this.messageBody = messageBody;
+    }
+
+    /**
+     * @return the personReceiving
+     */
+    public Person getPersonReceiving() {
+        return personReceiving;
+    }
+
+    /**
+     * @param personReceiving the personReceiving to set
+     */
+    public void setPersonReceiving(Person personReceiving) {
+        this.personReceiving = personReceiving;
     }
 
     @Override
