@@ -63,6 +63,8 @@ public class ReportResource {
                 return ReportTypeEnum.REPLY_REPORT;
             case "STREAM_REPORT":
                 return ReportTypeEnum.STREAM_REPORT;
+            case "SYSTEM_REPORT":
+                return ReportTypeEnum.SYSTEM_REPORT;
             default:
                 throw new NotValidException("Report type required");
         }
