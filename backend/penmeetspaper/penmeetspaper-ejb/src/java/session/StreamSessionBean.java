@@ -259,9 +259,11 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
     public void handleExitStream(Long streamId, Long personId) {
         Stream stream = em.find(Stream.class, streamId);
         Person person = em.find(Person.class, personId);
-        stream.setViewerCount(stream.getViewerCount() - 1);
+
         boolean gotRemove = stream.getCurrentViewers().remove(person);
-        System.out.println(gotRemove);
+        if (gotRemove == true) {
+            stream.setViewerCount(stream.getViewerCount() - 1);
+        }
     }
 
     @Override
@@ -269,5 +271,13 @@ public class StreamSessionBean implements StreamSessionBeanLocal {
         Stream stream = em.find(Stream.class, streamId);
         Person person = em.find(Person.class, personId);
         stream.getKickedUsers().add(person);
+    }
+
+    @Override
+    public void unkickUserFromStream(Long streamId, Long personId) {
+        Stream stream = em.find(Stream.class, streamId);
+        Person person = em.find(Person.class, personId);
+        boolean gotRemove = stream.getKickedUsers().remove(person);
+        System.out.println(gotRemove);
     }
 }
