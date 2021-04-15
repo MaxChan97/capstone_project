@@ -17,13 +17,35 @@ app.post('/pay', async (req, res) => {
     console.log(email);
 
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 1000,
+        amount: 5000,
         currency: 'sgd',
         metadata: {integration_check: 'accept_a_payment'},
-        recepient_email: email,
+        receipt_email: email,
     });
 
     res.json({'client_secret': paymentIntent['client_secret']})
+})
+
+app.post('/sub', async (req, res) => {
+    const {email, payment_method} = req.body;
+    const customer = await stripe.customers.create({
+        payment_method: payment_method,
+        email: email,
+        invoice_settings: {
+            default_payment_method: payment_method,
+        },
+    });
+
+    const subscription = await stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{plan: 'price_1IgazIHobA4nRrQlS1apl6Sl'}],
+        expand: ['latest_invoice.payment_intent']
+    });
+
+    const status = subscription['latest_invoice']['payment_intent']['status']
+    const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
+
+    res.json({'client_secret': client_secret, 'status': status})
 })
 
 app.listen(port, () => console.log(`payment server listening on port ${port}`))
