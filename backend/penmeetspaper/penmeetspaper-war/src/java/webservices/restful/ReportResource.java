@@ -75,12 +75,12 @@ public class ReportResource {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String messageBody = jsonObject.getString("messageBody");
-        String reporterIdStr = jsonObject.getString("reporterId");
+        int reporterIdInt = jsonObject.getInt("reporterId");
         String reportTypeStr = jsonObject.getString("reportTypeEnum");
         String reportedContentId = jsonObject.getString("reportedContentId");
         String category = jsonObject.getString("category");
 
-        Long reporterId = Long.parseLong(reporterIdStr);
+        Long reporterId = new Long(reporterIdInt);
 
         Report report = new Report();
 
