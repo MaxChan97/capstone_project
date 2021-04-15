@@ -74,7 +74,7 @@ export default function OwnProfileTopBar({
   setRefresh,
   personId,
   setProfilePicture,
-  user
+  user,
 }) {
   const handleTabValueChange = (event, newValue) => {
     setTabValue(newValue);
@@ -241,7 +241,10 @@ export default function OwnProfileTopBar({
           refresh={refresh}
           setRefresh={setRefresh}
         />
-        <ProfileManagementButtonGroup/>
+        <ProfileManagementButtonGroup
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
       </div>
       <div style={{ backgroundColor: "#FDFDFD", paddingTop: "1%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
