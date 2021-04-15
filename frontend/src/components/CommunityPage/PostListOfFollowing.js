@@ -7,6 +7,7 @@ import CommunityPostCard from "./CommunityPostCard";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
+import Talk from "../../assets/talk1.gif";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +80,14 @@ export default function PostListOfFollowing() {
       >
         Join a community to view their posts here!
       </p>
+      <br></br>
+      <div
+        style={{
+          textAlign: "center",
+          margin: "auto",
+        }}>
+        <img src={Talk} />
+      </div>
     </div>
   );
 }

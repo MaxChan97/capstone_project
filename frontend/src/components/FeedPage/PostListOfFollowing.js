@@ -7,7 +7,7 @@ import Divider from "@material-ui/core/Divider";
 import ProfilePostCard from "../../components/ProfilePage/ProfilePostCard";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
-
+import Talk from "../../assets/talk1.gif";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -76,6 +76,14 @@ export default function PostListOfFollowing() {
       >
         Follow or subscribe to someone to view their posts here!
       </p>
+      <br></br>
+      <div
+        style={{
+          textAlign: "center",
+          margin: "auto",
+        }}>
+        <img src={Talk} />
+      </div>
     </div>
   );
 }
