@@ -53,9 +53,9 @@ app.post('/createPricingPlan', async (req, res) => {
     res.json({'stripePrice': stripePrice});
 })
 
-app.post('/sub', async (req, res) => {
-    console.log('subscribe method called')
-    const {email, payment_method, plan} = req.body;
+app.post('/createCustomer', async (req, res) => {
+    console.log('create customer method called')
+    const {email, payment_method} = req.body;
     const customer = await stripe.customers.create({
         payment_method: payment_method,
         email: email,
@@ -64,8 +64,16 @@ app.post('/sub', async (req, res) => {
         },
     });
 
+    res.json({'customerId': customer.id})
+})
+
+app.post('/sub', async (req, res) => {
+    console.log('subscribe method called')
+    const {customerId, plan} = req.body;
+
+
     const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
+        customer: customerId,
         items: [{plan: plan}],
         expand: ['latest_invoice.payment_intent']
     });

@@ -378,6 +378,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         em.flush();
     } // end updatePricingPlan
 
+    @Override
     public void updateCustomerStripeId(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 
