@@ -39,7 +39,7 @@ const categories = [
 ];
 
 export default function ReportCommunity({
-    id, username
+    id, username, communityOwner
 }) {
     const alert = useAlert();
     const [confirmBanDialogOpen, setConfirmBanDialogOpen] = React.useState(false);
@@ -85,13 +85,13 @@ export default function ReportCommunity({
         console.log(reason);
         console.log(currentUser);
         console.log(type);
-        console.log(url);
+        console.log(communityOwner.id);
         //console.log(category.value);
         if (category == null) {
             closeBanPersonModal();
             alert.show("Please choose a reason");
         } else {
-            Api.createReport(reason, currentUser, type, url, category.value)
+            Api.createReport(reason, currentUser, type, url, category.value, communityOwner.id)
                 .done((list) => {
                     closeBanPersonModal();
                     alert.show("Report sent");
