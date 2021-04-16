@@ -1,46 +1,64 @@
-import styled from "@emotion/styled";
+
 import Confetti from "react-confetti";
-import { useState, useEffect } from "react";
+import React from "react";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import bear from "../assets/bear.png";
 
-import Layout from "../components/Layout";
-import HomeButton from "../components/prebuilt/HomeButton";
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText("#3B21CB"),
+    backgroundColor: "#3B21CB",
+    "&:hover": {
+      backgroundColor: "#260eab",
+    },
+  },
+}))(Button);
 
-const Container = styled.div`
-  width: 475px;
-  margin: 30px auto 0 auto;
-  text-align: center;
-  color: #fff;
-`;
-
-const Title = styled.div`
-  font-size: 58px;
-  color: #000;
-`;
-
-const Message = styled.div`
-  margin-top: 40px;
-  color: #000;
-`;
-
-export default () => {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
-    }, 100);
-  });
-
+export default function BannedPage() {
   return (
-    <Layout title="Success!">
-      <Container>
-        <Confetti width={width} height={height} numberOfPieces={450} />
-        <Title>congrats!</Title>
-        <Message>Stripe has successfully processed your payment.</Message>
-        <HomeButton>Back to Home</HomeButton>
-      </Container>
-    </Layout>
+    <div className="content-wrapper">
+      <div className="container">
+      <Confetti numberOfPieces={450} />
+        <div className="row">
+          <img
+            style={{
+              resizeMode: "repeat",
+              height: 350,
+              marginTop: "90px",
+              marginLeft: "400px",
+            }}
+            src={bear}
+          />
+        </div>
+        <div className="row">
+          <p
+            style={{ marginTop: "30px", marginLeft: "385px", fontSize: "20px" }}
+          >
+            Oops...You are banned from this community.
+          </p>
+        </div>
+        <div className="row">
+          <ColorButton
+            style={{
+              height: "35px",
+              width: "240px",
+              outline: "none",
+              float: "right",
+              fontWeight: "600",
+              marginLeft: "440px",
+              marginTop: "20px",
+              marginBottom:"160px"
+            }}
+            href="/home"
+            variant="contained"
+            color="primary"
+            type="button"
+          >
+            Back To Home
+          </ColorButton>
+        </div>
+      </div>
+    </div>
   );
-};
+}
