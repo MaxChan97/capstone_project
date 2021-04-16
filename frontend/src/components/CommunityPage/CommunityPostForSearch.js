@@ -22,25 +22,25 @@ import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
 export default function CommunityPostForSearch({
-    key,
-    data,
-    refresh,
-    setRefresh,
-    community,
+  key,
+  data,
+  refresh,
+  setRefresh,
+  community,
 }) {
-    let history = useHistory();
-    const alert = useAlert();
+  let history = useHistory();
+  const alert = useAlert();
 
-    //for menu button
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const isAdmin = useSelector((state) => state.isAdmin);
+  //for menu button
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const isAdmin = useSelector((state) => state.isAdmin);
 
-    const [pollAnswers, setPollAnswers] = useState([]);
-    const [votedAnswer, setVotedAnswer] = useState();
-    const [edit, setEdit] = useState(false);
-    {
-        /*}
+  const [pollAnswers, setPollAnswers] = useState([]);
+  const [votedAnswer, setVotedAnswer] = useState();
+  const [edit, setEdit] = useState(false);
+  {
+    /*}
       useEffect(() => {
         if (data.poll != undefined) {
           let hasVoted = false;
@@ -91,143 +91,143 @@ export default function CommunityPostForSearch({
           });
       }
     */
+  }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    setEdit(true);
+    setAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    openDeletePostModal();
+  };
+
+  const [showEditPostModal, setShowEditPostModal] = React.useState(false);
+
+  function openEditPostModal() {
+    setShowEditPostModal(true);
+  }
+
+  function closeEditPostModal() {
+    setShowEditPostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+  const [deletePostModal, setDeletePostModal] = React.useState(false);
+
+  function openDeletePostModal() {
+    setDeletePostModal(true);
+  }
+
+  function closeDeletePostModal() {
+    setDeletePostModal(false);
+    setRefresh(!refresh);
+    setAnchorEl(null);
+  }
+
+  const [liked, setLiked] = useState();
+  const currentUser = useSelector((state) => state.currentUser);
+
+  const handleLike = (event) => {
+    Api.likeProfilePost(data.id, currentUser).done(() => {
+      setRefresh(!refresh);
+      setLiked(true);
+    });
+  };
+
+  const handleUnlike = (event) => {
+    Api.unlikeProfilePost(data.id, currentUser).done(() => {
+      setRefresh(!refresh);
+      setLiked(false);
+    });
+  };
+
+  function checkedLiked() {
+    data.likes.forEach(function (arrayItem) {
+      if (arrayItem.id == currentUser) {
+        setLiked(true);
+      }
+    });
+  }
+
+  const [formatDate, setFormatDate] = useState();
+  function changeDateFormat() {
+    //remove [UTC] suffix
+    var changedDate = data.datePosted.substring(0, data.datePosted.length - 5);
+    setFormatDate(changedDate);
+  }
+
+  useEffect(() => {
+    if (data) {
+      checkedLiked();
+      changeDateFormat();
     }
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  }, []);
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  return data ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "left",
+      }}
+    >
+      <div>
+        <DeleteCommPostModal
+          show={deletePostModal}
+          handleClose={closeDeletePostModal}
+          data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          community={community}
+        />
+        <EditPostModal
+          show={showEditPostModal}
+          handleClose={closeEditPostModal}
+          data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+        <Link to={"/community/post/" + data.id}>
+          <div class="card">
+            <div class="card-body">
+              <div class="post">
+                <div style={{ display: "flex", alignItems: "baseline" }}>
+                  <div class="user-block">
+                    <img src={community.communityProfilePicture || defaultDP} />
+                    <span class="username">
+                      <Link
+                        to={"/community/" + community.id}
+                        style={{ color: "#3B21CB", fontSize: "18px" }}
+                      >
+                        {community.name}
+                      </Link>
+                      <span>&nbsp;</span>
+                      <span>&nbsp;</span>
+                      <span>&nbsp;</span>
+                      <Link
+                        to={"/profile/" + data.author.id}
+                        style={{ color: "gray", fontSize: "13px" }}
+                      >
+                        Posted by @ {data.author.username}
+                      </Link>
+                    </span>
 
-    const handleEdit = () => {
-        setEdit(true);
-        setAnchorEl(null);
-    };
-
-    const handleDelete = () => {
-        openDeletePostModal();
-    };
-
-    const [showEditPostModal, setShowEditPostModal] = React.useState(false);
-
-    function openEditPostModal() {
-        setShowEditPostModal(true);
-    }
-
-    function closeEditPostModal() {
-        setShowEditPostModal(false);
-        setRefresh(!refresh);
-        setAnchorEl(null);
-    }
-
-    const [deletePostModal, setDeletePostModal] = React.useState(false);
-
-    function openDeletePostModal() {
-        setDeletePostModal(true);
-    }
-
-    function closeDeletePostModal() {
-        setDeletePostModal(false);
-        setRefresh(!refresh);
-        setAnchorEl(null);
-    }
-
-    const [liked, setLiked] = useState();
-    const currentUser = useSelector((state) => state.currentUser);
-
-    const handleLike = (event) => {
-        Api.likeProfilePost(data.id, currentUser).done(() => {
-            setRefresh(!refresh);
-            setLiked(true);
-        });
-    };
-
-    const handleUnlike = (event) => {
-        Api.unlikeProfilePost(data.id, currentUser).done(() => {
-            setRefresh(!refresh);
-            setLiked(false);
-        });
-    };
-
-    function checkedLiked() {
-        data.likes.forEach(function (arrayItem) {
-            if (arrayItem.id == currentUser) {
-                setLiked(true);
-            }
-        });
-    }
-
-    const [formatDate, setFormatDate] = useState();
-    function changeDateFormat() {
-        //remove [UTC] suffix
-        var changedDate = data.datePosted.substring(0, data.datePosted.length - 5);
-        setFormatDate(changedDate);
-    }
-
-    useEffect(() => {
-        if (data) {
-            checkedLiked();
-            changeDateFormat();
-        }
-    }, []);
-
-    return data ? (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "left",
-            }}
-        >
-            <div>
-                <DeleteCommPostModal
-                    show={deletePostModal}
-                    handleClose={closeDeletePostModal}
-                    data={data}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    community={community}
-                />
-                <EditPostModal
-                    show={showEditPostModal}
-                    handleClose={closeEditPostModal}
-                    data={data}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                />
-                <Link to={"/community/post/" + data.id}>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="post">
-                                <div style={{ display: "flex", alignItems: "baseline" }}>
-                                    <div class="user-block">
-                                        <img src={community.communityProfilePicture || defaultDP} />
-                                        <span class="username">
-                                            <Link
-                                                to={"/community/" + community.id}
-                                                style={{ color: "#3B21CB", fontSize: "18px" }}
-                                            >
-                                                {community.name}
-                                            </Link>
-                                            <span>&nbsp;</span>
-                                            <span>&nbsp;</span>
-                                            <span>&nbsp;</span>
-                                            <Link
-                                                to={"/profile/" + data.author.id}
-                                                style={{ color: "gray", fontSize: "13px" }}
-                                            >
-                                                Posted by @ {data.author.username}
-                                            </Link>
-                                        </span>
-
-                                        <span class="description">
-                                            {" "}
-                                            {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
-                                            {moment.utc(formatDate).fromNow()}
-                                        </span>
-                                    </div>
-                                    {/*
+                    <span class="description">
+                      {" "}
+                      {/* moment(formatDate).format("DD/MM/YYYY hh:mm:ss a") */}
+                      {moment.utc(formatDate).fromNow()}
+                    </span>
+                  </div>
+                  {/*
                 {isAdmin == false && data.author.id == currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <IconButton
@@ -264,54 +264,58 @@ export default function CommunityPostForSearch({
                   <span></span>
                 )}
                 */}
-                                </div>
+                </div>
 
-                                {data.fileUrl &&
-                                    data.fileName &&
-                                    data.fileType &&
-                                    (data.fileType.split("/")[0] == "image" ? (
-                                        <img
-                                            className="mx-auto d-block"
-                                            width="300"
-                                            src={data.fileUrl}
-                                        />
-                                    ) : (
-                                        <div>
-                                            <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
-                                            <p className="text-center font-weight-bold">
-                                                {data.fileName.split(".")[0]}
-                                            </p>
-                                        </div>
-                                    ))}
+                {data.fileUrl &&
+                  data.fileName &&
+                  data.fileType &&
+                  (data.fileType.split("/")[0] == "image" ? (
+                    <img
+                      className="mx-auto d-block"
+                      width="300"
+                      src={data.fileUrl}
+                    />
+                  ) : data.fileType.split("/")[0] == "video" ? (
+                    <div className="d-flex justify-content-center">
+                      <iframe height="100%" src={data.fileUrl}></iframe>
+                    </div>
+                  ) : (
+                    <div>
+                      <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
+                      <p className="text-center font-weight-bold">
+                        {data.fileName.split(".")[0]}
+                      </p>
+                    </div>
+                  ))}
 
-                                {edit == false ? (
-                                    <p>
-                                        <ReactHashtag
-                                            renderHashtag={(hashtagValue) => (
-                                                <span
-                                                    style={{ color: "#3B21CB", cursor: "pointer" }}
-                                                    onClick={() =>
-                                                        history.push("/trend/" + hashtagValue.slice(1))
-                                                    }
-                                                >
-                                                    <b>{hashtagValue}</b>
-                                                </span>
-                                            )}
-                                        >
-                                            {data.body}
-                                        </ReactHashtag>
-                                    </p>
-                                ) : (
-                                    <EditPost
-                                        autofocus
-                                        data={data}
-                                        refresh={refresh}
-                                        setRefresh={setRefresh}
-                                        setEdit={setEdit}
-                                    ></EditPost>
-                                )}
+                {edit == false ? (
+                  <p>
+                    <ReactHashtag
+                      renderHashtag={(hashtagValue) => (
+                        <span
+                          style={{ color: "#3B21CB", cursor: "pointer" }}
+                          onClick={() =>
+                            history.push("/trend/" + hashtagValue.slice(1))
+                          }
+                        >
+                          <b>{hashtagValue}</b>
+                        </span>
+                      )}
+                    >
+                      {data.body}
+                    </ReactHashtag>
+                  </p>
+                ) : (
+                  <EditPost
+                    autofocus
+                    data={data}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    setEdit={setEdit}
+                  ></EditPost>
+                )}
 
-                                {/*}
+                {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
@@ -350,28 +354,29 @@ export default function CommunityPostForSearch({
                 ""
               )}
             */}
-                                <p>
-                                    {liked == true ? (
-                                        <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
-                                            <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                                        </Link>
-                                    ) : (
-                                        <Link onClick={handleLike} style={{ color: "black" }}>
-                                            <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                                        </Link>
-                                    )}
+                <p>
+                  {liked == true ? (
+                    <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  ) : (
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  )}
 
-                                    <span>
-                                        <Link
-                                            to={"/community/post/" + data.id}
-                                            style={{ marginLeft: 10, color: "black" }}
-                                        >
-                                            <i class="fas fa-comments mr-1"></i> {data.comments.length}
-                                        </Link>
-                                    </span>
-                                </p>
-                            </div>
-                            {/*
+                  <span>
+                    <Link
+                      to={"/community/post/" + data.id}
+                      style={{ marginLeft: 10, color: "black" }}
+                    >
+                      <i class="fas fa-comments mr-1"></i>{" "}
+                      {data.comments.length}
+                    </Link>
+                  </span>
+                </p>
+              </div>
+              {/*
             <MakeCommentCardForFeed
               data={data}
               refresh={refresh}
@@ -411,12 +416,12 @@ export default function CommunityPostForSearch({
               )}
             </div>
               */}
-                        </div>
-                    </div>
-                </Link>
-            </div >
-        </div >
-    ) : (
-        <p></p>
-    );
+            </div>
+          </div>
+        </Link>
+      </div>
+    </div>
+  ) : (
+    <p></p>
+  );
 }

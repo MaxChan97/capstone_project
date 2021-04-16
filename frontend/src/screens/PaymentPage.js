@@ -1,16 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { useHistory, Redirect, useParams } from "react-router";
+import { useSelector } from "react-redux";
 // MUI Components
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
+import Api from "../helpers/Api";
+import paymentApi from "../helpers/paymentApi";
 // stripe
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 // Util imports
 import {makeStyles} from '@material-ui/core/styles';
 // Custom Components
 import CardInput from '../components/CardInputs';
+
 
 const useStyles = makeStyles({
   root: {
@@ -34,13 +39,34 @@ const useStyles = makeStyles({
 });
 
 function PaymentPage() {
+
+  const [price, setPrice] = useState(0);
+  const { anotherPersonId } = useParams();
+  const currentUser = useSelector((state) => state.currentUser);
+  let email = "";
+  let plan = "";
+  useEffect(() => {
+    Api.getPersonById(currentUser)
+      .done((data) => {
+        email = data.email
+        Api.getPersonById(anotherPersonId).done((data) => {
+          console.log(data);
+          setPrice(data.pricingPlan);
+          plan = data.stripePrice;
+        })
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, []);
+
   const classes = useStyles();
   // State
-  const [email, setEmail] = useState('');
 
   const stripe = useStripe();
   const elements = useElements();
 
+  /*
   const handleSubmitPay = async (event) => {
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -76,6 +102,7 @@ function PaymentPage() {
       }
     }
   };
+  */
 
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
@@ -83,6 +110,7 @@ function PaymentPage() {
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
+
 
     const result = await stripe.createPaymentMethod({
       type: 'card',
@@ -94,53 +122,48 @@ function PaymentPage() {
 
     if (result.error) {
       console.log(result.error.message);
-    } else {
-      const res = await axios.post('http://localhost:3002/sub', {'payment_method': result.paymentMethod.id, 'email': email});
-      // eslint-disable-next-line camelcase
-      const {client_secret, status} = res.data;
-
-      if (status === 'requires_action') {
-        stripe.confirmCardPayment(client_secret).then(function(result) {
-          if (result.error) {
-            console.log('There was an issue!');
-            console.log(result.error);
-            // Display error message in your UI.
-            // The card was declined (i.e. insufficient funds, card has expired, etc)
-          } else {
-            console.log('You got the money!');
-            // Show a success message to your customer
-          }
-        });
-      } else {
-        console.log('You got the money!');
-        // No additional information was needed
-        // Show a success message to your customer
-      }
+    } else {;
+      paymentApi.subscribe(result, email, plan)
+      .done((res) => {
+        const {client_secret, status} = res;
+        if (status === 'requires_action') {
+          stripe.confirmCardPayment(client_secret).then(function(result) {
+            if (result.error) {
+              console.log('There was an issue!');
+              console.log(result.error);
+              // Display error message in your UI.
+              // The card was declined (i.e. insufficient funds, card has expired, etc)
+            } else {
+              console.log('You got the money!');
+              // Show a success message to your customer
+            }
+          });
+        } else {
+          console.log('You got the money!');
+          // No additional information was needed
+          // Show a success message to your customer
+        }
+      }).fail((res) => {
+        console.log('There was an issue!');
+        console.log(result.error);
+      })
     }
   };
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        <TextField
-          label='Email'
-          id='outlined-email-input'
-          helperText={`Email you'll recive updates and receipts on`}
-          margin='normal'
-          variant='outlined'
-          type='email'
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
+        
         <CardInput />
         <div className={classes.div}>
+          {/* 
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitPay}>
             Pay
           </Button>
+          */}
+          
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            Subscription
+            Subscribe for ${price}
           </Button>
         </div>
       </CardContent>

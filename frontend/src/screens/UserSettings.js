@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
+import paymentApi from "../helpers/paymentApi";
 import { useAlert } from "react-alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +70,12 @@ export default function UserSettings() {
 
     Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid)
       .done(() => {
-        Api.updatePricingPlan(currentUser, pricing)
+        paymentApi.createPricingPlan(currentUser, pricing)
+        .done((res) => {
+          const {stripePrice} = res;
+          const {id: stripePriceId} = stripePrice
+          console.log(stripePriceId);
+          Api.updatePricingPlan(currentUser, pricing, stripePriceId)
           .done(() => {
             alert.show("Settings saved!");
             setRefresh(!refresh);
@@ -77,6 +83,11 @@ export default function UserSettings() {
           .fail((xhr, status, error) => {
             alert.show("Settings saved!");
           });
+        }).fail(() => {
+          alert.show("Failed to create Pricing plan");
+        })
+
+        
       })
       .fail((xhr, status, error) => {
         alert.show("Settings saved!");

@@ -572,11 +572,13 @@ public class PersonResource {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
+        String stripePrice = jsonObject.getString("stripePrice");
+        System.out.println(stripePrice);
 
         try {
             Person person = personSB.getPersonById(id);
             person.setPricingPlan(pricingPlan);
-
+            person.setStripePrice(stripePrice);
             personSB.updatePricingPlan(person);
 
             return Response.status(204).build();
@@ -759,4 +761,25 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
+
+    @PUT
+    @Path("/{personId}/stripeCustomerId")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStripeCustomerId(@PathParam("personId") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String stripeCustomerId = jsonObject.getString("stripeCustomerId");
+
+        try {
+            Person person = personSB.getPersonById(personId);
+            person.setStripeCustomerId(stripeCustomerId);
+            personSB.updateCustomerStripeId(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }

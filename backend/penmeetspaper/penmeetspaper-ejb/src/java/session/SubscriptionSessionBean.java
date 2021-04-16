@@ -172,7 +172,6 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
     Date date = cal.getTime();
     Long newSubscriberCount = publisher.getPublications().stream().filter(p -> !p.isIsTerminated()).count();
-    System.out.println("unsubscribe:" + newSubscriberCount);
     publisher.getSubscribersAnalytics().getSubscribersCount().put(date, newSubscriberCount);
   }
 

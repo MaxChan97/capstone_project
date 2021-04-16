@@ -99,4 +99,6 @@ public interface PersonSessionBeanLocal {
 
     public void unbanPersonFromLogin(Long personId) throws NotValidException, NoResultException;
 
+    public void updateCustomerStripeId(Person person) throws NoResultException, NotValidException;
+
 }

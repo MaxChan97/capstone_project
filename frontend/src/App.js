@@ -239,7 +239,7 @@ function App() {
             />
             <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
             <Route exact path="/community" component={CommunityFeed} />
-            <Route exact path="/payment" component={Payment} />
+            <Route exact path="/payment/:anotherPersonId" component={Payment} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />
             <Route
