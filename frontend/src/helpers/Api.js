@@ -684,8 +684,9 @@ export default {
       },
       type: "POST",
       data: JSON.stringify({
-        subId, subId
-        }),
+        subId,
+        subId,
+      }),
     });
   },
 
@@ -1760,6 +1761,17 @@ export default {
         fileUrl: fileUrl,
         fileType: fileType,
       }),
+    });
+  },
+
+  getPersonsVideos(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/person" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
     });
   },
 };

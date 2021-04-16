@@ -166,7 +166,6 @@ function Navbar({
   }
 
   var handleUpload = () => {
-    console.log("hi");
     Api.uploadVideo(
       currentUser,
       title,
