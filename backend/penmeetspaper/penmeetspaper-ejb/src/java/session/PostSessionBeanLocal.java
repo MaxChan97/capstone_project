@@ -52,6 +52,8 @@ public interface PostSessionBeanLocal {
     public void deletePostForCommunity(Long postId) throws NoResultException, NotValidException;
 
     public List<Post> searchPostByBody(String searchTerm) throws NoResultException, NotValidException;
+    
+    public List<Post> getPostsByTrends(String hashtag) throws NoResultException, NotValidException;
 
     public void deletePost(Long postId) throws NoResultException, NotValidException;
 

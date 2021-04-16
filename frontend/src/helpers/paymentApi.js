@@ -67,7 +67,7 @@ export default {
     
   },
 
-  resub(subId) {
+  resub(subId, personId) {
     if (subId !== undefined) {
       return jQuery.ajax({ 
         url: this.SERVER_PREFIX + "/resub",
@@ -78,6 +78,7 @@ export default {
         type: "POST",
         data: JSON.stringify({
           subId: subId,
+          personId: personId,
         }),
       });
     }

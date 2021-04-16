@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function TopStreamerRow({ data, rank }) {
   return (
     <Link to={"/profile/" + data.id}>
-      <div className="container" style={{ color: "black" }}>
+      <div style={{ color: "black" }}>
         <div className="row" style={{ marginBottom: "-25px" }}>
           <div className="col-md-2">
             <p className="text-left">{rank + 1}</p>

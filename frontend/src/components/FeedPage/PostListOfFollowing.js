@@ -42,17 +42,15 @@ export default function PostListOfFollowing() {
   }
 
   return dataList && dataList.length > 0 ? (
-    <List className={classes.root}>
+    <List className={classes.root} style={{ paddingTop: 0 }}>
       {dataList.map((data) => (
         <div>
-
           <ProfilePostCard
             key={data.id}
             data={data}
             refresh={refresh}
             setRefresh={setRefresh}
           />
-
         </div>
       ))}
     </List>
@@ -81,7 +79,8 @@ export default function PostListOfFollowing() {
         style={{
           textAlign: "center",
           margin: "auto",
-        }}>
+        }}
+      >
         <img src={Talk} />
       </div>
     </div>

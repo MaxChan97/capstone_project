@@ -19,11 +19,12 @@ const getSubscribers = async function (id) {
   };
 
   const unsubscribeFromPerson = async function(subscriberId, publisherId) {
-
     return await axios.delete(BACKEND_SERVER_PREFIX + "/subscription/subscriber/" + subscriberId + "/publisher/" + publisherId)
-
   };
 
+  const getPersonById = async function(id) {
+      return await axios.get(BACKEND_SERVER_PREFIX + "/person/" + id);
+  }
 
 app.post('/createPricingPlan', async (req, res) => {
     
@@ -39,7 +40,7 @@ app.post('/createPricingPlan', async (req, res) => {
                 const {stripeSubId, subscriber, isTerminated } = element;
                 if (!isTerminated) {
                     if (stripeSubId != undefined) {
-                        stripe.subscriptions.del(stripeSubId);
+                        stripe.subscriptions.update(stripeSubId, {cancel_at_period_end: true});
                     }
                     unsubscribeFromPerson(subscriber.id, personId);
                 }
@@ -67,7 +68,7 @@ app.post('/createPricingPlan', async (req, res) => {
                     const {stripeSubId, subscriber, isTerminated } = element;
                     if (!isTerminated) {
                         if (stripeSubId != undefined) {
-                            stripe.subscriptions.del(stripeSubId);
+                            stripe.subscriptions.update(stripeSubId, {cancel_at_period_end: true});
                         }
                         unsubscribeFromPerson(subscriber.id, personId);
                     }
@@ -155,9 +156,25 @@ app.post('/unsub', async (req, res) => {
 
 app.post('/resub', async (req, res) => {
     console.log('resub method called');
-    const {subId} = req.body;
+    const {subId, personId} = req.body;
 
-    stripe.subscriptions.update(subId, {cancel_at_period_end: false});
+    const subscription = await stripe.subscriptions.retrieve(subId);
+    const subPrice = subscription.plan.id;
+    const person = await getPersonById(personId);
+    const personPrice = person.data.stripePrice;
+    if (personPrice == subPrice) {
+        stripe.subscriptions.update(subId, {cancel_at_period_end: false});
+    } else {
+        const subscription = await stripe.subscriptions.retrieve(subId);
+        await stripe.subscriptions.update(subId, {
+            cancel_at_period_end: false,
+            proration_behavior: 'none',
+            items: [{
+                id: subscription.items.data[0].id,
+                price: personPrice,
+            }]
+        });
+    }
     res.json({status: 'success'})
 })
 
