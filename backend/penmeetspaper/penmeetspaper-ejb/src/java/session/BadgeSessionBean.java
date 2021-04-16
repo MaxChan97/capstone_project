@@ -146,7 +146,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         Badge topPoster = new Badge();
         topPoster.setDisplayName("Top poster");
         topPoster.setBadgeType(BadgeTypeEnum.POST);
-        topPoster.setValueRequired(1000);
+        topPoster.setValueRequired(4);
         topPoster.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FPosts%20Badge.png?alt=media&token=c1c75dce-6289-4cea-8877-aa3a76e15baa");
 
         em.persist(topPoster);
