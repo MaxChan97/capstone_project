@@ -55,6 +55,7 @@ function PaymentPage() {
         setEmail(data.email);
         customerId = data.stripeCustomerId;
         console.log(data.stripeCustomerId);
+        console.log(customerId);
         Api.getPersonById(anotherPersonId).done((data) => {
           // console.log(data);
           setPrice(data.pricingPlan);
@@ -150,6 +151,7 @@ function PaymentPage() {
     if (result.error) {
       console.log(result.error.message);
     } else {
+      console.log(customerId);
       if (customerId == undefined) {
         const data = await paymentApi.createCustomer(result, email);
           console.log(data);
@@ -159,7 +161,7 @@ function PaymentPage() {
           await Api.updateStripeCustomerId(currentUser, customerId)
           console.log("customerId persisted");
         } 
-      
+      console.log(customerId);
       paymentApi.subscribe(customerId, plan)
       .done((res) => {
         const {client_secret, status, subId} = res;
