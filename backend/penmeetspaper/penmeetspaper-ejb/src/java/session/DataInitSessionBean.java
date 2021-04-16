@@ -362,7 +362,7 @@ public class DataInitSessionBean {
     followSB.followPerson(new Long(1), new Long(3));
     followSB.followPerson(new Long(1), new Long(4));
     followSB.followPerson(new Long(1), new Long(5));
-    
+
     followSB.followPerson(new Long(8), new Long(1));
     followSB.followPerson(new Long(9), new Long(1));
     followSB.followPerson(new Long(10), new Long(1));
@@ -373,24 +373,23 @@ public class DataInitSessionBean {
   }
 
   private void createSubs() throws NotValidException, NoResultException {
-    subSB.subscribeToPerson(new Long(1), new Long(2));
-    subSB.subscribeToPerson(new Long(1), new Long(3));
-    subSB.subscribeToPerson(new Long(1), new Long(4));
-    subSB.subscribeToPerson(new Long(1), new Long(5));
+    subSB.subscribeToPerson(new Long(1), new Long(2), "");
+    subSB.subscribeToPerson(new Long(1), new Long(3), "");
+    subSB.subscribeToPerson(new Long(1), new Long(4), "");
+    subSB.subscribeToPerson(new Long(1), new Long(5), "");
     subSB.unsubscribeToPerson(new Long(1), new Long(2));
 
-    subSB.subscribeToPerson(new Long(5), new Long(1));
-    subSB.subscribeToPerson(new Long(6), new Long(1));
-    subSB.subscribeToPerson(new Long(7), new Long(1));
+    subSB.subscribeToPerson(new Long(5), new Long(1), "");
+    subSB.subscribeToPerson(new Long(6), new Long(1), "");
+    subSB.subscribeToPerson(new Long(7), new Long(1), "");
 
-    subSB.subscribeToPerson(new Long(8), new Long(1));
-    subSB.subscribeToPerson(new Long(9), new Long(1));
-    subSB.subscribeToPerson(new Long(10), new Long(1));
-    subSB.subscribeToPerson(new Long(11), new Long(1));
-    subSB.subscribeToPerson(new Long(12), new Long(1));
-    subSB.subscribeToPerson(new Long(13), new Long(1));
-    subSB.subscribeToPerson(new Long(14), new Long(1));
-
+    subSB.subscribeToPerson(new Long(8), new Long(1), "");
+    subSB.subscribeToPerson(new Long(9), new Long(1), "");
+    subSB.subscribeToPerson(new Long(10), new Long(1), "");
+    subSB.subscribeToPerson(new Long(11), new Long(1), "");
+    subSB.subscribeToPerson(new Long(12), new Long(1), "");
+    subSB.subscribeToPerson(new Long(13), new Long(1), "");
+    subSB.subscribeToPerson(new Long(14), new Long(1), "");
   }
 
   private Poll createPoll() throws NotValidException, NoResultException {
