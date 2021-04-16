@@ -110,8 +110,8 @@ function PaymentPage() {
   };
   */
 
-  function handleSubscribe() {
-    Api.subscribeToPerson(currentUser, anotherPersonId)
+  function handleSubscribe(subId) {
+    Api.subscribeToPerson(currentUser, anotherPersonId, subId)
       .done(() => {
         console.log('subscription done');
           Api.followPerson(currentUser, anotherPersonId)
@@ -172,12 +172,12 @@ function PaymentPage() {
               // Display error message in your UI.
               // The card was declined (i.e. insufficient funds, card has expired, etc)
             } else {
-              handleSubscribe();
+              handleSubscribe(subId);
               // Show a success message to your customer
             }
           });
         } else {
-          handleSubscribe();
+          handleSubscribe(subId);
           // No additional information was needed
           // Show a success message to your customer
         }
