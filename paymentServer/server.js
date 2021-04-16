@@ -68,7 +68,7 @@ app.post('/createPricingPlan', async (req, res) => {
                     const {stripeSubId, subscriber, isTerminated } = element;
                     if (!isTerminated) {
                         if (stripeSubId != undefined) {
-                            stripe.subscriptions.del(stripeSubId);
+                            stripe.subscriptions.update(stripeSubId, {cancel_at_period_end: true});
                         }
                         unsubscribeFromPerson(subscriber.id, personId);
                     }
