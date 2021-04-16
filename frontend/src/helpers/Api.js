@@ -670,7 +670,7 @@ export default {
     });
   },
 
-  subscribeToPerson(subscriberId, publisherId) {
+  subscribeToPerson(subscriberId, publisherId, subId) {
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
@@ -683,6 +683,9 @@ export default {
         "Content-Type": "application/json",
       },
       type: "POST",
+      data: JSON.stringify({
+        subId, subId
+        }),
     });
   },
 

@@ -55,7 +55,7 @@ public class VideoResource {
   public Response createVideoForPerson(String jsonString) {
     JsonObject jsonObject = createJsonObject(jsonString);
 
-    String personId = jsonObject.getString("id");
+    int personId = jsonObject.getInt("id");
     String title = jsonObject.getString("title");
     String description = jsonObject.getString("description");
     String fileName = jsonObject.getString("fileName");
@@ -70,9 +70,11 @@ public class VideoResource {
     v.setFileType(fileType);
     v.setIsPaid(false);
     v.setDatePosted(new Date());
+    
+    System.out.println(jsonString);
 
     try {
-      videoSessionBean.createVideoForPerson(Long.valueOf(personId), v);
+      videoSessionBean.createVideoForPerson(new Long(personId), v);
       return Response.status(204).build();
     } catch (NoResultException | NotValidException e) {
       return buildError(e, 400);

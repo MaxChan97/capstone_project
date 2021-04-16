@@ -24,7 +24,7 @@ public interface SubscriptionSessionBeanLocal {
     public final static String CANNOT_FIND_PERSON = "Could not find person";
     public final static String CANNOT_FIND_SUB = "Could not find Subscription Entity that you were looking for";
 
-    public void subscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException;
+    public void subscribeToPerson(Long subscriberId, Long publisherId, String subId) throws NoResultException, NotValidException;
 
     public void unsubscribeToPerson(Long subscriberId, Long publisherId) throws NoResultException, NotValidException;
 

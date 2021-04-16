@@ -426,6 +426,7 @@ export default function UserAnalytics() {
         title: {
           text: null,
         },
+        allowDecimals: false,
       },
       yAxis: {
         min: 0,

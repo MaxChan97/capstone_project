@@ -617,7 +617,7 @@ public class PersonResource {
         } catch (NoResultException | NotValidException | ParseException e) {
             return buildError(e, 400);
         }
-    } // end onboardin
+    } // end onboarding
 
     @PUT
     @Path("{id}/skipOnboarding")

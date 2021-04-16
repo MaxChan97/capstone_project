@@ -57,6 +57,7 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
       em.detach(t);
       t.setPosts(null);
       t.setStreams(null);
+      t.setVideos(null);
     }
     return trends.subList(0, Math.min(4, trends.size()));
   }
@@ -71,6 +72,8 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
       em.detach(t);
       t.setPosts(null);
       t.setStreams(null);
+      t.setVideos(null);
+
     }
     Calendar cal = Calendar.getInstance();
     cal.set(Calendar.HOUR_OF_DAY, 0);

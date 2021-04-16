@@ -54,6 +54,9 @@ public class Subscription implements Serializable {
     @Column(nullable = false)
     private boolean isTerminated;
 
+    @Column
+    private String stripeSubId;
+
     public Long getId() {
         return id;
     }
@@ -141,6 +144,14 @@ public class Subscription implements Serializable {
     @Override
     public String toString() {
         return "entity.Subscription[ id=" + id + " ]";
+    }
+
+    public String getStripeSubId() {
+        return stripeSubId;
+    }
+
+    public void setStripeSubId(String stripeSubId) {
+        this.stripeSubId = stripeSubId;
     }
 
 }

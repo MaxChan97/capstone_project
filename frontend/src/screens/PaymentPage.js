@@ -42,6 +42,7 @@ const useStyles = makeStyles({
 function PaymentPage() {
 
   const alert = useAlert();
+  const history = useHistory();
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState('');
   const [plan, setPlan] = useState('');
@@ -54,6 +55,7 @@ function PaymentPage() {
         setEmail(data.email);
         customerId = data.stripeCustomerId;
         console.log(data.stripeCustomerId);
+        console.log(customerId);
         Api.getPersonById(anotherPersonId).done((data) => {
           // console.log(data);
           setPrice(data.pricingPlan);
@@ -109,6 +111,26 @@ function PaymentPage() {
   };
   */
 
+  function handleSubscribe(subId) {
+    Api.subscribeToPerson(currentUser, anotherPersonId, subId)
+      .done(() => {
+        console.log('subscription done');
+          Api.followPerson(currentUser, anotherPersonId)
+            .done(() => {
+              history.push("/paymentSuccess");
+            })
+            .fail((xhr, status, error) => {
+              if (xhr.responseJSON.error != 'Follow Entity already exists') {
+                alert.show(xhr.responseJSON.error)
+              }
+            });
+            history.push("/paymentSuccess");
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
 
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
@@ -129,6 +151,7 @@ function PaymentPage() {
     if (result.error) {
       console.log(result.error.message);
     } else {
+      console.log(customerId);
       if (customerId == undefined) {
         const data = await paymentApi.createCustomer(result, email);
           console.log(data);
@@ -138,30 +161,31 @@ function PaymentPage() {
           await Api.updateStripeCustomerId(currentUser, customerId)
           console.log("customerId persisted");
         } 
-      
+      console.log(customerId);
       paymentApi.subscribe(customerId, plan)
       .done((res) => {
-        const {client_secret, status} = res;
+        const {client_secret, status, subId} = res;
+
         if (status === 'requires_action') {
           stripe.confirmCardPayment(client_secret).then(function(result) {
             if (result.error) {
-              alert.show('There was an issue!');
-              alert.show(result.error);
+              alert.show('There was an issue! Please try again later');
+              console.log(result.error);
               // Display error message in your UI.
               // The card was declined (i.e. insufficient funds, card has expired, etc)
             } else {
-              alert.show('Payment Success!');
+              handleSubscribe(subId);
               // Show a success message to your customer
             }
           });
         } else {
-          alert.show('Payment Success!');
+          handleSubscribe(subId);
           // No additional information was needed
           // Show a success message to your customer
         }
       }).fail((res) => {
-        alert.show('There was an issue!');
-        alert.show(result.error);
+        alert.show('There was an issue! Please try again later');
+        console.log(result.error);
       })
     }
   };

@@ -30,6 +30,7 @@
     "react-bootstrap": "^1.5.2",
     "react-bootstrap-date-picker": "^5.1.0",
     "react-chat-elements": "^10.14.0",
+    "react-confetti": "^6.0.1",
     "react-dom": "^17.0.1",
     "react-firebase-file-uploader": "^2.4.4",
     "react-hashtag": "^2.1.2",

@@ -58,9 +58,11 @@ import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
 
 import Payment from "./screens/PaymentPage";
+import PaymentSuccess from "./screens/PaymentSuccessPage";
 // Stripe
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import PaymentSuccessPage from "./screens/PaymentSuccessPage";
 
 const stripePromise = loadStripe("pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ");
 
@@ -240,6 +242,7 @@ function App() {
             <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
             <Route exact path="/community" component={CommunityFeed} />
             <Route exact path="/payment/:anotherPersonId" component={Payment} />
+            <Route exact path="/paymentSuccess" component={PaymentSuccess} />
 
             <Route exact path="/admin/inbox" component={AdminInboxPage} />
             <Route

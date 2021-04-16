@@ -13,6 +13,7 @@ import analyticsLogo from "../assets/analytics.svg";
 import userManagementLogo from "../assets/UserManagement.svg";
 import advertisementLogo from "../assets/advertise.svg";
 import adminLogo from "../assets/admin.svg";
+import logLogo from "../assets/log-format.svg";
 import { useSelector } from "react-redux";
 import BNBLogo from "../assets/BNB Logo.png";
 
@@ -194,6 +195,47 @@ function AdminSidebar() {
                       alt="advertisementLogo"
                     />
                     <p className="ml-2">Ad Management</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
+              {location.pathname === "/admin/logs" ? (
+                <Link
+                  to="/admin/logs"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={logLogo}
+                      className="nav-icon"
+                      alt="logLogo"
+                    />
+                    <p className="ml-2">Admin Logs</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/admin/logs" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={logLogo}
+                      className="nav-icon"
+                      alt="logLogo"
+                    />
+                    <p className="ml-2">Admin Logs</p>
                   </div>
                 </Link>
               )}
