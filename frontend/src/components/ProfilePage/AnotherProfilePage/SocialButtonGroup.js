@@ -57,7 +57,7 @@ export default function SocialButtonGroup({
   ] = useState(false);
 
   const currentUser = useSelector((state) => state.currentUser);
-
+  console.log(pricingPlan);
   useEffect(() => {
     Api.getFollowers(id)
       .done((followObjects) => {
@@ -211,9 +211,12 @@ export default function SocialButtonGroup({
         </Button>
       );
     } else if (subscriptionStatus === "NotSubscribed") {
+      if (pricingPlan == 0) {
+        return;
+      }
       return (
-        <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
+        <Button 
+          style={{ height: "40px", width: "160px", outline: "none"}}
           variant="outlined"
           color="primary"
           onClick={handleSubscribeDialogOpen}
