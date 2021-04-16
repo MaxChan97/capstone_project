@@ -165,18 +165,24 @@ function Navbar({
     setShowUploadDialog(false);
   }
 
-  // const handleUpload = () => {
-  //   Api.uploadVideo(title, description, fileName, fileUrl, fileType)
-  //     .done(() => {
-  //       alert.show("Video uploaded successfully!");
-  //       setRefresh(!refresh);
-  //       handleUploadDialogClose();
-  //     })
-  //     .fail((xhr, status, error) => {
-  //       //alert.show("Something went wrong, please try again!");
-  //       alert.show(xhr.responseJSON.error);
-  //     });
-  // };
+  const handleUpload = () => {
+    Api.uploadVideo(
+      currentUser,
+      title,
+      description,
+      fileName,
+      fileUrl,
+      fileType
+    )
+      .done(() => {
+        alert.show("Video uploaded successfully!");
+        setRefresh(!refresh);
+        handleUploadDialogClose();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  };
 
   function handleUploadStart() {
     setProgress(0);
@@ -298,7 +304,7 @@ function Navbar({
                 style={{ outline: "none" }}
                 color="primary"
                 variant="contained"
-                // onClick={handleUpload}
+                onClick={handleUpload}
               >
                 Confirm
               </ColorButton>

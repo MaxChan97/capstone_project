@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -28,166 +27,156 @@ import javax.persistence.TemporalType;
 @Entity
 public class Video implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String title;
 
-    @Column(nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @Column(nullable = false)
-    private boolean isPaid;
+  @Column(nullable = false)
+  private String fileName;
 
-    @Column(nullable = false)
-    private byte payload;
+  @Column(nullable = false)
+  private String fileUrl;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datePosted;
+  @Column(nullable = false)
+  private String fileType;
 
-    @Column(nullable = false)
-    private int views;
+  @Column(nullable = false)
+  private boolean isPaid;
 
-    private List<String> hashTags = new ArrayList();
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date datePosted;
 
-    @ManyToOne
-    @JoinColumn(name = "video_person")
-    private Person creator;
+  @ManyToOne
+  @JoinColumn(name = "video_person")
+  private Person author;
 
-    @ManyToMany
-    @JoinColumn(name = "videolikes_person")
-    private List<Person> likes = new ArrayList();
+  @ManyToMany
+  @JoinColumn(name = "videolikes_person")
+  private List<Person> likes = new ArrayList<>();
 
-    @ManyToMany
-    private List<Trend> trends = new ArrayList();
+  @ManyToMany(mappedBy = "videos")
+  private List<Trend> trends = new ArrayList<>();
 
-    // unidirectional
-    @OneToMany
-    @JoinColumn(name = "comment_id")
-    private List<Comment> comments = new ArrayList();
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
+  }
+
+  public String getFileType() {
+    return fileType;
+  }
+
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
+
+  public boolean isIsPaid() {
+    return isPaid;
+  }
+
+  public void setIsPaid(boolean isPaid) {
+    this.isPaid = isPaid;
+  }
+
+  public Date getDatePosted() {
+    return datePosted;
+  }
+
+  public void setDatePosted(Date datePosted) {
+    this.datePosted = datePosted;
+  }
+
+  public Person getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(Person author) {
+    this.author = author;
+  }
+
+  public List<Person> getLikes() {
+    return likes;
+  }
+
+  public void setLikes(List<Person> likes) {
+    this.likes = likes;
+  }
+
+  public List<Trend> getTrends() {
+    return trends;
+  }
+
+  public void setTrends(List<Trend> trends) {
+    this.trends = trends;
+  }
+
+  
+
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof Video)) {
+      return false;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    Video other = (Video) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
     }
+    return true;
+  }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isIsPaid() {
-        return isPaid;
-    }
-
-    public void setIsPaid(boolean isPaid) {
-        this.isPaid = isPaid;
-    }
-
-    public byte getPayload() {
-        return payload;
-    }
-
-    public void setPayload(byte payload) {
-        this.payload = payload;
-    }
-
-    public Date getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
-    }
-
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
-    }
-
-    public List<String> getHashTags() {
-        return hashTags;
-    }
-
-    public void setHashTags(List<String> hashTags) {
-        this.hashTags = hashTags;
-    }
-
-    public Person getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Person creator) {
-        this.creator = creator;
-    }
-
-    public List<Person> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Person> likes) {
-        this.likes = likes;
-    }
-
-    public List<Trend> getTrends() {
-        return trends;
-    }
-
-    public void setTrends(List<Trend> trends) {
-        this.trends = trends;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Video)) {
-            return false;
-        }
-        Video other = (Video) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Video[ id=" + id + " ]";
-    }
+  @Override
+  public String toString() {
+    return "entity.Video[ id=" + id + " ]";
+  }
 
 }

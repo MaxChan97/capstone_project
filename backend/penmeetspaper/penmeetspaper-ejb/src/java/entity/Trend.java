@@ -41,6 +41,10 @@ public class Trend implements Serializable {
   //bidirectional
   @ManyToMany
   private List<Stream> streams = new ArrayList<>();
+  
+  //bidirectional
+  @ManyToMany
+  private List<Video> videos = new ArrayList<>();
 
   public Trend() {
   }
@@ -83,6 +87,14 @@ public class Trend implements Serializable {
 
   public void setStreams(List<Stream> streams) {
     this.streams = streams;
+  }
+
+  public List<Video> getVideos() {
+    return videos;
+  }
+
+  public void setVideos(List<Video> videos) {
+    this.videos = videos;
   }
 
   @Override

@@ -1726,11 +1726,7 @@ export default {
     });
   },
 
-  changeReportState(
-    reportId,
-    action,
-    adminId,
-  ) {
+  changeReportState(reportId, action, adminId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report/" + reportId + "/changeReportState",
       headers: {
@@ -1740,7 +1736,26 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         action: action,
-        adminId: adminId
+        adminId: adminId,
+      }),
+    });
+  },
+
+  uploadVideo(id, title, description, fileName, fileUrl, fileType) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/upload",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        id: id,
+        title: title,
+        description: description,
+        fileName: fileName,
+        fileUrl: fileUrl,
+        fileType: fileType,
       }),
     });
   },

@@ -15,6 +15,7 @@ import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import {makeStyles} from '@material-ui/core/styles';
 // Custom Components
 import CardInput from '../components/CardInputs';
+import { useAlert } from "react-alert";
 
 
 const useStyles = makeStyles({
@@ -40,19 +41,23 @@ const useStyles = makeStyles({
 
 function PaymentPage() {
 
+  const alert = useAlert();
   const [price, setPrice] = useState(0);
+  const [email, setEmail] = useState('');
+  const [plan, setPlan] = useState('');
+  let customerId = undefined;
   const { anotherPersonId } = useParams();
   const currentUser = useSelector((state) => state.currentUser);
-  let email = "";
-  let plan = "";
   useEffect(() => {
     Api.getPersonById(currentUser)
       .done((data) => {
-        email = data.email
+        setEmail(data.email);
+        customerId = data.stripeCustomerId;
+        console.log(data.stripeCustomerId);
         Api.getPersonById(anotherPersonId).done((data) => {
-          console.log(data);
+          // console.log(data);
           setPrice(data.pricingPlan);
-          plan = data.stripePrice;
+          setPlan(data.stripePrice);
         })
       })
       .fail((xhr, status, error) => {
@@ -104,6 +109,7 @@ function PaymentPage() {
   };
   */
 
+
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -122,30 +128,40 @@ function PaymentPage() {
 
     if (result.error) {
       console.log(result.error.message);
-    } else {;
-      paymentApi.subscribe(result, email, plan)
+    } else {
+      if (customerId == undefined) {
+        const data = await paymentApi.createCustomer(result, email);
+          console.log(data);
+          console.log(data.customerId);
+          customerId = data.customerId;
+          console.log(customerId);  
+          await Api.updateStripeCustomerId(currentUser, customerId)
+          console.log("customerId persisted");
+        } 
+      
+      paymentApi.subscribe(customerId, plan)
       .done((res) => {
         const {client_secret, status} = res;
         if (status === 'requires_action') {
           stripe.confirmCardPayment(client_secret).then(function(result) {
             if (result.error) {
-              console.log('There was an issue!');
-              console.log(result.error);
+              alert.show('There was an issue!');
+              alert.show(result.error);
               // Display error message in your UI.
               // The card was declined (i.e. insufficient funds, card has expired, etc)
             } else {
-              console.log('You got the money!');
+              alert.show('Payment Success!');
               // Show a success message to your customer
             }
           });
         } else {
-          console.log('You got the money!');
+          alert.show('Payment Success!');
           // No additional information was needed
           // Show a success message to your customer
         }
       }).fail((res) => {
-        console.log('There was an issue!');
-        console.log(result.error);
+        alert.show('There was an issue!');
+        alert.show(result.error);
       })
     }
   };

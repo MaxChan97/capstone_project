@@ -132,18 +132,18 @@ public class PostSessionBean implements PostSessionBeanLocal {
       }
     }
 
+    for (String hashtag : hashtags) {
+      Trend trend = trendSB.insertHashtag(hashtag);
+      post.getTrends().add(trend);
+      trend.getPosts().add(post);
+    }
+    
     Calendar cal = Calendar.getInstance();
     cal.set(Calendar.HOUR_OF_DAY, 0);
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
     Date date = cal.getTime();
-
-    for (String hashtag : hashtags) {
-      Trend trend = trendSB.insertHashtag(hashtag);
-      post.getTrends().add(trend);
-      trend.getPosts().add(post);
-    }
     
     // Site-wide posts
     Long oldCount = analyticsSB.getSiteWideAnalytics().getPostsCount().getOrDefault(date, new Long(0));

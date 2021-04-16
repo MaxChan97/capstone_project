@@ -86,10 +86,11 @@ public class TrendSessionBean implements TrendSessionBeanLocal {
   @Override
   public Trend createTrend(String hashtag) {
     Trend newTrend = new Trend();
-    newTrend.setHashTag(hashtag);
+    newTrend.setHashTag(hashtag.toLowerCase());
     newTrend.setDateCount(new HashMap<Date, Long>());
     newTrend.setPosts(new ArrayList<>());
     newTrend.setStreams(new ArrayList<>());
+    newTrend.setVideos(new ArrayList<>());
 
     HashMap<Date, Long> dateCount = new HashMap<Date, Long>();
     newTrend.setDateCount(dateCount);
