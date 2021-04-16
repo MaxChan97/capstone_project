@@ -31,37 +31,92 @@ app.post('/createPricingPlan', async (req, res) => {
     const {personId, price, oldPrice} = req.body;
 
     if (oldPrice != price) {
-
         const result = await getSubscribers(personId);
         const subscriptionArr = result.data;
 
-        subscriptionArr.forEach(element => {
-            const {stripeSubId, subscriber } = element;
-            if (stripeSubId != undefined) {
-                stripe.subscriptions.del(stripeSubId);
+        if (price > oldPrice) {
+            for (const element of subscriptionArr)  {
+                const {stripeSubId, subscriber, isTerminated } = element;
+                if (!isTerminated) {
+                    if (stripeSubId != undefined) {
+                        stripe.subscriptions.del(stripeSubId);
+                    }
+                    unsubscribeFromPerson(subscriber.id, personId);
+                }
+            };
+
+            const product = await stripe.products.create({
+                name: `Subscription for user ${personId}`,
+            });
+    
+            const stripePrice = await stripe.prices.create({
+                product: product.id,
+                unit_amount: price * 100,
+                currency: 'sgd',
+                recurring: {
+                interval: 'month',
+                },
+            });
+            res.json({'stripePrice': stripePrice});
+            return;
+
+        } else {
+            if (price == 0) {
+                // if price is 0, terminate subscriptions
+                for (const element of subscriptionArr)  {
+                    const {stripeSubId, subscriber, isTerminated } = element;
+                    if (!isTerminated) {
+                        if (stripeSubId != undefined) {
+                            stripe.subscriptions.del(stripeSubId);
+                        }
+                        unsubscribeFromPerson(subscriber.id, personId);
+                    }
+                };
+            } else {
+                // price is lower than oldPrice, downgrade
+                const product = await stripe.products.create({
+                    name: `Subscription for user ${personId}`,
+                });
+        
+                const stripePrice = await stripe.prices.create({
+                    product: product.id,
+                    unit_amount: price * 100,
+                    currency: 'sgd',
+                    recurring: {
+                    interval: 'month',
+                    },
+                });
+                for (const element of subscriptionArr) {
+                    const {stripeSubId, subscriber, isTerminated } = element;
+                    if (!isTerminated) {
+                        if (stripeSubId != undefined) {
+                            try {
+                                const subscription = await stripe.subscriptions.retrieve(stripeSubId);
+                                await stripe.subscriptions.update(stripeSubId, {
+                                    cancel_at_period_end: false,
+                                    proration_behavior: 'create_prorations',
+                                    items: [{
+                                        id: subscription.items.data[0].id,
+                                        price: stripePrice.id,
+                                    }]
+                                });
+                            } catch (e) {
+                                console.log(e);
+                            }
+                            
+                        }
+                        
+                    }
+                };
+
+
+                res.json({'stripePrice': stripePrice});
+                return;
+
+
             }
-            unsubscribeFromPerson(subscriber.id, personId);
-        });
-
-
-        if (price == 0) {
-            res.json({'stripePrice': {id: "notCreated"}});
-            return
         }
-        const product = await stripe.products.create({
-            name: `Subscription for user ${personId}`,
-        });
 
-        const stripePrice = await stripe.prices.create({
-            product: product.id,
-            unit_amount: price * 100,
-            currency: 'sgd',
-            recurring: {
-            interval: 'month',
-            },
-        });
-        res.json({'stripePrice': stripePrice});
-        return;
     }
 
     res.json({'stripePrice': {id: "notCreated"}});
