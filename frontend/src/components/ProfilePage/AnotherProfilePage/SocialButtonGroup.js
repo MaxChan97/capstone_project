@@ -357,7 +357,7 @@ export default function SocialButtonGroup({
           >
             Cancel
           </Button>
-          <Link to={"/payment"}>
+          <Link to={"/payment/" + anotherPerson.id}>
           <ColorButton
             style={{ outline: "none" }}
             onClick={handleSubscribe}
