@@ -167,7 +167,7 @@ export default function SocialButtonGroup({
   }
 
   function handleResubscribe() {
-    paymentApi.resub(subId).done(() => {
+    paymentApi.resub(subId, id).done(() => {
     Api.subscribeToPerson(currentUser, id, subId)
       .done(() => {
         if (following === false) {
