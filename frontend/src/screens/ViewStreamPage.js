@@ -20,6 +20,7 @@ import LiveChatBox from "../components/ViewStreamPage/LiveChatBox";
 import LivePollBox from "../components/ViewStreamPage/LivePollBox";
 import { streamRefreshListener } from "../helpers/FirebaseApi";
 import { db } from "../firebase";
+import ReactHashtag from "react-hashtag";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -700,7 +701,20 @@ export default function ViewStreamPage() {
                 {numFollowers} followers
               </p>
               <p style={{ margin: 0, marginTop: "18px", lineHeight: 1 }}>
-                {stream.description}
+                <ReactHashtag
+                  renderHashtag={(hashtagValue) => (
+                    <span
+                      style={{ color: "#3B21CB", cursor: "pointer" }}
+                      onClick={() =>
+                        history.push("/trend/" + hashtagValue.slice(1))
+                      }
+                    >
+                      <b>{hashtagValue}</b>
+                    </span>
+                  )}
+                >
+                  {stream.description}
+                </ReactHashtag>
               </p>
               <b>Related Topics</b>
               <div component="ul" className={classes.chip}>
@@ -752,7 +766,20 @@ export default function ViewStreamPage() {
               fontWeight: "bold",
             }}
           >
-            {stream.title}
+            <ReactHashtag
+              renderHashtag={(hashtagValue) => (
+                <span
+                  style={{ color: "#3B21CB", cursor: "pointer" }}
+                  onClick={() =>
+                    history.push("/trend/" + hashtagValue.slice(1))
+                  }
+                >
+                  <b>{hashtagValue}</b>
+                </span>
+              )}
+            >
+              {stream.title}
+            </ReactHashtag>
           </p>
           <p
             style={{

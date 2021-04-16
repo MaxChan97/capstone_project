@@ -167,7 +167,7 @@ export default function CommunityPostCard({
   }
 
   function MouseOver(event) {
-    event.target.style.textDecoration = 'underline';
+    event.target.style.textDecoration = "underline";
   }
   function MouseOut(event) {
     event.target.style.textDecoration = "";
@@ -274,10 +274,11 @@ export default function CommunityPostCard({
 
                 {isAdmin == false && data.author.id != currentUser ? (
                   <div style={{ textAlign: "right" }}>
-                    <ReportCommPost
-                      data={data}
-                    ></ReportCommPost> </div>
-                ) : ("")}
+                    <ReportCommPost data={data}></ReportCommPost>{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
               {data.fileUrl &&
@@ -289,6 +290,10 @@ export default function CommunityPostCard({
                     width="300"
                     src={data.fileUrl}
                   />
+                ) : data.fileType.split("/")[0] == "video" ? (
+                  <div className="d-flex justify-content-center">
+                    <iframe height="100%" src={data.fileUrl}></iframe>
+                  </div>
                 ) : (
                   <div>
                     <FileTypes data={data.fileName.split(".")[1]}></FileTypes>

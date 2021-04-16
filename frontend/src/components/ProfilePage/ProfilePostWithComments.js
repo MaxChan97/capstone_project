@@ -276,11 +276,11 @@ export default function ProfilePostWithComments() {
                   )}
                   {isAdmin == false && data.author.id != currentUser ? (
                     <div style={{ textAlign: "right" }}>
-                      <ReportPost
-                        data={data}
-                      ></ReportPost> </div>
-                  ) : ("")}
-
+                      <ReportPost data={data}></ReportPost>{" "}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 {data.fileUrl &&
@@ -292,6 +292,10 @@ export default function ProfilePostWithComments() {
                       width="300"
                       src={data.fileUrl}
                     />
+                  ) : data.fileType.split("/")[0] == "video" ? (
+                    <div className="d-flex justify-content-center">
+                      <iframe height="100%" src={data.fileUrl}></iframe>
+                    </div>
                   ) : (
                     <div>
                       <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
@@ -300,6 +304,7 @@ export default function ProfilePostWithComments() {
                       </p>
                     </div>
                   ))}
+
                 {edit == false ? (
                   <p>
                     <ReactHashtag

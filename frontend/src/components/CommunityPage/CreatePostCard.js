@@ -185,18 +185,20 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
               <div className="col-11">
                 {fileName &&
                   fileType &&
-                  (fileType.split("/")[0] == "image" ? (
-                    progress < 100 ? (
-                      <div className="d-flex justify-content-center">
-                        <CircularProgressWithLabel value={progress} />
-                      </div>
-                    ) : (
-                      <img
-                        className="mx-auto d-block"
-                        width="300"
-                        src={fileUrl}
-                      />
-                    )
+                  (progress >= 0 && progress < 100 ? (
+                    <div className="d-flex justify-content-center">
+                      <CircularProgressWithLabel value={progress} />
+                    </div>
+                  ) : fileType.split("/")[0] == "image" ? (
+                    <img
+                      className="mx-auto d-block"
+                      width="300"
+                      src={fileUrl}
+                    />
+                  ) : fileType.split("/")[0] == "video" ? (
+                    <div className="d-flex justify-content-center">
+                      <iframe height="100%" src={fileUrl}></iframe>
+                    </div>
                   ) : (
                     <div>
                       <FileTypes data={fileName.split(".")[1]}></FileTypes>
@@ -299,5 +301,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
         </div>
       </form>
     </div>
-  ) : ("");
+  ) : (
+    ""
+  );
 }
