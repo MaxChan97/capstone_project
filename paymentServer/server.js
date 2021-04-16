@@ -57,15 +57,21 @@ app.post('/createPricingPlan', async (req, res) => {
 app.post('/createCustomer', async (req, res) => {
     console.log('create customer method called')
     const {email, payment_method} = req.body;
-    const customer = await stripe.customers.create({
-        payment_method: payment_method,
-        email: email,
-        invoice_settings: {
-            default_payment_method: payment_method,
-        },
-    });
-
-    res.json({'customerId': customer.id})
+    try {
+        const customer = await stripe.customers.create({
+            payment_method: payment_method,
+            email: email,
+            invoice_settings: {
+                default_payment_method: payment_method,
+            },
+        });
+        res.json({'customerId': customer.id})
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send({
+            message: 'This is an error'
+         });
+    }
 })
 
 app.post('/unsub', async (req, res) => {
