@@ -1774,4 +1774,70 @@ export default {
       type: "GET",
     });
   },
+
+  
+  adminDeletePost(adminId, postId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        postId: postId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteComment(adminId, commentId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteComment",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        commentId: commentId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteReply(adminId, replyId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteReply",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        replyId: replyId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteCommunity(adminId, communityId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteCommunity",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityId: communityId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
 };
