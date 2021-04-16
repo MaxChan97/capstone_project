@@ -110,6 +110,26 @@ function PaymentPage() {
   };
   */
 
+  function handleSubscribe() {
+    Api.subscribeToPerson(currentUser, anotherPersonId)
+      .done(() => {
+        console.log('subscription done');
+          Api.followPerson(currentUser, anotherPersonId)
+            .done(() => {
+              history.push("/paymentSuccess");
+            })
+            .fail((xhr, status, error) => {
+              if (xhr.responseJSON.error != 'Follow Entity already exists') {
+                alert.show(xhr.responseJSON.error)
+              }
+            });
+            history.push("/paymentSuccess");
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
 
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
@@ -142,7 +162,8 @@ function PaymentPage() {
       
       paymentApi.subscribe(customerId, plan)
       .done((res) => {
-        const {client_secret, status} = res;
+        const {client_secret, status, subId} = res;
+
         if (status === 'requires_action') {
           stripe.confirmCardPayment(client_secret).then(function(result) {
             if (result.error) {
@@ -151,12 +172,12 @@ function PaymentPage() {
               // Display error message in your UI.
               // The card was declined (i.e. insufficient funds, card has expired, etc)
             } else {
-              history.push("/paymentSuccess");
+              handleSubscribe();
               // Show a success message to your customer
             }
           });
         } else {
-          history.push("/paymentSuccess");
+          handleSubscribe();
           // No additional information was needed
           // Show a success message to your customer
         }

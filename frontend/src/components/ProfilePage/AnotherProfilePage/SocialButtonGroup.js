@@ -165,6 +165,10 @@ export default function SocialButtonGroup({
   }
 
   function handleSubscribe() {
+    setRefresh(!refresh);
+    handleSubscribeDialogClose();
+    handleResubscribeDialogClose();
+    /*
     Api.subscribeToPerson(currentUser, id)
       .done(() => {
         if (following === false) {
@@ -186,6 +190,7 @@ export default function SocialButtonGroup({
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
+      */
   }
 
   function handleUnsubscribe() {

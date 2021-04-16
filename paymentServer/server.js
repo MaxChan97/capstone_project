@@ -80,8 +80,7 @@ app.post('/sub', async (req, res) => {
 
     const status = subscription['latest_invoice']['payment_intent']['status']
     const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
-
-    res.json({'client_secret': client_secret, 'status': status})
+    res.json({'client_secret': client_secret, 'status': status, 'subId': subscription.id})
 })
 
 app.listen(port, () => console.log(`payment server listening on port ${port}`))
