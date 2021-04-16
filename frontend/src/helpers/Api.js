@@ -1623,7 +1623,8 @@ export default {
     reporterId,
     reportTypeEnum,
     reportedContentId,
-    category
+    category,
+    reportedPersonId,
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report",
@@ -1638,6 +1639,7 @@ export default {
         reportTypeEnum: reportTypeEnum,
         reportedContentId: reportedContentId,
         category: category,
+        reportedPersonId: reportedPersonId,
       }),
     });
   },
@@ -1840,4 +1842,25 @@ export default {
     });
   },
 
+  getCommentById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getReplyById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };
