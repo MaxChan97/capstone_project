@@ -80,7 +80,7 @@ export default function ReportReply({
 
     const [category, setCategory] = useState(null);
     const [type, setType] = useState("REPLY_REPORT");
-    const [url, setUrl] = useState("/post/" + data.id);
+    const [url, setUrl] = useState("/reply/" + data.id);
     function handleReportPerson() {
         console.log(reason);
         console.log(currentUser);
