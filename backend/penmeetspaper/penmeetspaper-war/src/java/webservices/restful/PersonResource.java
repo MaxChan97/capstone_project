@@ -761,4 +761,25 @@ public class PersonResource {
             return buildError(e, 400);
         }
     }
+
+    @PUT
+    @Path("/{personId}/stripeCustomerId")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStripeCustomerId(@PathParam("personId") Long personId, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String stripeCustomerId = jsonObject.getString("stripeCustomerId");
+
+        try {
+            Person person = personSB.getPersonById(personId);
+            person.setStripeCustomerId(stripeCustomerId);
+            personSB.updateCustomerStripeId(person);
+
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
 }

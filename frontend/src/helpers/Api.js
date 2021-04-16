@@ -777,6 +777,20 @@ export default {
     });
   },
 
+  updateStripeCustomerId(personId, stripeCustomerId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/stripeCustomerId",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        stripeCustomerId: stripeCustomerId,
+      }),
+    });
+  },
+
   voteOnPoll(personId, pollId, optionVoted) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/poll/" + pollId + "/person/" + personId,
