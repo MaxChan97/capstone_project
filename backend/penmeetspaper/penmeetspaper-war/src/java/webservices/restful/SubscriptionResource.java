@@ -7,9 +7,11 @@ package webservices.restful;
 
 import exception.NoResultException;
 import exception.NotValidException;
+import java.io.StringReader;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,13 +40,23 @@ public class SubscriptionResource {
                 .type(MediaType.APPLICATION_JSON).build();
     }
 
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
+    }
+
     @POST
     @Path("/subscriber/{subscriberId}/publisher/{publisherId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response subscribeToPerson(@PathParam("subscriberId") Long subscriberId, @PathParam("publisherId") Long publisherId) {
+    public Response subscribeToPerson(@PathParam("subscriberId") Long subscriberId, @PathParam("publisherId") Long publisherId, String jsonString) {
+
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String subId = jsonObject.getString("subId");
+
         try {
 
-            subscriptionSB.subscribeToPerson(subscriberId, publisherId);
+            subscriptionSB.subscribeToPerson(subscriberId, publisherId, subId);
             return Response.status(204).build();
 
         } catch (NoResultException | NotValidException e) {

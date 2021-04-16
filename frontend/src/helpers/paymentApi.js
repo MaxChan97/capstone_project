@@ -49,4 +49,38 @@ export default {
     });
   },
 
+  unsub(subId) {
+    if (subId !== undefined) {
+      return jQuery.ajax({ 
+        url: this.SERVER_PREFIX + "/unsub",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        type: "POST",
+        data: JSON.stringify({
+          subId: subId,
+        }),
+      });
+    }
+    
+  },
+
+  resub(subId) {
+    if (subId !== undefined) {
+      return jQuery.ajax({ 
+        url: this.SERVER_PREFIX + "/resub",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        type: "POST",
+        data: JSON.stringify({
+          subId: subId,
+        }),
+      });
+    }
+    
+  }
+
 }
