@@ -27,8 +27,14 @@ app.post('/pay', async (req, res) => {
 */
 
 app.post('/createPricingPlan', async (req, res) => {
-    console.log('helllloooo');
+    
+
     const {personId, price} = req.body;
+
+    if (price == 0) {
+        res.json({'stripePrice': {id: null}});
+        return
+    }
     const product = await stripe.products.create({
         name: `Subscription for user ${personId}`,
       });

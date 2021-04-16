@@ -16,6 +16,7 @@ import {makeStyles} from '@material-ui/core/styles';
 // Custom Components
 import CardInput from '../components/CardInputs';
 
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 500,
@@ -38,14 +39,21 @@ const useStyles = makeStyles({
 });
 
 function PaymentPage() {
+
+  const [price, setPrice] = useState(0);
   const { anotherPersonId } = useParams();
   const currentUser = useSelector((state) => state.currentUser);
   let email = "";
+  let plan = "";
   useEffect(() => {
     Api.getPersonById(currentUser)
       .done((data) => {
         email = data.email
-
+        Api.getPersonById(anotherPersonId).done((data) => {
+          console.log(data);
+          setPrice(data.pricingPlan);
+          plan = data.stripePrice;
+        })
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -103,7 +111,6 @@ function PaymentPage() {
       return;
     }
 
-    const plan = 'price_1IgazIHobA4nRrQlE4MmUxeg'
 
     const result = await stripe.createPaymentMethod({
       type: 'card',
@@ -156,7 +163,7 @@ function PaymentPage() {
           */}
           
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            Subscribe for $10
+            Subscribe for ${price}
           </Button>
         </div>
       </CardContent>

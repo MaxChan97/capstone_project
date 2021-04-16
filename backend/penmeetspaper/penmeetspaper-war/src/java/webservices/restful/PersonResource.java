@@ -571,7 +571,7 @@ public class PersonResource {
     public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Double pricingPlan = Double.valueOf(jsonObject.getInt("pricingPlan"));
+        Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
         String stripePrice = jsonObject.getString("stripePrice");
         System.out.println(stripePrice);
 
