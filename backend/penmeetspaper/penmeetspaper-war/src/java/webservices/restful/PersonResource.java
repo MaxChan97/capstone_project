@@ -571,12 +571,14 @@ public class PersonResource {
     public Response editPersonPricingPlan(@PathParam("id") Long id, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        Double pricingPlan = Double.valueOf(jsonObject.getString("pricingPlan"));
+        Double pricingPlan = Double.valueOf(jsonObject.getInt("pricingPlan"));
+        String stripePrice = jsonObject.getString("stripePrice");
+        System.out.println(stripePrice);
 
         try {
             Person person = personSB.getPersonById(id);
             person.setPricingPlan(pricingPlan);
-
+            person.setStripePrice(stripePrice);
             personSB.updatePricingPlan(person);
 
             return Response.status(204).build();

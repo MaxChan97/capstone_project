@@ -762,7 +762,7 @@ export default {
     });
   },
 
-  updatePricingPlan(personId, pricing) {
+  updatePricingPlan(personId, pricing, stripePrice) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/person/" + personId + "/pricingPlan",
       headers: {
@@ -772,6 +772,7 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         pricingPlan: pricing,
+        stripePrice: stripePrice,
       }),
     });
   },

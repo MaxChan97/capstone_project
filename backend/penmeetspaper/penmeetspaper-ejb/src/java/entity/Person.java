@@ -86,6 +86,9 @@ public class Person implements Serializable {
     @Column(nullable = false)
     private boolean completedOnboarding = false;
 
+    @Column
+    private String stripePrice;
+
     // Entity Variables ------------------
     //
     @Enumerated(EnumType.STRING)
@@ -574,6 +577,14 @@ public class Person implements Serializable {
      */
     public void setStreams(List<Stream> streams) {
         this.streams = streams;
+    }
+
+    public String getStripePrice() {
+        return stripePrice;
+    }
+
+    public void setStripePrice(String stripePrice) {
+        this.stripePrice = stripePrice;
     }
 
 }
