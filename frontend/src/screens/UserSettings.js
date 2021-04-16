@@ -49,6 +49,7 @@ export default function UserSettings() {
   }))(Button);
 
   const [pricing, setPricing] = React.useState(0);
+  const [oldPrice, setOldPrice] = React.useState(0);
 
   const handlePricing = (event) => {
     setPricing(event.target.value);
@@ -60,6 +61,7 @@ export default function UserSettings() {
         setChatIsPaid(currentPerson.chatIsPaid);
         setExplicit(currentPerson.hasExplicitLanguage);
         setPricing(currentPerson.pricingPlan);
+        setOldPrice(currentPerson.pricingPlan);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -70,10 +72,10 @@ export default function UserSettings() {
 
     Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid)
       .done(() => {
-        paymentApi.createPricingPlan(currentUser, pricing)
+        paymentApi.createPricingPlan(currentUser, pricing, oldPrice)
         .done((res) => {
           const {stripePrice} = res;
-          const {id: stripePriceId} = stripePrice
+          const {id: stripePriceId} = stripePrice;
           console.log(stripePriceId);
           Api.updatePricingPlan(currentUser, pricing, stripePriceId)
           .done(() => {

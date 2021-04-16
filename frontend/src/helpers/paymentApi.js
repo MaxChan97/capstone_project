@@ -19,7 +19,7 @@ export default {
     });
   },
 
-  createPricingPlan(personId, price) {
+  createPricingPlan(personId, price, oldPrice) {
     return jQuery.ajax({ 
       url: this.SERVER_PREFIX + "/createPricingPlan",
       headers: {
@@ -30,6 +30,7 @@ export default {
       data: JSON.stringify({
         personId: personId,
         price: price,
+        oldPrice: oldPrice,
       }),
     });
   },

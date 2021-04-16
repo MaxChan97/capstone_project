@@ -1,4 +1,5 @@
 const express = require('express')
+const axios = require('axios')
 const app = express()
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -11,48 +12,63 @@ app.use(bodyParser.urlencoded({ extended: false}))
 
 app.use(bodyParser.json())
 
-/*
-app.post('/pay', async (req, res) => {
-    const {email} = req.body;
-    console.log(email);
+const BACKEND_SERVER_PREFIX = "http://localhost:8080/penmeetspaper-war/webresources";
 
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: 5000,
-        currency: 'sgd',
-        metadata: {integration_check: 'accept_a_payment'},
-        receipt_email: email,
-    });
+const getSubscribers = async function (id) {
+    return await axios.get(BACKEND_SERVER_PREFIX + "/person/" + id + "/subscribers/");
+  };
 
-    res.json({'client_secret': paymentIntent['client_secret']})
-})
-*/
+  const unsubscribeFromPerson = async function(subscriberId, publisherId) {
+
+    return await axios.delete(BACKEND_SERVER_PREFIX + "/subscription/subscriber/" + subscriberId + "/publisher/" + publisherId)
+
+  };
+
 
 app.post('/createPricingPlan', async (req, res) => {
     
 
-    const {personId, price} = req.body;
+    const {personId, price, oldPrice} = req.body;
 
-    if (price == 0) {
-        res.json({'stripePrice': {id: null}});
-        return
+    if (oldPrice != price) {
+
+        const result = await getSubscribers(personId);
+        const subscriptionArr = result.data;
+
+        subscriptionArr.forEach(element => {
+            const {stripeSubId, subscriber } = element;
+            if (stripeSubId != undefined) {
+                stripe.subscriptions.del(stripeSubId);
+            }
+            unsubscribeFromPerson(subscriber.id, personId);
+        });
+
+
+        if (price == 0) {
+            res.json({'stripePrice': {id: "notCreated"}});
+            return
+        }
+        const product = await stripe.products.create({
+            name: `Subscription for user ${personId}`,
+        });
+
+        const stripePrice = await stripe.prices.create({
+            product: product.id,
+            unit_amount: price * 100,
+            currency: 'sgd',
+            recurring: {
+            interval: 'month',
+            },
+        });
+        res.json({'stripePrice': stripePrice});
+        return;
     }
-    const product = await stripe.products.create({
-        name: `Subscription for user ${personId}`,
-      });
 
-    const stripePrice = await stripe.prices.create({
-        product: product.id,
-        unit_amount: price * 100,
-        currency: 'sgd',
-        recurring: {
-          interval: 'month',
-        },
-      });
+    res.json({'stripePrice': {id: "notCreated"}});
+    return;
+});
+       
 
-    
-
-    res.json({'stripePrice': stripePrice});
-})
 
 app.post('/createCustomer', async (req, res) => {
     console.log('create customer method called')
@@ -95,15 +111,22 @@ app.post('/sub', async (req, res) => {
     const {customerId, plan} = req.body;
     console.log(customerId);
 
-    const subscription = await stripe.subscriptions.create({
-        customer: customerId,
-        items: [{plan: plan}],
-        expand: ['latest_invoice.payment_intent']
-    });
+    try {
 
-    const status = subscription['latest_invoice']['payment_intent']['status']
-    const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
-    res.json({'client_secret': client_secret, 'status': status, 'subId': subscription.id})
+        const subscription = await stripe.subscriptions.create({
+            customer: customerId,
+            items: [{plan: plan}],
+            expand: ['latest_invoice.payment_intent']
+        });
+
+        const status = subscription['latest_invoice']['payment_intent']['status']
+        const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
+        res.json({'client_secret': client_secret, 'status': status, 'subId': subscription.id})
+    } catch (e) {
+        return res.status(400).send({
+            message: 'payment failed'
+        });
+    }
 })
 
 app.listen(port, () => console.log(`payment server listening on port ${port}`))
