@@ -27,4 +27,6 @@ public interface VideoSessionBeanLocal {
 
   public List<Video> getPersonsVideos(Long personId) throws NoResultException, NotValidException;
 
+  public Video getVideo(Long videoId) throws NoResultException, NotValidException;
+
 }

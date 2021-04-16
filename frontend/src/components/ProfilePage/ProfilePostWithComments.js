@@ -20,6 +20,8 @@ import EditPost from "./EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
 import ReportPost from "./ReportPost";
+import Divider from "@material-ui/core/Divider";
+import Box from "@material-ui/core/Box";
 
 const ITEM_HEIGHT = 30;
 
@@ -379,6 +381,20 @@ export default function ProfilePostWithComments() {
                 </p>
               </div>
             </div>
+            {isAdmin == true ? (
+              <div>
+                <Divider variant="middle" />
+                <Box
+                  fontWeight="fontWeightBold"
+                  fontSize={13}
+                  m={1}
+                  style={{ marginLeft: "30px" }}
+                >
+                  {data.comments.length} Comments
+                </Box>
+                <Divider variant="middle" />
+              </div>
+            ) : ("")}
             <MakeCommentCard
               data={data}
               refresh={refresh}

@@ -670,7 +670,7 @@ export default {
     });
   },
 
-  subscribeToPerson(subscriberId, publisherId) {
+  subscribeToPerson(subscriberId, publisherId, subId) {
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
@@ -683,6 +683,10 @@ export default {
         "Content-Type": "application/json",
       },
       type: "POST",
+      data: JSON.stringify({
+        subId,
+        subId,
+      }),
     });
   },
 
@@ -1652,7 +1656,8 @@ export default {
     reporterId,
     reportTypeEnum,
     reportedContentId,
-    category
+    category,
+    reportedPersonId,
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report",
@@ -1667,6 +1672,7 @@ export default {
         reportTypeEnum: reportTypeEnum,
         reportedContentId: reportedContentId,
         category: category,
+        reportedPersonId: reportedPersonId,
       }),
     });
   },
@@ -1790,6 +1796,104 @@ export default {
         fileUrl: fileUrl,
         fileType: fileType,
       }),
+    });
+  },
+
+  getPersonsVideos(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/person" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  
+  adminDeletePost(adminId, postId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        postId: postId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteComment(adminId, commentId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteComment",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        commentId: commentId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteReply(adminId, replyId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteReply",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        replyId: replyId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  adminDeleteCommunity(adminId, communityId, description, reportId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/admin/" + adminId + "/deleteCommunity",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        communityId: communityId,
+        description: description,
+        reportId: reportId,
+      }),
+    });
+  },
+
+  getCommentById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/comment/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getReplyById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/reply/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
     });
   },
 };

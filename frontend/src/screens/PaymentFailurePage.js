@@ -1,9 +1,7 @@
-
-import Confetti from "react-confetti";
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import bear from "../assets/bear.png";
+import failbear from "../assets/failbear.png";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -19,7 +17,6 @@ export default function BannedPage() {
   return (
     <div className="content-wrapper">
       <div className="container">
-      <Confetti numberOfPieces={450} />
         <div className="row">
           <img
             style={{
@@ -28,14 +25,14 @@ export default function BannedPage() {
               marginTop: "90px",
               marginLeft: "250px",
             }}
-            src={bear}
+            src={failbear}
           />
         </div>
         <div className="row">
           <p
             style={{ marginTop: "30px", marginLeft: "480px", fontSize: "20px" }}
           >
-            Payment Success!!
+            Payment Not Successful!!
           </p>
         </div>
         <div className="row">

@@ -19,7 +19,7 @@ export default {
     });
   },
 
-  createPricingPlan(personId, price) {
+  createPricingPlan(personId, price, oldPrice) {
     return jQuery.ajax({ 
       url: this.SERVER_PREFIX + "/createPricingPlan",
       headers: {
@@ -30,6 +30,7 @@ export default {
       data: JSON.stringify({
         personId: personId,
         price: price,
+        oldPrice: oldPrice,
       }),
     });
   },
@@ -48,5 +49,39 @@ export default {
       }),
     });
   },
+
+  unsub(subId) {
+    if (subId !== undefined) {
+      return jQuery.ajax({ 
+        url: this.SERVER_PREFIX + "/unsub",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        type: "POST",
+        data: JSON.stringify({
+          subId: subId,
+        }),
+      });
+    }
+    
+  },
+
+  resub(subId) {
+    if (subId !== undefined) {
+      return jQuery.ajax({ 
+        url: this.SERVER_PREFIX + "/resub",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        type: "POST",
+        data: JSON.stringify({
+          subId: subId,
+        }),
+      });
+    }
+    
+  }
 
 }

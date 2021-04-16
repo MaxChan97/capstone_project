@@ -13,6 +13,7 @@ import entity.PersonAnswer;
 import entity.Poll;
 import entity.Post;
 import entity.Reply;
+import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
@@ -140,6 +141,41 @@ public class DataInitSessionBean {
     user7.setEmail("user7@email.com");
     user7.setPassword("password");
 
+    Person user101 = new Person();
+    user101.setUsername("Alice");
+    user101.setEmail("alice@gmail.com");
+    user101.setPassword("password");
+
+    Person user102 = new Person();
+    user102.setUsername("Bob");
+    user102.setEmail("bob@gmail.com");
+    user102.setPassword("password");
+
+    Person user103 = new Person();
+    user103.setUsername("Carl");
+    user103.setEmail("carl@gmail.com");
+    user103.setPassword("password");
+
+    Person user104 = new Person();
+    user104.setUsername("Desmond");
+    user104.setEmail("desmond@gmail.com");
+    user104.setPassword("password");
+
+    Person user105 = new Person();
+    user105.setUsername("Enola");
+    user105.setEmail("enola@gmail.com");
+    user105.setPassword("password");
+
+    Person user106 = new Person();
+    user106.setUsername("Fred");
+    user106.setEmail("fred@gmail.com");
+    user106.setPassword("password");
+
+    Person user107 = new Person();
+    user107.setUsername("Giraffe");
+    user107.setEmail("giraffe@gmail.com");
+    user107.setPassword("password");
+
     personSB.createPerson(user1);
     personSB.createPerson(user2);
     personSB.createPerson(user3);
@@ -147,6 +183,94 @@ public class DataInitSessionBean {
     personSB.createPerson(user5);
     personSB.createPerson(user6);
     personSB.createPerson(user7);
+
+    user101 = personSB.createPerson(user101);
+    user102 = personSB.createPerson(user102);
+    user103 = personSB.createPerson(user103);
+    user104 = personSB.createPerson(user104);
+    user105 = personSB.createPerson(user105);
+    user106 = personSB.createPerson(user106);
+    user107 = personSB.createPerson(user107);
+
+    List<TopicEnum> ti1 = new ArrayList<>();
+    List<TopicEnum> ti2 = new ArrayList<>();
+    List<TopicEnum> ti3 = new ArrayList<>();
+    List<TopicEnum> ti4 = new ArrayList<>();
+    List<TopicEnum> ti5 = new ArrayList<>();
+    List<TopicEnum> ti6 = new ArrayList<>();
+    List<TopicEnum> ti7 = new ArrayList<>();
+
+    ti1.add(TopicEnum.BLOCKCHAIN);
+    ti1.add(TopicEnum.ETF);
+    ti1.add(TopicEnum.CPF);
+    ti1.add(TopicEnum.BTO);
+
+    ti2.add(TopicEnum.BLOCKCHAIN);
+    ti2.add(TopicEnum.CRYPTOCURRENCY);
+    ti2.add(TopicEnum.CPF);
+    ti2.add(TopicEnum.CREDITCARDS);
+
+    ti3.add(TopicEnum.BLOCKCHAIN);
+    ti3.add(TopicEnum.ETF);
+    ti3.add(TopicEnum.INVESTMENTS);
+    ti3.add(TopicEnum.ROBOADVISORS);
+
+    ti4.add(TopicEnum.BLOCKCHAIN);
+    ti4.add(TopicEnum.TRADING);
+    ti4.add(TopicEnum.CPF);
+    ti4.add(TopicEnum.REITS);
+
+    ti5.add(TopicEnum.BLOCKCHAIN);
+    ti5.add(TopicEnum.ETF);
+    ti5.add(TopicEnum.INVESTMENTS);
+    ti5.add(TopicEnum.ROBOADVISORS);
+
+    ti6.add(TopicEnum.BLOCKCHAIN);
+    ti6.add(TopicEnum.ETF);
+    ti6.add(TopicEnum.INVESTMENTS);
+    ti6.add(TopicEnum.ROBOADVISORS);
+
+    ti7.add(TopicEnum.BLOCKCHAIN);
+    ti7.add(TopicEnum.ETF);
+    ti7.add(TopicEnum.INVESTMENTS);
+    ti7.add(TopicEnum.ROBOADVISORS);
+
+    user101.setIncomeRange(IncomeRangeEnum.LOW);
+    user102.setIncomeRange(IncomeRangeEnum.MIDDLE);
+    user103.setIncomeRange(IncomeRangeEnum.MIDDLE_HIGH);
+    user104.setIncomeRange(IncomeRangeEnum.MIDDLE_LOW);
+    user105.setIncomeRange(IncomeRangeEnum.NOT_EARNING);
+    user106.setIncomeRange(IncomeRangeEnum.CRA);
+    user107.setIncomeRange(IncomeRangeEnum.MIDDLE);
+
+    user101.setDob(new Date());
+    user102.setDob(new Date());
+    user103.setDob(new Date());
+    user104.setDob(new Date());
+    user105.setDob(new Date());
+    user106.setDob(new Date());
+    user107.setDob(new Date());
+
+    user101.setTopicInterests(ti1);
+    user102.setTopicInterests(ti2);
+    user103.setTopicInterests(ti3);
+    user104.setTopicInterests(ti4);
+    user105.setTopicInterests(ti5);
+    user106.setTopicInterests(ti6);
+    user107.setTopicInterests(ti7);
+
+    try {
+      personSB.onboarding(user101);
+      personSB.onboarding(user102);
+      personSB.onboarding(user103);
+      personSB.onboarding(user104);
+      personSB.onboarding(user105);
+      personSB.onboarding(user106);
+      personSB.onboarding(user107);
+    } catch (NoResultException ex) {
+      System.out.println("Error onboarding");
+    }
+
   }
 
   private void updateProfilePictures() throws NotValidException, NoResultException {
@@ -238,18 +362,34 @@ public class DataInitSessionBean {
     followSB.followPerson(new Long(1), new Long(3));
     followSB.followPerson(new Long(1), new Long(4));
     followSB.followPerson(new Long(1), new Long(5));
+
+    followSB.followPerson(new Long(8), new Long(1));
+    followSB.followPerson(new Long(9), new Long(1));
+    followSB.followPerson(new Long(10), new Long(1));
+    followSB.followPerson(new Long(11), new Long(1));
+    followSB.followPerson(new Long(12), new Long(1));
+    followSB.followPerson(new Long(13), new Long(1));
+    followSB.followPerson(new Long(14), new Long(1));
   }
 
   private void createSubs() throws NotValidException, NoResultException {
-    subSB.subscribeToPerson(new Long(1), new Long(2));
-    subSB.subscribeToPerson(new Long(1), new Long(3));
-    subSB.subscribeToPerson(new Long(1), new Long(4));
-    subSB.subscribeToPerson(new Long(1), new Long(5));
+    subSB.subscribeToPerson(new Long(1), new Long(2), "");
+    subSB.subscribeToPerson(new Long(1), new Long(3), "");
+    subSB.subscribeToPerson(new Long(1), new Long(4), "");
+    subSB.subscribeToPerson(new Long(1), new Long(5), "");
     subSB.unsubscribeToPerson(new Long(1), new Long(2));
 
-    subSB.subscribeToPerson(new Long(5), new Long(1));
-    subSB.subscribeToPerson(new Long(6), new Long(1));
-    subSB.subscribeToPerson(new Long(7), new Long(1));
+    subSB.subscribeToPerson(new Long(5), new Long(1), "");
+    subSB.subscribeToPerson(new Long(6), new Long(1), "");
+    subSB.subscribeToPerson(new Long(7), new Long(1), "");
+
+    subSB.subscribeToPerson(new Long(8), new Long(1), "");
+    subSB.subscribeToPerson(new Long(9), new Long(1), "");
+    subSB.subscribeToPerson(new Long(10), new Long(1), "");
+    subSB.subscribeToPerson(new Long(11), new Long(1), "");
+    subSB.subscribeToPerson(new Long(12), new Long(1), "");
+    subSB.subscribeToPerson(new Long(13), new Long(1), "");
+    subSB.subscribeToPerson(new Long(14), new Long(1), "");
   }
 
   private Poll createPoll() throws NotValidException, NoResultException {

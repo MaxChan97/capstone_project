@@ -15,6 +15,7 @@ import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import ReportPerson from "../ReportPerson";
+import paymentApi from "../../../helpers/paymentApi";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -37,6 +38,7 @@ export default function SocialButtonGroup({
   const alert = useAlert();
   const isAdmin = useSelector((state) => state.isAdmin);
   const [following, setFollowing] = useState(false);
+  const [subId, setSubId] = useState();
   const [subscribed, setSubscribed] = useState(false);
   const [subscription, setSubscription] = useState();
   const [subscriptionStatus, setSubscriptionStatus] = useState("NotSubscribed");
@@ -57,7 +59,6 @@ export default function SocialButtonGroup({
   ] = useState(false);
 
   const currentUser = useSelector((state) => state.currentUser);
-
   useEffect(() => {
     Api.getFollowers(id)
       .done((followObjects) => {
@@ -85,6 +86,7 @@ export default function SocialButtonGroup({
         let subscribedFlag = false;
         for (var i = 0; i < subscriptionObjects.length; i++) {
           if (subscriptionObjects[i].subscriber.id === currentUser) {
+            setSubId(subscriptionObjects[i].stripeSubId);
             subscribedFlag = true;
             //setSubscribed(true);
             console.log(subscriptionObjects[i]);
@@ -164,7 +166,34 @@ export default function SocialButtonGroup({
       });
   }
 
+  function handleResubscribe() {
+    paymentApi.resub(subId).done(() => {
+    Api.subscribeToPerson(currentUser, id, subId)
+      .done(() => {
+        if (following === false) {
+          Api.followPerson(currentUser, id)
+            .done(() => {
+              setRefresh(!refresh);
+              handleResubscribeDialogClose();
+            })
+            .fail((xhr, status, error) => {
+              alert.show(xhr.responseJSON.error);
+            });
+        } else {
+          setRefresh(!refresh);
+          handleResubscribeDialogClose();
+        }
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+    })
+  }
+
   function handleSubscribe() {
+    setRefresh(!refresh);
+    handleSubscribeDialogClose();
+    /*
     Api.subscribeToPerson(currentUser, id)
       .done(() => {
         if (following === false) {
@@ -186,10 +215,13 @@ export default function SocialButtonGroup({
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
+      */
   }
 
   function handleUnsubscribe() {
-    Api.unsubscribeFromPerson(currentUser, id)
+    console.log(subId);
+    paymentApi.unsub(subId).done(() => {
+      Api.unsubscribeFromPerson(currentUser, id)
       .done(() => {
         setRefresh(!refresh);
         handleUnsubscribeDialogClose();
@@ -197,6 +229,8 @@ export default function SocialButtonGroup({
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
       });
+    })
+    
   }
 
   function renderSubscribe() {
@@ -211,9 +245,12 @@ export default function SocialButtonGroup({
         </Button>
       );
     } else if (subscriptionStatus === "NotSubscribed") {
+      if (pricingPlan == 0) {
+        return;
+      }
       return (
-        <Button
-          style={{ height: "40px", width: "160px", outline: "none" }}
+        <Button 
+          style={{ height: "40px", width: "160px", outline: "none"}}
           variant="outlined"
           color="primary"
           onClick={handleSubscribeDialogOpen}
@@ -447,7 +484,7 @@ export default function SocialButtonGroup({
             </DialogContentText>
             {pricingPlan != undefined ? (
               <DialogContentText>
-                You will continue to be charged SGD {pricingPlan.toFixed(2)}
+                You will be charged SGD {pricingPlan.toFixed(2)}
                 /month when your subscription expires if you do
               </DialogContentText>
             ) : (
@@ -463,7 +500,7 @@ export default function SocialButtonGroup({
             </Button>
             <ColorButton
               style={{ outline: "none" }}
-              onClick={handleSubscribe}
+              onClick={handleResubscribe}
               color="primary"
               variant="contained"
               autoFocus

@@ -33,7 +33,7 @@ public class Report implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     private String messageBody;
 
     @Column
@@ -54,6 +54,8 @@ public class Report implements Serializable {
     @ManyToOne
     @JoinColumn(name = "person_report")
     private Person reporter;
+
+    private Long reportedPersonId;
 
     public Long getId() {
         return id;
@@ -123,6 +125,20 @@ public class Report implements Serializable {
      */
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    /**
+     * @return the reportedPersonId
+     */
+    public Long getReportedPersonId() {
+        return reportedPersonId;
+    }
+
+    /**
+     * @param reportedPersonId the reportedPersonId to set
+     */
+    public void setReportedPersonId(Long reportedPersonId) {
+        this.reportedPersonId = reportedPersonId;
     }
 
     @Override

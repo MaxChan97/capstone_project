@@ -165,7 +165,7 @@ function Navbar({
     setShowUploadDialog(false);
   }
 
-  const handleUpload = () => {
+  var handleUpload = () => {
     Api.uploadVideo(
       currentUser,
       title,
@@ -176,7 +176,7 @@ function Navbar({
     )
       .done(() => {
         alert.show("Video uploaded successfully!");
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
         handleUploadDialogClose();
       })
       .fail((xhr, status, error) => {
@@ -220,78 +220,75 @@ function Navbar({
         <DialogActions>
           <div className="container">
             <div className="row ml-1">
-              <form>
-                <div className="ml-2 mr-4">
-                  <div className="form-group">
-                    {progress >= 0 && progress < 100 ? (
-                      <div className="d-flex justify-content-center">
-                        <CircularProgressWithLabel value={progress} />
-                      </div>
-                    ) : (
-                      fileUrl && (
-                        <div className="d-flex justify-content-center">
-                          <iframe height="100%" src={fileUrl}></iframe>
-                        </div>
-                      )
-                    )}
-                    <div className="row mt-2 justify-content-center">
-                      <label
-                        className="btn"
-                        style={{
-                          height: "40px",
-                          width: "220px",
-                          backgroundColor: "#3B21CB",
-                          color: "white",
-                          textAlign: "center",
-                        }}
-                      >
-                        Choose Video to Upload
-                        <FileUploader
-                          hidden
-                          accept="video/*"
-                          randomizeFilename={true}
-                          storageRef={firebase.storage().ref("videos")}
-                          onUploadStart={handleUploadStart}
-                          onUploadError={handleUploadError}
-                          onUploadSuccess={handleUploadSuccess}
-                          onProgress={handleProgress}
-                        />
-                      </label>
+              <div className="ml-2 mr-4">
+                <div className="form-group">
+                  {progress >= 0 && progress < 100 ? (
+                    <div className="d-flex justify-content-center">
+                      <CircularProgressWithLabel value={progress} />
                     </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="inputTitle">Title</label>
-                    <input
-                      type="text"
-                      id="inputTitle"
-                      // required
+                  ) : (
+                    fileUrl && (
+                      <div className="d-flex justify-content-center">
+                        <iframe height="100%" src={fileUrl}></iframe>
+                      </div>
+                    )
+                  )}
+                  <div className="row mt-2 justify-content-center">
+                    <label
+                      className="btn"
                       style={{
-                        width: "400px",
-                        marginTop: "13px",
-                        marginBottom: "20px",
+                        height: "40px",
+                        width: "220px",
+                        backgroundColor: "#3B21CB",
+                        color: "white",
+                        textAlign: "center",
                       }}
-                      className="form-control"
-                      value={title}
-                      onChange={handleTitleChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="inputDescription">Description</label>
-                    <textarea
-                      className="form-control"
-                      value={description}
-                      style={{
-                        width: "400px",
-                        height: "100px",
-                        marginTop: "13px",
-                        marginBottom: "20px",
-                      }}
-                      onChange={handleDescriptionChange}
-                    />
+                    >
+                      Choose Video to Upload
+                      <FileUploader
+                        hidden
+                        accept="video/*"
+                        randomizeFilename={true}
+                        storageRef={firebase.storage().ref("videos")}
+                        onUploadStart={handleUploadStart}
+                        onUploadError={handleUploadError}
+                        onUploadSuccess={handleUploadSuccess}
+                        onProgress={handleProgress}
+                      />
+                    </label>
                   </div>
                 </div>
-              </form>
+                <div className="form-group">
+                  <label htmlFor="inputTitle">Title</label>
+                  <input
+                    type="text"
+                    id="inputTitle"
+                    // required
+                    style={{
+                      width: "400px",
+                      marginTop: "13px",
+                      marginBottom: "20px",
+                    }}
+                    className="form-control"
+                    value={title}
+                    onChange={handleTitleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="inputDescription">Description</label>
+                  <textarea
+                    className="form-control"
+                    value={description}
+                    style={{
+                      width: "400px",
+                      height: "100px",
+                      marginTop: "13px",
+                      marginBottom: "20px",
+                    }}
+                    onChange={handleDescriptionChange}
+                  />
+                </div>
+              </div>
             </div>
             <div className="row mr-3 mb-2" style={{ float: "right" }}>
               <Button
