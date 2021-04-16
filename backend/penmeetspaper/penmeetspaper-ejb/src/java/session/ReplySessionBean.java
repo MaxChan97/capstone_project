@@ -10,6 +10,8 @@ import entity.Person;
 import entity.Reply;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -78,9 +80,36 @@ public class ReplySessionBean implements ReplySessionBeanLocal {
         }
     }
 
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        Person person = emGetPerson(p.getId());
+        Person res = new Person();
+        res.setUsername(person.getUsername());
+        res.setId(person.getId());
+        return res;
+    }
+
+    private ArrayList<Person> getDetachedLikes(List<Person> likes) {
+        int size = likes.size();
+        ArrayList<Person> res = new ArrayList();
+        for (int i = 0; i < size; i++) {
+            res.add(new Person());
+        }
+        return res;
+    }
+
     @Override
     public Reply getReply(Long replyId) throws NoResultException, NotValidException {
         return emGetReply(replyId);
+    }
+
+    @Override
+    public Reply getReplyById(Long replyId) throws NoResultException, NotValidException {
+        Reply r = emGetReply(replyId);
+        em.detach(r);
+
+        r.setLikes(getDetachedLikes(r.getLikes()));
+        r.setAuthor(getDetachedPerson(r.getAuthor()));
+        return r;
     }
 
     @Override
