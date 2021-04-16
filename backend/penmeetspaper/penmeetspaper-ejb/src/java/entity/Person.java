@@ -134,7 +134,7 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "likes")
     private List<Video> likedVideos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "author")
     private List<Video> videosCreated = new ArrayList<>();
 
     @OneToMany(mappedBy = "reporter")
