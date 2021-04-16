@@ -6,6 +6,7 @@ import Divider from "@material-ui/core/Divider";
 import ProfilePostCard from "./ProfilePostCard";
 import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
+import Talk from "../../assets/talk1.gif";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,6 +74,14 @@ export default function PostList({
       >
         No posts yet...
       </h3>
+      <br></br>
+      <div
+        style={{
+          textAlign: "center",
+          margin: "auto",
+        }}>
+        <img src={Talk} />
+      </div>
     </div>
   );
 }
