@@ -17,6 +17,7 @@ import DeleteCommentModal from "./DeleteCommentModal";
 import { useAlert } from "react-alert";
 import EditComment from "./EditComment";
 import ReportComment from "./ReportComment";
+import AdminDeleteCommentModal from "./AdminDeleteCommentModal";
 
 const ITEM_HEIGHT = 30;
 
@@ -69,6 +70,20 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
     setAnchorEl(null);
   }
 
+  const [adminDeleteCommentModal, setAdminDeleteCommentModal] = React.useState(false);
+
+  function openAdminDeleteCommentModal() {
+    setAdminDeleteCommentModal(true);
+  }
+
+  function closeAdminDeleteCommentModal() {
+    setAdminDeleteCommentModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openAdminDeleteCommentModal();
+  };
   const [showReplies, setShowReplies] = React.useState(false);
 
   const handleViewHideReplies = () => {
@@ -122,7 +137,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
     }
   }, [refresh]);
 
-  return deleted == false && data ? (
+  return deleted == false && data.author != undefined ? (
     <div
       style={{
         display: "flex",
@@ -131,6 +146,12 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div >
+        <AdminDeleteCommentModal
+          show={adminDeleteCommentModal}
+          handleClose={closeAdminDeleteCommentModal}
+          data={data}
+          setDeleted={setDeleted}
+        />
         <DeleteCommentModal
           show={deleteCommentModal}
           handleClose={closeDeleteCommentModal}
@@ -205,12 +226,21 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               ) : (
                 <span></span>
               )}
-               {isAdmin == false && data.author.id != currentUser ? (
-                  <div style={{ textAlign: "right" }}>
-                    <ReportComment
-                      data={data}
-                    ></ReportComment> </div>
-                ) : ("")}
+              {isAdmin == false && data.author.id != currentUser ? (
+                <div style={{ textAlign: "right" }}>
+                  <ReportComment
+                    data={data}
+                  ></ReportComment> </div>
+              ) : ("")}
+              {isAdmin == true ? (
+                <div style={{ textAlign: "right" }}>
+                  <Link onClick={handleAdminDelete}>
+                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                  </Link>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
 
             {edit == false ? (<p style={{ marginLeft: 10 }}>{data.body}</p>) : <EditComment autofocus data={data}

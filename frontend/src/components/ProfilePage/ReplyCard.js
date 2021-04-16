@@ -15,6 +15,7 @@ import DeleteReplyModal from "./DeleteReplyModal";
 import { useAlert } from "react-alert";
 import EditReply from "./EditReply";
 import ReportReply from "./ReportReply";
+import AdminDeleteReplyModal from "./AdminDeleteReplyModal";
 
 const options = ["Edit Reply", "Delete Reply"];
 
@@ -69,6 +70,21 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     setAnchorEl(null);
   }
 
+  const [deleteReplyModal, setDeleteReplyModal] = React.useState(false);
+
+  function openDeleteReplyModal() {
+    setDeleteReplyModal(true);
+  }
+
+  function closeDeleteReplyModal() {
+    setDeleteReplyModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openDeleteReplyModal();
+  };
+
   const [liked, setLiked] = useState();
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -111,7 +127,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     }
   }, [refresh]);
 
-  return deleted == false && data ? (
+  return deleted == false && data.author != undefined ? (
     <div
       style={{
         display: "flex",
@@ -120,6 +136,12 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
       }}
     >
       <div >
+        <AdminDeleteReplyModal
+          show={deleteReplyModal}
+          handleClose={closeDeleteReplyModal}
+          data={data}
+          setDeleted={setDeleted}
+        />
         <DeleteReplyModal
           show={deleteCommentModal}
           handleClose={closeDeleteCommentModal}
@@ -202,6 +224,15 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                     data={data}
                   ></ReportReply> </div>
               ) : ("")}
+              {isAdmin == true ? (
+                <div style={{ textAlign: "right",}}>
+                  <Link onClick={handleAdminDelete}>
+                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                  </Link>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
 
 

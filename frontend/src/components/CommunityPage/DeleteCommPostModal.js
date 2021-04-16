@@ -16,36 +16,13 @@ import Api from "../../helpers/Api";
 import { useAlert } from "react-alert";
 import { Redirect, useHistory } from "react-router";
 
-const useStyles = makeStyles({
-  cardContainer: {
-    background: "white",
-    minWidth: 500,
-    minHeight: 100,
-    paddingLeft: "5%",
-    paddingRight: "5%",
-    top: "50%",
-    transform: "translate(0, -50%)",
-    overflowY: "auto",
-    maxHeight: "auto",
-    border: "1px solid #BEBEBE",
-    boxShadow: "-10px 10px 4px rgba(0, 0, 0, 0.05)",
-    margin: "auto",
-  },
-  cardContent: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space",
-    alignItems: "center",
-    paddingTop: "15%",
-    padding: 0,
-    width: "100%",
-  },
-  nameText: {
-    fontWeight: "bold",
-    fontSize: 40,
-    margin: 0,
-  },
-});
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -66,7 +43,6 @@ export default function DeleteCommPostModal({
   setRefresh,
   community,
 }) {
-  const styles = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const theme = useTheme();
   const alert = useAlert();
@@ -90,63 +66,58 @@ export default function DeleteCommPostModal({
     handleClose();
   }
 
-  return  data ? (
-    <Modal
+  return data ? (
+    <Dialog
       open={show}
       onClose={handleClose}
-      style={{
-        display: "flex",
-        position: "absolute",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        width: "100%",
-        maxHeight: "60%",
-        top: "20%",
-        alignSelf: "center",
-        textAlign: "center",
-      }}
+      aria-labelledby="confirm-delete-dialog-title"
+      aria-describedby="confirm-delete-dialog-description"
+      fullWidth={true}
+      maxWidth="sm"
     >
-      <Card className={styles.cardContainer}>
-        <CardContent className={styles.cardContent}>
-          <h5>Confirm Delete Post from Community {community.name} ?</h5>
-          <p>Post deletion is permanent and cannot be undone</p>
-          <br></br>
-          <div style={{ display: "flex", alignItems: "baseline" }}>
-            <ColorButton
-              style={{
-                outline: "none",
-                marginRight: "3%",
-                backgroundColor: "#FFFFFF",
-                color: "#4A5056",
-              }}
-              variant="contained"
-              color="secondary"
-              type="reset"
-              size="small"
-              onClick={handleCancel}
-            >
-              CANCEL
+      <DialogTitle id="confirm-delete-dialog-title">
+        <i class='fas fa-exclamation-circle' style={{ color: "#EA3F79" }}></i>{" "}  Delete Post
+     </DialogTitle>
+      <DialogContent style={{ overflowY: 'visible' }}>
+        <DialogContentText id="confirm-delete-dialog-description" style={{ textAlign: "left" }}>
+          Confirm Delete Post from Community {community.name} ?
+          Post deletion is permanent and cannot be undone.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <ColorButton
+          style={{
+            outline: "none",
+            marginRight: "3%",
+            backgroundColor: "#FFFFFF",
+            color: "#4A5056",
+          }}
+          variant="contained"
+          color="secondary"
+          type="reset"
+          size="small"
+          onClick={handleCancel}
+        >
+          CANCEL
             </ColorButton>
-            <span> &nbsp; </span>
-            <ColorButton
-              style={{
-                outline: "none",
-                marginRight: "3%",
-                textAlign: "right",
-              }}
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="small"
-              onClick={handleSubmit}
-            >
-              Delete
+        <span> &nbsp; </span>
+        <ColorButton
+          style={{
+            outline: "none",
+            marginRight: "3%",
+            textAlign: "right",
+          }}
+          variant="contained"
+          color="primary"
+          type="submit"
+          size="small"
+          onClick={handleSubmit}
+        >
+          Delete
             </ColorButton>
-          </div>
-        </CardContent>
-      </Card>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   ) : (
-      ""
+    ""
   );
 }
