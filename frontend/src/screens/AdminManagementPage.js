@@ -30,18 +30,11 @@ export default function AdminManagementPage() {
         <div className="row">
           <div className="col-md-12 mt-4" style={{ textAlign: "left", }}>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
               <Link to="/admin/createAdmin">
                 <ColorButton
                   style={{
                     height: "35px",
-                    width: "300px",
+                    width: "250px",
                     outline: "none",
                     float: "right",
                     fontWeight: "600",
@@ -52,42 +45,14 @@ export default function AdminManagementPage() {
                   color="primary"
                   type="button"
                 >
-                  Create Admin Account
+                  <i class='fas fa-plus'></i> &nbsp;
+                  Add New Admin
                 </ColorButton>
               </Link>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Link to="/admin/logs">
-                  <ColorButton
-                    style={{
-                      height: "35px",
-                      width: "300px",
-                      outline: "none",
-                      float: "right",
-                      fontWeight: "600",
-                      backgroundColor: "#EA3F79",
-                      margin: "20px"
-                    }}
-
-                    variant="contained"
-                    color="primary"
-                    type="button"
-                  >
-                    View all admin logs
-                  </ColorButton>
-                </Link>
-              </div>
-            </div>
-
           </div>
         </div>
-        <div className="col-md-12 mt-4">
+        <div className="col-md-12 mt-1">
           <AdminList></AdminList>
         </div>
       </div>
