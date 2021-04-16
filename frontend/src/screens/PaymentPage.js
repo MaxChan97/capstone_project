@@ -42,6 +42,7 @@ const useStyles = makeStyles({
 function PaymentPage() {
 
   const alert = useAlert();
+  const history = useHistory();
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState('');
   const [plan, setPlan] = useState('');
@@ -145,23 +146,23 @@ function PaymentPage() {
         if (status === 'requires_action') {
           stripe.confirmCardPayment(client_secret).then(function(result) {
             if (result.error) {
-              alert.show('There was an issue!');
-              alert.show(result.error);
+              alert.show('There was an issue! Please try again later');
+              console.log(result.error);
               // Display error message in your UI.
               // The card was declined (i.e. insufficient funds, card has expired, etc)
             } else {
-              alert.show('Payment Success!');
+              history.push("/paymentSuccess");
               // Show a success message to your customer
             }
           });
         } else {
-          alert.show('Payment Success!');
+          history.push("/paymentSuccess");
           // No additional information was needed
           // Show a success message to your customer
         }
       }).fail((res) => {
-        alert.show('There was an issue!');
-        alert.show(result.error);
+        alert.show('There was an issue! Please try again later');
+        console.log(result.error);
       })
     }
   };

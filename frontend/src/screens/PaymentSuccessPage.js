@@ -26,16 +26,16 @@ export default function BannedPage() {
               resizeMode: "repeat",
               height: 350,
               marginTop: "90px",
-              marginLeft: "400px",
+              marginLeft: "250px",
             }}
             src={bear}
           />
         </div>
         <div className="row">
           <p
-            style={{ marginTop: "30px", marginLeft: "385px", fontSize: "20px" }}
+            style={{ marginTop: "30px", marginLeft: "480px", fontSize: "20px" }}
           >
-            Oops...You are banned from this community.
+            Payment Success!!
           </p>
         </div>
         <div className="row">
@@ -50,9 +50,9 @@ export default function BannedPage() {
               marginTop: "20px",
               marginBottom:"160px"
             }}
-            href="/home"
+            href="/feed"
             variant="contained"
-            color="primary"
+            color="primary" 
             type="button"
           >
             Back To Home
