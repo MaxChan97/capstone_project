@@ -20,6 +20,8 @@ import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
 import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 import EditPost from "../../components/ProfilePage/EditPost";
+import Divider from "@material-ui/core/Divider";
+import Box from "@material-ui/core/Box";
 
 const ITEM_HEIGHT = 30;
 
@@ -294,7 +296,20 @@ export default function CommunityPostWithComments() {
                 </p>
               </div>
             </div>
-
+            {isAdmin == true ? (
+              <div>
+                <Divider variant="middle" />
+                <Box
+                  fontWeight="fontWeightBold"
+                  fontSize={13}
+                  m={1}
+                  style={{ marginLeft: "30px" }}
+                >
+                  {data.comments.length} Comments
+                </Box>
+                <Divider variant="middle" />
+              </div>
+            ) : ("")}
             <MakeCommentCard
               data={data}
               refresh={refresh}
