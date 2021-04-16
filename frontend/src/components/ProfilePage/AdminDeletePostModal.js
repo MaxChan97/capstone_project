@@ -37,7 +37,7 @@ const ColorButton = withStyles((theme) => ({
 
 
 export default function AdminDeletePostModal({ show, handleClose, data, refresh,
-    setRefresh, }) {
+    setRefresh, community }) {
 
     const currentUser = useSelector((state) => state.currentUser);
     const theme = useTheme();
@@ -53,13 +53,17 @@ export default function AdminDeletePostModal({ show, handleClose, data, refresh,
                 alert.show("Deleted!");
                 setRefresh(!refresh);
                 handleClose();
-                history.push("/profile/" + data.author.id);
+                if (community == undefined) {
+                    history.push("/profile/" + data.author.id);
+                } else {
+                    history.push("/community/" + community.id);
+                }
             })
             .fail((xhr, status, error) => {
                 handleClose();
                 alert.show("Something went wrong, please try again!");
             });
-        
+
     }
 
     async function handleCancel() {

@@ -20,6 +20,8 @@ import EditPost from "../../components/ProfilePage/EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
 import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
+import AdminDeletePostModal from "../../components/ProfilePage/AdminDeletePostModal";
+
 const ITEM_HEIGHT = 30;
 
 export default function ProfilePostCard({
@@ -132,6 +134,21 @@ export default function ProfilePostCard({
     setAnchorEl(null);
   }
 
+  const [adminDeletePostModal, setAdminDeletePostModal] = React.useState(false);
+
+  function openAdminDeletePostModal() {
+    setAdminDeletePostModal(true);
+  }
+
+  function closeAdminDeletePostModal() {
+    setAdminDeletePostModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openAdminDeletePostModal();
+  };
+
   const [liked, setLiked] = useState();
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -188,6 +205,14 @@ export default function ProfilePostCard({
       }}
     >
       <div>
+      <AdminDeletePostModal
+          show={adminDeletePostModal}
+          handleClose={closeAdminDeletePostModal}
+          data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          community={community}
+        />
         <DeleteCommPostModal
           show={deletePostModal}
           handleClose={closeDeletePostModal}
@@ -266,6 +291,15 @@ export default function ProfilePostCard({
                 {isAdmin == false && data.author.id != currentUser ? (
                   <div style={{ textAlign: "right" }}>
                     <ReportCommPost data={data}></ReportCommPost>{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {isAdmin == true ? (
+                  <div style={{ textAlign: "right", marginRight:25 }}>
+                    <Link onClick={handleAdminDelete}>
+                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                    </Link>
                   </div>
                 ) : (
                   ""
