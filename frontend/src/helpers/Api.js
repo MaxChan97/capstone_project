@@ -1038,6 +1038,17 @@ export default {
     });
   },
 
+  getPostByTrends(hashtag) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/post/trend/query?hashtag=" + hashtag,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   banPersonFromCommunity(communityId, personId, ownerId) {
     return jQuery.ajax({
       url:
@@ -1216,6 +1227,28 @@ export default {
   getStreamById(streamId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/" + streamId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  searchStreamByTitleAndDescription(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/query?searchString=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getStreamsByTrend(hashtag) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/stream/trend/query?hashtag=" + hashtag,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

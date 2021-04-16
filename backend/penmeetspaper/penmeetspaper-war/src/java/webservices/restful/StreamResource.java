@@ -10,6 +10,8 @@ import entity.LivePoll;
 import entity.PersonAnswer;
 import entity.Stream;
 import enumeration.TopicEnum;
+import exception.NoResultException;
+import exception.NotValidException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -421,6 +424,45 @@ public class StreamResource {
         try {
             streamSBLocal.unkickUserFromStream(streamId, personId);
             return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchStreamByTitleAndDescription(@QueryParam("searchString") String searchString) {
+        try {
+            if (searchString != null) {
+                List<Stream> results = streamSBLocal.searchStreamByTitleAndDescription(searchString);
+                GenericEntity<List<Stream>> entity = new GenericEntity<List<Stream>>(results) {
+                };
+                
+                return Response.status(200).entity(entity).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
+
+                return Response.status(400).entity(exception).build();
+            }
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/trend/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStreamsByTrend(@QueryParam("hashtag") String hashtag) {
+        try {
+            hashtag = "#" + hashtag; 
+            List<Stream> results = streamSBLocal.getStreamsByTrend(hashtag);
+            GenericEntity<List<Stream>> entity = new GenericEntity<List<Stream>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
