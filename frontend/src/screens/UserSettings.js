@@ -71,8 +71,8 @@ export default function UserSettings() {
   const [oldPrice, setOldPrice] = React.useState(0);
   const [productId, setProductId] = React.useState();
   const [bankAccount, setBankAccount] = React.useState();
+  const [bankName, setBankName] = React.useState();
   const [accountNumber, setAccountNumber] = React.useState("");
-  const [bankName, setBankName] = useState();
 
   const handleBankName = (event) => {
     setBankName(event.target.value);
@@ -85,7 +85,7 @@ export default function UserSettings() {
   const handleAccountNumber = (event) => {
     setAccountNumber(event.target.value);
   };
-  
+
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
@@ -95,6 +95,11 @@ export default function UserSettings() {
         setOldPrice(currentPerson.pricingPlan);
         setProductId(currentPerson.stripeProductId);
         setBankAccount(currentPerson.bankAccount);
+
+        if (currentPerson.bankAccount) {
+          setAccountNumber(currentPerson.bankAccount.accountNumber);
+          setBankName(stringToBank(currentPerson.bankAccount.bankEnum))
+        }
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
@@ -119,6 +124,7 @@ export default function UserSettings() {
     } else {
       Api.updateBankAccount(bankAccount.id, accountNumber, bankName.value);
     }
+
     if (productId === undefined) {
       try {
         const data = await paymentApi.createProductForUser(currentUser);
@@ -177,7 +183,7 @@ export default function UserSettings() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Subscription pricing
               </Box>
-              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px" }}>
                 <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
                   Pricing
                 </Box>
@@ -200,26 +206,26 @@ export default function UserSettings() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Bank Account
               </Box>
-              <div className="form-group" style={{marginLeft:"10px", marginRight:"480px"}}>
-                  <label htmlFor="inputBankName">Bank</label>
-                  {bankName !== undefined ? (
-                    <Select
-                      name="bank"
-                      options={bank}
-                      value={stringToBank(bankAccount.bankEnum)}
-                      onChange={setBankName}
-                      classNamePrefix="select"
-                    />
-                  ) : (
-                    <Select
-                      name="banks"
-                      options={bank}
-                      onChange={setBankName}
-                      classNamePrefix="select"
-                    />
-                  )}
-                </div>
-              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
+              <div className="form-group" style={{ marginLeft: "10px", marginRight: "480px" }}>
+                <label htmlFor="inputBankName">Bank</label>
+                {bankName !== undefined ? (
+                  <Select
+                    name="bank"
+                    options={bank}
+                    value={bankName}
+                    onChange={setBankName}
+                    classNamePrefix="select"
+                  />
+                ) : (
+                  <Select
+                    name="banks"
+                    options={bank}
+                    onChange={setBankName}
+                    classNamePrefix="select"
+                  />
+                )}
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px" }}>
                 <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
                   Account Number
                 </Box>
@@ -229,7 +235,7 @@ export default function UserSettings() {
                   type="number"
                   variant="outlined"
                   size="small"
-                  value={bankAccount.accountNumber}
+                  value={accountNumber}
                   onChange={handleAccountNumber}
                 />
               </div>
