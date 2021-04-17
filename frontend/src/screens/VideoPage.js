@@ -49,6 +49,11 @@ export default function VideoPage() {
   const currentUser = useSelector((state) => state.currentUser);
   const history = useHistory();
 
+  const [advertisements, setAdvertisements] = useState(null);
+  const [adToShow, setAdToShow] = useState([]);
+  const [shownAd, setShownAd] = useState();
+  const [adLink, setAdLink] = useState();
+  const [currentPerson, setCurrentPerson] = useState(null);
   const [video, setVideo] = useState();
   const [videos, setVideos] = useState();
   const [numFollowers, setNumFollowers] = useState(0);
@@ -75,15 +80,21 @@ export default function VideoPage() {
   ] = useState(false);
 
   useEffect(() => {
-    Api.getVideo(videoId)
-      .done((video) => {
-        setVideo(video);
-        Api.getAllVideos()
-          .done((videos) => {
-            let vs = videos.filter(
-              (v) => v.id != video.id && isRelated(v, video)
-            );
-            setVideos(vs);
+    Api.addView(videoId)
+      .done(() => {
+        Api.getVideo(videoId)
+          .done((video) => {
+            setVideo(video);
+            Api.getAllVideos()
+              .done((videos) => {
+                let vs = videos.filter(
+                  (v) => v.id != video.id && isRelated(v, video)
+                );
+                setVideos(vs);
+              })
+              .fail((xhr, status, error) => {
+                alert.show(xhr.responseJSON.error);
+              });
           })
           .fail((xhr, status, error) => {
             alert.show(xhr.responseJSON.error);
@@ -91,6 +102,18 @@ export default function VideoPage() {
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
+      });
+    Api.getAllAdvertisement()
+      .done((list) => {
+        setAdvertisements(list);
+        Api.getPersonById(currentUser)
+          .then((person) => {
+            setCurrentPerson(person);
+            targetAd(list, person);
+          })
+      })
+      .fail(() => {
+        //alert.show("Unable to load!");
       });
   }, [refresh]);
 
@@ -162,6 +185,37 @@ export default function VideoPage() {
       }
     }
     return isRelated;
+  }
+
+  function targetAd(list, person) {
+    var found = false;
+    for (var i = list.length - 1; i >= 0; i--) {
+      if (
+        person.topicInterests.some((interest) =>
+          list[i].topics.includes(interest)
+        )
+      ) {
+        // got match in interest
+        // add to recommended ads
+        found = true;
+        adToShow.push(list[i]);
+      }
+    }
+    //default advert
+    if (found == false) {
+      adToShow.push(list[1]);
+    }
+
+    var randomAdId = Math.floor(getRandomArbitrary(0, adToShow.length));
+    console.log(randomAdId);
+    console.log(adToShow[randomAdId]);
+    setShownAd(adToShow[randomAdId]);
+    setAdLink("https://" + adToShow[randomAdId].linkTo);
+    console.log(shownAd)
+  }
+
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
   }
 
   function handleUnfollowDialogOpen() {
@@ -624,7 +678,7 @@ export default function VideoPage() {
     );
   }
 
-  return video ? (
+  return video && advertisements ? (
     <div className="content-wrapper">
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div
@@ -679,6 +733,19 @@ export default function VideoPage() {
           </p>
           <hr style={{ borderTop: "1px solid #D0D0D0", margin: 0 }} />
           <div style={{ marginTop: "16px" }}>{renderVideoInfo(video)}</div>
+          <br></br>
+          {subscriptionStatus === "NotSubscribed" && advertisements.length > 0 && shownAd != undefined? (
+             <a href={adLink} target="_blank" rel="noopener noreferrer">
+             <img
+              className="mx-auto d-block"
+              width="750px"
+              src={shownAd.image}
+            />
+           </a>
+            
+          
+          ) : ("")}
+          <br></br>
         </div>
         <div
           style={{

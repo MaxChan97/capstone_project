@@ -6,6 +6,7 @@
 package session;
 
 import entity.Administrator;
+import entity.Badge;
 import entity.Comment;
 import entity.Community;
 import entity.Person;
@@ -17,6 +18,8 @@ import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,38 +110,38 @@ public class DataInitSessionBean {
 
     private void createPersons() throws NotValidException {
         Person user1 = new Person();
-        user1.setUsername("user1");
-        user1.setEmail("user1@email.com");
+        user1.setUsername("xiaoming_");
+        user1.setEmail("xiaoming@gmail.com");
         user1.setPassword("password");
 
         Person user2 = new Person();
-        user2.setUsername("user2");
-        user2.setEmail("user2@email.com");
+        user2.setUsername("jenny_hodl");
+        user2.setEmail("jennytan@yahoo.com.sg");
         user2.setPassword("password");
 
         Person user3 = new Person();
-        user3.setUsername("user3");
-        user3.setEmail("user3@email.com");
+        user3.setUsername("alanxalan");
+        user3.setEmail("alandsouza@hotmail.com");
         user3.setPassword("password");
 
         Person user4 = new Person();
-        user4.setUsername("user4");
-        user4.setEmail("user4@email.com");
+        user4.setUsername("iLoveCrypto");
+        user4.setEmail("maxchanwf@gmail.com");
         user4.setPassword("password");
 
         Person user5 = new Person();
-        user5.setUsername("user5");
-        user5.setEmail("user5@email.com");
+        user5.setUsername("tothemoon");
+        user5.setEmail("tothemoon@gmail.com");
         user5.setPassword("password");
 
         Person user6 = new Person();
-        user6.setUsername("user6");
-        user6.setEmail("user6@email.com");
+        user6.setUsername("TheInsuranceGuru");
+        user6.setEmail("theinsuranceguru@yahoo.com.sg");
         user6.setPassword("password");
 
         Person user7 = new Person();
-        user7.setUsername("user7");
-        user7.setEmail("user7@email.com");
+        user7.setUsername("apeboi97");
+        user7.setEmail("apeboi97@gmail.com");
         user7.setPassword("password");
 
         Person user101 = new Person();
@@ -271,6 +274,134 @@ public class DataInitSessionBean {
             System.out.println("Error onboarding");
         }
 
+    }
+
+    private Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    private void editPersonDataInt() throws NoResultException, NotValidException {
+
+        List<TopicEnum> ti1 = new ArrayList<>();
+        List<TopicEnum> ti2 = new ArrayList<>();
+        List<TopicEnum> ti3 = new ArrayList<>();
+        List<TopicEnum> ti4 = new ArrayList<>();
+        List<TopicEnum> ti5 = new ArrayList<>();
+        List<TopicEnum> ti6 = new ArrayList<>();
+        List<TopicEnum> ti7 = new ArrayList<>();
+
+        ti1.add(TopicEnum.INVESTMENTS);
+        ti1.add(TopicEnum.ETF);
+        ti1.add(TopicEnum.CPF);
+        ti1.add(TopicEnum.SAVINGS);
+
+        ti2.add(TopicEnum.CRYPTOCURRENCY);
+        ti2.add(TopicEnum.STOCKS);
+        ti2.add(TopicEnum.INVESTMENTS);
+        ti2.add(TopicEnum.ETF);
+
+        ti3.add(TopicEnum.REAL_ESTATE);
+        ti3.add(TopicEnum.REITS);
+        ti3.add(TopicEnum.RETIREMENT);
+        ti3.add(TopicEnum.BTO);
+
+        ti4.add(TopicEnum.CRYPTOCURRENCY);
+        ti4.add(TopicEnum.INVESTMENTS);
+
+        ti5.add(TopicEnum.CRYPTOCURRENCY);
+        ti5.add(TopicEnum.STOCKS);
+        ti5.add(TopicEnum.TRADING);
+        ti5.add(TopicEnum.INVESTMENTS);
+        ti5.add(TopicEnum.BROKERAGES);
+
+        ti6.add(TopicEnum.INSURANCE);
+        ti6.add(TopicEnum.RETIREMENT);
+        ti6.add(TopicEnum.SALARY);
+
+        ti7.add(TopicEnum.CRYPTOCURRENCY);
+        ti7.add(TopicEnum.STOCKS);
+        ti7.add(TopicEnum.INVESTMENTS);
+
+        Person user1 = personSB.getPerson(new Long(1));
+        user1.setDescription("Hello I’m new! I would love to learn how to better manage my personal finance!");
+        user1.setTopicInterests(ti1);
+        user1.setDob(parseDate("12/03/1996"));
+        user1.setIncomeRange(IncomeRangeEnum.LOW);
+
+        user1.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%203.jpeg?alt=media&token=a47c9ed4-cbb4-4c9d-ba58-a1a24a9a67cb");
+        user1.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FXMProfile.jpeg?alt=media&token=8df25640-7f20-4e22-8a60-64061a553fa8 ");
+
+        personSB.updatePersonDataInt(user1);
+
+        Person user2 = personSB.getPerson(new Long(2));
+        user2.setDescription(" Keeping up with the candles! Subscribe to get access to all my secret tips and tricks! I stream every monday and friday!");
+        user2.setTopicInterests(ti2);
+        user2.setDob(parseDate("20/08/1986"));
+        user2.setIncomeRange(IncomeRangeEnum.HIGH);
+
+        user2.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%204.jpeg?alt=media&token=ed7d1766-f9a0-4145-aa8e-c727613835d7");
+        user2.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FJennyProfile.jpeg?alt=media&token=59021e8e-216e-4578-b766-7207d877f672");
+
+        personSB.updatePersonDataInt(user2);
+
+        Person user3 = personSB.getPerson(new Long(3));
+        user3.setDescription("Hello World.");
+        user3.setTopicInterests(ti3);
+        user3.setDob(parseDate("5/07/1990"));
+        user3.setIncomeRange(IncomeRangeEnum.CRA);
+
+        user3.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%207.jpeg?alt=media&token=35b61879-44bd-400d-aece-5aade229a07e");
+        user3.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FAlanProfile.jpeg?alt=media&token=f945cc1f-cf76-4ed9-80e0-f6682ba87428");
+
+        personSB.updatePersonDataInt(user3);
+
+        Person user4 = personSB.getPerson(new Long(4));
+        user4.setDescription("Big fan of BTC, ETH, ADA, LINK, CAKE, DOGE, FTT and BNB!");
+        user4.setTopicInterests(ti4);
+        user4.setDob(parseDate("16/01/2000"));
+        user4.setIncomeRange(IncomeRangeEnum.MIDDLE);
+
+        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%202.jpeg?alt=media&token=382d3833-3d2e-4068-9687-7fd344e42c0f");
+        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FCryptoProfile.jpeg?alt=media&token=5657834a-7547-4c36-a6c9-ed6f98e49fa1");
+
+        personSB.updatePersonDataInt(user4);
+
+        Person user5 = personSB.getPerson(new Long(5));
+        user5.setDescription("We are going on a trip on our favourite rocket ship, flying through the sky, little einstein! Let’s go to the moon!");
+        user5.setTopicInterests(ti5);
+        user5.setDob(parseDate("1/05/1976"));
+        user5.setIncomeRange(IncomeRangeEnum.MIDDLE);
+
+        user5.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%208.png?alt=media&token=6d384a64-1182-4cd0-bfa1-884d3588ae2d");
+        user5.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FMoonProfile.jpeg?alt=media&token=859fc54b-f864-4022-b051-bae20e216d80");
+
+        personSB.updatePersonDataInt(user5);
+
+        Person user6 = personSB.getPerson(new Long(6));
+        user6.setDescription("Not sure what kind of insurance you should buy? Come to The Insurance Guru! I stream every Monday! Only sharing the most relevant news!");
+        user6.setTopicInterests(ti6);
+        user6.setDob(parseDate("15/09/1988"));
+        user6.setIncomeRange(IncomeRangeEnum.HIGH);
+
+        user6.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%205.jpeg?alt=media&token=e682da4f-e6b9-4b32-8dc0-9fb322ebd019");
+        user6.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FInsuranceProfile.jpeg?alt=media&token=c5e521db-405c-4cb9-b4c9-09f1a2db032e");
+
+        personSB.updatePersonDataInt(user6);
+
+        Person user7 = personSB.getPerson(new Long(7));
+        user7.setDescription("All about crypto and stocks! I’LL HODL ALL THE WAY! APES STRONG TOGETHER! ");
+        user7.setTopicInterests(ti7);
+        user7.setDob(parseDate("11/11/1997"));
+        user7.setIncomeRange(IncomeRangeEnum.LOW);
+
+        user7.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%206.png?alt=media&token=e414206e-dfcf-450d-b4a1-aabb876ab253");
+        user7.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FapeProfile.jpeg?alt=media&token=9b4f20e5-7f38-46e9-ad45-be50cbea4946");
+
+        personSB.updatePersonDataInt(user7);
     }
 
     private void updateProfilePictures() throws NotValidException, NoResultException {
@@ -412,7 +543,7 @@ public class DataInitSessionBean {
         communitySB.createCommunity(comm1, new Long(2));
         communitySB.createCommunity(comm2, new Long(2));
         communitySB.createCommunity(comm3, new Long(1));
-        communitySB.createCommunity(comm4, new Long(1));
+        communitySB.createCommunity(comm4, new Long(2));
         communitySB.createCommunity(comm5, new Long(3));
         communitySB.createCommunity(comm6, new Long(5));
         communitySB.createCommunity(comm7, new Long(5));
@@ -477,9 +608,24 @@ public class DataInitSessionBean {
         return pollSB.createPoll(postPoll);
     }
 
+    private Poll createPoll(String question, String[] option) throws NotValidException, NoResultException {
+        Poll postPoll = new Poll();
+        postPoll.setQuestion(question);
+
+        for (int i = 0; i < option.length; i++) {
+            String pollOption = option[i];
+            PersonAnswer personAnswer1 = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer1 = paSB.createPersonAnswer(personAnswer1);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer1);
+        }
+        return pollSB.createPoll(postPoll);
+    }
+
     private void createPersonPost(Long personId) throws NotValidException, NoResultException {
         Post post1 = new Post();
-        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setBody("Following breaking above the symmetrical triangle, bulls were able to drive the price of Bitcoin above prior resistance at the March 2021 high, which currently holds as support, allowing them to set another record above $63,000.\n"
+                + "\n"
+                + "With price action trading above both the 8 and 20-period EMA, both the Commodity Channel Index (CCI) and the Relative Strength Index (RSI) continue to test the upper bounds of their range, indicating that BTC/USD may soon enter into overbought territory. ");
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -490,7 +636,19 @@ public class DataInitSessionBean {
 
     private void createCommunityPost(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post1 = new Post();
-        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setBody("Just reminding people (regardless of which crypto your planning to sell) to not put sell orders at round numbers $1, $10, $1000, etc, as this adds to the resistance for that crypto at those psychological price levels.\n"
+                + "Instead, put sell orders a few percent above or below those prices. This will reduce resistance at psychological price levels, which will do the rest of the crypto community a huge favour by making it easier for each crypto to break through specific price levels!");
+        post1.setFileName("");
+        post1.setFileUrl("");
+        post1.setFileType("");
+        post1.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post1, personId, communityId);
+    }
+
+    private void createCommunityPost(Long personId, Long communityId, String body) throws NotValidException, NoResultException {
+        Post post1 = new Post();
+        post1.setBody(body);
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -501,7 +659,7 @@ public class DataInitSessionBean {
 
     private void createPersonPostWithPoll(Long personId) throws NotValidException, NoResultException {
         Post post2 = new Post();
-        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setBody("Although cryptocurrencies continue to face rigorous scrutiny by global regulators, crowd psychology and speculation remain the primary catalysts of crypto price action with numerous alt coins now beginning to outpace Bitcoin’s recent performance. Should this dynamic continue, bears may push the price of Bitcoin towards the psychological level of $60,000, which could act as support");
         post2.setFileName("");
         post2.setFileUrl("");
         post2.setFileType("");
@@ -513,11 +671,23 @@ public class DataInitSessionBean {
 
     private void createCommunityPostWithPoll(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post2 = new Post();
-        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setBody("Today Bitcoin cleared a key resistance with ease, rallying the entire day on a big volume jump.");
         post2.setFileName("");
         post2.setFileUrl("");
         post2.setFileType("");
         post2.setPoll(createPoll());
+        post2.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post2, personId, communityId);
+    }
+
+    private void createCommunityPostWithPoll(Long personId, Long communityId, String body, String question, String[] option) throws NotValidException, NoResultException {
+        Post post2 = new Post();
+        post2.setBody(body);
+        post2.setFileName("");
+        post2.setFileUrl("");
+        post2.setFileType("");
+        post2.setPoll(createPoll(question, option));
         post2.setDatePosted(new Date());
 
         postSB.createPostForCommunity(post2, personId, communityId);
@@ -622,6 +792,24 @@ public class DataInitSessionBean {
         badgeSB.createBadges();
     }
 
+    private void createAllCommunityPosts() throws NotValidException, NoResultException {
+        // posts for roboAdvisors
+        createCommunityPost(new Long(4), new Long(4), "After reading the answers in the forum, I am not sure to go for a robo-advisor or self pick the funds? What are some changes you would want to make, back when you just started investing?");
+        createCommunityPost(new Long(3), new Long(4), "Should I move my funds in StashAway over to Syfe with the Syfe Equity100 rebalancing? \n"
+                + "\n"
+                + "I currently have an equal amount of funds in both StashAway (36% risk portfolio) and Syfe (Equity100) and have DCA for about a year now.The main reason why I chose StashAway is because of its exposure to Chinese stocks. The main reason why I chose Syfe is because of it's 100% equity portfolio. Now that Syfe's Equity100 is rebalancing which adds 2 Chinese stocks ETFs, should I move my funds and focus on just one portfolio instead?");
+        createCommunityPost(new Long(4), new Long(4), " I noticed that my money in Syfe Cash+ has been decreasing and fluctuating, would it be more worth it if I store my money in Singlife/Dash instead?");
+        createCommunityPost(new Long(5), new Long(4), "I only trust banks so I’m using OCBC RoboInvest.");
+        String[] array = new String[]{
+            "StashAway", "AutoWealth", "Syfe", "EndowUs"};
+        createCommunityPostWithPoll(new Long(3), new Long(4),
+                "There has been an increase in the number of Robo Advisors in the market! Comment down below if there are other platforms you want to recommend! ",
+                "Which Robo Advisor are you using?",
+                array
+        );
+        createCommunityPost(new Long(4), new Long(4), "RoboAdvisors are dumb!! Ur all idiots leaving ur $$ to tech. the robots r taking over our brains n stealing our jobs.");
+    }
+
     private void initData() {
 
         try {
@@ -629,7 +817,8 @@ public class DataInitSessionBean {
             createBadges();
             createMasterAdmin();
             createPersons();
-            updateProfilePictures();
+            editPersonDataInt();
+            // updateProfilePictures();
             createCommunities();
             createFollows();
             createSubs();
@@ -638,6 +827,7 @@ public class DataInitSessionBean {
 
             createCommunityPost(new Long(2), new Long(1));
             createCommunityPostWithPoll(new Long(2), new Long(1));
+            createAllCommunityPosts();
 
             createComments();
             createReplies();

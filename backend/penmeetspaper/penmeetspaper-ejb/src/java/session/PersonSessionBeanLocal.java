@@ -108,4 +108,8 @@ public interface PersonSessionBeanLocal {
 
     public void personOpenNotification(Long personId) throws NotValidException, NoResultException;
 
+    public void updatePersonDataInt(Person person) throws NoResultException, NotValidException;
+
+    public Person getPerson(Long pId) throws NoResultException, NotValidException;
+
 }

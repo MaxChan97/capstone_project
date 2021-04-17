@@ -79,6 +79,14 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
         }
         return video;
     }
+    
+    @Override
+    public void addView(Long videoId) {
+        Video video = emGetVideo(videoId);
+        Long oldView = video.getNoOfViews();
+        video.setNoOfViews(oldView + 1);
+        em.flush();
+    }
 
     @Override
     public void createVideoForPerson(Long personId, Video video) throws NoResultException, NotValidException {
