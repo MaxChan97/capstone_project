@@ -19,6 +19,7 @@ public interface BankAccountSessionBeanLocal {
 
     public final static String MISSING_BANKACCOUNT_ID = "Missing bankaccount Id";
     public final static String CANNOT_FIND_BANKACCOUNT = "Cannot find bank account";
+    public final static String BANK_ENUM_NOT_RECOGNISED = "Bank Enum not recognised";
 
     public BankAccount createBankAccount(BankAccount ba);
 
