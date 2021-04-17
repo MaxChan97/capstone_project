@@ -334,7 +334,7 @@ export default function AdminList() {
                     </DialogActions>
                 </Dialog>) : (" ")}
             <div class="card bg-white">
-                <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8" }}>Administrators Master List</h5>
+                
                 <div style={{ display: 'flex', height: 510, width: '100%' }}>
                     <div style={{ flexGrow: 1 }}>
                         <DataGrid rows={rows} columns={columns} pageSize={7}

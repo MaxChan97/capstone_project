@@ -110,31 +110,19 @@ export default function UserSettings() {
       }
 
     } else {
-
-      Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid)
-        .done(() => {
-          paymentApi.createPricingPlan(currentUser, pricing, oldPrice, productId)
-            .done((res) => {
-              const { stripePrice } = res;
-              const { id: stripePriceId } = stripePrice;
-              console.log(stripePriceId);
-              Api.updatePricingPlan(currentUser, pricing, stripePriceId)
-                .done(() => {
-                  alert.show("Settings saved!");
-                  setRefresh(!refresh);
-                })
-                .fail((xhr, status, error) => {
-                  alert.show("Settings saved!");
-                });
-            }).fail(() => {
-              alert.show("Failed to create Pricing plan");
-            })
-
-
-        })
-        .fail((xhr, status, error) => {
-          alert.show("An unexpected has occured.");
-        });
+      try {
+        await Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid);
+        console.log(productId);
+        const result = await paymentApi.createPricingPlan(currentUser, pricing, oldPrice, productId);
+        const { stripePrice } = result;
+        const { id: stripePriceId } = stripePrice;
+        console.log(stripePriceId);
+        await Api.updatePricingPlan(currentUser, pricing, stripePriceId)
+        alert.show("Settings saved!");
+        setRefresh(!refresh);
+      } catch (e) {
+        alert.show("An unexpected error has occured.");
+      }
     }
 
   };
