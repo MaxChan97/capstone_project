@@ -19,8 +19,8 @@ export default {
     });
   },
 
-  createPricingPlan(personId, price, oldPrice) {
-    return jQuery.ajax({ 
+  createPricingPlan(personId, price, oldPrice, productId) {
+    return jQuery.ajax({
       url: this.SERVER_PREFIX + "/createPricingPlan",
       headers: {
         Accept: "application/json",
@@ -31,12 +31,27 @@ export default {
         personId: personId,
         price: price,
         oldPrice: oldPrice,
+        productId, productId,
+      }),
+    });
+  },
+
+  createProductForUser(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/createProductForUser",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        personId: personId,
       }),
     });
   },
 
   createCustomer(result, email) {
-    return jQuery.ajax({ 
+    return jQuery.ajax({
       url: this.SERVER_PREFIX + "/createCustomer",
       headers: {
         Accept: "application/json",
@@ -52,7 +67,7 @@ export default {
 
   unsub(subId) {
     if (subId !== undefined) {
-      return jQuery.ajax({ 
+      return jQuery.ajax({
         url: this.SERVER_PREFIX + "/unsub",
         headers: {
           Accept: "application/json",
@@ -64,12 +79,12 @@ export default {
         }),
       });
     }
-    
+
   },
 
   resub(subId, personId) {
     if (subId !== undefined) {
-      return jQuery.ajax({ 
+      return jQuery.ajax({
         url: this.SERVER_PREFIX + "/resub",
         headers: {
           Accept: "application/json",
@@ -82,7 +97,7 @@ export default {
         }),
       });
     }
-    
+
   }
 
 }

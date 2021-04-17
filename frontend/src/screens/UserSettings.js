@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function UserSettings() {
   const alert = useAlert();
   const classes = useStyles();
@@ -50,6 +51,7 @@ export default function UserSettings() {
 
   const [pricing, setPricing] = React.useState(0);
   const [oldPrice, setOldPrice] = React.useState(0);
+  const [productId, setProductId] = React.useState();
 
   const handlePricing = (event) => {
     setPricing(event.target.value);
@@ -62,38 +64,60 @@ export default function UserSettings() {
         setExplicit(currentPerson.hasExplicitLanguage);
         setPricing(currentPerson.pricingPlan);
         setOldPrice(currentPerson.pricingPlan);
+        setProductId(currentPerson.stripeProductId);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid)
-      .done(() => {
-        paymentApi.createPricingPlan(currentUser, pricing, oldPrice)
-        .done((res) => {
-          const {stripePrice} = res;
-          const {id: stripePriceId} = stripePrice;
-          console.log(stripePriceId);
-          Api.updatePricingPlan(currentUser, pricing, stripePriceId)
-          .done(() => {
-            alert.show("Settings saved!");
-            setRefresh(!refresh);
-          })
-          .fail((xhr, status, error) => {
-            alert.show("Settings saved!");
-          });
-        }).fail(() => {
-          alert.show("Failed to create Pricing plan");
-        })
-
-        
-      })
-      .fail((xhr, status, error) => {
+    if (productId == undefined) {
+      try {
+        const data = await paymentApi.createProductForUser(currentUser);
+        setProductId(data.productId);
+        await Api.updateStripeProductId(currentUser, data.productId);
+        await Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid);
+        console.log(productId);
+        const result = await paymentApi.createPricingPlan(currentUser, pricing, oldPrice, data.productId);
+        const { stripePrice } = result;
+        const { id: stripePriceId } = stripePrice;
+        console.log(stripePriceId);
+        await Api.updatePricingPlan(currentUser, pricing, stripePriceId)
         alert.show("Settings saved!");
-      });
+        setRefresh(!refresh);
+      } catch (e) {
+        alert.show("An unexpected has occured.");
+      }
+
+    } else {
+
+      Api.updateExplicitAndChat(currentUser, explicit, chatIsPaid)
+        .done(() => {
+          paymentApi.createPricingPlan(currentUser, pricing, oldPrice, productId)
+            .done((res) => {
+              const { stripePrice } = res;
+              const { id: stripePriceId } = stripePrice;
+              console.log(stripePriceId);
+              Api.updatePricingPlan(currentUser, pricing, stripePriceId)
+                .done(() => {
+                  alert.show("Settings saved!");
+                  setRefresh(!refresh);
+                })
+                .fail((xhr, status, error) => {
+                  alert.show("Settings saved!");
+                });
+            }).fail(() => {
+              alert.show("Failed to create Pricing plan");
+            })
+
+
+        })
+        .fail((xhr, status, error) => {
+          alert.show("An unexpected has occured.");
+        });
+    }
+
   };
 
   useEffect(() => {

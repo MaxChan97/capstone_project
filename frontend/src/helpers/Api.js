@@ -795,6 +795,21 @@ export default {
     });
   },
 
+  updateStripeProductId(personId, stripeProductId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/stripeProductId",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        stripeProductId: stripeProductId,
+      }),
+    });
+  },
+
+
   voteOnPoll(personId, pollId, optionVoted) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/poll/" + pollId + "/person/" + personId,
@@ -1801,7 +1816,7 @@ export default {
 
   getPersonsVideos(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/video/person" + id,
+      url: this.SERVER_PREFIX + "/video/person/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -1810,7 +1825,7 @@ export default {
     });
   },
 
-  
+
   adminDeletePost(adminId, postId, description, reportId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",

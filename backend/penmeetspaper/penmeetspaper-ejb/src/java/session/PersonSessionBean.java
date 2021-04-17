@@ -388,6 +388,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     }
 
     @Override
+    public void updateStripeProductId(Person person) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(person.getId());
+
+        oldPerson.setStripeProductId(person.getStripeProductId());
+        em.flush();
+    }
+
+    @Override
     public void onboarding(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 

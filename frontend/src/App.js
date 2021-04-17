@@ -50,6 +50,7 @@ import AdminAdManagementPage from "./screens/AdminAdManagementPage";
 import AdminManagementPage from "./screens/AdminManagementPage";
 import AdminLogin from "./screens/AdminLogin";
 import CreateAnotherAdmin from "./screens/CreateAnotherAdmin";
+import PointsPage from "./screens/PointsPage";
 
 import { useSelector } from "react-redux";
 import AdminNavBar from "./components/AdminNavBar";
@@ -130,9 +131,9 @@ function App() {
       );
     } else if (
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-        "manageDetails" ||
+      "manageDetails" ||
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-        "manageMembers"
+      "manageMembers"
     ) {
       return (
         <div>
@@ -209,6 +210,7 @@ function App() {
               <Route exact path="/changePassword" component={ChangePassword} />
               <Route exact path="/myCommunities" component={MyCommunities} />
               <Route exact path="/userAnalytics" component={UserAnalytics} />
+              <Route exact path="/PointsPage" component={PointsPage} />
               <Route
                 exact
                 path="/community/:communityId/banned"
@@ -303,16 +305,16 @@ function App() {
 
               <Route exact path="/admin/log/:adminId" component={AdminLog} />
 
-            <Route exact path="/admin/logs" component={AllAdminLogs} />
-            <Route exact path="/banned" component={BannedFromLoginPage} />
-            <Route
-              exact
-              path="/admin/deactivated"
-              component={AdminDeactivatedPage}
-            />
-            <Route exact path="/comment/:commentId" component={AdminCommentCard} />
-            <Route exact path="/reply/:replyId" component={AdminReplyCard} />
-            {/*<Route component={PageNotFound} />*/}
+              <Route exact path="/admin/logs" component={AllAdminLogs} />
+              <Route exact path="/banned" component={BannedFromLoginPage} />
+              <Route
+                exact
+                path="/admin/deactivated"
+                component={AdminDeactivatedPage}
+              />
+              <Route exact path="/comment/:commentId" component={AdminCommentCard} />
+              <Route exact path="/reply/:replyId" component={AdminReplyCard} />
+              {/*<Route component={PageNotFound} />*/}
             </div>
           </div>
         </Switch>

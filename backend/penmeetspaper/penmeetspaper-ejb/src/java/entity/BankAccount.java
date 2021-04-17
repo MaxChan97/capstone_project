@@ -5,9 +5,12 @@
  */
 package entity;
 
+import enumeration.BankEnum;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +36,9 @@ public class BankAccount implements Serializable {
 
     @Column(nullable = false)
     private String displayName;
+
+    @Enumerated(EnumType.STRING)
+    private BankEnum bankEnum;
 
     public Long getId() {
         return id;
@@ -64,6 +70,20 @@ public class BankAccount implements Serializable {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    /**
+     * @return the bankEnum
+     */
+    public BankEnum getBankEnum() {
+        return bankEnum;
+    }
+
+    /**
+     * @param bankEnum the bankEnum to set
+     */
+    public void setBankEnum(BankEnum bankEnum) {
+        this.bankEnum = bankEnum;
     }
 
     @Override
