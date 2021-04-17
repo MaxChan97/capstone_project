@@ -33,7 +33,7 @@ public class Notification implements Serializable {
     // Nullable
     private String redirectTo;
 
-    private boolean read;
+    private boolean isRead;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -97,11 +97,11 @@ public class Notification implements Serializable {
     }
 
     public boolean isRead() {
-        return read;
+        return isRead;
     }
 
     public void setRead(boolean read) {
-        this.read = read;
+        this.isRead = read;
     }
 
 }

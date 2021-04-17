@@ -803,7 +803,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         Collections.sort(notif, new Comparator<Notification>() {
             public int compare(Notification n1, Notification n2) {
 
-                return n1.getDateCreated().compareTo(n2.getDateCreated());
+                return n2.getDateCreated().compareTo(n1.getDateCreated());
             }
         });
         return notif;
