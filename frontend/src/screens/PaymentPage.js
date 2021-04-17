@@ -21,7 +21,9 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles({
   root: {
     maxWidth: 500,
-    margin: '35vh auto',
+    marginTop: "25vh",
+    marginLeft: "600px",
+    borderColor: "purple"
   },
   content: {
     display: 'flex',
@@ -36,6 +38,7 @@ const useStyles = makeStyles({
   },
   button: {
     margin: '2em auto 1em',
+    backgroundColor: "#3B21CB",
   },
 });
 
@@ -44,6 +47,7 @@ function PaymentPage() {
   const alert = useAlert();
   const history = useHistory();
   const [price, setPrice] = useState(0);
+  const [isProcessing, setProcessingTo] = useState(false);
   const [email, setEmail] = useState('');
   const [plan, setPlan] = useState('');
   const [customerId, setCustomerId] = useState();
@@ -116,22 +120,27 @@ function PaymentPage() {
         console.log('subscription done');
         Api.followPerson(currentUser, anotherPersonId)
           .done(() => {
+            setProcessingTo(false);
             history.push("/paymentSuccess");
           })
           .fail((xhr, status, error) => {
-            if (xhr.responseJSON.error != 'Follow Entity already exists') {
+            if (xhr.responseJSON.error !== 'Follow Entity already exists') {
+              setProcessingTo(false);
               alert.show(xhr.responseJSON.error)
             }
           });
+        setProcessingTo(false);
         history.push("/paymentSuccess");
       })
       .fail((xhr, status, error) => {
+        setProcessingTo(false);
         alert.show(xhr.responseJSON.error);
       });
   }
 
 
   const handleSubmitSub = async (event) => {
+    setProcessingTo(true);
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
@@ -165,6 +174,7 @@ function PaymentPage() {
             if (status === 'requires_action') {
               stripe.confirmCardPayment(client_secret).then(function (result) {
                 if (result.error) {
+                  setProcessingTo(false);
                   alert.show('There was an issue! Please try again later');
                   console.log(result.error);
                   // Display error message in your UI.
@@ -180,6 +190,7 @@ function PaymentPage() {
               // Show a success message to your customer
             }
           }).fail((res) => {
+            setProcessingTo(false);
             alert.show('There was an issue! Please try again later');
             console.log(result.error);
           })
@@ -194,6 +205,7 @@ function PaymentPage() {
             if (status === 'requires_action') {
               stripe.confirmCardPayment(client_secret).then(function (result) {
                 if (result.error) {
+                  setProcessingTo(false);
                   alert.show('There was an issue! Please try again later');
                   console.log(result.error);
                   // Display error message in your UI.
@@ -209,6 +221,7 @@ function PaymentPage() {
               // Show a success message to your customer
             }
           }).fail((res) => {
+            setProcessingTo(false);
             alert.show('There was an issue! Please try again later');
             console.log(result.error);
           })
@@ -220,17 +233,34 @@ function PaymentPage() {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
+      <div>
+          <p
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: "22px",
+              paddingTop: "20px",
+              paddingBottom: "10px",
+            }}
+          >
+            PAYMENT DETAILS
+          </p>
+          <p
+            style={{
+              fontWeight: "400",
+              textAlign: "center",
+              fontSize: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            TOTAL: ${price} / month
+          </p>
+        </div>
 
         <CardInput />
         <div className={classes.div}>
-          {/* 
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitPay}>
-            Pay
-          </Button>
-          */}
-
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            Subscribe for ${price}
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} disabled={isProcessing || !stripe} style={{width: "150px", fontWeight:"bold"}}>
+          {isProcessing ? "Processing..." : `Subscribe`}
           </Button>
         </div>
       </CardContent>

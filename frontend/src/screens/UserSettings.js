@@ -72,7 +72,7 @@ export default function UserSettings() {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (productId == undefined) {
+    if (productId === undefined) {
       try {
         const data = await paymentApi.createProductForUser(currentUser);
         setProductId(data.productId);
@@ -87,7 +87,7 @@ export default function UserSettings() {
         alert.show("Settings saved!");
         setRefresh(!refresh);
       } catch (e) {
-        alert.show("An unexpected has occured.");
+        alert.show("An unexpected error has occured.");
       }
 
     } else {
