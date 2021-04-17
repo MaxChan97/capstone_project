@@ -152,7 +152,7 @@ export default function ProfilePostCard({
     openAdminDeletePostModal();
   };
 
-  const [liked, setLiked] = useState();
+  const [liked, setLiked] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
@@ -396,15 +396,16 @@ export default function ProfilePostCard({
                 ""
               )}
               <p>
-                {liked == true ? (
-                  <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
-                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                  </Link>
-                ) : (
-                  <Link onClick={handleLike} style={{ color: "black" }}>
-                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                  </Link>
-                )}
+              {isAdmin == false && liked == true ? (
+                    <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  ) : isAdmin == false && liked == false ? (
+                    <Link onClick={handleLike} style={{ color: "black" }}>
+                      <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                    </Link>
+                  ) : isAdmin == true ? (<span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+                  ) : ("")}
 
                 <span>
                   <Tooltip
