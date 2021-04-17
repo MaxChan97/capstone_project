@@ -5,14 +5,18 @@
  */
 package session;
 
+import entity.Follow;
 import entity.Notification;
 import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -23,6 +27,12 @@ public class NotificationSessionBean implements NotificationSessionBeanLocal {
 
     @PersistenceContext
     EntityManager em;
+
+    @EJB
+    PersonSessionBeanLocal personSB;
+
+    @EJB
+    AdminLogSessionBeanLocal adminLogSB;
 
     private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
         if (personId == null) {
@@ -71,6 +81,32 @@ public class NotificationSessionBean implements NotificationSessionBeanLocal {
         Notification n = emGetNotification(nId);
         n.setRead(true);
         em.flush();
+    }
+
+    @Override
+    public void createNotificationForFollowers(String body, String redirectTo, Long personId) throws NoResultException, NotValidException {
+        List<Follow> followers = personSB.getFollowers(personId);
+
+        for (Follow f : followers) {
+            Person follower = f.getFollower();
+            Notification n = new Notification();
+            n.setBody(body);
+            n.setRedirectTo(redirectTo);
+            createNotification(n, follower.getId());
+        }
+    }
+
+    @Override
+    public void createSystemWideNotification(String body, String redirectTo) throws NoResultException, NotValidException {
+
+        Query q = em.createQuery("SELECT p FROM Person p");
+        List<Person> personList = q.getResultList();
+        for (Person p : personList) {
+            Notification n = new Notification();
+            n.setBody(body);
+            n.setRedirectTo(redirectTo);
+            createNotification(n, p.getId());
+        }
     }
 
 }
