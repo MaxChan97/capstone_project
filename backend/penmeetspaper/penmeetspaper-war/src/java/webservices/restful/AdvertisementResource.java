@@ -176,7 +176,6 @@ public class AdvertisementResource {
     }
 
     @GET
-    @Path("/allAdvertisement")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAdvertisement() {
         List<Advertisement> a = aSB.getAllAdvertisement();
