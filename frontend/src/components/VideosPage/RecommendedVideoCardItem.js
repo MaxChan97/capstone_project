@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Card, Box, CardContent } from "@material-ui/core";
-import defaultDP from "../../assets/Default Dp logo.svg";
 import { useHistory } from "react-router";
+import defaultDP from "../../assets/Default Dp logo.svg";
 
 export default function RecommendedVideoCardItem({ video }) {
   const history = useHistory();

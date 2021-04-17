@@ -205,32 +205,42 @@ function Navbar({
   }
 
   var handleUpload = () => {
-    Api.uploadVideo(
-      currentUser,
-      title,
-      description,
-      fileName,
-      fileUrl,
-      fileType,
-      isSubscriberOnly,
-      videoTopics
-    )
-      .done(() => {
-        alert.show("Video uploaded successfully!");
-        /*handleUploadDialogClose();
-        setFileName("");
-        setFileUrl("");
-        setFileType("");
-        setTitle("");
-        setDescription("");
-        setIsSubscriberOnly(false);
-        setVideoTopics([]);
-        setProgress();*/
-        window.location.reload();
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
+    if (title == undefined) {
+      alert.show("Please add a title");
+    } else if (description == undefined) {
+      alert.show("Please add a description");
+    } else if (progress == undefined) {
+      alert.show("Please upload a video");
+    } else if (progress != 100) {
+      alert.show("Please wait for video to upload finish!");
+    } else {
+      Api.uploadVideo(
+        currentUser,
+        title,
+        description,
+        fileName,
+        fileUrl,
+        fileType,
+        isSubscriberOnly,
+        videoTopics
+      )
+        .done(() => {
+          alert.show("Video uploaded successfully!");
+          /*handleUploadDialogClose();
+          setFileName("");
+          setFileUrl("");
+          setFileType("");
+          setTitle("");
+          setDescription("");
+          setIsSubscriberOnly(false);
+          setVideoTopics([]);
+          setProgress();*/
+          window.location.reload();
+        })
+        .fail((xhr, status, error) => {
+          alert.show(xhr.responseJSON.error);
+        });
+    }
   };
 
   function handleUploadStart() {
@@ -262,7 +272,7 @@ function Navbar({
 
   function renderUploadDialog() {
     return (
-      <Dialog open={uploadDialog} onClose={handleUploadDialogClose}>
+      <Dialog open={uploadDialog}>
         <DialogTitle id="confirm-start-stream-dialog-title">
           <b>Upload Video</b>
         </DialogTitle>
