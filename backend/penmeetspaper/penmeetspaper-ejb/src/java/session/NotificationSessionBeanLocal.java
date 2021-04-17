@@ -24,4 +24,10 @@ public interface NotificationSessionBeanLocal {
 
     public void readNotification(Long nId) throws NoResultException, NotValidException;
 
+    public void createNotificationForFollowers(String body, String redirectTo, Long personId) throws NoResultException, NotValidException;
+
+    public void createSystemWideNotification(String body, String redirectTo) throws NoResultException, NotValidException;
+
+    public void createNotificationForSubscribers(String body, String redirectTo, Long personId) throws NoResultException, NotValidException;
+
 }

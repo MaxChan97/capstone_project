@@ -1835,6 +1835,17 @@ export default {
     });
   },
 
+  getVideo(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   adminDeletePost(adminId, postId, description, reportId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",
@@ -1921,7 +1932,7 @@ export default {
     });
   },
 
-  createBankAccount(personId, accountNumber, displayName, bankEnum) {
+  createBankAccount(personId, accountNumber, bankEnum) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/bankAccount/" + personId,
       headers: {
@@ -1931,13 +1942,12 @@ export default {
       type: "POST",
       data: JSON.stringify({
         accountNumber: accountNumber,
-        displayName: displayName,
         bankEnum: bankEnum,
       }),
     });
   },
 
-  updateBankAccount(bankAccountId, accountNumber, displayName, bankEnum) {
+  updateBankAccount(bankAccountId, accountNumber, bankEnum) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/bankAccount/" + bankAccountId,
       headers: {
@@ -1947,7 +1957,6 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         accountNumber: accountNumber,
-        displayName: displayName,
         bankEnum: bankEnum,
       }),
     });
@@ -1972,6 +1981,73 @@ export default {
         "Content-Type": "application/json",
       },
       type: "PUT",
+    });
+  },
+
+  getPersonNotification(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/notifications",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  openPersonNotification(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/openNotifications",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+    });
+  },
+
+  createNotification(redirectTo, body, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
+    });
+  },
+
+  createNotificationForFollowers(redirectTo, body, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + personId + "/followers",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
+    });
+  },
+
+  createSystemWideNotification(redirectTo, body) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/systemWide",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
     });
   },
 };

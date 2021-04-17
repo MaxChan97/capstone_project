@@ -67,7 +67,6 @@ public class BankAccountResource {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String accountNumber = jsonObject.getString("accountNumber");
-        String displayName = jsonObject.getString("displayName");
         String bankEnumStr = jsonObject.getString("bankEnum");
 
         try {
@@ -75,7 +74,6 @@ public class BankAccountResource {
             BankAccount ba = new BankAccount();
             ba.setAccountNumber(accountNumber);
             ba.setBankEnum(bankEnum);
-            ba.setDisplayName(displayName);
 
             BankAccount addedBankAccount = baSB.createBankAccount(ba, id);
             return Response.status(200).entity(addedBankAccount).type(MediaType.APPLICATION_JSON).build();
@@ -92,7 +90,6 @@ public class BankAccountResource {
         JsonObject jsonObject = createJsonObject(jsonString);
 
         String accountNumber = jsonObject.getString("accountNumber");
-        String displayName = jsonObject.getString("displayName");
         String bankEnumStr = jsonObject.getString("bankEnum");
 
         try {
@@ -101,7 +98,6 @@ public class BankAccountResource {
             ba.setId(id);
             ba.setAccountNumber(accountNumber);
             ba.setBankEnum(bankEnum);
-            ba.setDisplayName(displayName);
 
             baSB.updateBankAccount(ba);
             return Response.status(204).build();

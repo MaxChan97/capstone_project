@@ -5,11 +5,16 @@
  */
 package webservices.restful;
 
+import entity.Notification;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.io.StringReader;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -28,6 +33,11 @@ public class NotificationResource {
     @EJB
     NotificationSessionBeanLocal nSB;
 
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
+    }
+
     private Response buildError(Exception e, int statusCode) {
         JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
@@ -45,5 +55,85 @@ public class NotificationResource {
             return buildError(e, 400);
         }
 
+    }
+
+    @POST
+    @Path("/{personId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNotifications(@PathParam("personId") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String redirectTo = jsonObject.getString("redirectTo");
+        String body = jsonObject.getString("body");
+
+        try {
+
+            Notification n = new Notification();
+            n.setBody(body);
+            n.setRedirectTo(redirectTo);
+            nSB.createNotification(n, id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+
+    }
+
+    @POST
+    @Path("/{personId}/followers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNotificationsForFollowers(@PathParam("personId") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String redirectTo = jsonObject.getString("redirectTo");
+        String body = jsonObject.getString("body");
+
+        try {
+
+            nSB.createNotificationForFollowers(body, redirectTo, id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @POST
+    @Path("/{personId}/subscribers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNotificationsForSubscribers(@PathParam("personId") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String redirectTo = jsonObject.getString("redirectTo");
+        String body = jsonObject.getString("body");
+
+        try {
+
+            nSB.createNotificationForSubscribers(body, redirectTo, id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @POST
+    @Path("/systemWide")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createSystemWideNotification(String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String redirectTo = jsonObject.getString("redirectTo");
+        String body = jsonObject.getString("body");
+
+        try {
+
+            nSB.createSystemWideNotification(body, redirectTo);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
     }
 }

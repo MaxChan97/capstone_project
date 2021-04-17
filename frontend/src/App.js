@@ -59,6 +59,7 @@ import AdminLog from "./components/AdminPage/AdminLog";
 import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
 import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
+import VideoPage from "./screens/VideoPage";
 
 import Payment from "./screens/PaymentPage";
 import PaymentSuccess from "./screens/PaymentSuccessPage";
@@ -68,6 +69,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import PaymentSuccessPage from "./screens/PaymentSuccessPage";
 import AdminCommentCard from "./components/ProfilePage/AdminCommentCard";
 import AdminReplyCard from "./components/ProfilePage/AdminReplyCard";
+import CommunityDeletedPage from "./screens/CommunityDeletedPage";
 const stripePromise = loadStripe(
   "pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ"
 );
@@ -131,9 +133,9 @@ function App() {
       );
     } else if (
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-      "manageDetails" ||
+        "manageDetails" ||
       location.pathname.split("/")[location.pathname.split("/").length - 1] ===
-      "manageMembers"
+        "manageMembers"
     ) {
       return (
         <div>
@@ -202,6 +204,7 @@ function App() {
                 component={ViewStreamPage}
               />
               <Route exact path="/chat/:personId" component={ChatPage} />
+              <Route exact path="/video/:videoId" component={VideoPage} />
               <Route
                 exact
                 path="/createCommunity"
@@ -312,8 +315,13 @@ function App() {
                 path="/admin/deactivated"
                 component={AdminDeactivatedPage}
               />
-              <Route exact path="/comment/:commentId" component={AdminCommentCard} />
+              <Route
+                exact
+                path="/comment/:commentId"
+                component={AdminCommentCard}
+              />
               <Route exact path="/reply/:replyId" component={AdminReplyCard} />
+              <Route exact path="/deleted/community" component={CommunityDeletedPage} />
               {/*<Route component={PageNotFound} />*/}
             </div>
           </div>
