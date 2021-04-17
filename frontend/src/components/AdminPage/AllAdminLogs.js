@@ -216,12 +216,7 @@ export default function AllAdminLogs() {
     return isAdmin == true && rows != null ? (
         <div>
             <div className="content-wrapper">
-                <div style={{paddingLeft:"20px", paddingRight:"20px"}} >
-                    <div className="row">
-                        <div className="col-md-12 mt-4" style={{ textAlign: "centre", margin: "auto" }}>
-
-                        </div>
-                    </div>
+                <div style={{paddingLeft:"20px", paddingRight:"20px", paddingTop:"4px"}} >
                     <div className="col-md-12 mt-4">
                         <div class="card bg-white">
                             <h5 class="card-header" style={{ margin: "auto", textAlign: "center", width: "100%", backgroundColor: "#E8E8E8", }}>Admin Logs</h5>

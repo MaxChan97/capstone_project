@@ -408,11 +408,11 @@ export default function UsersList() {
               Ban User From Login <i class="fas fa-user-shield"></i>
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="confirm-delete-dialog-description">
-                Are you sure you want to ban {currentPerson.username} from
+              <h6>Are you sure you want to ban {currentPerson.username} from
                 login? {currentPerson.username} will no longer have login access
-                after a ban.
-              </DialogContentText>
+                after a ban. </h6>
+              <p> <i class="far fa-envelope-open"></i> {" "}An automated email will be sent to {currentPerson.username}.</p>
+              <br></br>
               <p htmlFor="inputReason">Enter a reason for accountability: </p>
               <input
                 type="text"
@@ -452,12 +452,12 @@ export default function UsersList() {
               Unban User From Login <i class="fas fa-user-shield"></i>
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="confirm-delete-dialog-description">
-                {currentPerson.username} was previously banned from login. Are
+              <h6>User {currentPerson.username} was previously banned from login. Are
                 you sure you want to unban {currentPerson.username} from login?{" "}
                 {currentPerson.username} will regain login access after
-                confirmation.
-              </DialogContentText>
+                confirmation.  </h6>
+              <p> <i class="far fa-envelope-open"></i> {" "}An automated email will be sent to {currentPerson.username}.</p>
+              <br></br>
               <p htmlFor="inputReason">Enter a reason for accountability: </p>
               <input
                 type="text"
