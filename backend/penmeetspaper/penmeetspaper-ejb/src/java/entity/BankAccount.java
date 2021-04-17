@@ -32,9 +32,6 @@ public class BankAccount implements Serializable {
     private String accountNumber;
 
     @Column(nullable = false)
-    private String bankName;
-
-    @Column(nullable = false)
     private String displayName;
 
     @Enumerated(EnumType.STRING)
@@ -54,14 +51,6 @@ public class BankAccount implements Serializable {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
     }
 
     public String getDisplayName() {
