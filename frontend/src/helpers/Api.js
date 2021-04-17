@@ -1948,7 +1948,7 @@ export default {
     });
   },
 
-  updateBankAccount(bankAccountId, accountNumber, displayName, bankEnum) {
+  updateBankAccount(bankAccountId, accountNumber, bankEnum) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/bankAccount/" + bankAccountId,
       headers: {
@@ -1958,7 +1958,6 @@ export default {
       type: "PUT",
       data: JSON.stringify({
         accountNumber: accountNumber,
-        displayName: displayName,
         bankEnum: bankEnum,
       }),
     });
