@@ -131,7 +131,6 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
     setAnchorEl(null);
   }
 
-  
   const [adminDeletePostModal, setAdminDeletePostModal] = React.useState(false);
 
   function openAdminDeletePostModal() {
@@ -203,7 +202,7 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
       }}
     >
       <div>
-      <AdminDeletePostModal
+        <AdminDeletePostModal
           show={adminDeletePostModal}
           handleClose={closeAdminDeletePostModal}
           data={data}
@@ -292,9 +291,12 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   ""
                 )}
                 {isAdmin == true ? (
-                  <div style={{ textAlign: "right", marginRight:25 }}>
+                  <div style={{ textAlign: "right", marginRight: 25 }}>
                     <Link onClick={handleAdminDelete}>
-                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                      <i
+                        class="fas fa-trash-alt"
+                        style={{ color: "#3B21CB" }}
+                      ></i>
                     </Link>
                   </div>
                 ) : (
@@ -316,10 +318,12 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   </div>
                 ) : (
                   <div>
-                    <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
-                    <p className="text-center font-weight-bold">
-                      {data.fileName.split(".")[0]}
-                    </p>
+                    <a href={data.fileUrl} download>
+                      <FileTypes data={data.fileName.split(".")[1]}></FileTypes>
+                      <p className="text-center font-weight-bold">
+                        {data.fileName.split(".")[0]}
+                      </p>
+                    </a>
                   </div>
                 ))}
 
@@ -395,8 +399,17 @@ export default function ProfilePostCard({ key, data, refresh, setRefresh }) {
                   <Link onClick={handleLike} style={{ color: "black" }}>
                     <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                   </Link>
-                ) : isAdmin == true ?( <span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
-                ) : ("")}
+                ) : isAdmin == true ? (
+                  <span>
+                    <i
+                      class="fas fa-thumbs-up mr-1"
+                      style={{ color: "black" }}
+                    ></i>{" "}
+                    {data.likes.length}
+                  </span>
+                ) : (
+                  ""
+                )}
 
                 <span>
                   <Tooltip
