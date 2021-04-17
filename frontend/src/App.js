@@ -61,6 +61,8 @@ import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
 import VideoPage from "./screens/VideoPage";
 import VideosPage from "./screens/VideosPage";
+import RecommendedVideosPage from "./screens/RecommendedVideosPage";
+import TrendingVideosPage from "./screens/TrendingVideosPage";
 
 import Payment from "./screens/PaymentPage";
 import PaymentSuccess from "./screens/PaymentSuccessPage";
@@ -208,6 +210,16 @@ function App() {
               <Route exact path="/chat/:personId" component={ChatPage} />
               <Route exact path="/video/:videoId" component={VideoPage} />
               <Route exact path="/videos" component={VideosPage} />
+              <Route
+                exact
+                path="/videos/recommended"
+                component={RecommendedVideosPage}
+              />
+              <Route
+                exact
+                path="/videos/trending"
+                component={TrendingVideosPage}
+              />
               <Route
                 exact
                 path="/createCommunity"

@@ -70,7 +70,13 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
 
         video.setAuthor(personSB.getPersonById(video.getAuthor().getId()));
 
-        video.setTrends(null);
+        //video.setTrends(null);
+        for (Trend trend : video.getTrends()) {
+            em.detach(trend);
+            trend.setPosts(null);
+            trend.setStreams(null);
+            trend.setVideos(null);
+        }
         return video;
     }
 

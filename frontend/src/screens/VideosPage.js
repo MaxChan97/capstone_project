@@ -55,8 +55,10 @@ export default function VideosPage() {
       .then((person) => {
         Api.getTopTrends()
           .then((topTrends) => {
+            console.log(topTrends);
             Api.getTodaysTrends()
               .then((todayTrends) => {
+                console.log(todayTrends);
                 Api.getAllVideos()
                   .then((videos) => {
                     (async () => {
@@ -137,7 +139,7 @@ export default function VideosPage() {
               Recommended For You
             </h5>
 
-            <Link style={{ color: "inherit" }}>
+            <Link to="/videos/recommended" style={{ color: "inherit" }}>
               <p
                 style={{
                   color: "#6E757C",
@@ -173,7 +175,7 @@ export default function VideosPage() {
               >
                 Trending
               </h5>
-              <Link style={{ color: "inherit" }}>
+              <Link to="/videos/trending" style={{ color: "inherit" }}>
                 <p
                   style={{
                     color: "#6E757C",
