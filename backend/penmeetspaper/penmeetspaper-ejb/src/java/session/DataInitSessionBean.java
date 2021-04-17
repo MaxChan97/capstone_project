@@ -331,15 +331,77 @@ public class DataInitSessionBean {
         user1.setTopicInterests(ti1);
         user1.setDob(parseDate("12/03/1996"));
         user1.setIncomeRange(IncomeRangeEnum.LOW);
-        user1.setContributorPoints(10);
-        user1.setContentCreatorPoints(0);
-        Badge b2 = badgeSB.getBadgeByDisplayName("Level 2 Badge");
-        user1.setBadgeDisplaying(b2);
-        user1.getBadges().add(b2);
+
         user1.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%203.jpeg?alt=media&token=a47c9ed4-cbb4-4c9d-ba58-a1a24a9a67cb");
         user1.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FXMProfile.jpeg?alt=media&token=8df25640-7f20-4e22-8a60-64061a553fa8 ");
 
         personSB.updatePersonDataInt(user1);
+
+        Person user2 = personSB.getPerson(new Long(2));
+        user2.setDescription(" Keeping up with the candles! Subscribe to get access to all my secret tips and tricks! I stream every monday and friday!");
+        user2.setTopicInterests(ti2);
+        user2.setDob(parseDate("20/08/1986"));
+        user2.setIncomeRange(IncomeRangeEnum.HIGH);
+
+        user2.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%204.jpeg?alt=media&token=ed7d1766-f9a0-4145-aa8e-c727613835d7");
+        user2.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FJennyProfile.jpeg?alt=media&token=59021e8e-216e-4578-b766-7207d877f672");
+
+        personSB.updatePersonDataInt(user2);
+
+        Person user3 = personSB.getPerson(new Long(3));
+        user3.setDescription("Hello World.");
+        user3.setTopicInterests(ti3);
+        user3.setDob(parseDate("5/07/1990"));
+        user3.setIncomeRange(IncomeRangeEnum.CRA);
+
+        user3.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%207.jpeg?alt=media&token=35b61879-44bd-400d-aece-5aade229a07e");
+        user3.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FAlanProfile.jpeg?alt=media&token=f945cc1f-cf76-4ed9-80e0-f6682ba87428");
+
+        personSB.updatePersonDataInt(user3);
+
+        Person user4 = personSB.getPerson(new Long(4));
+        user4.setDescription("Big fan of BTC, ETH, ADA, LINK, CAKE, DOGE, FTT and BNB!");
+        user4.setTopicInterests(ti4);
+        user4.setDob(parseDate("16/01/2000"));
+        user4.setIncomeRange(IncomeRangeEnum.MIDDLE);
+
+        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%202.jpeg?alt=media&token=382d3833-3d2e-4068-9687-7fd344e42c0f");
+        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FCryptoProfile.jpeg?alt=media&token=5657834a-7547-4c36-a6c9-ed6f98e49fa1");
+
+        personSB.updatePersonDataInt(user4);
+
+        Person user5 = personSB.getPerson(new Long(5));
+        user5.setDescription("We are going on a trip on our favourite rocket ship, flying through the sky, little einstein! Let’s go to the moon!");
+        user5.setTopicInterests(ti5);
+        user5.setDob(parseDate("1/05/1976"));
+        user5.setIncomeRange(IncomeRangeEnum.MIDDLE);
+
+        user5.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%208.png?alt=media&token=6d384a64-1182-4cd0-bfa1-884d3588ae2d");
+        user5.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FMoonProfile.jpeg?alt=media&token=859fc54b-f864-4022-b051-bae20e216d80");
+
+        personSB.updatePersonDataInt(user5);
+
+        Person user6 = personSB.getPerson(new Long(6));
+        user6.setDescription("Not sure what kind of insurance you should buy? Come to The Insurance Guru! I stream every Monday! Only sharing the most relevant news!");
+        user6.setTopicInterests(ti6);
+        user6.setDob(parseDate("15/09/1988"));
+        user6.setIncomeRange(IncomeRangeEnum.HIGH);
+
+        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%205.jpeg?alt=media&token=e682da4f-e6b9-4b32-8dc0-9fb322ebd019");
+        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FInsuranceProfile.jpeg?alt=media&token=c5e521db-405c-4cb9-b4c9-09f1a2db032e");
+
+        personSB.updatePersonDataInt(user6);
+
+        Person user7 = personSB.getPerson(new Long(7));
+        user7.setDescription("All about crypto and stocks! I’LL HODL ALL THE WAY! APES STRONG TOGETHER! ");
+        user7.setTopicInterests(ti7);
+        user7.setDob(parseDate("11/11/1997"));
+        user7.setIncomeRange(IncomeRangeEnum.LOW);
+
+        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%206.png?alt=media&token=e414206e-dfcf-450d-b4a1-aabb876ab253");
+        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FapeProfile.jpeg?alt=media&token=9b4f20e5-7f38-46e9-ad45-be50cbea4946");
+
+        personSB.updatePersonDataInt(user7);
     }
 
     private void updateProfilePictures() throws NotValidException, NoResultException {
