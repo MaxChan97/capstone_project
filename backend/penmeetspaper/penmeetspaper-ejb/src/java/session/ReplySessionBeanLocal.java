@@ -43,4 +43,6 @@ public interface ReplySessionBeanLocal {
 
     public void deleteReply(Long replyId) throws NoResultException, NotValidException;
 
+    public Reply getReplyById(Long replyId) throws NoResultException, NotValidException;
+
 }

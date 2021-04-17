@@ -6,6 +6,7 @@ import { Tabs, Tab } from "@material-ui/core";
 import SearchCommunityResultList from "../components/SearchPage/SearchCommunityResultList";
 import SearchPersonResultList from "../components/SearchPage/SearchPersonResultList";
 import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
+import LiveStreamCard from "../components/LivePage/LiveStreamCard";
 import { useSelector } from "react-redux";
 import { animateScroll } from "react-scroll";
 
@@ -62,6 +63,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const [postPaginatedResults, setPostPaginatedResults] = useState([]);
   const [postPageCount, setPostPageCount] = useState(0);
   const [postRefresh, setPostRefresh] = useState(true);
+
+  const [streamOffset, setStreamOffset] = useState(1);
+  const [streamResults, setStreamResults] = useState([]);
+  const [streamPaginatedResults, setStreamPaginatedResults] = useState([]);
+  const [streamPageCount, setStreamPageCount] = useState(0);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -123,7 +129,12 @@ export default function SearchPage({ searchString, searchRefresh }) {
 
   useEffect(() => {
     scrollToTopOfResultList();
-  }, [personPaginatedResults, communityPaginatedResults, postPaginatedResults]);
+  }, [
+    personPaginatedResults,
+    communityPaginatedResults,
+    postPaginatedResults,
+    streamPaginatedResults,
+  ]);
 
   useEffect(() => {
     const slice = postResults.slice(
@@ -132,6 +143,25 @@ export default function SearchPage({ searchString, searchRefresh }) {
     );
     setPostPaginatedResults(slice);
   }, [postOffset, postResults]);
+
+  useEffect(() => {
+    Api.searchStreamByTitleAndDescription(searchString)
+      .done((streamObjects) => {
+        setStreamResults(streamObjects.reverse());
+        setStreamPageCount(Math.ceil(streamObjects.length / 16));
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, [searchRefresh]);
+
+  useEffect(() => {
+    const slice = streamResults.slice(
+      (streamOffset - 1) * 16,
+      (streamOffset - 1) * 16 + 16
+    );
+    setStreamPaginatedResults(slice);
+  }, [streamOffset, streamResults]);
 
   const handlePersonPageClick = (e) => {
     const selectedPage = e.selected;
@@ -146,6 +176,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const handlePostPageClick = (e) => {
     const selectedPage = e.selected;
     setPostOffset(selectedPage + 1);
+  };
+
+  const handleStreamPageClick = (e) => {
+    const selectedPage = e.selected;
+    setStreamOffset(selectedPage + 1);
   };
 
   const handleTabValueChange = (event, newValue) => {
@@ -169,7 +204,7 @@ export default function SearchPage({ searchString, searchRefresh }) {
           handleCommunityPageClick={handleCommunityPageClick}
         />
       );
-    } else {
+    } else if (tabValue === 2) {
       return (
         <SearchPostResultList
           postList={postPaginatedResults}
@@ -177,6 +212,14 @@ export default function SearchPage({ searchString, searchRefresh }) {
           handlePostPageClick={handlePostPageClick}
           postRefresh={postRefresh}
           setPostRefresh={setPostRefresh}
+        />
+      );
+    } else if (tabValue === 3) {
+      return (
+        <LiveStreamCard
+          streamList={streamPaginatedResults}
+          streamPageCount={streamPageCount}
+          handleStreamPageClick={handleStreamPageClick}
         />
       );
     }
@@ -198,11 +241,19 @@ export default function SearchPage({ searchString, searchRefresh }) {
           <StyledTab label="Users" />
           <StyledTab label="Communities" />
           <StyledTab label="Posts" />
+          <StyledTab label="Streams" />
+          <StyledTab label="Videos" />
         </StyledTabs>
       </div>
-      <div style={{ width: "80%", margin: "auto" }}>
-        {handleTabView(tabValue)}
-      </div>
+      {tabValue === 3 ? (
+        <div style={{ paddingLeft: "28px", paddingRight: "28px" }}>
+          {handleTabView(tabValue)}
+        </div>
+      ) : (
+        <div style={{ width: "80%", margin: "auto" }}>
+          {handleTabView(tabValue)}
+        </div>
+      )}
     </div>
   );
 }

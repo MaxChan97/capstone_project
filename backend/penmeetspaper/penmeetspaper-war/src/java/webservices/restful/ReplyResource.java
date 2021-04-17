@@ -15,6 +15,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -110,5 +111,20 @@ public class ReplyResource {
             return buildError(e, 400);
         }
     } // end unlikeReply
+
+    @GET
+    @Path("/{replyId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCommentById(@PathParam("replyId") Long replyId) {
+        try {
+
+            Reply r = replySB.getReplyById(replyId);
+
+            return Response.status(200).entity(r).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
 
 }

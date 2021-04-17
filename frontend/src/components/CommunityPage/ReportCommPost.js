@@ -91,7 +91,7 @@ export default function ReportCommPost({
             closeBanPersonModal();
             alert.show("Please choose a reason");
         } else {
-            Api.createReport(reason, currentUser, type, url, category.value)
+            Api.createReport(reason, currentUser, type, url, category.value,data.author.id)
                 .done((list) => {
                     closeBanPersonModal();
                     alert.show("Report sent");

@@ -22,6 +22,8 @@ import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 import EditPost from "../../components/ProfilePage/EditPost";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
+import AdminDeletePostModal from "../../components/ProfilePage/AdminDeletePostModal";
+import error from "../../assets/Error.png";
 
 const ITEM_HEIGHT = 30;
 
@@ -75,6 +77,21 @@ export default function CommunityPostWithComments() {
     setRefresh(!refresh);
     setAnchorEl(null);
   }
+
+  const [adminDeletePostModal, setAdminDeletePostModal] = React.useState(false);
+
+  function openAdminDeletePostModal() {
+    setAdminDeletePostModal(true);
+  }
+
+  function closeAdminDeletePostModal() {
+    setAdminDeletePostModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openAdminDeletePostModal();
+  };
 
   const [data, setData] = useState();
   const [liked, setLiked] = useState();
@@ -142,6 +159,14 @@ export default function CommunityPostWithComments() {
         }}
       >
         <div class="col-md-9" style={{ paddingTop: "20px", margin: "auto" }}>
+        <AdminDeletePostModal
+          show={adminDeletePostModal}
+          handleClose={closeAdminDeletePostModal}
+          data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          community={data.postCommunity}
+        />
           <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -235,6 +260,15 @@ export default function CommunityPostWithComments() {
                   ) : (
                     ""
                   )}
+                  {isAdmin == true ? (
+                  <div style={{ textAlign: "right", marginRight:25 }}>
+                    <Link onClick={handleAdminDelete}>
+                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                    </Link>
+                  </div>
+                ) : (
+                  ""
+                )}
                 </div>
                 {data.fileUrl &&
                   data.fileName &&
@@ -326,14 +360,27 @@ export default function CommunityPostWithComments() {
       </div>
     </div>
   ) : (
-    <h3
-      style={{
-        color: "gray",
-        textAlign: "center",
-        margin: "auto",
-      }}
+    <div className="content-wrapper">
+
+    <div
+        style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            margin: "auto",
+        }}
     >
-      Post does not exist
-    </h3>
+        <div class="col-md-9 mt-4" style={{ margin: "auto" }}>
+            <h3>Post Deleted!</h3>
+            <img
+                style={{
+                    resizeMode: "repeat",
+                    height: 350,
+                }}
+                src={error}
+            />
+        </div>
+    </div>
+</div>
   );
 }

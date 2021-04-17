@@ -19,7 +19,7 @@ export default {
     });
   },
 
-  createPricingPlan(personId, price) {
+  createPricingPlan(personId, price, oldPrice) {
     return jQuery.ajax({ 
       url: this.SERVER_PREFIX + "/createPricingPlan",
       headers: {
@@ -30,6 +30,7 @@ export default {
       data: JSON.stringify({
         personId: personId,
         price: price,
+        oldPrice: oldPrice,
       }),
     });
   },
@@ -66,7 +67,7 @@ export default {
     
   },
 
-  resub(subId) {
+  resub(subId, personId) {
     if (subId !== undefined) {
       return jQuery.ajax({ 
         url: this.SERVER_PREFIX + "/resub",
@@ -77,6 +78,7 @@ export default {
         type: "POST",
         data: JSON.stringify({
           subId: subId,
+          personId: personId,
         }),
       });
     }

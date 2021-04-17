@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import {
@@ -36,14 +36,17 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 
-export default function DeleteCommentModal({ show, handleClose, data, setDeleted }) {
+export default function AdminDeleteCommentModal({ show, handleClose, data, setDeleted }) {
 
     const currentUser = useSelector((state) => state.currentUser);
     const theme = useTheme();
     const alert = useAlert();
-
+    const [reason, setReason] = useState("");
+    const handleReasonChange = (event) => {
+        setReason(event.target.value);
+    };
     async function handleSubmit() {
-        Api.deleteProfilePostComment(data.id, currentUser)
+        Api.adminDeleteComment(currentUser, data.id, reason, null)
             .done(() => {
                 setDeleted(true);
                 alert.show("Delete success!");
@@ -75,7 +78,15 @@ export default function DeleteCommentModal({ show, handleClose, data, setDeleted
                     Do you want to delete this comment?
                     Comment deletion is permanent and cannot be undone.
         </DialogContentText>
-
+                <p htmlFor="inputReason">Enter reason for admin logs: </p>
+                <textarea
+                    type="text"
+                    id="inputReason"
+                    className="form-control"
+                    value={reason}
+                    required="required"
+                    onChange={handleReasonChange}
+                />
             </DialogContent>
             <DialogActions>
                 <ColorButton

@@ -81,6 +81,13 @@ public class ReportResource {
         String reportTypeStr = jsonObject.getString("reportTypeEnum");
         String reportedContentId = jsonObject.getString("reportedContentId");
         String category = jsonObject.getString("category");
+        int reportedPersonIdInt = jsonObject.getInt("reportedPersonId");
+
+        Long reportedPersonId = null;
+
+        if (reportedPersonIdInt != 0) {
+            reportedPersonId = new Long(reportedPersonIdInt);
+        }
 
         Long reporterId = new Long(reporterIdInt);
 
@@ -92,6 +99,7 @@ public class ReportResource {
             report.setReportContentId(reportedContentId);
             report.setReportType(reportType);
             report.setCategory(category);
+            report.setReportedPersonId(reportedPersonId);
 
             reportSB.createReport(report, reporterId);
             return Response.status(204).build();

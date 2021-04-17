@@ -7,6 +7,8 @@ import Register from "./screens/Register";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import LivePage from "./screens/LivePage";
+import RecommendedLivePage from "./screens/RecommendedLivePage";
+import TrendingLivePage from "./screens/TrendingLivePage";
 import FollowingPage from "./screens/FollowingPage";
 import SubscribingPage from "./screens/SubscribingPage";
 import LikedPage from "./screens/LikedPage";
@@ -63,8 +65,11 @@ import PaymentSuccess from "./screens/PaymentSuccessPage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentSuccessPage from "./screens/PaymentSuccessPage";
-
-const stripePromise = loadStripe("pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ");
+import AdminCommentCard from "./components/ProfilePage/AdminCommentCard";
+import AdminReplyCard from "./components/ProfilePage/AdminReplyCard";
+const stripePromise = loadStripe(
+  "pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ"
+);
 
 function App() {
   let location = useLocation();
@@ -158,125 +163,145 @@ function App() {
   return (
     <div className="App">
       <Elements stripe={stripePromise}>
-      
-    
-      <Switch>
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/admin/login" component={AdminLogin} />
-        <Route exact path="/newPassword/:resetId" component={NewPassword} />
-        <Route exact path="/resetPassword" component={ResetPassword} />
-        <div className="layout-navbar-fixed">
-          <div className="wrapper">
-            {renderNavSide()}
-            <Route exact path="/" component={LivePage} />
-            <Route exact path="/following" component={FollowingPage} />
-            <Route exact path="/subscribing" component={SubscribingPage} />
-            <Route exact path="/liked" component={LikedPage} />
-            <Route exact path="/library" component={LibraryPage} />
-            <Route
-              exact
-              path="/community/:communityId"
-              component={CommunityPage}
-            />
-            <Route exact path="/categories" component={CategoriesPage} />
-            <Route exact path="/feed" component={FeedPage} />
-            <Route exact path="/profile/:personId" component={ProfilePage} />
-            <Route exact path="/postCard" component={ProfilePostCard} />
-            <Route exact path="/aboutMe" component={AboutMe} />
-            <Route exact path="/userSettings" component={UserSettings} />
-            <Route exact path="/stream" component={StreamPage} />
-            <Route exact path="/stream/:streamId" component={ViewStreamPage} />
-            <Route exact path="/chat/:personId" component={ChatPage} />
-            <Route exact path="/createCommunity" component={CreateCommunity} />
-            <Route exact path="/changePassword" component={ChangePassword} />
-            <Route exact path="/myCommunities" component={MyCommunities} />
-            <Route exact path="/userAnalytics" component={UserAnalytics} />
-            <Route
-              exact
-              path="/community/:communityId/banned"
-              component={BannedPage}
-            />
+        <Switch>
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/admin/login" component={AdminLogin} />
+          <Route exact path="/newPassword/:resetId" component={NewPassword} />
+          <Route exact path="/resetPassword" component={ResetPassword} />
+          <div className="layout-navbar-fixed">
+            <div className="wrapper">
+              {renderNavSide()}
+              <Route exact path="/" component={LivePage} />
+              <Route
+                exact
+                path="/live/recommended"
+                component={RecommendedLivePage}
+              />
+              <Route exact path="/live/trending" component={TrendingLivePage} />
+              <Route exact path="/following" component={FollowingPage} />
+              <Route exact path="/subscribing" component={SubscribingPage} />
+              <Route exact path="/liked" component={LikedPage} />
+              <Route exact path="/library" component={LibraryPage} />
+              <Route
+                exact
+                path="/community/:communityId"
+                component={CommunityPage}
+              />
+              <Route exact path="/categories" component={CategoriesPage} />
+              <Route exact path="/feed" component={FeedPage} />
+              <Route exact path="/profile/:personId" component={ProfilePage} />
+              <Route exact path="/postCard" component={ProfilePostCard} />
+              <Route exact path="/aboutMe" component={AboutMe} />
+              <Route exact path="/userSettings" component={UserSettings} />
+              <Route exact path="/stream" component={StreamPage} />
+              <Route
+                exact
+                path="/stream/:streamId"
+                component={ViewStreamPage}
+              />
+              <Route exact path="/chat/:personId" component={ChatPage} />
+              <Route
+                exact
+                path="/createCommunity"
+                component={CreateCommunity}
+              />
+              <Route exact path="/changePassword" component={ChangePassword} />
+              <Route exact path="/myCommunities" component={MyCommunities} />
+              <Route exact path="/userAnalytics" component={UserAnalytics} />
+              <Route
+                exact
+                path="/community/:communityId/banned"
+                component={BannedPage}
+              />
 
-            <Route
-              exact
-              path="/community/:communityId/manageDetails"
-              component={ManageCommunityDetails}
-            />
-            <Route
-              exact
-              path="/community/:communityId/manageMembers"
-              component={ManageCommunityMembers}
-            />
-            <Route
-              exact
-              path="/community/:communityId/viewMembers"
-              component={ViewCommunityMembers}
-            />
-            <Route
-              exact
-              path="/customiseProfile"
-              component={CustomiseProfile}
-            />
-            <Route exact path="/subscribers" component={SubscribersPage} />
-            <Route
-              exact
-              path="/post/:postId"
-              component={ProfilePostWithComments}
-            />
-            <Route
-              exact
-              path="/community/post/:postId"
-              component={CommunityPostWithComments}
-            />
-            <Route
-              exact
-              path="/search"
-              render={() => (
-                <SearchPage
-                  searchString={searchString}
-                  searchRefresh={searchRefresh}
-                />
-              )}
-            />
-            <Route exact path="/trend/:hashtag" render={() => <TrendsPage />} />
-            <Route exact path="/community" component={CommunityFeed} />
-            <Route exact path="/payment/:anotherPersonId" component={Payment} />
-            <Route exact path="/paymentSuccess" component={PaymentSuccess} />
+              <Route
+                exact
+                path="/community/:communityId/manageDetails"
+                component={ManageCommunityDetails}
+              />
+              <Route
+                exact
+                path="/community/:communityId/manageMembers"
+                component={ManageCommunityMembers}
+              />
+              <Route
+                exact
+                path="/community/:communityId/viewMembers"
+                component={ViewCommunityMembers}
+              />
+              <Route
+                exact
+                path="/customiseProfile"
+                component={CustomiseProfile}
+              />
+              <Route exact path="/subscribers" component={SubscribersPage} />
+              <Route
+                exact
+                path="/post/:postId"
+                component={ProfilePostWithComments}
+              />
+              <Route
+                exact
+                path="/community/post/:postId"
+                component={CommunityPostWithComments}
+              />
+              <Route
+                exact
+                path="/search"
+                render={() => (
+                  <SearchPage
+                    searchString={searchString}
+                    searchRefresh={searchRefresh}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/trend/:hashtag"
+                render={() => <TrendsPage />}
+              />
+              <Route exact path="/community" component={CommunityFeed} />
+              <Route
+                exact
+                path="/payment/:anotherPersonId"
+                component={Payment}
+              />
+              <Route exact path="/paymentSuccess" component={PaymentSuccess} />
 
-            <Route exact path="/admin/inbox" component={AdminInboxPage} />
-            <Route
-              exact
-              path="/admin/analytics"
-              component={AdminAnalyticsPage}
-            />
-            <Route
-              exact
-              path="/admin/usermanagement"
-              component={AdminUserManagementPage}
-            />
-            <Route
-              exact
-              path="/admin/advertisementmanagement"
-              component={AdminAdManagementPage}
-            />
-            <Route
-              exact
-              path="/admin/adminmanagement"
-              component={AdminManagementPage}
-            />
-            <Route
-              exact
-              path="/admin/createAdmin"
-              component={CreateAnotherAdmin}
-            />
-            <Route
-              exact
-              path="/admin/reportDetails/:reportId"
-              component={ReportDetails}
-            />
+              <Route exact path="/admin/inbox" component={AdminInboxPage} />
+              <Route
+                exact
+                path="/admin/analytics"
+                component={AdminAnalyticsPage}
+              />
+              <Route
+                exact
+                path="/admin/usermanagement"
+                component={AdminUserManagementPage}
+              />
+              <Route
+                exact
+                path="/admin/advertisementmanagement"
+                component={AdminAdManagementPage}
+              />
+              <Route
+                exact
+                path="/admin/adminmanagement"
+                component={AdminManagementPage}
+              />
+              <Route
+                exact
+                path="/admin/createAdmin"
+                component={CreateAnotherAdmin}
+              />
+              <Route
+                exact
+                path="/admin/reportDetails/:reportId"
+                component={ReportDetails}
+              />
 
-            <Route exact path="/admin/log/:adminId" component={AdminLog} />
+              <Route exact path="/admin/log/:adminId" component={AdminLog} />
 
             <Route exact path="/admin/logs" component={AllAdminLogs} />
             <Route exact path="/banned" component={BannedFromLoginPage} />
@@ -285,10 +310,12 @@ function App() {
               path="/admin/deactivated"
               component={AdminDeactivatedPage}
             />
+            <Route exact path="/comment/:commentId" component={AdminCommentCard} />
+            <Route exact path="/reply/:replyId" component={AdminReplyCard} />
             {/*<Route component={PageNotFound} />*/}
+            </div>
           </div>
-        </div>
-      </Switch>
+        </Switch>
       </Elements>
     </div>
   );

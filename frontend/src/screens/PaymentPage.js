@@ -46,16 +46,15 @@ function PaymentPage() {
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState('');
   const [plan, setPlan] = useState('');
-  let customerId = undefined;
+  const [customerId, setCustomerId] = useState();
   const { anotherPersonId } = useParams();
   const currentUser = useSelector((state) => state.currentUser);
   useEffect(() => {
     Api.getPersonById(currentUser)
       .done((data) => {
         setEmail(data.email);
-        customerId = data.stripeCustomerId;
-        console.log(data.stripeCustomerId);
-        console.log(customerId);
+        const {stripeCustomerId} = data
+        setCustomerId(stripeCustomerId);
         Api.getPersonById(anotherPersonId).done((data) => {
           // console.log(data);
           setPrice(data.pricingPlan);
@@ -154,39 +153,67 @@ function PaymentPage() {
       console.log(customerId);
       if (customerId == undefined) {
         const data = await paymentApi.createCustomer(result, email);
-          console.log(data);
-          console.log(data.customerId);
-          customerId = data.customerId;
-          console.log(customerId);  
-          await Api.updateStripeCustomerId(currentUser, customerId)
+          console.log(data)
+          setCustomerId(data.customerId);
+          await Api.updateStripeCustomerId(currentUser, data.customerId)
           console.log("customerId persisted");
-        } 
-      console.log(customerId);
-      paymentApi.subscribe(customerId, plan)
-      .done((res) => {
-        const {client_secret, status, subId} = res;
 
-        if (status === 'requires_action') {
-          stripe.confirmCardPayment(client_secret).then(function(result) {
-            if (result.error) {
-              alert.show('There was an issue! Please try again later');
-              console.log(result.error);
-              // Display error message in your UI.
-              // The card was declined (i.e. insufficient funds, card has expired, etc)
+          paymentApi.subscribe(data.customerId, plan)
+          .done((res) => {
+            const {client_secret, status, subId} = res;
+    
+            if (status === 'requires_action') {
+              stripe.confirmCardPayment(client_secret).then(function(result) {
+                if (result.error) {
+                  alert.show('There was an issue! Please try again later');
+                  console.log(result.error);
+                  // Display error message in your UI.
+                  // The card was declined (i.e. insufficient funds, card has expired, etc)
+                } else {
+                  handleSubscribe(subId);
+                  // Show a success message to your customer
+                }
+              });
             } else {
               handleSubscribe(subId);
+              // No additional information was needed
               // Show a success message to your customer
             }
-          });
-        } else {
-          handleSubscribe(subId);
-          // No additional information was needed
-          // Show a success message to your customer
-        }
-      }).fail((res) => {
-        alert.show('There was an issue! Please try again later');
-        console.log(result.error);
-      })
+          }).fail((res) => {
+            alert.show('There was an issue! Please try again later');
+            console.log(result.error);
+          })
+          
+      } else {
+
+        console.log(customerId);
+        paymentApi.subscribe(customerId, plan)
+        .done((res) => {
+          const {client_secret, status, subId} = res;
+
+          if (status === 'requires_action') {
+            stripe.confirmCardPayment(client_secret).then(function(result) {
+              if (result.error) {
+                alert.show('There was an issue! Please try again later');
+                console.log(result.error);
+                // Display error message in your UI.
+                // The card was declined (i.e. insufficient funds, card has expired, etc)
+              } else {
+                handleSubscribe(subId);
+                // Show a success message to your customer
+              }
+            });
+          } else {
+            handleSubscribe(subId);
+            // No additional information was needed
+            // Show a success message to your customer
+          }
+        }).fail((res) => {
+          alert.show('There was an issue! Please try again later');
+          console.log(result.error);
+        })
+      }
+      
     }
   };
 

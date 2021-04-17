@@ -23,7 +23,7 @@ const ColorButton = withStyles((theme) => ({
 }))(Button);
 
 
-export default function SocialButtonGroup({ communityId, communityName, refresh, setRefresh }) {
+export default function SocialButtonGroup({ communityId, communityName, communityOwner, refresh, setRefresh }) {
   const alert = useAlert();
 
   //const [refresh, setRefresh] = useState(true);
@@ -130,7 +130,8 @@ export default function SocialButtonGroup({ communityId, communityName, refresh,
 
       <ReportCommunity
         id={communityId}
-        username={communityName}>
+        username={communityName}
+        communityOwner ={communityOwner}>
       </ReportCommunity>
 
       <Dialog

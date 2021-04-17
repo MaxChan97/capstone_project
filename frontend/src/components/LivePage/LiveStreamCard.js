@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { GridList, Box } from "@material-ui/core";
 import LiveStreamCardItem from "./LiveStreamCardItem";
+import ReactPaginate from "react-paginate";
 
 const useStyles = makeStyles({
   streamList: {
@@ -18,20 +19,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function LiveStreamCard({ streamList, searchTerm }) {
+export default function LiveStreamCard({
+  streamList,
+  streamPageCount,
+  handleStreamPageClick,
+}) {
   const styles = useStyles();
 
-  const [searchResults, setSearchResults] = useState([]);
-
-  useEffect(() => {
-    const results = streamList.filter((stream) =>
-      stream.title.toLowerCase().includes(searchTerm)
-    );
-    setSearchResults(results);
-  }, [streamList, searchTerm]);
-
   return streamList && streamList.length > 0 ? (
-    searchResults.length > 0 ? (
+    <div>
       <GridList
         col={4}
         className={styles.streamList}
@@ -39,18 +35,39 @@ export default function LiveStreamCard({ streamList, searchTerm }) {
           justifyContent: "flex-start",
         }}
       >
-        {searchResults.map((data, idx) => (
+        {streamList.map((data, idx) => (
           <LiveStreamCardItem key={idx} stream={data} />
         ))}
       </GridList>
-    ) : (
-      <Box className={styles.noStreamsText}>
-        <p>No results for '{searchTerm}'</p>
-      </Box>
-    )
+      {streamPageCount > 1 ? (
+        <ReactPaginate
+          previousLabel={"prev"}
+          nextLabel={"next"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={streamPageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handleStreamPageClick}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"}
+        />
+      ) : (
+        ""
+      )}
+    </div>
   ) : (
-    <Box className={styles.noStreamsText}>
-      <p>No streams!</p>
-    </Box>
+    <div>
+      <h3
+        style={{
+          color: "gray",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        No streams found
+      </h3>
+    </div>
   );
 }

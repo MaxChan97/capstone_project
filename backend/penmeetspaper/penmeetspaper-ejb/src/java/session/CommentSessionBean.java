@@ -10,6 +10,8 @@ import entity.Person;
 import entity.Post;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -78,10 +80,38 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         }
     }
 
+    private Person getDetachedPerson(Person p) throws NoResultException, NotValidException {
+        Person person = emGetPerson(p.getId());
+        Person res = new Person();
+        res.setUsername(person.getUsername());
+        res.setId(person.getId());
+        return res;
+    }
+
+    private ArrayList<Person> getDetachedLikes(List<Person> likes) {
+        int size = likes.size();
+        ArrayList<Person> res = new ArrayList();
+        for (int i = 0; i < size; i++) {
+            res.add(new Person());
+        }
+        return res;
+    }
+
     // Main Logic -------------------------------------------------------------------
     @Override
     public Comment getComment(Long commentId) throws NoResultException, NotValidException {
         return emGetComment(commentId);
+    }
+
+    @Override
+    public Comment getCommentById(Long commentId) throws NoResultException, NotValidException {
+        Comment c = emGetComment(commentId);
+        em.detach(c);
+        c.setReplies(null);
+
+        c.setLikes(getDetachedLikes(c.getLikes()));
+        c.setAuthor(getDetachedPerson(c.getAuthor()));
+        return c;
     }
 
     @Override

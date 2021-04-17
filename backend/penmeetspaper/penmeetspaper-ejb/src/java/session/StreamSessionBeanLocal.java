@@ -30,6 +30,8 @@ public interface StreamSessionBeanLocal {
     public void endStream(Long streamId);
 
     public Stream getStreamById(Long streamId) throws NoResultException, NotValidException;
+    
+    public List<Stream> getStreamsByTrend(String hashtag) throws NoResultException, NotValidException;
 
     public LivePoll getActiveLivePollByStreamId(Long streamId) throws NoResultException, NotValidException;
 
@@ -50,4 +52,6 @@ public interface StreamSessionBeanLocal {
     public void kickUserFromStream(Long streamId, Long personId);
 
     public void unkickUserFromStream(Long streamId, Long personId);
+    
+    public List<Stream> searchStreamByTitleAndDescription(String searchString) throws NoResultException, NotValidException;
 }
