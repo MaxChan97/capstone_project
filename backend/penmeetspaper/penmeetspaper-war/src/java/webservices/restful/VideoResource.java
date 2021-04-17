@@ -24,6 +24,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -231,4 +232,42 @@ public class VideoResource {
         }
     } // end getAllVideos
 
+    @GET
+    @Path("/trend/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVideosByTrend(@QueryParam("hashtag") String hashtag) {
+        try {
+            hashtag = "#" + hashtag;
+            List<Video> results = videoSessionBean.getVideosByTrend(hashtag);
+            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+            };
+            
+            return Response.status(200).entity(entity).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+    
+    @GET
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchVideoByTitleAndDescription(@QueryParam("searchString") String searchString) {
+        try {
+            if (searchString != null) {
+                List<Video> results = videoSessionBean.searchVideoByTitleAndDescription(searchString);
+                GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+                };
+                
+                return Response.status(200).entity(entity).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
+
+                return Response.status(400).entity(exception).build();
+            }
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }

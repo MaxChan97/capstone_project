@@ -141,5 +141,31 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
         }
         return videoList;
     }
+    
+    @Override
+    public List<Video> getVideosByTrend(String hashtag) throws NoResultException, NotValidException {
+        Trend trend = trendSB.getTrend(hashtag);
+        em.detach(trend);
+        for (Video video : trend.getVideos()) {
+            video = getVideo(video.getId());
+        }
+        return trend.getVideos();
+    }
+    
+    @Override
+    public List<Video> searchVideoByTitleAndDescription(String searchString) throws NoResultException, NotValidException {
+        Query q;
+        if (searchString != null) {
+            q = em.createQuery("SELECT v FROM Video v WHERE LOWER(v.title) LIKE :searchString OR LOWER(v.description) LIKE :searchString");
+            q.setParameter("searchString", "%" + searchString.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT v FROM Video v");
+        }
+        List<Video> videoList = q.getResultList();
+        for (Video v : videoList) {
+            v = getVideo(v.getId());
+        }
+        return videoList;
+    }
 
 }
