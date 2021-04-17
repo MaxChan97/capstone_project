@@ -38,6 +38,8 @@ public class Advertisement implements Serializable {
     @Column(nullable = false)
     private String description;
 
+    private String linkTo;
+
     @Column(nullable = false)
     private String image;
 
@@ -93,6 +95,14 @@ public class Advertisement implements Serializable {
 
     public void setTopics(List<TopicEnum> topics) {
         this.topics = topics;
+    }
+
+    public String getLinkTo() {
+        return linkTo;
+    }
+
+    public void setLinkTo(String linkTo) {
+        this.linkTo = linkTo;
     }
 
     @Override
