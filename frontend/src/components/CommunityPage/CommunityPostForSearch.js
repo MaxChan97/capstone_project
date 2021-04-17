@@ -17,7 +17,7 @@ import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed"
 import EditPost from "../../components/ProfilePage/EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
-//import Poll from "react-polls";
+import Poll from "react-polls";
 import { useAlert } from "react-alert";
 const ITEM_HEIGHT = 30;
 
@@ -38,60 +38,63 @@ export default function CommunityPostForSearch({
 
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
+  const [pollRefresh, setPollRefresh] = useState(true);
   const [edit, setEdit] = useState(false);
-  {
-    /*}
-      useEffect(() => {
-        if (data.poll != undefined) {
-          let hasVoted = false;
-          for (var i = 0; i < data.poll.pollers.length; i++) {
-            if (currentUser === data.poll.pollers[i].id) {
-              hasVoted = true;
+
+  useEffect(() => {
+    if (data.poll != undefined) {
+      let hasVoted = false;
+      for (var i = 0; i < data.poll.pollers.length; i++) {
+        if (currentUser === data.poll.pollers[i].id) {
+          hasVoted = true;
+        }
+      }
+
+      if (hasVoted === false) {
+        let tempPollAnswer = [];
+        for (const [key, value] of Object.entries(data.poll.options)) {
+          const pollAnswer = {
+            option: key,
+            votes: value.numAnswered,
+          };
+          tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+        }
+        setPollAnswers(tempPollAnswer);
+      } else {
+        // this user has voted alrdy
+        let tempPollAnswer = [];
+        for (const [key, value] of Object.entries(data.poll.options)) {
+          const pollAnswer = {
+            option: key,
+            votes: value.numAnswered,
+          };
+          tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+          for (var i = 0; i < value.answeredBy.length; i++) {
+            if (value.answeredBy[i].id === currentUser) {
+              console.log(key);
+              setVotedAnswer(key);
             }
-          }
-    
-          if (hasVoted === false) {
-            let tempPollAnswer = [];
-            for (const [key, value] of Object.entries(data.poll.options)) {
-              const pollAnswer = {
-                option: key,
-                votes: value.numAnswered,
-              };
-              tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
-            }
-            setPollAnswers(tempPollAnswer);
-          } else {
-            // this user has voted alrdy
-            let tempPollAnswer = [];
-            for (const [key, value] of Object.entries(data.poll.options)) {
-              const pollAnswer = {
-                option: key,
-                votes: value.numAnswered,
-              };
-              tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
-              for (var i = 0; i < value.answeredBy.length; i++) {
-                if (value.answeredBy[i].id === currentUser) {
-                  console.log(key);
-                  setVotedAnswer(key);
-                }
-              }
-            }
-            setPollAnswers(tempPollAnswer);
           }
         }
-      }, [data, refresh]);
-    
-      function handleVote(voteAnswer) {
-        Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
-          .done(() => {
-            setRefresh(!refresh);
-          })
-          .fail((xhr, status, error) => {
-            alert.show(xhr.responseJSON.error);
-          });
+        setPollAnswers(tempPollAnswer);
       }
-    */
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setPollRefresh(!pollRefresh);
+  }, [pollAnswers]);
+
+  function handleVote(voteAnswer) {
+    Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
+      .done(() => {
+        setRefresh(!refresh);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
   }
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -315,7 +318,6 @@ export default function CommunityPostForSearch({
                   ></EditPost>
                 )}
 
-                {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
@@ -353,7 +355,6 @@ export default function CommunityPostForSearch({
               ) : (
                 ""
               )}
-            */}
                 <p>
                   {liked == true ? (
                     <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
