@@ -8,6 +8,7 @@ package session;
 import entity.Follow;
 import entity.Notification;
 import entity.Person;
+import entity.Subscription;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.Date;
@@ -93,6 +94,19 @@ public class NotificationSessionBean implements NotificationSessionBeanLocal {
             n.setBody(body);
             n.setRedirectTo(redirectTo);
             createNotification(n, follower.getId());
+        }
+    }
+
+    @Override
+    public void createNotificationForSubscribers(String body, String redirectTo, Long personId) throws NoResultException, NotValidException {
+        List<Subscription> subs = personSB.getPublications(personId);
+
+        for (Subscription s : subs) {
+            Person subscriber = s.getSubscriber();
+            Notification n = new Notification();
+            n.setBody(body);
+            n.setRedirectTo(redirectTo);
+            createNotification(n, subscriber.getId());
         }
     }
 
