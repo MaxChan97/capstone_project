@@ -40,6 +40,7 @@ const StyledTab = withStyles((theme) => ({
 export default function TrendsPage() {
   const alert = useAlert();
   let { hashtag } = useParams();
+  const currentUser = useSelector((state) => state.currentUser);
 
   const [tabValue, setTabValue] = useState(0);
   const [perPage] = useState(5);
@@ -81,8 +82,23 @@ export default function TrendsPage() {
   useEffect(() => {
     Api.getStreamsByTrend(hashtag)
       .done((streamObjects) => {
-        setStreamResults(streamObjects.reverse());
-        setStreamPageCount(Math.ceil(streamObjects.length / 16));
+        (async () => {
+          for (var i = streamObjects.length - 1; i >= 0; i--) {
+            if (streamObjects[i].isPaid === true) {
+              // check if current user is subscribed
+              let subscriptionStatus = await Api.isSubscribed(
+                currentUser,
+                streamObjects[i].streamer.id
+              );
+              if (subscriptionStatus.subscriptionStatus === "NotSubscribed") {
+                streamObjects.splice(i, 1);
+              }
+            }
+          }
+
+          setStreamResults(streamObjects.reverse());
+          setStreamPageCount(Math.ceil(streamObjects.length / 16));
+        })();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);

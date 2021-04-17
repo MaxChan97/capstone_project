@@ -7,10 +7,10 @@ export default function TopStreamerRow({ data, rank }) {
     <Link to={"/profile/" + data.id}>
       <div style={{ color: "black" }}>
         <div className="row" style={{ marginBottom: "-25px" }}>
-          <div className="col-md-2">
+          <div className="col-md-3 p-0">
             <p className="text-left">{rank + 1}</p>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-3 p-0">
             <img
               className="img-circle"
               style={{ height: "25px" }}
@@ -18,7 +18,7 @@ export default function TopStreamerRow({ data, rank }) {
               alt="defaultDP"
             />
           </div>
-          <div className="col-md-7">
+          <div className="col-md-6 p-0">
             <p className="text-left">{data.username}</p>
           </div>
         </div>
