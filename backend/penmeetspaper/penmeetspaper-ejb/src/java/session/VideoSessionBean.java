@@ -34,6 +34,7 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
   @EJB
   private TrendSessionBeanLocal trendSB;
 
+  //Get managed person
   private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
     if (personId == null) {
       throw new NotValidException(VideoSessionBeanLocal.MISSING_PERSON_ID);
@@ -47,13 +48,37 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
 
     return person;
   }
-  
+
+  // Get managed video
+  private Video emGetVideo(Long videoId) {
+    Video video = em.find(Video.class, videoId);
+    return video;
+  }
+
+  // Get unmanaged video
+  @Override
+  public Video getVideo(Long videoId) throws NoResultException, NotValidException {
+    Video video = emGetVideo(videoId);
+    em.detach(video);
+
+    List<Person> likes = new ArrayList<>();
+    for (Person p : video.getLikes()) {
+      likes.add(personSB.getPersonById(p.getId()));
+    }
+    video.setLikes(likes);
+
+    video.setAuthor(personSB.getPersonById(video.getAuthor().getId()));
+
+    video.setTrends(null);
+    return video;
+  }
+
   @Override
   public void createVideoForPerson(Long personId, Video video) throws NoResultException, NotValidException {
     if (personId == null) {
       throw new NotValidException(VideoSessionBeanLocal.MISSING_PERSON_ID);
     }
-    
+
     if (video == null) {
       throw new NotValidException(VideoSessionBeanLocal.MISSING_VIDEO);
     }
@@ -72,7 +97,7 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
       video.getTrends().add(trend);
       trend.getVideos().add(video);
     }
-    
+
     Person author = emGetPerson(personId);
     video.setAuthor(author);
     em.persist(video);
@@ -84,7 +109,6 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
 
   } // end createVideoForPerson
 
-  
   @Override
   public List<Video> getPersonsVideos(Long personId) throws NoResultException, NotValidException {
     Person person = emGetPerson(personId);
@@ -94,8 +118,8 @@ public class VideoSessionBean implements VideoSessionBeanLocal {
     List<Video> results = new ArrayList<>();
 
     for (Video v : videos) {
-      em.detach(v);
-      results.add(v);
+      Video video = getVideo(v.getId());
+      results.add(video);
     }
     return results;
   }

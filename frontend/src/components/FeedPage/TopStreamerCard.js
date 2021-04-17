@@ -3,7 +3,7 @@ import TopStreamerRow from "./TopStreamerRow";
 
 export default function TopStreamerCard({ data }) {
   return (
-    <div className="card card-primary" style={{width: "20rem",  marginLeft:"20px"}}>
+    <div className="card card-primary" style={{ width: "68%" }}>
       <div className="card-body">
         <p className="font-weight-bold" style={{ marginBottom: "-3px" }}>
           Top Streamers

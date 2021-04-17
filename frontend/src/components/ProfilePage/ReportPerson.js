@@ -89,13 +89,13 @@ export default function ReportPerson({
         console.log(reason);
         console.log(currentUser);
         console.log(type);
-        console.log(url);
+        console.log(id);
         //console.log(category.value);
         if (category == null) {
             closeBanPersonModal();
             alert.show("Please choose a reason");
         } else {
-            Api.createReport(reason, currentUser, type, url, category.value)
+            Api.createReport(reason, currentUser, type, url, category.value,parseInt(id))
                 .done((list) => {
                     closeBanPersonModal();
                     alert.show("Report sent");

@@ -80,7 +80,7 @@ export default function ReportReply({
 
     const [category, setCategory] = useState(null);
     const [type, setType] = useState("REPLY_REPORT");
-    const [url, setUrl] = useState("/post/" + data.id);
+    const [url, setUrl] = useState("/reply/" + data.id);
     function handleReportPerson() {
         console.log(reason);
         console.log(currentUser);
@@ -91,7 +91,7 @@ export default function ReportReply({
             closeBanPersonModal();
             alert.show("Please choose a reason");
         } else {
-            Api.createReport(reason, currentUser, type, url, category.value)
+            Api.createReport(reason, currentUser, type, url, category.value,data.author.id)
                 .done((list) => {
                     closeBanPersonModal();
                     alert.show("Report sent");

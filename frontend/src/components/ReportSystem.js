@@ -87,7 +87,7 @@ export default function ReportSystem({
             closeBanPersonModal();
             alert.show("Please enter more details");
         } else {
-            Api.createReport(reason, currentUser, type, url, category.value)
+            Api.createReport(reason, currentUser, type, url, category.value,0)
                 .done((list) => {
                     closeBanPersonModal();
                     alert.show("Report sent");

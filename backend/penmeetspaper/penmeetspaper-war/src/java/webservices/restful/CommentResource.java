@@ -17,6 +17,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -133,6 +134,21 @@ public class CommentResource {
 
             commentSBLocal.unlikeComment(commentId, personId);
             return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{commentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCommentById(@PathParam("commentId") Long commentId) {
+        try {
+
+            Comment c = commentSBLocal.getCommentById(commentId);
+
+            return Response.status(200).entity(c).type(MediaType.APPLICATION_JSON).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);

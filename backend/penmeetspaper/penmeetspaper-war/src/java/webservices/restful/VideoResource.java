@@ -71,8 +71,6 @@ public class VideoResource {
     v.setIsPaid(false);
     v.setDatePosted(new Date());
     
-    System.out.println(jsonString);
-
     try {
       videoSessionBean.createVideoForPerson(new Long(personId), v);
       return Response.status(204).build();

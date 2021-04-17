@@ -5,9 +5,8 @@ import { animateScroll } from "react-scroll";
 import { useParams } from "react-router";
 import { withStyles } from "@material-ui/core/styles";
 import { Tabs, Tab } from "@material-ui/core";
-import SearchCommunityResultList from "../components/SearchPage/SearchCommunityResultList";
-import SearchPersonResultList from "../components/SearchPage/SearchPersonResultList";
 import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
+import LiveStreamCard from "../components/LivePage/LiveStreamCard";
 import Api from "../helpers/Api";
 
 const StyledTabs = withStyles({
@@ -40,8 +39,7 @@ const StyledTab = withStyles((theme) => ({
 
 export default function TrendsPage() {
   const alert = useAlert();
-  const { hashtag } = useParams();
-  console.log(hashtag);
+  let { hashtag } = useParams();
 
   const [tabValue, setTabValue] = useState(0);
   const [perPage] = useState(5);
@@ -52,8 +50,13 @@ export default function TrendsPage() {
   const [postPageCount, setPostPageCount] = useState(0);
   const [postRefresh, setPostRefresh] = useState(true);
 
+  const [streamOffset, setStreamOffset] = useState(1);
+  const [streamResults, setStreamResults] = useState([]);
+  const [streamPaginatedResults, setStreamPaginatedResults] = useState([]);
+  const [streamPageCount, setStreamPageCount] = useState(0);
+
   useEffect(() => {
-    Api.searchPostByBody(hashtag)
+    Api.getPostByTrends(hashtag)
       .done((postObjects) => {
         setPostResults(postObjects.reverse());
         setPostPageCount(Math.ceil(postObjects.length / perPage));
@@ -65,7 +68,7 @@ export default function TrendsPage() {
 
   useEffect(() => {
     scrollToTopOfResultList();
-  }, [postPaginatedResults]);
+  }, [postPaginatedResults.streamPaginatedResults]);
 
   useEffect(() => {
     const slice = postResults.slice(
@@ -75,9 +78,33 @@ export default function TrendsPage() {
     setPostPaginatedResults(slice);
   }, [postOffset, postResults]);
 
+  useEffect(() => {
+    Api.getStreamsByTrend(hashtag)
+      .done((streamObjects) => {
+        setStreamResults(streamObjects.reverse());
+        setStreamPageCount(Math.ceil(streamObjects.length / 16));
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const slice = streamResults.slice(
+      (streamOffset - 1) * 16,
+      (streamOffset - 1) * 16 + 16
+    );
+    setStreamPaginatedResults(slice);
+  }, [streamOffset, streamResults]);
+
   const handlePostPageClick = (e) => {
     const selectedPage = e.selected;
     setPostOffset(selectedPage + 1);
+  };
+
+  const handleStreamPageClick = (e) => {
+    const selectedPage = e.selected;
+    setStreamOffset(selectedPage + 1);
   };
 
   const handleTabValueChange = (event, newValue) => {
@@ -86,25 +113,55 @@ export default function TrendsPage() {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
-      return (
-        <SearchPostResultList
-          postList={postPaginatedResults}
-          postPageCount={postPageCount}
-          handlePostPageClick={handlePostPageClick}
-          postRefresh={postRefresh}
-          setPostRefresh={setPostRefresh}
-        />
-      );
+      if (postPaginatedResults.length > 0) {
+        return (
+          <SearchPostResultList
+            postList={postPaginatedResults}
+            postPageCount={postPageCount}
+            handlePostPageClick={handlePostPageClick}
+            postRefresh={postRefresh}
+            setPostRefresh={setPostRefresh}
+          />
+        );
+      } else {
+        return (
+          <div>
+            <h3
+              style={{
+                color: "gray",
+                textAlign: "center",
+                margin: "auto",
+              }}
+            >
+              No posts
+            </h3>
+          </div>
+        );
+      }
     } else if (tabValue === 1) {
-      return (
-        <SearchPostResultList
-          postList={postPaginatedResults}
-          postPageCount={postPageCount}
-          handlePostPageClick={handlePostPageClick}
-          postRefresh={postRefresh}
-          setPostRefresh={setPostRefresh}
-        />
-      );
+      if (streamPaginatedResults.length > 0) {
+        return (
+          <LiveStreamCard
+            streamList={streamPaginatedResults}
+            streamPageCount={streamPageCount}
+            handleStreamPageClick={handleStreamPageClick}
+          />
+        );
+      } else {
+        return (
+          <div>
+            <h3
+              style={{
+                color: "gray",
+                textAlign: "center",
+                margin: "auto",
+              }}
+            >
+              No streams
+            </h3>
+          </div>
+        );
+      }
     } else {
       return (
         <SearchPostResultList
@@ -125,7 +182,7 @@ export default function TrendsPage() {
   return (
     <div className="content-wrapper">
       <div style={{ paddingLeft: "2%", paddingTop: "1%" }}>
-        <h3 style={{ fontWeight: "bold" }}>{hashtag}</h3>
+        <h3 style={{ fontWeight: "bold" }}>{"#" + hashtag}</h3>
       </div>
       <div style={{ marginBottom: "2%" }}>
         <StyledTabs value={tabValue} onChange={handleTabValueChange}>
@@ -134,9 +191,15 @@ export default function TrendsPage() {
           <StyledTab label="Videos" />
         </StyledTabs>
       </div>
-      <div style={{ width: "80%", margin: "auto" }}>
-        {handleTabView(tabValue)}
-      </div>
+      {tabValue === 1 ? (
+        <div style={{ paddingLeft: "28px", paddingRight: "28px" }}>
+          {handleTabView(tabValue)}
+        </div>
+      ) : (
+        <div style={{ width: "80%", margin: "auto" }}>
+          {handleTabView(tabValue)}
+        </div>
+      )}
     </div>
   );
 }

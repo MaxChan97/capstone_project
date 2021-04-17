@@ -137,9 +137,6 @@ public class Person implements Serializable {
     @OneToOne
     private Ban ban;
 
-    @ManyToMany(mappedBy = "likes")
-    private List<Video> likedVideos = new ArrayList<>();
-
     @OneToMany(mappedBy = "author")
     private List<Video> videosCreated = new ArrayList<>();
 
@@ -403,14 +400,6 @@ public class Person implements Serializable {
 
     public void setBan(Ban ban) {
         this.ban = ban;
-    }
-
-    public List<Video> getLikedVideos() {
-        return likedVideos;
-    }
-
-    public void setLikedVideos(List<Video> likedVideos) {
-        this.likedVideos = likedVideos;
     }
 
     public List<Video> getVideosCreated() {

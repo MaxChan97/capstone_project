@@ -53,14 +53,17 @@ public class Video implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date datePosted;
 
+  // bidirectional
   @ManyToOne
   @JoinColumn(name = "video_person")
   private Person author;
 
+  // unidirectional
   @ManyToMany
-  @JoinColumn(name = "videolikes_person")
+  @JoinColumn(name = "video_liker")
   private List<Person> likes = new ArrayList<>();
 
+  // birectional
   @ManyToMany(mappedBy = "videos")
   private List<Trend> trends = new ArrayList<>();
 
@@ -151,8 +154,6 @@ public class Video implements Serializable {
   public void setTrends(List<Trend> trends) {
     this.trends = trends;
   }
-
-  
 
   @Override
   public int hashCode() {
