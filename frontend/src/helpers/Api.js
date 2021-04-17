@@ -671,6 +671,9 @@ export default {
   },
 
   subscribeToPerson(subscriberId, publisherId, subId) {
+    if (subId == undefined) {
+      subId = "";
+    }
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
@@ -684,7 +687,6 @@ export default {
       },
       type: "POST",
       data: JSON.stringify({
-        subId,
         subId,
       }),
     });
@@ -2006,5 +2008,5 @@ export default {
       },
       type: "POST",
     });
-  }
+  },
 };
