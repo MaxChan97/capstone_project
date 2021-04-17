@@ -671,6 +671,9 @@ export default {
   },
 
   subscribeToPerson(subscriberId, publisherId, subId) {
+    if (subId == undefined) {
+      subId = "";
+    }
     return jQuery.ajax({
       url:
         this.SERVER_PREFIX +
@@ -684,7 +687,6 @@ export default {
       },
       type: "POST",
       data: JSON.stringify({
-        subId,
         subId,
       }),
     });
@@ -2048,6 +2050,68 @@ export default {
         redirectTo: redirectTo,
         body: body,
       }),
+    });
+  },
+
+  getAllVideos() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  createAdvertisement(title, description, linkTo, image, topicInterests) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/advertisement",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        title,
+        description,
+        linkTo,
+        image,
+        topicInterests
+      }),
+    });
+  },
+
+  getAllAdvertisement() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/advertisement",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getAdvertisementById(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/advertisement/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  deleteAdvertisement(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/advertisement/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
     });
   },
 };

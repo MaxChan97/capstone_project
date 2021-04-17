@@ -161,39 +161,44 @@ function PaymentPage() {
     } else {
       console.log(customerId);
       if (customerId == undefined) {
-        const data = await paymentApi.createCustomer(result, email);
-        console.log(data)
-        setCustomerId(data.customerId);
-        await Api.updateStripeCustomerId(currentUser, data.customerId)
-        console.log("customerId persisted");
+        try {
+          const data = await paymentApi.createCustomer(result, email);
+          console.log(data);
+          setCustomerId(data.customerId);
+          await Api.updateStripeCustomerId(currentUser, data.customerId)
+          console.log("customerId persisted");
 
-        paymentApi.subscribe(data.customerId, plan)
-          .done((res) => {
-            const { client_secret, status, subId } = res;
+          paymentApi.subscribe(data.customerId, plan)
+            .done((res) => {
+              const { client_secret, status, subId } = res;
 
-            if (status === 'requires_action') {
-              stripe.confirmCardPayment(client_secret).then(function (result) {
-                if (result.error) {
-                  setProcessingTo(false);
-                  alert.show('There was an issue! Please try again later');
-                  console.log(result.error);
-                  // Display error message in your UI.
-                  // The card was declined (i.e. insufficient funds, card has expired, etc)
-                } else {
-                  handleSubscribe(subId);
-                  // Show a success message to your customer
-                }
-              });
-            } else {
-              handleSubscribe(subId);
-              // No additional information was needed
-              // Show a success message to your customer
-            }
-          }).fail((res) => {
-            setProcessingTo(false);
-            alert.show('There was an issue! Please try again later');
-            console.log(result.error);
-          })
+              if (status === 'requires_action') {
+                stripe.confirmCardPayment(client_secret).then(function (result) {
+                  if (result.error) {
+                    setProcessingTo(false);
+                    alert.show('There was an issue! Please try again later');
+                    console.log(result.error);
+                    // Display error message in your UI.
+                    // The card was declined (i.e. insufficient funds, card has expired, etc)
+                  } else {
+                    handleSubscribe(subId);
+                    // Show a success message to your customer
+                  }
+                });
+              } else {
+                handleSubscribe(subId);
+                // No additional information was needed
+                // Show a success message to your customer
+              }
+            }).fail((res) => {
+              setProcessingTo(false);
+              alert.show('There was an issue! Please try again later');
+              console.log(result.error);
+            })
+        } catch (e) {
+          alert.show(`There was an issue! ${e.responseJSON.message}`);
+          setProcessingTo(false);
+        }
 
       } else {
 
@@ -233,7 +238,7 @@ function PaymentPage() {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-      <div>
+        <div>
           <p
             style={{
               fontWeight: "bold",
@@ -259,8 +264,8 @@ function PaymentPage() {
 
         <CardInput />
         <div className={classes.div}>
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} disabled={isProcessing || !stripe} style={{width: "150px", fontWeight:"bold"}}>
-          {isProcessing ? "Processing..." : `Subscribe`}
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} disabled={isProcessing || !stripe} style={{ width: "150px", fontWeight: "bold" }}>
+            {isProcessing ? "Processing..." : `Subscribe`}
           </Button>
         </div>
       </CardContent>

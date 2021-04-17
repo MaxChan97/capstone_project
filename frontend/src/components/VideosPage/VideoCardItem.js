@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { Card, Box, CardContent, Button } from "@material-ui/core";
 import defaultDP from "../../assets/Default Dp logo.svg";
+import VideoThumbnail from "react-video-thumbnail";
 
 const useStyles = makeStyles({
   root: {
@@ -40,21 +41,21 @@ const useStyles = makeStyles({
   },
 });
 
-export default function LiveStreamCardItem({ stream }) {
+export default function VideoCardItem({ video }) {
   const styles = useStyles();
 
-  function renderStreamTitle() {
-    if (stream.title.length < 48) {
-      return <p className={styles.mainText}>{stream.title}</p>;
+  function renderVideoTitle() {
+    if (video.title.length < 48) {
+      return <p className={styles.mainText}>{video.title}</p>;
     } else {
-      var placeholder = stream.title.slice(0, 48) + "...";
+      var placeholder = video.title.slice(0, 48) + "...";
       return <p className={styles.mainText}>{placeholder}</p>;
     }
   }
 
   return (
     <Card className={styles.root}>
-      <Link style={{ color: "inherit" }} to={"/stream/" + stream.id}>
+      <Link style={{ color: "inherit" }}>
         <CardContent style={{ padding: "0" }}>
           <Box
             display="flex"
@@ -66,9 +67,18 @@ export default function LiveStreamCardItem({ stream }) {
               justifyContent: "space-between",
             }}
           >
-            <img
-              style={{ height: "158px", width: "100%" }}
-              src={stream.thumbnailUrl}
+            {/*<VideoThumbnail
+              videoUrl={video.fileUrl}
+              snapshotAtTime={0}
+              width={250}
+              height={188}
+            />*/}
+            <video
+              width="100%"
+              height={158}
+              class="clip-thumbnail"
+              src={video.fileUrl}
+              style={{ paddingTop: "0px" }}
             />
             <div
               style={{
@@ -78,7 +88,7 @@ export default function LiveStreamCardItem({ stream }) {
               }}
             >
               <Link
-                to={"/profile/" + stream.streamer.id}
+                to={"/profile/" + video.author.id}
                 style={{
                   height: "38px",
                   width: "38px",
@@ -88,7 +98,7 @@ export default function LiveStreamCardItem({ stream }) {
                 <img
                   className="img-fluid rounded-circle"
                   style={{ height: "38px", width: "38px" }}
-                  src={stream.streamer.profilePicture || defaultDP}
+                  src={video.author.profilePicture || defaultDP}
                 />
               </Link>
               <div
@@ -98,10 +108,10 @@ export default function LiveStreamCardItem({ stream }) {
                   paddingLeft: "10px",
                 }}
               >
-                {renderStreamTitle()}
+                {renderVideoTitle()}
 
                 <Link
-                  to={"/profile/" + stream.streamer.id}
+                  to={"/profile/" + video.author.id}
                   style={{ display: "inherit" }}
                 >
                   <p
@@ -111,13 +121,11 @@ export default function LiveStreamCardItem({ stream }) {
                     }}
                     className={styles.username}
                   >
-                    {stream.streamer.username}
+                    {video.author.username}
                   </p>
                 </Link>
 
-                <p className={styles.subText}>
-                  {stream.viewerCount} Watching Now
-                </p>
+                <p className={styles.subText}>{video.noOfViews} Views</p>
               </div>
             </div>
           </Box>

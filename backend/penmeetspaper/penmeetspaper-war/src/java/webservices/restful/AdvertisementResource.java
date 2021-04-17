@@ -5,13 +5,12 @@
  */
 package webservices.restful;
 
-import entity.Video;
+import entity.Advertisement;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -19,6 +18,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -27,18 +27,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import session.VideoSessionBeanLocal;
+import session.AdvertisementSessionBeanLocal;
 
 /**
- * REST Web Service
  *
- * @author carlc
+ * @author User
  */
-@Path("video")
-public class VideoResource {
+@Path("advertisement")
+public class AdvertisementResource {
 
     @EJB
-    private VideoSessionBeanLocal videoSessionBean;
+    AdvertisementSessionBeanLocal aSB;
 
     private JsonObject createJsonObject(String jsonString) {
         JsonReader reader = Json.createReader(new StringReader(jsonString));
@@ -152,83 +151,64 @@ public class VideoResource {
     }
 
     @POST
-    @Path("/upload")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createVideoForPerson(String jsonString) {
+    public Response createAdvertisement(String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
 
-        int personId = jsonObject.getInt("id");
         String title = jsonObject.getString("title");
         String description = jsonObject.getString("description");
-        String fileName = jsonObject.getString("fileName");
-        String fileUrl = jsonObject.getString("fileUrl");
-        String fileType = jsonObject.getString("fileType");
-        Boolean isPaid = jsonObject.getBoolean("isSubscriberOnly");
+        String linkTo = jsonObject.getString("linkTo");
+        String image = jsonObject.getString("image");
+        JsonArray topicInterestsJsonArray = jsonObject.getJsonArray("topicInterests");
 
-        JsonArray relatedTopicsJsonArray = jsonObject.getJsonArray("videoTopics");
-        List<TopicEnum> relatedTopics = convertToTopicEnumList(relatedTopicsJsonArray);
+        List<TopicEnum> topicInterests = convertToTopicEnumList(topicInterestsJsonArray);
 
-        Video v = new Video();
-        v.setTitle(title);
-        v.setDescription(description);
-        v.setFileName(fileName);
-        v.setFileUrl(fileUrl);
-        v.setFileType(fileType);
-        v.setIsPaid(isPaid);
-        v.setNoOfViews(new Long(0));
-        v.setDatePosted(new Date());
-        v.setRelatedTopics(relatedTopics);
+        Advertisement a = new Advertisement();
+        a.setTitle(title);
+        a.setDescription(description);
+        a.setLinkTo(linkTo);
+        a.setImage(image);
+        a.setTopics(topicInterests);
+        aSB.createAdvertisement(a);
+        return Response.status(204).build();
 
-        try {
-            videoSessionBean.createVideoForPerson(new Long(personId), v);
-            return Response.status(204).build();
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end createVideoForPerson
+    }
 
     @GET
-    @Path("/person/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonsVideos(@PathParam("id") Long personId) {
-        try {
+    public Response getAllAdvertisement() {
+        List<Advertisement> a = aSB.getAllAdvertisement();
 
-            List<Video> results = videoSessionBean.getPersonsVideos(personId);
-            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
-            };
+        GenericEntity<List<Advertisement>> entity = new GenericEntity<List<Advertisement>>(a) {
+        };
 
-            return Response.status(200).entity(entity).build();
+        return Response.status(200).entity(entity).build();
 
-        } catch (NoResultException | NotValidException e) {
-            return buildError(e, 400);
-        }
-    } // end getPersonsVideos
+    } // end getTenTopStreamers
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getVideo(@PathParam("id") Long videoId) {
+    public Response getAdById(@PathParam("id") Long id) {
         try {
-            Video video = videoSessionBean.getVideo(videoId);
-            return Response.status(200).entity(video).build();
+            Advertisement a = aSB.getAdById(id);
+
+            return Response.status(200).entity(a).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } // end getVideo
+    }
 
-    @GET
-    @Path("/all")
+    @DELETE
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllVideos() {
+    public Response deleteAd(@PathParam("id") Long id) {
         try {
-            List<Video> results = videoSessionBean.getAllVideos();
-            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
-            };
-            return Response.status(200).entity(entity).build();
+            aSB.deleteAd(id);
+            return Response.status(204).build();
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
         }
-    } // end getAllVideos
-
+    }
 }
