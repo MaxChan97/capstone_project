@@ -52,6 +52,7 @@ export default function VideoPage() {
   const [advertisements, setAdvertisements] = useState(null);
   const [adToShow, setAdToShow] = useState([]);
   const [shownAd, setShownAd] = useState();
+  const [adLink, setAdLink] = useState();
   const [currentPerson, setCurrentPerson] = useState(null);
   const [video, setVideo] = useState();
   const [videos, setVideos] = useState();
@@ -209,6 +210,7 @@ export default function VideoPage() {
     console.log(randomAdId);
     console.log(adToShow[randomAdId]);
     setShownAd(adToShow[randomAdId]);
+    setAdLink("https://" + adToShow[randomAdId].linkTo);
     console.log(shownAd)
   }
 
@@ -733,11 +735,15 @@ export default function VideoPage() {
           <div style={{ marginTop: "16px" }}>{renderVideoInfo(video)}</div>
           <br></br>
           {subscriptionStatus === "NotSubscribed" && advertisements.length > 0 && shownAd != undefined? (
-            <img
+             <a href={adLink} target="_blank" rel="noopener noreferrer">
+             <img
               className="mx-auto d-block"
               width="750px"
               src={shownAd.image}
             />
+           </a>
+            
+          
           ) : ("")}
           <br></br>
         </div>
