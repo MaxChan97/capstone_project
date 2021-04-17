@@ -78,13 +78,16 @@ export default function VideoPage() {
     Api.getVideo(videoId)
       .done((video) => {
         setVideo(video);
-      })
-      .fail((xhr, status, error) => {
-        alert.show(xhr.responseJSON.error);
-      });
-    Api.getAllVideos()
-      .done((videos) => {
-        setVideos(videos);
+        Api.getAllVideos()
+          .done((videos) => {
+            let vs = videos.filter(
+              (v) => v.id != video.id && isRelated(v, video)
+            );
+            setVideos(vs);
+          })
+          .fail((xhr, status, error) => {
+            alert.show(xhr.responseJSON.error);
+          });
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -147,6 +150,19 @@ export default function VideoPage() {
         });
     }
   }, [video, videoRefresh, refresh]);
+
+  function isRelated(v1, v2) {
+    let t1 = v1.relatedTopics;
+    let t2 = v2.relatedTopics;
+    let isRelated = false;
+    for (let t of t1) {
+      if (t2.includes(t)) {
+        isRelated = true;
+        break;
+      }
+    }
+    return isRelated;
+  }
 
   function handleUnfollowDialogOpen() {
     setConfirmUnfollowDialogOpen(true);
