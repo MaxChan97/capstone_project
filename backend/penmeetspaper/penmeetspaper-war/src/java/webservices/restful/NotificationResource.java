@@ -100,6 +100,25 @@ public class NotificationResource {
     }
 
     @POST
+    @Path("/{personId}/subscribers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createNotificationsForSubscribers(@PathParam("personId") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String redirectTo = jsonObject.getString("redirectTo");
+        String body = jsonObject.getString("body");
+
+        try {
+
+            nSB.createNotificationForSubscribers(body, redirectTo, id);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @POST
     @Path("/systemWide")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
