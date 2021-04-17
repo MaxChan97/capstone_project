@@ -816,7 +816,7 @@ public class PersonResource {
         }
     }
 
-    @GET
+    @POST
     @Path("/{personId}/openNotifications")
     @Produces(MediaType.APPLICATION_JSON)
     public Response openNotifications(@PathParam("personId") Long personId) {
