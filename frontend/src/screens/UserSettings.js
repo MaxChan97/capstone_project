@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const bank = [
   { value: "DBS", label: "DBS" },
   { value: "OCBC", label: "OCBC" },
@@ -29,6 +31,13 @@ const bank = [
   { value: "POSB", label: "POSB" },
 ];
 
+function stringToBank(bankStr) {
+  for (var i = 0; i < bank.length; i++) {
+    if (bank[i].value === bankStr) {
+      return bank[i];
+    }
+  }
+}
 
 export default function UserSettings() {
   const alert = useAlert();
@@ -61,8 +70,9 @@ export default function UserSettings() {
   const [pricing, setPricing] = React.useState(0);
   const [oldPrice, setOldPrice] = React.useState(0);
   const [productId, setProductId] = React.useState();
-  const [accountNumber, setAccountNumber] = React.useState("");
-  const [bankName, setBankName] = useState();
+  const [bankAccount, setBankAccount] = React.useState();
+  const [bankName, setBankName] = React.useState();
+  const [accountNumber, setAccountNumber] = React.useState();
 
   const handleBankName = (event) => {
     setBankName(event.target.value);
@@ -75,7 +85,7 @@ export default function UserSettings() {
   const handleAccountNumber = (event) => {
     setAccountNumber(event.target.value);
   };
-  
+
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
@@ -84,13 +94,50 @@ export default function UserSettings() {
         setPricing(currentPerson.pricingPlan);
         setOldPrice(currentPerson.pricingPlan);
         setProductId(currentPerson.stripeProductId);
+        setBankAccount(currentPerson.bankAccount);
+
+        if (currentPerson.bankAccount) {
+          setAccountNumber(currentPerson.bankAccount.accountNumber);
+          setBankName(stringToBank(currentPerson.bankAccount.bankEnum))
+        }
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(bankName);
+
+    if (pricing !== 0 && accountNumber == "") {
+      alert.show("Cannot remove your bank Account if you have a price!")
+      setRefresh(!refresh);
+      return;
+    } else if (accountNumber == "") {
+      Api.deleteBankAccountForPerson(currentUser);
+      setAccountNumber(undefined);
+      setBankName(undefined)
+    }
+
+
+    if (bankAccount === undefined) {
+      // this case pricing plan cannot be non zero
+      if (pricing !== 0) {
+        alert.show("Please add a bank account first");
+        return;
+      } else {
+        if (bankName == undefined) {
+          alert.show("Please select a bank");
+        }
+        await Api.createBankAccount(currentUser, accountNumber, bankName.value)
+        setRefresh(!refresh);
+      }
+    } else {
+      Api.updateBankAccount(bankAccount.id, accountNumber, bankName.value);
+    }
+
+
     if (productId === undefined) {
       try {
         const data = await paymentApi.createProductForUser(currentUser);
@@ -124,7 +171,6 @@ export default function UserSettings() {
         alert.show("An unexpected error has occured.");
       }
     }
-
   };
 
   useEffect(() => {
@@ -150,7 +196,7 @@ export default function UserSettings() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Subscription pricing
               </Box>
-              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px" }}>
                 <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
                   Pricing
                 </Box>
@@ -173,26 +219,26 @@ export default function UserSettings() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Bank Account
               </Box>
-              <div className="form-group" style={{marginLeft:"10px", marginRight:"480px"}}>
-                  <label htmlFor="inputBankName">Bank</label>
-                  {bankName !== undefined ? (
-                    <Select
-                      name="bank"
-                      options={bank}
-                      value={bankName}
-                      onChange={setBankName}
-                      classNamePrefix="select"
-                    />
-                  ) : (
-                    <Select
-                      name="banks"
-                      options={bank}
-                      onChange={setBankName}
-                      classNamePrefix="select"
-                    />
-                  )}
-                </div>
-              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
+              <div className="form-group" style={{ marginLeft: "10px", marginRight: "480px" }}>
+                <label htmlFor="inputBankName">Bank</label>
+                {bankName !== undefined ? (
+                  <Select
+                    name="bank"
+                    options={bank}
+                    value={bankName}
+                    onChange={setBankName}
+                    classNamePrefix="select"
+                  />
+                ) : (
+                  <Select
+                    name="banks"
+                    options={bank}
+                    onChange={setBankName}
+                    classNamePrefix="select"
+                  />
+                )}
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px" }}>
                 <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
                   Account Number
                 </Box>
