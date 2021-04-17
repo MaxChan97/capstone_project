@@ -1964,4 +1964,14 @@ export default {
     });
   },
 
+  readNotification(notificationId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + notificationId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+    });
+  },
 };

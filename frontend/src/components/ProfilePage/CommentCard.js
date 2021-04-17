@@ -90,7 +90,7 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
     setShowReplies(!showReplies);
   };
 
-  const [liked, setLiked] = useState();
+  const [liked, setLiked] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
   const isAdmin = useSelector((state) => state.isAdmin);
 
@@ -249,15 +249,18 @@ export default function CommentCard({ key, data, refresh, setRefresh }) {
               setEdit={setEdit}></EditComment>}
 
             <p style={{ marginLeft: 10 }}>
-              {liked == true ? (
-                <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
-                  <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                </Link>
-              ) : (
-                <Link onClick={handleLike} style={{ color: "black" }}>
-                  <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
-                </Link>
-              )}
+            {isAdmin == false && liked == true ? (
+                  <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
+                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                  </Link>
+                ) : isAdmin == false && liked == false ? (
+                  <Link onClick={handleLike} style={{ color: "black" }}>
+                    <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
+                  </Link>
+                ) : isAdmin == true ?( <span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+                ) : ("")}
+              
+              
 
               <span>
                 <i

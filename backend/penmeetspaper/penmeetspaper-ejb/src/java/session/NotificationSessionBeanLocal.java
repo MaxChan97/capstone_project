@@ -22,4 +22,6 @@ public interface NotificationSessionBeanLocal {
 
     public void createNotification(Notification noti, Long personId) throws NoResultException, NotValidException;
 
+    public void readNotification(Long nId) throws NoResultException, NotValidException;
+
 }

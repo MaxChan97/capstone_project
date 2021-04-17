@@ -7,6 +7,7 @@ package session;
 
 import entity.Community;
 import entity.Follow;
+import entity.Notification;
 import entity.Person;
 import entity.Post;
 import entity.Subscription;
@@ -102,5 +103,9 @@ public interface PersonSessionBeanLocal {
     public void updateCustomerStripeId(Person person) throws NoResultException, NotValidException;
 
     public void updateStripeProductId(Person person) throws NoResultException, NotValidException;
+
+    public List<Notification> getPersonNotification(Long personId) throws NotValidException, NoResultException;
+
+    public void personOpenNotification(Long personId) throws NotValidException, NoResultException;
 
 }

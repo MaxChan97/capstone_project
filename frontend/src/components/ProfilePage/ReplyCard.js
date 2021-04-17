@@ -85,7 +85,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
     openDeleteReplyModal();
   };
 
-  const [liked, setLiked] = useState();
+  const [liked, setLiked] = useState(false);
   const currentUser = useSelector((state) => state.currentUser);
 
   const handleLike = (event) => {
@@ -225,7 +225,7 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
                   ></ReportReply> </div>
               ) : ("")}
               {isAdmin == true ? (
-                <div style={{ textAlign: "right",}}>
+                <div style={{ textAlign: "right", }}>
                   <Link onClick={handleAdminDelete}>
                     <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
                   </Link>
@@ -241,15 +241,16 @@ export default function ReplyCard({ data, refresh, setRefresh }) {
               setRefresh={setRefresh}
               setEdit={setEdit}></EditReply>}
             <p style={{ marginLeft: 10 }}>
-              {liked == true ? (
+              {isAdmin == false && liked == true ? (
                 <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                   <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </Link>
-              ) : (
+              ) : isAdmin == false && liked == false ? (
                 <Link onClick={handleLike} style={{ color: "black" }}>
                   <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                 </Link>
-              )}
+              ) : isAdmin == true ? (<span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+              ) : ("")}
             </p>
           </div>
         </div>

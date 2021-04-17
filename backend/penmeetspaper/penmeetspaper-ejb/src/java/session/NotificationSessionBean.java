@@ -59,11 +59,14 @@ public class NotificationSessionBean implements NotificationSessionBeanLocal {
         noti.setRead(false);
         noti.setDateCreated(new Date());
         p.getNotifications().add(noti);
+        int unreadNotifications = p.getUnreadNotifications() + 1;
+        p.setUnreadNotifications(unreadNotifications);
 
         em.persist(noti);
         em.flush();
     }
 
+    @Override
     public void readNotification(Long nId) throws NoResultException, NotValidException {
         Notification n = emGetNotification(nId);
         n.setRead(true);
