@@ -51,7 +51,7 @@ export default function ViewStreamPage() {
   const classes = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const history = useHistory();
-
+  const [adLink, setAdLink] = useState();
   const [advertisements, setAdvertisements] = useState(null);
   const [adToShow, setAdToShow] = useState([]);
   const [shownAd, setShownAd] = useState();
@@ -196,6 +196,7 @@ export default function ViewStreamPage() {
     console.log(randomAdId);
     console.log(adToShow[randomAdId]);
     setShownAd(adToShow[randomAdId]);
+    setAdLink("https://" + adToShow[randomAdId].linkTo);
     console.log(shownAd)
   }
 
@@ -841,12 +842,14 @@ export default function ViewStreamPage() {
           <div style={{ marginTop: "16px" }}>{renderStreamInfo(stream)}</div>
           <br>
           </br>
-          {subscriptionStatus === "NotSubscribed" && advertisements.length > 0 && shownAd != undefined? (
-            <img
-              className="mx-auto d-block"
-              width="750px"
-              src={shownAd.image}
-            />
+          {subscriptionStatus === "NotSubscribed" && advertisements.length > 0 && shownAd != undefined ? (
+            <a href={adLink} target="_blank" rel="noopener noreferrer">
+              <img
+                className="mx-auto d-block"
+                width="750px"
+                src={shownAd.image}
+              />
+            </a>
           ) : ("")}
         </div>
         <div
