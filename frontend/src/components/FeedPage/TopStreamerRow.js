@@ -6,19 +6,19 @@ export default function TopStreamerRow({ data, rank }) {
   return (
     <Link to={"/profile/" + data.id}>
       <div style={{ color: "black" }}>
-        <div className="row" style={{ marginBottom: "-25px" }}>
-          <div className="col-md-3 p-0">
-            <p className="text-left">{rank + 1}</p>
+        <div className="row">
+          <div className="col-2">
+            <p className="text-center">{rank + 1}</p>
           </div>
-          <div className="col-md-3 p-0">
+          <div className="col-3">
             <img
-              className="img-circle"
-              style={{ height: "25px" }}
-              src={data.profilePicture}
-              alt="defaultDP"
+              className="img-circle float-left"
+              src={data.profilePicture || defaultDP}
+              alt="profile picture"
+              style={{ width: "30px" }}
             />
           </div>
-          <div className="col-md-6 p-0">
+          <div className="col-7">
             <p className="text-left">{data.username}</p>
           </div>
         </div>

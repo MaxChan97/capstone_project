@@ -40,16 +40,13 @@ export default function CommunityFeedPage() {
 
   return (
     <div className="content-wrapper">
-      <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+      <div className="container">
         <div className="row">
-          <div className="col-md-9 mt-4">
+          <div className="col-9 mt-4">
             <PostListOfFollowing />
           </div>
 
-          <div
-            className="col-md-3 mt-4"
-            style={{ textAlign: "left", paddingTop: "10px" }}
-          >
+          <div className="col-3 mt-4">
             <div className="card card-primary">
               <div className="card-body">
                 <div
@@ -63,7 +60,7 @@ export default function CommunityFeedPage() {
                     <ColorButton
                       style={{
                         height: "50px",
-                        width: "250px",
+                        width: "200px",
                         outline: "none",
                         float: "right",
                         fontWeight: "600",
