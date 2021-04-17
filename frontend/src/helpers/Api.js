@@ -1766,7 +1766,7 @@ export default {
 
   getPersonsVideos(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/video/person" + id,
+      url: this.SERVER_PREFIX + "/video/person/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
