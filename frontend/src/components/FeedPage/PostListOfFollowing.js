@@ -72,7 +72,7 @@ export default function PostListOfFollowing() {
           margin: "auto",
         }}
       >
-        Follow or subscribe to someone to view their posts here!
+        Follow someone to view their posts here!
       </p>
       <br></br>
       <div
