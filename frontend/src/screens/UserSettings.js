@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Api from "../helpers/Api";
 import paymentApi from "../helpers/paymentApi";
 import { useAlert } from "react-alert";
+import Select from "react-select";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const bank = [
+  { value: "DBS", label: "DBS" },
+  { value: "OCBC", label: "OCBC" },
+  { value: "SC", label: "SC" },
+  { value: "POSB", label: "POSB" },
+];
 
 
 export default function UserSettings() {
@@ -34,6 +42,7 @@ export default function UserSettings() {
   const handleExplicit = (event) => {
     setExplicit(event.target.checked);
   };
+
 
   const handleChatIsPaid = (event) => {
     setChatIsPaid(event.target.checked);
@@ -52,11 +61,21 @@ export default function UserSettings() {
   const [pricing, setPricing] = React.useState(0);
   const [oldPrice, setOldPrice] = React.useState(0);
   const [productId, setProductId] = React.useState();
+  const [accountNumber, setAccountNumber] = React.useState("");
+  const [bankName, setBankName] = useState();
+
+  const handleBankName = (event) => {
+    setBankName(event.target.value);
+  };
 
   const handlePricing = (event) => {
     setPricing(event.target.value);
   };
 
+  const handleAccountNumber = (event) => {
+    setAccountNumber(event.target.value);
+  };
+  
   function loadData(currentUser) {
     Api.getPersonById(currentUser)
       .done((currentPerson) => {
@@ -131,7 +150,7 @@ export default function UserSettings() {
               <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
                 Subscription pricing
               </Box>
-              <div style={{ display: "flex", alignItems: "baseline" }}>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
                 <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
                   Pricing
                 </Box>
@@ -143,12 +162,48 @@ export default function UserSettings() {
                   size="small"
                   InputProps={{
                     inputProps: {
-                      max: 1000,
+                      max: 50,
                       min: 0,
                     },
                   }}
                   value={pricing}
                   onChange={handlePricing}
+                />
+              </div>
+              <Box fontWeight="fontWeightBold" fontSize={22} m={1}>
+                Bank Account
+              </Box>
+              <div className="form-group" style={{marginLeft:"10px", marginRight:"480px"}}>
+                  <label htmlFor="inputBankName">Bank</label>
+                  {bankName !== undefined ? (
+                    <Select
+                      name="bank"
+                      options={bank}
+                      value={bankName}
+                      onChange={setBankName}
+                      classNamePrefix="select"
+                    />
+                  ) : (
+                    <Select
+                      name="banks"
+                      options={bank}
+                      onChange={setBankName}
+                      classNamePrefix="select"
+                    />
+                  )}
+                </div>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom:"20px"}}>
+                <Box fontWeight="fontWeightBold" fontSize={18} m={1}>
+                  Account Number
+                </Box>
+
+                <TextField
+                  id="outlined-number"
+                  type="number"
+                  variant="outlined"
+                  size="small"
+                  value={accountNumber}
+                  onChange={handleAccountNumber}
                 />
               </div>
 
