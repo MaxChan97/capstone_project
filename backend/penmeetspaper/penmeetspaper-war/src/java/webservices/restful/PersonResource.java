@@ -7,6 +7,7 @@ package webservices.restful;
 
 import entity.Community;
 import entity.Follow;
+import entity.Notification;
 import entity.Person;
 import entity.Post;
 import entity.Subscription;
@@ -775,6 +776,7 @@ public class PersonResource {
 
     @PUT
     @Path("/{personId}/stripeCustomerId")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateStripeCustomerId(@PathParam("personId") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
@@ -795,6 +797,7 @@ public class PersonResource {
 
     @PUT
     @Path("/{personId}/stripeProductId")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateStripeProductId(@PathParam("personId") Long personId, String jsonString) {
         JsonObject jsonObject = createJsonObject(jsonString);
@@ -807,6 +810,37 @@ public class PersonResource {
             personSB.updateStripeProductId(person);
 
             return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/openNotifications")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response openNotifications(@PathParam("personId") Long personId) {
+
+        try {
+            personSB.personOpenNotification(personId);
+            return Response.status(204).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    }
+
+    @GET
+    @Path("/{personId}/notifications")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsNotification(@PathParam("personId") Long personId) {
+
+        try {
+            List<Notification> results = personSB.getPersonNotification(personId);
+            GenericEntity<List<Notification>> entity = new GenericEntity<List<Notification>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
 
         } catch (NoResultException | NotValidException e) {
             return buildError(e, 400);
