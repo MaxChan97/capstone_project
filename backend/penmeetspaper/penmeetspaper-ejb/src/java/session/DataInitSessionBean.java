@@ -126,7 +126,7 @@ public class DataInitSessionBean {
 
         Person user4 = new Person();
         user4.setUsername("iLoveCrypto");
-        user4.setEmail("ilovecrypto@gmail.com");
+        user4.setEmail("maxchanwf@gmail.com");
         user4.setPassword("password");
 
         Person user5 = new Person();
