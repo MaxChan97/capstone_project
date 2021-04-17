@@ -70,7 +70,6 @@ public class BankAccountSessionBean implements BankAccountSessionBeanLocal {
         BankAccount oldAccount = emGetBankAccount(bankAccount.getId());
         oldAccount.setAccountNumber(bankAccount.getAccountNumber());
         oldAccount.setBankEnum(bankAccount.getBankEnum());
-        oldAccount.setDisplayName(bankAccount.getDisplayName());
 
         em.flush();
     }

@@ -31,7 +31,7 @@ public class BankAccount implements Serializable {
     @Column(nullable = false)
     private String accountNumber;
 
-    @Column(nullable = false)
+    @Column
     private String displayName;
 
     @Enumerated(EnumType.STRING)
