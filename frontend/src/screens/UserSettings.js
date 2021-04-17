@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const bank = [
   { value: "DBS", label: "DBS" },
   { value: "OCBC", label: "OCBC" },
@@ -29,6 +31,13 @@ const bank = [
   { value: "POSB", label: "POSB" },
 ];
 
+function stringToBank(bankStr) {
+  for (var i = 0; i < bank.length; i++) {
+    if (bank[i].value === bankStr) {
+      return bank[i];
+    }
+  }
+}
 
 export default function UserSettings() {
   const alert = useAlert();
@@ -61,6 +70,7 @@ export default function UserSettings() {
   const [pricing, setPricing] = React.useState(0);
   const [oldPrice, setOldPrice] = React.useState(0);
   const [productId, setProductId] = React.useState();
+  const [bankAccount, setBankAccount] = React.useState();
   const [accountNumber, setAccountNumber] = React.useState("");
   const [bankName, setBankName] = useState();
 
@@ -84,13 +94,31 @@ export default function UserSettings() {
         setPricing(currentPerson.pricingPlan);
         setOldPrice(currentPerson.pricingPlan);
         setProductId(currentPerson.stripeProductId);
+        setBankAccount(currentPerson.bankAccount);
       })
       .fail((xhr, status, error) => {
         alert.show("This user does not exist!");
       });
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(bankName);
+    if (bankAccount === undefined) {
+      // this case pricing plan cannot be non zero
+      if (pricing !== 0) {
+        alert.show("Please add a bank account first");
+        return;
+      } else {
+        if (!bankName) {
+          alert.show("Please select a bank");
+        }
+        await Api.createBankAccount(currentUser, accountNumber, bankName.value)
+        setRefresh(!refresh);
+      }
+    } else {
+      Api.updateBankAccount(bankAccount.id, accountNumber, bankName.value);
+    }
     if (productId === undefined) {
       try {
         const data = await paymentApi.createProductForUser(currentUser);
@@ -124,7 +152,6 @@ export default function UserSettings() {
         alert.show("An unexpected error has occured.");
       }
     }
-
   };
 
   useEffect(() => {
@@ -179,7 +206,7 @@ export default function UserSettings() {
                     <Select
                       name="bank"
                       options={bank}
-                      value={bankName}
+                      value={stringToBank(bankAccount.bankEnum)}
                       onChange={setBankName}
                       classNamePrefix="select"
                     />
@@ -202,7 +229,7 @@ export default function UserSettings() {
                   type="number"
                   variant="outlined"
                   size="small"
-                  value={accountNumber}
+                  value={bankAccount.accountNumber}
                   onChange={handleAccountNumber}
                 />
               </div>
