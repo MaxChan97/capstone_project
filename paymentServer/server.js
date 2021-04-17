@@ -153,9 +153,9 @@ app.post('/createCustomer', async (req, res) => {
         });
         res.json({ 'customerId': customer.id })
     } catch (e) {
-        console.log(e)
+        console.log("error occured");
         return res.status(400).send({
-            message: 'This is an error'
+            message: e.decline_code
         });
     }
 })
