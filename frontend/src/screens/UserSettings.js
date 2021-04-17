@@ -72,7 +72,7 @@ export default function UserSettings() {
   const [productId, setProductId] = React.useState();
   const [bankAccount, setBankAccount] = React.useState();
   const [bankName, setBankName] = React.useState();
-  const [accountNumber, setAccountNumber] = React.useState("");
+  const [accountNumber, setAccountNumber] = React.useState();
 
   const handleBankName = (event) => {
     setBankName(event.target.value);
@@ -109,13 +109,25 @@ export default function UserSettings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(bankName);
+
+    if (pricing !== 0 && accountNumber == "") {
+      alert.show("Cannot remove your bank Account if you have a price!")
+      setRefresh(!refresh);
+      return;
+    } else if (accountNumber == "") {
+      Api.deleteBankAccountForPerson(currentUser);
+      setAccountNumber(undefined);
+      setBankName(undefined)
+    }
+
+
     if (bankAccount === undefined) {
       // this case pricing plan cannot be non zero
       if (pricing !== 0) {
         alert.show("Please add a bank account first");
         return;
       } else {
-        if (!bankName) {
+        if (bankName == undefined) {
           alert.show("Please select a bank");
         }
         await Api.createBankAccount(currentUser, accountNumber, bankName.value)
@@ -124,6 +136,7 @@ export default function UserSettings() {
     } else {
       Api.updateBankAccount(bankAccount.id, accountNumber, bankName.value);
     }
+
 
     if (productId === undefined) {
       try {
