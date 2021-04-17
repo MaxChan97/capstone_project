@@ -107,38 +107,38 @@ public class DataInitSessionBean {
 
     private void createPersons() throws NotValidException {
         Person user1 = new Person();
-        user1.setUsername("user1");
-        user1.setEmail("user1@email.com");
+        user1.setUsername("xiaoming_");
+        user1.setEmail("xiaoming@gmail.com");
         user1.setPassword("password");
 
         Person user2 = new Person();
-        user2.setUsername("user2");
-        user2.setEmail("user2@email.com");
+        user2.setUsername("jenny_hodl");
+        user2.setEmail("jennytan@yahoo.com.sg");
         user2.setPassword("password");
 
         Person user3 = new Person();
-        user3.setUsername("user3");
-        user3.setEmail("user3@email.com");
+        user3.setUsername("alanxalan");
+        user3.setEmail("alandsouza@hotmail.com");
         user3.setPassword("password");
 
         Person user4 = new Person();
-        user4.setUsername("user4");
-        user4.setEmail("user4@email.com");
+        user4.setUsername("iLoveCrypto");
+        user4.setEmail("ilovecrypto@gmail.com");
         user4.setPassword("password");
 
         Person user5 = new Person();
-        user5.setUsername("user5");
-        user5.setEmail("user5@email.com");
+        user5.setUsername("tothemoon");
+        user5.setEmail("tothemoon@gmail.com");
         user5.setPassword("password");
 
         Person user6 = new Person();
-        user6.setUsername("user6");
-        user6.setEmail("user6@email.com");
+        user6.setUsername("TheInsuranceGuru");
+        user6.setEmail("theinsuranceguru@yahoo.com.sg");
         user6.setPassword("password");
 
         Person user7 = new Person();
-        user7.setUsername("user7");
-        user7.setEmail("user7@email.com");
+        user7.setUsername("apeboi97");
+        user7.setEmail("apeboi97@gmail.com");
         user7.setPassword("password");
 
         Person user101 = new Person();
