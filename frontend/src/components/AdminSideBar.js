@@ -16,6 +16,7 @@ import adminLogo from "../assets/admin.svg";
 import logLogo from "../assets/log-format.svg";
 import { useSelector } from "react-redux";
 import BNBLogo from "../assets/BNB Logo.png";
+import conversation from "../assets/conversation.svg";
 
 function AdminSidebar() {
   let location = useLocation();
@@ -236,6 +237,47 @@ function AdminSidebar() {
                       alt="logLogo"
                     />
                     <p className="ml-2">Admin Logs</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
+              {location.pathname === "/admin/systemNotif" ? (
+                <Link
+                  to="/admin/systemNotif"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={conversation}
+                      className="nav-icon"
+                      alt="notification"
+                    />
+                    <p className="ml-2">System Notification</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/admin/systemNotif" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={conversation}
+                      className="nav-icon"
+                      alt="notification"
+                    />
+                    <p className="ml-2">System Notification</p>
                   </div>
                 </Link>
               )}
