@@ -9,6 +9,7 @@ import LiveStreamCard from "../components/LivePage/LiveStreamCard";
 import RecommendedOrTrendingStreamCard from "../components/LivePage/RecommendedOrTrendingStreamCard";
 import Api from "../helpers/Api";
 import { Box } from "@material-ui/core";
+import { useAlert } from "react-alert";
 
 const useStyles = makeStyles({
   streamList: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 export default function LivePage() {
   const currentUser = useSelector((state) => state.currentUser);
   const styles = useStyles();
+  const alert = useAlert();
 
   const [perPage] = useState(16);
   const [recommendedStreamList, setRecommendedStreamList] = useState([]);
@@ -61,44 +63,64 @@ export default function LivePage() {
               .then((todayTrends) => {
                 Api.getOngoingStreams()
                   .then((streams) => {
-                    let recommendedStreams = [];
-                    for (var i = streams.length - 1; i >= 0; i--) {
-                      if (
-                        person.topicInterests.some((interest) =>
-                          streams[i].relatedTopics.includes(interest)
-                        )
-                      ) {
-                        // got match in interest
-                        // add to recommended streams and remove from streams
-                        recommendedStreams.push(streams[i]);
-                        streams.splice(i, 1);
+                    (async () => {
+                      // take out all the streams where streamer set subscriptionOnly and currentuser not a subscriber
+                      for (var i = streams.length - 1; i >= 0; i--) {
+                        if (streams[i].isPaid === true) {
+                          // check if current user is subscribed
+                          let subscriptionStatus = await Api.isSubscribed(
+                            currentUser,
+                            streams[i].streamer.id
+                          );
+                          console.log(subscriptionStatus);
+                          if (
+                            subscriptionStatus.subscriptionStatus ===
+                            "NotSubscribed"
+                          ) {
+                            streams.splice(i, 1);
+                          }
+                        }
                       }
-                    }
 
-                    let trendingStreams = [];
-                    for (var i = streams.length - 1; i >= 0; i--) {
-                      if (
-                        topTrends.some((trend) =>
-                          streams[i].trends.some((streamTrend) => {
-                            return streamTrend.hashTag == trend.hashtag;
-                          })
-                        ) ||
-                        todayTrends.some((trend) =>
-                          streams[i].trends.some((streamTrend) => {
-                            return streamTrend.hashTag == trend.hashtag;
-                          })
-                        )
-                      ) {
-                        // got match in trends
-                        trendingStreams.push(streams[i]);
-                        streams.splice(i, 1);
+                      let recommendedStreams = [];
+                      for (var i = streams.length - 1; i >= 0; i--) {
+                        if (
+                          person.topicInterests.some((interest) =>
+                            streams[i].relatedTopics.includes(interest)
+                          )
+                        ) {
+                          // got match in interest
+                          // add to recommended streams and remove from streams
+                          recommendedStreams.push(streams[i]);
+                          streams.splice(i, 1);
+                        }
                       }
-                    }
-                    setRecommendedStreamList(recommendedStreams);
-                    setTrendingStreamList(trendingStreams);
 
-                    setStreamResults(streams);
-                    setStreamPageCount(Math.ceil(streams.length / perPage));
+                      let trendingStreams = [];
+                      for (var i = streams.length - 1; i >= 0; i--) {
+                        if (
+                          topTrends.some((trend) =>
+                            streams[i].trends.some((streamTrend) => {
+                              return streamTrend.hashTag == trend.hashtag;
+                            })
+                          ) ||
+                          todayTrends.some((trend) =>
+                            streams[i].trends.some((streamTrend) => {
+                              return streamTrend.hashTag == trend.hashtag;
+                            })
+                          )
+                        ) {
+                          // got match in trends
+                          trendingStreams.push(streams[i]);
+                          streams.splice(i, 1);
+                        }
+                      }
+                      setRecommendedStreamList(recommendedStreams);
+                      setTrendingStreamList(trendingStreams);
+
+                      setStreamResults(streams.reverse());
+                      setStreamPageCount(Math.ceil(streams.length / perPage));
+                    })();
                   })
                   .fail((xhr, status, error) => {});
               })
@@ -126,21 +148,18 @@ export default function LivePage() {
             >
               Recommended For You
             </h5>
-            {recommendedStreamList.length > 4 ? (
-              <Link to="/live/recommended" style={{ color: "inherit" }}>
-                <p
-                  style={{
-                    color: "#6E757C",
-                    margin: "0px",
-                    marginLeft: "10px",
-                  }}
-                >
-                  View All
-                </p>
-              </Link>
-            ) : (
-              ""
-            )}
+
+            <Link to="/live/recommended" style={{ color: "inherit" }}>
+              <p
+                style={{
+                  color: "#6E757C",
+                  margin: "0px",
+                  marginLeft: "10px",
+                }}
+              >
+                View All
+              </p>
+            </Link>
           </div>
           <div style={{ paddingTop: "20px" }}>
             <RecommendedOrTrendingStreamCard
@@ -169,21 +188,17 @@ export default function LivePage() {
               >
                 Trending
               </h5>
-              {trendingStreamList.length > 4 ? (
-                <Link to="/live/trending" style={{ color: "inherit" }}>
-                  <p
-                    style={{
-                      color: "#6E757C",
-                      margin: "0px",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    View All
-                  </p>
-                </Link>
-              ) : (
-                ""
-              )}
+              <Link to="/live/trending" style={{ color: "inherit" }}>
+                <p
+                  style={{
+                    color: "#6E757C",
+                    margin: "0px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  View All
+                </p>
+              </Link>
             </div>
             <div style={{ paddingTop: "20px" }}>
               <RecommendedOrTrendingStreamCard

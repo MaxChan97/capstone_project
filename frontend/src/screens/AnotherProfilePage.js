@@ -7,6 +7,7 @@ import AboutMe from "../components/ProfilePage/AboutMe";
 import PostList from "../components/ProfilePage/PostList";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import VideosTab from "../components/ProfilePage/VideosTab";
 
 export default function AnotherProfilePage({ personId }) {
   const alert = useAlert();
@@ -43,10 +44,19 @@ export default function AnotherProfilePage({ personId }) {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
+      return (
+        <VideosTab
+          personId={personId}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+      );
+    }
+    if (tabValue === 1) {
       if (anotherPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+            <div className="col-md-9 mt-4" style={{ margin: "auto" }}>
               <PostList
                 personId={personId}
                 refresh={refresh}

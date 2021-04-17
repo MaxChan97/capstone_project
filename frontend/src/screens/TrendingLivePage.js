@@ -39,26 +39,44 @@ export default function TrendingLivePage() {
           .then((todayTrends) => {
             Api.getOngoingStreams()
               .then((streams) => {
-                let trendingStreams = [];
-                for (var i = streams.length - 1; i >= 0; i--) {
-                  if (
-                    topTrends.some((trend) =>
-                      streams[i].trends.some((streamTrend) => {
-                        return streamTrend.hashTag == trend.hashtag;
-                      })
-                    ) ||
-                    todayTrends.some((trend) =>
-                      streams[i].trends.some((streamTrend) => {
-                        return streamTrend.hashTag == trend.hashtag;
-                      })
-                    )
-                  ) {
-                    // got match in trends
-                    trendingStreams.push(streams[i]);
-                    streams.splice(i, 1);
+                (async () => {
+                  for (var i = streams.length - 1; i >= 0; i--) {
+                    if (streams[i].isPaid === true) {
+                      // check if current user is subscribed
+                      let subscriptionStatus = await Api.isSubscribed(
+                        currentUser,
+                        streams[i].streamer.id
+                      );
+                      if (
+                        subscriptionStatus.subscriptionStatus ===
+                        "NotSubscribed"
+                      ) {
+                        streams.splice(i, 1);
+                      }
+                    }
                   }
-                }
-                setTrendingStreamList(trendingStreams);
+
+                  let trendingStreams = [];
+                  for (var i = streams.length - 1; i >= 0; i--) {
+                    if (
+                      topTrends.some((trend) =>
+                        streams[i].trends.some((streamTrend) => {
+                          return streamTrend.hashTag == trend.hashtag;
+                        })
+                      ) ||
+                      todayTrends.some((trend) =>
+                        streams[i].trends.some((streamTrend) => {
+                          return streamTrend.hashTag == trend.hashtag;
+                        })
+                      )
+                    ) {
+                      // got match in trends
+                      trendingStreams.push(streams[i]);
+                      streams.splice(i, 1);
+                    }
+                  }
+                  setTrendingStreamList(trendingStreams);
+                })();
               })
               .fail((xhr, status, error) => {});
           })

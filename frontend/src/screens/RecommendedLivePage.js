@@ -37,20 +37,37 @@ export default function RecommendedLivePage() {
       .then((person) => {
         Api.getOngoingStreams()
           .then((streams) => {
-            let recommendedStreams = [];
-            for (var i = streams.length - 1; i >= 0; i--) {
-              if (
-                person.topicInterests.some((interest) =>
-                  streams[i].relatedTopics.includes(interest)
-                )
-              ) {
-                // got match in interest
-                // add to recommended streams and remove from streams
-                recommendedStreams.push(streams[i]);
-                streams.splice(i, 1);
+            (async () => {
+              for (var i = streams.length - 1; i >= 0; i--) {
+                if (streams[i].isPaid === true) {
+                  // check if current user is subscribed
+                  let subscriptionStatus = await Api.isSubscribed(
+                    currentUser,
+                    streams[i].streamer.id
+                  );
+                  if (
+                    subscriptionStatus.subscriptionStatus === "NotSubscribed"
+                  ) {
+                    streams.splice(i, 1);
+                  }
+                }
               }
-            }
-            setRecommendedStreamList(recommendedStreams);
+
+              let recommendedStreams = [];
+              for (var i = streams.length - 1; i >= 0; i--) {
+                if (
+                  person.topicInterests.some((interest) =>
+                    streams[i].relatedTopics.includes(interest)
+                  )
+                ) {
+                  // got match in interest
+                  // add to recommended streams and remove from streams
+                  recommendedStreams.push(streams[i]);
+                  streams.splice(i, 1);
+                }
+              }
+              setRecommendedStreamList(recommendedStreams);
+            })();
           })
           .fail((xhr, status, error) => {});
       })

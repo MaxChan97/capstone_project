@@ -147,8 +147,23 @@ export default function SearchPage({ searchString, searchRefresh }) {
   useEffect(() => {
     Api.searchStreamByTitleAndDescription(searchString)
       .done((streamObjects) => {
-        setStreamResults(streamObjects.reverse());
-        setStreamPageCount(Math.ceil(streamObjects.length / 16));
+        (async () => {
+          for (var i = streamObjects.length - 1; i >= 0; i--) {
+            if (streamObjects[i].isPaid === true) {
+              // check if current user is subscribed
+              let subscriptionStatus = await Api.isSubscribed(
+                currentUser,
+                streamObjects[i].streamer.id
+              );
+              if (subscriptionStatus.subscriptionStatus === "NotSubscribed") {
+                streamObjects.splice(i, 1);
+              }
+            }
+          }
+
+          setStreamResults(streamObjects.reverse());
+          setStreamPageCount(Math.ceil(streamObjects.length / 16));
+        })();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);

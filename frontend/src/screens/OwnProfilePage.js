@@ -9,6 +9,7 @@ import PostList from "../components/ProfilePage/PostList";
 import PostsSortdropdown from "../components/ProfilePage/PostsSortDropdown";
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
+import VideosTab from "../components/ProfilePage/VideosTab";
 
 export default function OwnProfilePage({ personId }) {
   const alert = useAlert();
@@ -49,19 +50,27 @@ export default function OwnProfilePage({ personId }) {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
+      return (
+        <VideosTab
+          personId={personId}
+          refresh={refresh}
+          setRefresh={setRefresh}
+        />
+      );
+    } else if (tabValue === 1) {
       if (currentPerson != {}) {
         return (
           <div style={{ marginTop: "20px" }}>
-            <div style={{ margin: "auto", }}>
-              <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+            <div style={{ margin: "auto" }}>
+              <div className="col-md-9 mt-4" style={{ margin: "auto" }}>
                 <CreatePostCard
                   personId={personId}
                   refresh={refresh}
                   setRefresh={setRefresh}
                   profilePicture={currentPerson.profilePicture}
                 />
-                </div>
-                <div className="col-md-9 mt-4" style={{ margin: "auto", }}>
+              </div>
+              <div className="col-md-9 mt-4" style={{ margin: "auto" }}>
                 <PostList
                   personId={personId}
                   refresh={refresh}
@@ -101,12 +110,12 @@ export default function OwnProfilePage({ personId }) {
             profilePicture={profilePicture}
             profileBanner={profileBanner}
             badge={badge}
-            setProfileBanner ={setProfileBanner}
+            setProfileBanner={setProfileBanner}
             refresh={refresh}
             setRefresh={setRefresh}
             personId={personId}
             setProfilePicture={setProfilePicture}
-            user = {currentPerson}
+            user={currentPerson}
           />
           {handleTabView(tabValue)}
         </div>
