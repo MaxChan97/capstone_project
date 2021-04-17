@@ -1932,7 +1932,7 @@ export default {
     });
   },
 
-  createBankAccount(personId, accountNumber, displayName, bankEnum) {
+  createBankAccount(personId, accountNumber, bankEnum) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/bankAccount/" + personId,
       headers: {
@@ -1942,7 +1942,6 @@ export default {
       type: "POST",
       data: JSON.stringify({
         accountNumber: accountNumber,
-        displayName: displayName,
         bankEnum: bankEnum,
       }),
     });
