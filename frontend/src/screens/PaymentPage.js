@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
@@ -10,9 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import Api from "../helpers/Api";
 import paymentApi from "../helpers/paymentApi";
 // stripe
-import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 // Util imports
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 // Custom Components
 import CardInput from '../components/CardInputs';
 import { useAlert } from "react-alert";
@@ -53,7 +53,7 @@ function PaymentPage() {
     Api.getPersonById(currentUser)
       .done((data) => {
         setEmail(data.email);
-        const {stripeCustomerId} = data
+        const { stripeCustomerId } = data
         setCustomerId(stripeCustomerId);
         Api.getPersonById(anotherPersonId).done((data) => {
           // console.log(data);
@@ -114,16 +114,16 @@ function PaymentPage() {
     Api.subscribeToPerson(currentUser, anotherPersonId, subId)
       .done(() => {
         console.log('subscription done');
-          Api.followPerson(currentUser, anotherPersonId)
-            .done(() => {
-              history.push("/paymentSuccess");
-            })
-            .fail((xhr, status, error) => {
-              if (xhr.responseJSON.error != 'Follow Entity already exists') {
-                alert.show(xhr.responseJSON.error)
-              }
-            });
+        Api.followPerson(currentUser, anotherPersonId)
+          .done(() => {
             history.push("/paymentSuccess");
+          })
+          .fail((xhr, status, error) => {
+            if (xhr.responseJSON.error != 'Follow Entity already exists') {
+              alert.show(xhr.responseJSON.error)
+            }
+          });
+        history.push("/paymentSuccess");
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -153,17 +153,17 @@ function PaymentPage() {
       console.log(customerId);
       if (customerId == undefined) {
         const data = await paymentApi.createCustomer(result, email);
-          console.log(data)
-          setCustomerId(data.customerId);
-          await Api.updateStripeCustomerId(currentUser, data.customerId)
-          console.log("customerId persisted");
+        console.log(data)
+        setCustomerId(data.customerId);
+        await Api.updateStripeCustomerId(currentUser, data.customerId)
+        console.log("customerId persisted");
 
-          paymentApi.subscribe(data.customerId, plan)
+        paymentApi.subscribe(data.customerId, plan)
           .done((res) => {
-            const {client_secret, status, subId} = res;
-    
+            const { client_secret, status, subId } = res;
+
             if (status === 'requires_action') {
-              stripe.confirmCardPayment(client_secret).then(function(result) {
+              stripe.confirmCardPayment(client_secret).then(function (result) {
                 if (result.error) {
                   alert.show('There was an issue! Please try again later');
                   console.log(result.error);
@@ -183,44 +183,44 @@ function PaymentPage() {
             alert.show('There was an issue! Please try again later');
             console.log(result.error);
           })
-          
+
       } else {
 
         console.log(customerId);
         paymentApi.subscribe(customerId, plan)
-        .done((res) => {
-          const {client_secret, status, subId} = res;
+          .done((res) => {
+            const { client_secret, status, subId } = res;
 
-          if (status === 'requires_action') {
-            stripe.confirmCardPayment(client_secret).then(function(result) {
-              if (result.error) {
-                alert.show('There was an issue! Please try again later');
-                console.log(result.error);
-                // Display error message in your UI.
-                // The card was declined (i.e. insufficient funds, card has expired, etc)
-              } else {
-                handleSubscribe(subId);
-                // Show a success message to your customer
-              }
-            });
-          } else {
-            handleSubscribe(subId);
-            // No additional information was needed
-            // Show a success message to your customer
-          }
-        }).fail((res) => {
-          alert.show('There was an issue! Please try again later');
-          console.log(result.error);
-        })
+            if (status === 'requires_action') {
+              stripe.confirmCardPayment(client_secret).then(function (result) {
+                if (result.error) {
+                  alert.show('There was an issue! Please try again later');
+                  console.log(result.error);
+                  // Display error message in your UI.
+                  // The card was declined (i.e. insufficient funds, card has expired, etc)
+                } else {
+                  handleSubscribe(subId);
+                  // Show a success message to your customer
+                }
+              });
+            } else {
+              handleSubscribe(subId);
+              // No additional information was needed
+              // Show a success message to your customer
+            }
+          }).fail((res) => {
+            alert.show('There was an issue! Please try again later');
+            console.log(result.error);
+          })
       }
-      
+
     }
   };
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        
+
         <CardInput />
         <div className={classes.div}>
           {/* 
@@ -228,7 +228,7 @@ function PaymentPage() {
             Pay
           </Button>
           */}
-          
+
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
             Subscribe for ${price}
           </Button>

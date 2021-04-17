@@ -587,7 +587,9 @@ public class PersonResource {
         try {
             Person person = personSB.getPersonById(id);
             person.setPricingPlan(pricingPlan);
-            person.setStripePrice(stripePrice);
+            if (stripePrice != null) {
+                person.setStripePrice(stripePrice);
+            }
             personSB.updatePricingPlan(person);
 
             return Response.status(204).build();
