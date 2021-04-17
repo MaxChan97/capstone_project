@@ -6,6 +6,7 @@
 package session;
 
 import entity.Administrator;
+import entity.Badge;
 import entity.Comment;
 import entity.Community;
 import entity.Person;
@@ -17,6 +18,8 @@ import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -271,6 +274,72 @@ public class DataInitSessionBean {
             System.out.println("Error onboarding");
         }
 
+    }
+
+    private Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    private void editPersonDataInt() throws NoResultException, NotValidException {
+
+        List<TopicEnum> ti1 = new ArrayList<>();
+        List<TopicEnum> ti2 = new ArrayList<>();
+        List<TopicEnum> ti3 = new ArrayList<>();
+        List<TopicEnum> ti4 = new ArrayList<>();
+        List<TopicEnum> ti5 = new ArrayList<>();
+        List<TopicEnum> ti6 = new ArrayList<>();
+        List<TopicEnum> ti7 = new ArrayList<>();
+
+        ti1.add(TopicEnum.INVESTMENTS);
+        ti1.add(TopicEnum.ETF);
+        ti1.add(TopicEnum.CPF);
+        ti1.add(TopicEnum.SAVINGS);
+
+        ti2.add(TopicEnum.CRYPTOCURRENCY);
+        ti2.add(TopicEnum.STOCKS);
+        ti2.add(TopicEnum.INVESTMENTS);
+        ti2.add(TopicEnum.ETF);
+
+        ti3.add(TopicEnum.REAL_ESTATE);
+        ti3.add(TopicEnum.REITS);
+        ti3.add(TopicEnum.RETIREMENT);
+        ti3.add(TopicEnum.BTO);
+
+        ti4.add(TopicEnum.CRYPTOCURRENCY);
+        ti4.add(TopicEnum.INVESTMENTS);
+
+        ti5.add(TopicEnum.CRYPTOCURRENCY);
+        ti5.add(TopicEnum.STOCKS);
+        ti5.add(TopicEnum.TRADING);
+        ti5.add(TopicEnum.INVESTMENTS);
+        ti5.add(TopicEnum.BROKERAGES);
+
+        ti6.add(TopicEnum.INSURANCE);
+        ti6.add(TopicEnum.RETIREMENT);
+        ti6.add(TopicEnum.SALARY);
+
+        ti7.add(TopicEnum.CRYPTOCURRENCY);
+        ti7.add(TopicEnum.STOCKS);
+        ti7.add(TopicEnum.INVESTMENTS);
+
+        Person user1 = personSB.getPerson(new Long(1));
+        user1.setDescription("Hello I’m new! I would love to learn how to better manage my personal finance!");
+        user1.setTopicInterests(ti1);
+        user1.setDob(parseDate("12/03/1996"));
+        user1.setIncomeRange(IncomeRangeEnum.LOW);
+        user1.setContributorPoints(10);
+        user1.setContentCreatorPoints(0);
+        Badge b2 = badgeSB.getBadgeByDisplayName("Level 2 Badge");
+        user1.setBadgeDisplaying(b2);
+        user1.getBadges().add(b2);
+        user1.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%203.jpeg?alt=media&token=a47c9ed4-cbb4-4c9d-ba58-a1a24a9a67cb");
+        user1.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FXMProfile.jpeg?alt=media&token=8df25640-7f20-4e22-8a60-64061a553fa8 ");
+
+        personSB.updatePersonDataInt(user1);
     }
 
     private void updateProfilePictures() throws NotValidException, NoResultException {
@@ -683,7 +752,8 @@ public class DataInitSessionBean {
             createBadges();
             createMasterAdmin();
             createPersons();
-            updateProfilePictures();
+            editPersonDataInt();
+            // updateProfilePictures();
             createCommunities();
             createFollows();
             createSubs();

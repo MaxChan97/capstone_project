@@ -815,4 +815,32 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
         person.setUnreadNotifications(0);
         em.flush();
     }
+
+    @Override
+    public void updatePersonDataInt(Person person) throws NoResultException, NotValidException {
+
+        Person oldPerson = em.find(Person.class, person.getId());
+
+        if (oldPerson != null) {
+            oldPerson.setUsername(person.getUsername());
+            oldPerson.setPassword(person.getPassword());
+            oldPerson.setDescription(person.getDescription());
+            oldPerson.setDob(person.getDob());
+            oldPerson.setIncomeRange(person.getIncomeRange());
+            oldPerson.setTopicInterests(person.getTopicInterests());
+            oldPerson.setProfilePicture(person.getProfilePicture());
+            oldPerson.setProfileBanner(person.getProfileBanner());
+            oldPerson.setBadgeDisplaying(person.getBadgeDisplaying());
+            oldPerson.setBadges(person.getBadges());
+        } else {
+            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        em.flush();
+    } // end updatePerson
+
+    @Override
+    public Person getPerson(Long pId) throws NoResultException, NotValidException {
+        return emGetPerson(pId);
+    }
 }
