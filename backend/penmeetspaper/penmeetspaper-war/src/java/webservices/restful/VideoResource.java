@@ -6,13 +6,16 @@
 package webservices.restful;
 
 import entity.Video;
+import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.ws.rs.Consumes;
@@ -34,66 +37,171 @@ import session.VideoSessionBeanLocal;
 @Path("video")
 public class VideoResource {
 
-  @EJB
-  private VideoSessionBeanLocal videoSessionBean;
+    @EJB
+    private VideoSessionBeanLocal videoSessionBean;
 
-  private JsonObject createJsonObject(String jsonString) {
-    JsonReader reader = Json.createReader(new StringReader(jsonString));
-    return reader.readObject();
-  }
-
-  private Response buildError(Exception e, int statusCode) {
-    JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
-
-    return Response.status(statusCode).entity(exception).type(MediaType.APPLICATION_JSON).build();
-  }
-
-  @POST
-  @Path("/upload")
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response createVideoForPerson(String jsonString) {
-    JsonObject jsonObject = createJsonObject(jsonString);
-
-    int personId = jsonObject.getInt("id");
-    String title = jsonObject.getString("title");
-    String description = jsonObject.getString("description");
-    String fileName = jsonObject.getString("fileName");
-    String fileUrl = jsonObject.getString("fileUrl");
-    String fileType = jsonObject.getString("fileType");
-
-    Video v = new Video();
-    v.setTitle(title);
-    v.setDescription(description);
-    v.setFileName(fileName);
-    v.setFileUrl(fileUrl);
-    v.setFileType(fileType);
-    v.setIsPaid(false);
-    v.setDatePosted(new Date());
-    
-    try {
-      videoSessionBean.createVideoForPerson(new Long(personId), v);
-      return Response.status(204).build();
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
+    private JsonObject createJsonObject(String jsonString) {
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        return reader.readObject();
     }
-  } // end createVideoForPerson
 
-  @GET
-  @Path("/person/{id}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getPersonsVideos(@PathParam("id") Long personId) {
-    try {
+    private Response buildError(Exception e, int statusCode) {
+        JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
 
-      List<Video> results = videoSessionBean.getPersonsVideos(personId);
-      GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
-      };
-
-      return Response.status(200).entity(entity).build();
-
-    } catch (NoResultException | NotValidException e) {
-      return buildError(e, 400);
+        return Response.status(statusCode).entity(exception).type(MediaType.APPLICATION_JSON).build();
     }
-  } // end getPersonsVideos
+
+    private List<TopicEnum> convertToTopicEnumList(JsonArray topicInterestsJsonArray) {
+        List<TopicEnum> topicInterests = new ArrayList<TopicEnum>();
+
+        for (int i = 0; i < topicInterestsJsonArray.size(); i++) {
+            String topicInterest = topicInterestsJsonArray.getString(i);
+            if (null != topicInterest) {
+                switch (topicInterest) {
+                    case "INVESTMENTS":
+                        topicInterests.add(TopicEnum.INVESTMENTS);
+                        break;
+
+                    case "STOCKS":
+                        topicInterests.add(TopicEnum.STOCKS);
+                        break;
+
+                    case "SAVINGS":
+                        topicInterests.add(TopicEnum.SAVINGS);
+                        break;
+
+                    case "CAREER":
+                        topicInterests.add(TopicEnum.CAREER);
+                        break;
+
+                    case "ETF":
+                        topicInterests.add(TopicEnum.ETF);
+                        break;
+
+                    case "ROBOADVISORS":
+                        topicInterests.add(TopicEnum.ROBOADVISORS);
+                        break;
+
+                    case "TRADING":
+                        topicInterests.add(TopicEnum.TRADING);
+                        break;
+
+                    case "INSURANCE":
+                        topicInterests.add(TopicEnum.INSURANCE);
+                        break;
+
+                    case "BROKERAGES":
+                        topicInterests.add(TopicEnum.BROKERAGES);
+                        break;
+
+                    case "RETIREMENT":
+                        topicInterests.add(TopicEnum.RETIREMENT);
+                        break;
+
+                    case "SALARY":
+                        topicInterests.add(TopicEnum.SALARY);
+                        break;
+
+                    case "CPF":
+                        topicInterests.add(TopicEnum.CPF);
+                        break;
+
+                    case "BTO":
+                        topicInterests.add(TopicEnum.BTO);
+                        break;
+
+                    case "UTILITIES_BILL":
+                        topicInterests.add(TopicEnum.UTILITIES_BILL);
+                        break;
+
+                    case "REAL_ESTATE":
+                        topicInterests.add(TopicEnum.REAL_ESTATE);
+                        break;
+
+                    case "FUTURES":
+                        topicInterests.add(TopicEnum.FUTURES);
+                        break;
+
+                    case "CRYPTOCURRENCY":
+                        topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                        break;
+
+                    case "CREDITCARDS":
+                        topicInterests.add(TopicEnum.CREDITCARDS);
+                        break;
+
+                    case "BANKING":
+                        topicInterests.add(TopicEnum.BANKING);
+                        break;
+
+                    case "REITS":
+                        topicInterests.add(TopicEnum.REITS);
+                        break;
+
+                    case "BLOCKCHAIN":
+                        topicInterests.add(TopicEnum.BLOCKCHAIN);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        return topicInterests;
+    }
+
+    @POST
+    @Path("/upload")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createVideoForPerson(String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        int personId = jsonObject.getInt("id");
+        String title = jsonObject.getString("title");
+        String description = jsonObject.getString("description");
+        String fileName = jsonObject.getString("fileName");
+        String fileUrl = jsonObject.getString("fileUrl");
+        String fileType = jsonObject.getString("fileType");
+        Boolean isPaid = jsonObject.getBoolean("isSubscriberOnly");
+
+        JsonArray relatedTopicsJsonArray = jsonObject.getJsonArray("videoTopics");
+        List<TopicEnum> relatedTopics = convertToTopicEnumList(relatedTopicsJsonArray);
+
+        Video v = new Video();
+        v.setTitle(title);
+        v.setDescription(description);
+        v.setFileName(fileName);
+        v.setFileUrl(fileUrl);
+        v.setFileType(fileType);
+        v.setIsPaid(isPaid);
+        v.setDatePosted(new Date());
+        v.setRelatedTopics(relatedTopics);
+
+        try {
+            videoSessionBean.createVideoForPerson(new Long(personId), v);
+            return Response.status(204).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end createVideoForPerson
+
+    @GET
+    @Path("/person/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsVideos(@PathParam("id") Long personId) {
+        try {
+
+            List<Video> results = videoSessionBean.getPersonsVideos(personId);
+            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getPersonsVideos
 
 }

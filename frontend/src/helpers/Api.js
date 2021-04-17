@@ -809,7 +809,6 @@ export default {
     });
   },
 
-
   voteOnPoll(personId, pollId, optionVoted) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/poll/" + pollId + "/person/" + personId,
@@ -1672,7 +1671,7 @@ export default {
     reportTypeEnum,
     reportedContentId,
     category,
-    reportedPersonId,
+    reportedPersonId
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report",
@@ -1795,7 +1794,16 @@ export default {
     });
   },
 
-  uploadVideo(id, title, description, fileName, fileUrl, fileType) {
+  uploadVideo(
+    id,
+    title,
+    description,
+    fileName,
+    fileUrl,
+    fileType,
+    isSubscriberOnly,
+    videoTopics
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/video/upload",
       headers: {
@@ -1810,6 +1818,8 @@ export default {
         fileName: fileName,
         fileUrl: fileUrl,
         fileType: fileType,
+        isSubscriberOnly: isSubscriberOnly,
+        videoTopics: videoTopics,
       }),
     });
   },
@@ -1824,7 +1834,6 @@ export default {
       type: "GET",
     });
   },
-
 
   adminDeletePost(adminId, postId, description, reportId) {
     return jQuery.ajax({
