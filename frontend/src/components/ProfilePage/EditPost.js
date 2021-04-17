@@ -58,6 +58,20 @@ export default function EditPost({
             });
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            Api.editProfilePost(currentUser, data.id, post)
+                .done(() => {
+                    alert.show("Edit success!");
+                    setRefresh(!refresh);
+                    setEdit(false);
+                })
+                .fail((xhr, status, error) => {
+                    alert.show("Something went wrong, please try again!");
+                });
+        }
+    }
+
     return (
         <div>
 
@@ -68,10 +82,11 @@ export default function EditPost({
                 onChange={handleEdit}
                 fullWidth={true}
                 variant="filled"
+                onKeyDown={handleKeyDown}
             />
             <br></br>
             <br></br>
-            <div style={{ alignItems: "baseline", textAlign:"right"}}>
+            <div style={{ alignItems: "baseline", textAlign: "right" }}>
                 <ColorButton
                     style={{
                         outline: "none",

@@ -94,7 +94,7 @@ export default function CommunityPostWithComments() {
   };
 
   const [data, setData] = useState();
-  const [liked, setLiked] = useState();
+  const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     if (postId) {
@@ -318,15 +318,16 @@ export default function CommunityPostWithComments() {
                   ></EditPost>
                 )}
                 <p>
-                  {liked == true ? (
+                {isAdmin == false && liked == true ? (
                     <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  ) : (
+                  ) : isAdmin == false && liked == false ? (
                     <Link onClick={handleLike} style={{ color: "black" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  )}
+                  ) : isAdmin == true ? (<span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+                  ) : ("")}
                 </p>
               </div>
             </div>
