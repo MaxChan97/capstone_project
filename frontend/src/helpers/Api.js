@@ -2006,5 +2006,20 @@ export default {
       },
       type: "POST",
     });
-  }
+  },
+
+  createNotification(redirectTo, body, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
+    });
+  },
 };
