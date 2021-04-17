@@ -31,4 +31,6 @@ public interface VideoSessionBeanLocal {
 
     public List<Video> getAllVideos() throws NoResultException, NotValidException;
 
+    public void addView(Long videoId);
+
 }

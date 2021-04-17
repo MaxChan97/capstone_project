@@ -75,15 +75,21 @@ export default function VideoPage() {
   ] = useState(false);
 
   useEffect(() => {
-    Api.getVideo(videoId)
-      .done((video) => {
-        setVideo(video);
-        Api.getAllVideos()
-          .done((videos) => {
-            let vs = videos.filter(
-              (v) => v.id != video.id && isRelated(v, video)
-            );
-            setVideos(vs);
+    Api.addView(videoId)
+      .done(() => {
+        Api.getVideo(videoId)
+          .done((video) => {
+            setVideo(video);
+            Api.getAllVideos()
+              .done((videos) => {
+                let vs = videos.filter(
+                  (v) => v.id != video.id && isRelated(v, video)
+                );
+                setVideos(vs);
+              })
+              .fail((xhr, status, error) => {
+                alert.show(xhr.responseJSON.error);
+              });
           })
           .fail((xhr, status, error) => {
             alert.show(xhr.responseJSON.error);
