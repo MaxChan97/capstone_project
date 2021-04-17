@@ -95,6 +95,9 @@ public class Person implements Serializable {
     @Column
     private String stripeProductId;
 
+    @Column
+    private int unreadNotifications;
+
     // Entity Variables ------------------
     //
     @Enumerated(EnumType.STRING)
@@ -605,6 +608,14 @@ public class Person implements Serializable {
      */
     public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    public int getUnreadNotifications() {
+        return unreadNotifications;
+    }
+
+    public void setUnreadNotifications(int unreadNotifications) {
+        this.unreadNotifications = unreadNotifications;
     }
 
 }
