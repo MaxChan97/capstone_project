@@ -217,7 +217,7 @@ function Navbar({
     )
       .done(() => {
         alert.show("Video uploaded successfully!");
-        handleUploadDialogClose();
+        /*handleUploadDialogClose();
         setFileName("");
         setFileUrl("");
         setFileType("");
@@ -225,7 +225,8 @@ function Navbar({
         setDescription("");
         setIsSubscriberOnly(false);
         setVideoTopics([]);
-        setProgress();
+        setProgress();*/
+        window.location.reload();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);

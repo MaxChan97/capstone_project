@@ -18,9 +18,11 @@ import {
     DialogContentText,
     DialogTitle,
 } from "@material-ui/core";
+import { useAlert } from "react-alert";
 
 export default function ReportDetails() {
     const dispatch = useDispatch();
+    const alert = useAlert();
     const [refresh, setRefresh] = useState(false);
     const currentUser = useSelector((state) => state.currentUser);
     const { reportId } = useParams();
@@ -95,7 +97,24 @@ export default function ReportDetails() {
     }
 
     function handleMsgSubmit() {
-        //send notification to user on report status
+        if(notificationMsgReporter != "") {
+            Api.createNotification("", notificationMsgReporter, data.reporter.id)
+            .done((r) => {
+                alert.show("Notifications sent!");
+            })
+            .fail(() => {
+                //alert.show("Unable to load!");
+            });
+        }
+
+        if(notificationMsgReported != "") {
+            Api.createNotification("", notificationMsgReported, data.reportedPersonId)
+            .done((r) => {
+                //alert.show("Notifications sent!");
+            })
+            
+        }
+        closeBanPersonModal()
     }
 
     //person that created report
