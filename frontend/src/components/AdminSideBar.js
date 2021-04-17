@@ -277,7 +277,7 @@ function AdminSidebar() {
                       className="nav-icon"
                       alt="notification"
                     />
-                    <p className="ml-2">Notification</p>
+                    <p className="ml-2">System Notification</p>
                   </div>
                 </Link>
               )}
