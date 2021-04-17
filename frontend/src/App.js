@@ -60,6 +60,7 @@ import AllAdminLogs from "./components/AdminPage/AllAdminLogs";
 import BannedFromLoginPage from "./screens/BannedFromLoginPage";
 import AdminDeactivatedPage from "./screens/AdminDeactivatedPage";
 import VideoPage from "./screens/VideoPage";
+import VideosPage from "./screens/VideosPage";
 
 import Payment from "./screens/PaymentPage";
 import PaymentSuccess from "./screens/PaymentSuccessPage";
@@ -121,7 +122,8 @@ function App() {
       location.pathname === "/subscribers" ||
       location.pathname === "/userSettings" ||
       location.pathname === "/changePassword" ||
-      location.pathname === "/stream"
+      location.pathname === "/stream" ||
+      location.pathname === "/userAnalytics"
     ) {
       return (
         <div>
@@ -187,14 +189,11 @@ function App() {
               <Route exact path="/live/trending" component={TrendingLivePage} />
               <Route exact path="/following" component={FollowingPage} />
               <Route exact path="/subscribing" component={SubscribingPage} />
-              <Route exact path="/liked" component={LikedPage} />
-              <Route exact path="/library" component={LibraryPage} />
               <Route
                 exact
                 path="/community/:communityId"
                 component={CommunityPage}
               />
-              <Route exact path="/categories" component={CategoriesPage} />
               <Route exact path="/feed" component={FeedPage} />
               <Route exact path="/profile/:personId" component={ProfilePage} />
               <Route exact path="/postCard" component={ProfilePostCard} />
@@ -208,6 +207,7 @@ function App() {
               />
               <Route exact path="/chat/:personId" component={ChatPage} />
               <Route exact path="/video/:videoId" component={VideoPage} />
+              <Route exact path="/videos" component={VideosPage} />
               <Route
                 exact
                 path="/createCommunity"
@@ -324,8 +324,16 @@ function App() {
                 component={AdminCommentCard}
               />
               <Route exact path="/reply/:replyId" component={AdminReplyCard} />
-              <Route exact path="/deleted/community" component={CommunityDeletedPage} />
-              <Route exact path="/admin/systemNotif" component={AdminSystemWideNotif} />
+              <Route
+                exact
+                path="/deleted/community"
+                component={CommunityDeletedPage}
+              />
+              <Route
+                exact
+                path="/admin/systemNotif"
+                component={AdminSystemWideNotif}
+              />
               <Route exact path="/admin/createAd" component={CreateAd} />
               <Route
                 exact

@@ -8,6 +8,7 @@ import changePasswordLogo from "../assets/channelDashboardSidebar/changePassword
 import backLogo from "../assets/channelDashboardSidebar/back.png";
 import liveLogo from "../assets/Live Logo.svg";
 import BNBLogo from "../assets/BNB Logo.png";
+import BarChartIcon from "@material-ui/icons/BarChart";
 
 export default function ChannelDashboardSidebar() {
   let location = useLocation();
@@ -61,9 +62,9 @@ export default function ChannelDashboardSidebar() {
               </Link>
             </li>
             <li className="nav-item">
-              {location.pathname === "/customiseProfile" ? (
+              {location.pathname === "/userSettings" ? (
                 <Link
-                  to="/customiseProfile"
+                  to="/userSettings"
                   className="nav-link"
                   style={{ backgroundColor: "#EAECEF" }}
                 >
@@ -75,15 +76,15 @@ export default function ChannelDashboardSidebar() {
                     }}
                   >
                     <img
-                      src={profileLogo}
+                      src={settingsLogo}
                       className="nav-icon"
-                      alt="profileLogo"
+                      alt="settingsLogo"
                     />
-                    <p className="ml-2">Profile</p>
+                    <p className="ml-2">Settings</p>
                   </div>
                 </Link>
               ) : (
-                <Link to="/customiseProfile" className="nav-link">
+                <Link to="/userSettings" className="nav-link">
                   <div
                     style={{
                       display: "flex",
@@ -92,11 +93,11 @@ export default function ChannelDashboardSidebar() {
                     }}
                   >
                     <img
-                      src={profileLogo}
+                      src={settingsLogo}
                       className="nav-icon"
-                      alt="profileLogo"
+                      alt="settingsLogo"
                     />
-                    <p className="ml-2">Profile</p>
+                    <p className="ml-2">Settings</p>
                   </div>
                 </Link>
               )}
@@ -176,47 +177,6 @@ export default function ChannelDashboardSidebar() {
               )}
             </li>
             <li className="nav-item">
-              {location.pathname === "/userSettings" ? (
-                <Link
-                  to="/userSettings"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={settingsLogo}
-                      className="nav-icon"
-                      alt="settingsLogo"
-                    />
-                    <p className="ml-2">Settings</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/userSettings" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={settingsLogo}
-                      className="nav-icon"
-                      alt="settingsLogo"
-                    />
-                    <p className="ml-2">Settings</p>
-                  </div>
-                </Link>
-              )}
-            </li>
-            <li className="nav-item">
               {location.pathname === "/changePassword" ? (
                 <Link
                   to="/changePassword"
@@ -253,6 +213,39 @@ export default function ChannelDashboardSidebar() {
                       alt="passwordLogo"
                     />
                     <p className="ml-2">Change Password</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
+              {location.pathname === "/userAnalytics" ? (
+                <Link
+                  to="/userAnalytics"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <BarChartIcon fontSize="large"></BarChartIcon>
+                    <p className="ml-1">Analytics</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/userAnalytics" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <BarChartIcon fontSize="large"></BarChartIcon>
+                    <p className="ml-1">Analytics</p>
                   </div>
                 </Link>
               )}

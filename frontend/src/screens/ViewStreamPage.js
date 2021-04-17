@@ -729,7 +729,6 @@ export default function ViewStreamPage() {
             </div>
             <div style={{ display: "flex", flexDirection: "row" }}>
               {renderFollowButton()}
-              {renderSubscribeButton()}
             </div>
           </div>
         </div>

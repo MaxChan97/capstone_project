@@ -165,9 +165,7 @@ function AdminNavBar({
           <img src={chatLogo} alt="chatLogo" />
         </Link>
           */}
-        <Link to="/admin/inbox">
-          <img src={notificationLogo} alt="notificationLogo" />
-        </Link>
+       
         <Link onClick={handleLogOut}>
           <img src={logout} alt="log out" />
         </Link>
