@@ -41,8 +41,10 @@ export default function ProfilePage() {
       })
       .fail((xhr, status, error) => {
         if (xhr.responseJSON.error === "You are banned from the community") {
-        history.push("/community/" + communityId + "/banned");
-      }
+          history.push("/community/" + communityId + "/banned");
+        } else {
+          history.push("/deleted/community");
+        }
       });
   }
   console.log(ownedCommunities);
@@ -71,5 +73,5 @@ export default function ProfilePage() {
         <AnotherCommunityPage communityId={communityId} />
       )}
     </div>
-  ): ("");
+  ) : ("");
 }
