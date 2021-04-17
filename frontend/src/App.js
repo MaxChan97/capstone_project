@@ -72,6 +72,8 @@ import AdminCommentCard from "./components/ProfilePage/AdminCommentCard";
 import AdminReplyCard from "./components/ProfilePage/AdminReplyCard";
 import CommunityDeletedPage from "./screens/CommunityDeletedPage";
 import AdminSystemWideNotif from "./screens/AdminSystemWideNotif";
+import CreateAd from "./components/AdminPage/CreateAd";
+import AdvertDetails from "./components/AdminPage/AdvertDetails";
 const stripePromise = loadStripe(
   "pk_test_51IU3CaHobA4nRrQlSkBDrr0y3D0xRnk6Wts0oyQmd7hk8BihJImI4azJ0MaQ1CtcNsrUBtwO6K5TKfMaprYUhvUl006GWy5vFQ"
 );
@@ -331,6 +333,12 @@ function App() {
                 exact
                 path="/admin/systemNotif"
                 component={AdminSystemWideNotif}
+              />
+              <Route exact path="/admin/createAd" component={CreateAd} />
+              <Route
+                exact
+                path="/admin/advertDetails/:advertId"
+                component={AdvertDetails}
               />
               {/*<Route component={PageNotFound} />*/}
             </div>
