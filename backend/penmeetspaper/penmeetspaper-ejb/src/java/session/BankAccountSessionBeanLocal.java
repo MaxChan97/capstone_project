@@ -6,6 +6,8 @@
 package session;
 
 import entity.BankAccount;
+import exception.NoResultException;
+import exception.NotValidException;
 import javax.ejb.Local;
 
 /**
@@ -15,6 +17,11 @@ import javax.ejb.Local;
 @Local
 public interface BankAccountSessionBeanLocal {
 
+    public final static String MISSING_BANKACCOUNT_ID = "Missing bankaccount Id";
+    public final static String CANNOT_FIND_BANKACCOUNT = "Cannot find bank account";
+
     public BankAccount createBankAccount(BankAccount ba);
+
+    public void updateBankAccount(BankAccount bankAccount) throws NoResultException, NotValidException;
 
 }
