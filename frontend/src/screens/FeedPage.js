@@ -297,17 +297,17 @@ export default function FeedPage() {
   //const handleOnboardingDialogueClose = () => setOnboardingDialogueOpen(false);
   const handleOnboardingDialogueOpen = () => setOnboardingDialogueOpen(true);
 
-  // function handleOnboardingDialogueSkip() {
-  //   console.log("skip");
-  //   Api.updateSkipOnboarding(currentUser)
-  //     .done(() => {
-  //       console.log("Skipped");
-  //       setOnboardingDialogueOpen(false);
-  //     })
-  //     .fail((xhr, status, error) => {
-  //       alert.show("Error skipping onboarding");
-  //     });
-  // }
+  function handleOnboardingDialogueSkip() {
+    console.log("skip");
+    Api.updateSkipOnboarding(currentUser)
+      .done(() => {
+        console.log("Skipped");
+        setOnboardingDialogueOpen(false);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("Error skipping onboarding");
+      });
+  }
 
   function initiateOnboardingDialogue(e) {
     // Check if new user
@@ -411,12 +411,12 @@ export default function FeedPage() {
           </form>
         </DialogContent>
         <DialogActions>
-          {/* <Button
+          <Button
             style={{ outline: "none" }}
             onClick={handleOnboardingDialogueSkip}
           >
             Skip
-          </Button> */}
+          </Button>
           <ColorButton
             style={{ outline: "none" }}
             color="primary"
