@@ -5,14 +5,19 @@
  */
 package webservices.restful;
 
+import entity.BankAccount;
 import enumeration.BankEnum;
+import exception.NoResultException;
 import exception.NotValidException;
 import java.io.StringReader;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import session.BankAccountSessionBeanLocal;
@@ -52,11 +57,30 @@ public class BankAccountResource {
                 throw new NotValidException(BankAccountSessionBeanLocal.BANK_ENUM_NOT_RECOGNISED);
         }
     }
-    /*
+
     @POST
-    @Path("/{id}")
+    @Path("/{personId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSubscriptions(@PathParam("id") Long id) {
-     */
+    public Response createBankAccount(@PathParam("personId") Long id, String jsonString) {
+        JsonObject jsonObject = createJsonObject(jsonString);
+
+        String accountNumber = jsonObject.getString("accountNumber");
+        String displayName = jsonObject.getString("displayName");
+        String bankEnumStr = jsonObject.getString("bankEnum");
+
+        try {
+            BankEnum bankEnum = convertToBankEnum(bankEnumStr);
+            BankAccount ba = new BankAccount();
+            ba.setAccountNumber(accountNumber);
+            ba.setBankEnum(bankEnum);
+            ba.setDisplayName(displayName);
+
+            BankAccount addedBankAccount = baSB.createBankAccount(ba, id);
+            return Response.status(200).entity(addedBankAccount).type(MediaType.APPLICATION_JSON).build();
+
+        } catch (NotValidException | NoResultException e) {
+            return buildError(e, 400);
+        }
+    }
 
 }

@@ -21,8 +21,10 @@ public interface BankAccountSessionBeanLocal {
     public final static String CANNOT_FIND_BANKACCOUNT = "Cannot find bank account";
     public final static String BANK_ENUM_NOT_RECOGNISED = "Bank Enum not recognised";
 
-    public BankAccount createBankAccount(BankAccount ba);
+    public BankAccount createBankAccount(BankAccount ba, Long personId) throws NoResultException, NotValidException;
 
     public void updateBankAccount(BankAccount bankAccount) throws NoResultException, NotValidException;
+
+    public void deleteBankAccount(Long personId) throws NoResultException, NotValidException;
 
 }

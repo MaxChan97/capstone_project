@@ -6,6 +6,7 @@
 package session;
 
 import entity.BankAccount;
+import entity.Person;
 import exception.NoResultException;
 import exception.NotValidException;
 import javax.ejb.Stateless;
@@ -36,12 +37,32 @@ public class BankAccountSessionBean implements BankAccountSessionBeanLocal {
         return ba;
     }
 
+    private Person emGetPerson(Long personId) throws NoResultException, NotValidException {
+        if (personId == null) {
+            throw new NotValidException(PersonSessionBeanLocal.MISSING_PERSON_ID);
+        }
+
+        Person person = em.find(Person.class, personId);
+
+        if (person == null) {
+            throw new NoResultException(PersonSessionBeanLocal.CANNOT_FIND_PERSON);
+        }
+
+        return person;
+    }
+
     @Override
-    public BankAccount createBankAccount(BankAccount ba) {
+    public BankAccount createBankAccount(BankAccount ba, Long personId) throws NoResultException, NotValidException {
+        Person p = emGetPerson(personId);
+        p.setBankAccount(ba);
         em.persist(ba);
         em.flush();
 
         return ba;
+    }
+
+    public BankAccount getBankAccountById(Long baId) throws NoResultException, NotValidException {
+        return emGetBankAccount(baId);
     }
 
     @Override
@@ -50,6 +71,16 @@ public class BankAccountSessionBean implements BankAccountSessionBeanLocal {
         oldAccount.setAccountNumber(bankAccount.getAccountNumber());
         oldAccount.setBankEnum(bankAccount.getBankEnum());
         oldAccount.setDisplayName(bankAccount.getDisplayName());
+
+        em.flush();
+    }
+
+    @Override
+    public void deleteBankAccount(Long personId) throws NoResultException, NotValidException {
+        Person p = emGetPerson(personId);
+        BankAccount b = p.getBankAccount();
+        p.setBankAccount(null);
+        em.remove(b);
 
         em.flush();
     }
