@@ -32,7 +32,7 @@ export default function SearchPersonResultRow({ person }) {
               alt="Profile Picture"
             />
           </div>
-          <div className="col-md-2">
+          <div className="col-md-4">
             <p
               className="text-left"
               style={{ color: "black", fontSize: "18px" }}

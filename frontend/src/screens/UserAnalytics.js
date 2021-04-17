@@ -490,6 +490,7 @@ export default function UserAnalytics() {
               title={"Active Subscribers"}
               currentStat={activeSubscribers}
               prevStat={prevActiveSubscribers}
+              isCurrency={false}
             />
           </div>
           <div class="col-3">
@@ -497,6 +498,7 @@ export default function UserAnalytics() {
               title={"Active Followers"}
               currentStat={activeFollowers}
               prevStat={prevActiveFollowers}
+              isCurrency={false}
             />
           </div>
           <div class="col-3">
@@ -504,6 +506,7 @@ export default function UserAnalytics() {
               title={"Total Views"}
               currentStat={views}
               prevStat={prevViews}
+              isCurrency={false}
             />
           </div>
           <div class="col-3">
@@ -511,6 +514,7 @@ export default function UserAnalytics() {
               title={"Total earnings"}
               currentStat={earnings}
               prevStat={prevEarnings}
+              isCurrency={true}
             />
           </div>
         </div>

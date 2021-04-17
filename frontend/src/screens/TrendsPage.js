@@ -8,6 +8,9 @@ import { Tabs, Tab } from "@material-ui/core";
 import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
 import LiveStreamCard from "../components/LivePage/LiveStreamCard";
 import Api from "../helpers/Api";
+import TrendsCard from "../components/FeedPage/TrendsCard";
+import TopContributorCard from "../components/FeedPage/TopContributorCard";
+import TopStreamerCard from "../components/FeedPage/TopStreamerCard";
 
 const StyledTabs = withStyles({
   indicator: {
@@ -55,6 +58,11 @@ export default function TrendsPage() {
   const [streamResults, setStreamResults] = useState([]);
   const [streamPaginatedResults, setStreamPaginatedResults] = useState([]);
   const [streamPageCount, setStreamPageCount] = useState(0);
+
+  const [topTenContributors, setTopTenContributors] = useState([]);
+  const [topTenStreamers, setTopTenStreamers] = useState([]);
+  const [topTrends, setTopTrends] = useState([]);
+  const [todaysTrends, setTodaysTrends] = useState([]);
 
   useEffect(() => {
     Api.getPostByTrends(hashtag)
@@ -113,6 +121,44 @@ export default function TrendsPage() {
     setStreamPaginatedResults(slice);
   }, [streamOffset, streamResults]);
 
+  useEffect(() => {
+    if (currentUser) {
+      loadData();
+    }
+  }, [currentUser]);
+
+  function loadData() {
+    Api.getTopTenContributors()
+      .done((topTenContributors) => {
+        setTopTenContributors(topTenContributors);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+    Api.getTopTenStreamers()
+      .done((topTenStreamers) => {
+        setTopTenStreamers(topTenStreamers);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+    Api.getTopTrends()
+      .done((topAllTime) => {
+        setTopTrends(topAllTime);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+    Api.getTodaysTrends()
+      .done((topToday) => {
+        console.log(topToday);
+        setTodaysTrends(topToday);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+  }
+
   const handlePostPageClick = (e) => {
     const selectedPage = e.selected;
     setPostOffset(selectedPage + 1);
@@ -131,13 +177,24 @@ export default function TrendsPage() {
     if (tabValue === 0) {
       if (postPaginatedResults.length > 0) {
         return (
-          <SearchPostResultList
-            postList={postPaginatedResults}
-            postPageCount={postPageCount}
-            handlePostPageClick={handlePostPageClick}
-            postRefresh={postRefresh}
-            setPostRefresh={setPostRefresh}
-          />
+          <div className="container">
+            <div className="row">
+              <div className="col-8">
+                <SearchPostResultList
+                  postList={postPaginatedResults}
+                  postPageCount={postPageCount}
+                  handlePostPageClick={handlePostPageClick}
+                  postRefresh={postRefresh}
+                  setPostRefresh={setPostRefresh}
+                />
+              </div>
+              <div className="col-4">
+                <TopStreamerCard data={topTenStreamers} />
+                <TopContributorCard data={topTenContributors} />
+                <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
+              </div>
+            </div>
+          </div>
         );
       } else {
         return (

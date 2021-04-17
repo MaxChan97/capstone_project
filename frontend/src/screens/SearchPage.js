@@ -9,6 +9,9 @@ import SearchPostResultList from "../components/SearchPage/SearchPostResultList"
 import LiveStreamCard from "../components/LivePage/LiveStreamCard";
 import { useSelector } from "react-redux";
 import { animateScroll } from "react-scroll";
+import TrendsCard from "../components/FeedPage/TrendsCard";
+import TopContributorCard from "../components/FeedPage/TopContributorCard";
+import TopStreamerCard from "../components/FeedPage/TopStreamerCard";
 
 const StyledTabs = withStyles({
   indicator: {
@@ -68,6 +71,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const [streamResults, setStreamResults] = useState([]);
   const [streamPaginatedResults, setStreamPaginatedResults] = useState([]);
   const [streamPageCount, setStreamPageCount] = useState(0);
+
+  const [topTenContributors, setTopTenContributors] = useState([]);
+  const [topTenStreamers, setTopTenStreamers] = useState([]);
+  const [topTrends, setTopTrends] = useState([]);
+  const [todaysTrends, setTodaysTrends] = useState([]);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -178,6 +186,44 @@ export default function SearchPage({ searchString, searchRefresh }) {
     setStreamPaginatedResults(slice);
   }, [streamOffset, streamResults]);
 
+  useEffect(() => {
+    if (currentUser) {
+      loadData();
+    }
+  }, [currentUser]);
+
+  function loadData() {
+    Api.getTopTenContributors()
+      .done((topTenContributors) => {
+        setTopTenContributors(topTenContributors);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+    Api.getTopTenStreamers()
+      .done((topTenStreamers) => {
+        setTopTenStreamers(topTenStreamers);
+      })
+      .fail((xhr, status, error) => {
+        alert.show("This user does not exist!");
+      });
+    Api.getTopTrends()
+      .done((topAllTime) => {
+        setTopTrends(topAllTime);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+    Api.getTodaysTrends()
+      .done((topToday) => {
+        console.log(topToday);
+        setTodaysTrends(topToday);
+      })
+      .fail((xhr, status, error) => {
+        alert("Error");
+      });
+  }
+
   const handlePersonPageClick = (e) => {
     const selectedPage = e.selected;
     setPersonOffset(selectedPage + 1);
@@ -205,29 +251,63 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
       return (
-        <SearchPersonResultList
-          personList={personPaginatedResults}
-          personPageCount={personPageCount}
-          handlePersonPageClick={handlePersonPageClick}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-8">
+              <SearchPersonResultList
+                personList={personPaginatedResults}
+                personPageCount={personPageCount}
+                handlePersonPageClick={handlePersonPageClick}
+              />
+            </div>
+
+            <div className="col-4">
+              <TopStreamerCard data={topTenStreamers} />
+              <TopContributorCard data={topTenContributors} />
+              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
+            </div>
+          </div>
+        </div>
       );
     } else if (tabValue === 1) {
       return (
-        <SearchCommunityResultList
-          communityList={communityPaginatedResults}
-          communityPageCount={communityPageCount}
-          handleCommunityPageClick={handleCommunityPageClick}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-8">
+              <SearchCommunityResultList
+                communityList={communityPaginatedResults}
+                communityPageCount={communityPageCount}
+                handleCommunityPageClick={handleCommunityPageClick}
+              />
+            </div>
+            <div className="col-4">
+              <TopStreamerCard data={topTenStreamers} />
+              <TopContributorCard data={topTenContributors} />
+              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
+            </div>
+          </div>
+        </div>
       );
     } else if (tabValue === 2) {
       return (
-        <SearchPostResultList
-          postList={postPaginatedResults}
-          postPageCount={postPageCount}
-          handlePostPageClick={handlePostPageClick}
-          postRefresh={postRefresh}
-          setPostRefresh={setPostRefresh}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-8">
+              <SearchPostResultList
+                postList={postPaginatedResults}
+                postPageCount={postPageCount}
+                handlePostPageClick={handlePostPageClick}
+                postRefresh={postRefresh}
+                setPostRefresh={setPostRefresh}
+              />
+            </div>
+            <div className="col-4">
+              <TopStreamerCard data={topTenStreamers} />
+              <TopContributorCard data={topTenContributors} />
+              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
+            </div>
+          </div>
+        </div>
       );
     } else if (tabValue === 3) {
       return (

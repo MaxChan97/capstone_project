@@ -2,7 +2,12 @@ import React from "react";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
-export default function StatisticsCard({ title, currentStat, prevStat }) {
+export default function StatisticsCard({
+  title,
+  currentStat,
+  prevStat,
+  isCurrency,
+}) {
   let percentage = (100 * Math.abs(currentStat - prevStat)) / prevStat;
 
   return (
@@ -13,7 +18,10 @@ export default function StatisticsCard({ title, currentStat, prevStat }) {
             <h6 class="card-text text-muted">{title}</h6>
           </div>
           <div class="row mt-2">
-            <h4 class="card-text">{currentStat}</h4>
+            <h4 class="card-text">
+              {isCurrency ? "$" : ""}
+              {currentStat}
+            </h4>
           </div>
           <div class="row mt-2">
             <div class="col-3 p-0">

@@ -82,9 +82,8 @@ export default function VideoPage() {
             setVideo(video);
             Api.getAllVideos()
               .done((videos) => {
-                let vs = videos.filter(
-                  (v) => v.id != video.id && isRelated(v, video)
-                );
+                let vs = videos.filter((v) => isRecommended(v, video));
+                console.log(vs);
                 setVideos(vs);
               })
               .fail((xhr, status, error) => {
@@ -157,14 +156,34 @@ export default function VideoPage() {
     }
   }, [video, videoRefresh, refresh]);
 
-  function isRelated(v1, v2) {
+  function isRecommended(v1, v2) {
+    // Only recommended if different user, isSubscribed or free, similar topics
+    if (v1.id == v2.id) {
+      return false;
+    }
+
+    let a1 = v1.author.id;
+    if (currentUser == a1) {
+      return false;
+    }
+
+    if (v1.isPaid) {
+      Api.isSubscribed(currentUser, v1.author.id)
+        .done((status) => {
+          if (status.subscriptionStatus === "NotSubscribed") {
+            return false;
+          }
+        })
+        .fail((xhr, status, error) => {
+          alert.show(xhr.responseJSON.error);
+        });
+    }
     let t1 = v1.relatedTopics;
     let t2 = v2.relatedTopics;
     let isRelated = false;
     for (let t of t1) {
       if (t2.includes(t)) {
         isRelated = true;
-        break;
       }
     }
     return isRelated;

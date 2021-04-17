@@ -29,6 +29,7 @@ export default function RecommendedVideoCardItem({ video }) {
             <img
               className="img-fluid rounded-circle"
               src={video.author.profilePicture || defaultDP}
+              width={"40px"}
             />
           </Link>
         </div>

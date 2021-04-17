@@ -24,7 +24,7 @@ export default function SearchCommunityResultRow({ community }) {
               alt="Community Picture"
             />
           </div>
-          <div className="col-md-2">
+          <div className="col-md-4">
             <p
               className="text-left"
               style={{ color: "black", fontSize: "18px" }}
@@ -38,7 +38,7 @@ export default function SearchCommunityResultRow({ community }) {
               </small>
             </p>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-5">
             <p className="text-left" style={{ color: "black" }}>
               {community.description.length > 130
                 ? community.description.substring(0, 80) + "..."

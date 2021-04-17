@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     margin: "auto",
+    padding: "0px",
   },
   inline: {
     display: "inline",
@@ -30,7 +31,6 @@ export default function SearchPostResultList({
         <List className={classes.root}>
           {postList.map((data) => (
             <div>
-
               {data.postCommunity == undefined ? (
                 <ProfilePostCard
                   key={data.id}
@@ -47,7 +47,6 @@ export default function SearchPostResultList({
                   community={data.postCommunity}
                 />
               )}
-
             </div>
           ))}
         </List>
