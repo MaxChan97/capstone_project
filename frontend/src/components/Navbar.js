@@ -225,6 +225,7 @@ function Navbar({
         setDescription("");
         setIsSubscriberOnly(false);
         setVideoTopics([]);
+        setProgress();
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
