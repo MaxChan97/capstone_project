@@ -19,6 +19,7 @@ import Level7 from "../assets/badges/Level7.png";
 import Level8 from "../assets/badges/Level8.png";
 import Level9 from "../assets/badges/Level9.png";
 import Level10 from "../assets/badges/Level10.png";
+import bearRage from "../assets/bearRage.png";
 
 
 
@@ -54,8 +55,8 @@ export default function PointsPage() {
   const classes = useStyles();
 
 
-  function levelBadgeData(badge, achievement) {
-    return { badge, achievement };
+  function levelBadgeData(badge, achievement, reward) {
+    return { badge, achievement, reward };
   }
 
   function pointData(action, points) {
@@ -67,22 +68,22 @@ export default function PointsPage() {
   }
 
   const levelBadges = [
-    levelBadgeData(<img src={Level1} alt="Level1" width="52" height="60" />, 0),
-    levelBadgeData(<img src={Level2} alt="Level2" width="52" height="60" />, 10),
-    levelBadgeData(<img src={Level3} alt="Level3" width="52" height="60" />, 30),
-    levelBadgeData(<img src={Level4} alt="Level4" width="52" height="60" />, 80),
-    levelBadgeData(<img src={Level5} alt="Level5" width="52" height="60" />, 150),
-    levelBadgeData(<img src={Level6} alt="Level6" width="52" height="60" />, 300),
-    levelBadgeData(<img src={Level7} alt="Level7" width="52" height="60" />, 800),
-    levelBadgeData(<img src={Level8} alt="Level8" width="52" height="60" />, 1700),
-    levelBadgeData(<img src={Level9} alt="Level9" width="52" height="60" />, 3500),
-    levelBadgeData(<img src={Level10} alt="Level10" width="52" height="60" />, 7000),
+    levelBadgeData(<img src={Level1} alt="Level1" width="52" height="60" />, 0, '-'),
+    levelBadgeData(<img src={Level2} alt="Level2" width="52" height="60" />, 10, '-'),
+    levelBadgeData(<img src={Level3} alt="Level3" width="52" height="60" />, 30, '-'),
+    levelBadgeData(<img src={Level4} alt="Level4" width="52" height="60" />, 80, '-'),
+    levelBadgeData(<img src={Level5} alt="Level5" width="52" height="60" />, 150, 'Exclusive newsletter'),
+    levelBadgeData(<img src={Level6} alt="Level6" width="52" height="60" />, 300, '-'),
+    levelBadgeData(<img src={Level7} alt="Level7" width="52" height="60" />, 800, '-'),
+    levelBadgeData(<img src={Level8} alt="Level8" width="52" height="60" />, 1700, 'Exclusive FinXpert Community'),
+    levelBadgeData(<img src={Level9} alt="Level9" width="52" height="60" />, 3500, '-'),
+    levelBadgeData(<img src={Level10} alt="Level10" width="52" height="60" />, 7000, 'Annual event passes'),
   ];
 
   const pointBadges = [
-    pointData("Comment/Reply", 159),
-    pointData("Post", 159),
-    pointData("Livestream", 159),
+    pointData("Comment/Reply", 1),
+    pointData("Post", 3),
+    pointData("Livestream", 10),
   ];
 
   const specialBadges = [
@@ -115,7 +116,7 @@ export default function PointsPage() {
         <div className="row">
           <div className="col-md-9 mt-4">
             <div className="card card-primary">
-              <div className="card-body container">
+              <div className="card-body container" align="center">
                 <div
                   style={{
                     display: "flex",
@@ -136,43 +137,22 @@ export default function PointsPage() {
                 </div>
                 <p></p>
                 <div className="row">
-                  <h2 style={{ color: "#4A5056", textAlign: "center", paddingTop: "10px" }}><b>We love having you here. That's why we'll reward you for it.</b></h2>
-                </div>
-                <p></p>
-                <div className="row">
-                  <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} > Badge</TableCell>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> Points required</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {levelBadges.map((row) => (
-                          <TableRow key={row.name}>
-                            <TableCell align="center" style={{ width: '50%' }}>{row.badge}</TableCell>
-                            <TableCell align="center" style={{ fontSize: 16 }}>{row.achievement}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                  <h2 style={{ color: "#4A5056", textAlign: "center", fontSize: 30, paddingTop: "15px", marginLeft: '40px' }}><b>We love having you here. That's why we'll reward you for it.</b></h2>
                 </div>
 
                 <div className="row" style={{ paddingTop: "50px" }}>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} align="center" style={{ width: '90%', padding: '10px', marginLeft: '41px' }}>
                     <Table className={classes.table} aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} > Action</TableCell>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> Points</TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} ><b> Action</b></TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> <b>Points</b></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {pointBadges.map((row) => (
                           <TableRow key={row.name}>
-                            <TableCell align="center" style={{ width: '30%' }}>{row.action}</TableCell>
+                            <TableCell align="center" style={{ width: '50%' }}>{row.action}</TableCell>
                             <TableCell align="center" style={{ fontSize: 16 }}>{row.points}</TableCell>
                           </TableRow>
                         ))}
@@ -182,20 +162,45 @@ export default function PointsPage() {
                 </div>
 
                 <div className="row" style={{ paddingTop: "50px" }}>
-                  <TableContainer component={Paper}>
+                  <TableContainer component={Paper} style={{ width: '90%', padding: '50px', marginLeft: '41px' }}>
+                    <Table className={classes.table} aria-label="simple table" align="center">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} > <b>Badge</b></TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> <b>Points required</b></TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> <b>Reward</b></TableCell>
+
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {levelBadges.map((row) => (
+                          <TableRow key={row.name}>
+                            <TableCell align="center" style={{ width: '40%' }}>{row.badge}</TableCell>
+                            <TableCell align="center" style={{ fontSize: 16 }}>{row.achievement}</TableCell>
+                            <TableCell align="center" style={{ fontSize: 14 }}>{row.reward}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+
+
+                <div className="row" style={{ paddingTop: "50px" }}>
+                  <TableContainer component={Paper} style={{ width: '90%', padding: '10px', marginLeft: '41px' }}>
                     <Table className={classes.table} aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} > Badge</TableCell>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} > Name</TableCell>
-                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}> Achievement</TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} ><b>Badge</b> </TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }} ><b> Title</b> </TableCell>
+                          <TableCell align="center" style={{ fontSize: 16, color: '#4A5056' }}><b> Achievement</b></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {specialBadges.map((row) => (
                           <TableRow key={row.name}>
                             <TableCell align="center" style={{ width: '30%' }}>{row.badge}</TableCell>
-                            <TableCell align="center" style={{ fontSize: 15, width: '40%' }}>{row.name}</TableCell>
+                            <TableCell align="center" style={{ fontSize: 15, width: '40%' }}><b>{row.name}</b></TableCell>
                             <TableCell align="center">{row.achievement}</TableCell>
                           </TableRow>
                         ))}
@@ -203,6 +208,24 @@ export default function PointsPage() {
                     </Table>
                   </TableContainer>
                 </div>
+
+                <p></p>
+                <div className="row">
+                  <h2 style={{ color: "#4A5056", textAlign: "center", fontSize: 28, paddingTop: "15px", marginLeft: '350px' }}><b>Aim to be elite</b></h2>
+                </div>
+                <div className="row" style={{ fontSize: 17, marginLeft: '39px', padding: '5px', marginLeft: '180px' }}>
+                  <p>The more you do, the more points you earn.<br></br>Top 10 users with the highest stream points or contributor points <br></br> are featured on our Top Streamers and Top Contributors leaderboards.</p>
+                </div>
+                <div className="row">
+                  <img src={bearRage} alt="bearRage"
+                    style={{
+                      alignItems: "center",
+                      maxWidth: "40%",
+                      marginLeft: '260px'
+                    }}
+                  />
+                </div>
+                <p></p>
 
               </div>
             </div>

@@ -11,6 +11,8 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Grid,
+  Switch,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import liveLogo from "../assets/Live Logo.svg";
@@ -29,6 +31,32 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 import FileUploader from "react-firebase-file-uploader";
 import CircularProgressWithLabel from "../components/CircularProgressWithLabel.js";
+import Select from "react-select";
+
+// For related topics
+const topics = [
+  { value: "INVESTMENTS", label: "Investments" },
+  { value: "STOCKS", label: "Stocks" },
+  { value: "SAVINGS", label: "Savings" },
+  { value: "CAREER", label: "Career" },
+  { value: "ETF", label: "ETF" },
+  { value: "ROBOADVISORS", label: "Robo-Advisors" },
+  { value: "TRADING", label: "Trading" },
+  { value: "INSURANCE", label: "Insurance" },
+  { value: "BROKERAGES", label: "Brokerages" },
+  { value: "RETIREMENT", label: "Retirement" },
+  { value: "SALARY", label: "Salary" },
+  { value: "CPF", label: "CPF" },
+  { value: "BTO", label: "BTO" },
+  { value: "UTILITIES_BILL", label: "Utilities Bill" },
+  { value: "REAL_ESTATE", label: "Real Estate" },
+  { value: "FUTURES", label: "Futures" },
+  { value: "CRYPTOCURRENCY", label: "Cryptocurrency" },
+  { value: "CREDITCARDS", label: "Credit Cards" },
+  { value: "BANKING", label: "Banking" },
+  { value: "REITS", label: "REITs" },
+  { value: "BLOCKCHAIN", label: "Blockchain" },
+];
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -88,6 +116,17 @@ function Navbar({
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
+
+  const [videoTopics, setVideoTopics] = useState([]);
+  function handleVideoTopicsChange(selectedOptions) {
+    let tempSelectedOptions = [];
+    for (var i = 0; i < selectedOptions.length; i++) {
+      tempSelectedOptions.push(selectedOptions[i].value);
+    }
+    setVideoTopics(tempSelectedOptions);
+  }
+
+  const [isSubscriberOnly, setIsSubscriberOnly] = useState(false);
 
   const [refresh, setRefresh] = useState(true);
   const [fileName, setFileName] = useState("");
@@ -172,12 +211,20 @@ function Navbar({
       description,
       fileName,
       fileUrl,
-      fileType
+      fileType,
+      isSubscriberOnly,
+      videoTopics
     )
       .done(() => {
         alert.show("Video uploaded successfully!");
-        // setRefresh(!refresh);
         handleUploadDialogClose();
+        setFileName("");
+        setFileUrl("");
+        setFileType("");
+        setTitle("");
+        setDescription("");
+        setIsSubscriberOnly(false);
+        setVideoTopics([]);
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -277,6 +324,7 @@ function Navbar({
                 <div className="form-group">
                   <label htmlFor="inputDescription">Description</label>
                   <textarea
+                    id="inputDescription"
                     className="form-control"
                     value={description}
                     style={{
@@ -287,6 +335,69 @@ function Navbar({
                     }}
                     onChange={handleDescriptionChange}
                   />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="topics">Related Topics</label>
+                  <Select
+                    isMulti
+                    id="topics"
+                    name="topics"
+                    options={topics}
+                    onChange={(selectedOptions) =>
+                      handleVideoTopicsChange(selectedOptions)
+                    }
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    style={{
+                      width: "400px",
+                      marginTop: "13px",
+                      marginBottom: "20px",
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: "13px",
+                    }}
+                  >
+                    <div>
+                      <b>Subscriber-only</b>
+                    </div>
+                    <div
+                      style={{
+                        flexGrow: "1",
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Grid
+                        justify="center"
+                        component="label"
+                        container
+                        alignItems="center"
+                        spacing={1}
+                      >
+                        <Grid item>No</Grid>
+                        <Grid item>
+                          <Switch
+                            color="primary"
+                            name="subscriberOnly"
+                            inputProps={{ "aria-label": "primary checkbox" }}
+                            checked={isSubscriberOnly}
+                            onChange={(e) => {
+                              setIsSubscriberOnly(e.target.checked);
+                            }}
+                          />
+                        </Grid>
+                        <Grid item>Yes</Grid>
+                      </Grid>
+                    </div>
+                  </div>
+                  <p>(Only allow subscribers to view)</p>
                 </div>
               </div>
             </div>

@@ -203,7 +203,7 @@ export default function FeedPage() {
   const [OnboardingDialogueOpen, setOnboardingDialogueOpen] = useState(false);
 
   // Modal
-  useEffect(() => {}, [horizontalMenu]);
+  useEffect(() => { }, [horizontalMenu]);
   useEffect(() => {
     if (currentUser) {
       loadData();
