@@ -1266,9 +1266,31 @@ export default {
     });
   },
 
+  searchVideoByTitleAndDescription(searchString) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/query?searchString=" + searchString,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   getStreamsByTrend(hashtag) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/stream/trend/query?hashtag=" + hashtag,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
+  getVideosByTrend(hashtag) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/trend/query?hashtag=" + hashtag,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

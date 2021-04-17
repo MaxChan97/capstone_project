@@ -7,6 +7,7 @@ import SearchCommunityResultList from "../components/SearchPage/SearchCommunityR
 import SearchPersonResultList from "../components/SearchPage/SearchPersonResultList";
 import SearchPostResultList from "../components/SearchPage/SearchPostResultList";
 import LiveStreamCard from "../components/LivePage/LiveStreamCard";
+import VideoCard from "../components/VideosPage/VideoCard";
 import { useSelector } from "react-redux";
 import { animateScroll } from "react-scroll";
 import TrendsCard from "../components/FeedPage/TrendsCard";
@@ -76,6 +77,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const [topTenStreamers, setTopTenStreamers] = useState([]);
   const [topTrends, setTopTrends] = useState([]);
   const [todaysTrends, setTodaysTrends] = useState([]);
+
+  const [videoOffset, setVideoOffset] = useState(1);
+  const [videoResults, setVideoResults] = useState([]);
+  const [videoPaginatedResults, setVideoPaginatedResults] = useState([]);
+  const [videoPageCount, setVideoPageCount] = useState(0);
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -223,6 +229,41 @@ export default function SearchPage({ searchString, searchRefresh }) {
         alert("Error");
       });
   }
+  useEffect(() => {
+    Api.searchVideoByTitleAndDescription(searchString)
+      .done((videoObjects) => {
+        (async () => {
+          for (var i = videoObjects.length - 1; i >= 0; i--) {
+            if (videoObjects[i].isPaid === true) {
+              let subscriptionStatus = await Api.isSubscribed(
+                currentUser,
+                videoObjects[i].author.id
+              );
+              if (
+                subscriptionStatus.subscriptionStatus === "NotSubscribed" &&
+                videoObjects[i].author.id !== currentUser
+              ) {
+                videoObjects.splice(i, 1);
+              }
+            }
+          }
+
+          setVideoResults(videoObjects.reverse());
+          setVideoPageCount(Math.ceil(videoObjects.length / 16));
+        })();
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }, [searchRefresh]);
+
+  useEffect(() => {
+    const slice = videoResults.slice(
+      (videoOffset - 1) * 16,
+      (videoOffset - 1) * 16 + 16
+    );
+    setVideoPaginatedResults(slice);
+  }, [videoOffset, videoResults]);
 
   const handlePersonPageClick = (e) => {
     const selectedPage = e.selected;
@@ -242,6 +283,11 @@ export default function SearchPage({ searchString, searchRefresh }) {
   const handleStreamPageClick = (e) => {
     const selectedPage = e.selected;
     setStreamOffset(selectedPage + 1);
+  };
+
+  const handleVideoPageClick = (e) => {
+    const selectedPage = e.selected;
+    setVideoOffset(selectedPage + 1);
   };
 
   const handleTabValueChange = (event, newValue) => {
@@ -317,6 +363,14 @@ export default function SearchPage({ searchString, searchRefresh }) {
           handleStreamPageClick={handleStreamPageClick}
         />
       );
+    } else if (tabValue === 4) {
+      return (
+        <VideoCard
+          videoList={videoPaginatedResults}
+          videoPageCount={videoPageCount}
+          handleVideoPageClick={handleVideoPageClick}
+        />
+      );
     }
   };
 
@@ -340,7 +394,7 @@ export default function SearchPage({ searchString, searchRefresh }) {
           <StyledTab label="Videos" />
         </StyledTabs>
       </div>
-      {tabValue === 3 ? (
+      {tabValue === 3 || tabValue === 4 ? (
         <div style={{ paddingLeft: "28px", paddingRight: "28px" }}>
           {handleTabView(tabValue)}
         </div>

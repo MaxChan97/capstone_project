@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import LiveTab from "../components/FollowingPage/LiveTab/LiveTab.js";
-import ChannelsTab from "../components/FollowingPage/ChannelsTab/ChannelsTab.js"
-import VideosTab from "../components/FollowingPage/VideosTab/VideosTab";
+import ChannelsTab from "../components/FollowingPage/ChannelsTab/ChannelsTab.js";
 import FollowingPageTopBar from "../components/FollowingPage/FollowingPageTopBar";
 import Api from "../helpers/Api";
-
+import VideosTab from "../components/FollowingPage/VideosTab";
+import LiveTab from "../components/FollowingPage/LiveTab";
 
 export default function FollowingPage() {
-
   const currentUser = useSelector((state) => state.currentUser);
   const [tabValue, setTabValue] = useState(0);
   const [refresh, setRefresh] = useState(true);
@@ -37,13 +35,11 @@ export default function FollowingPage() {
 
   const handleTabView = (tabValue) => {
     if (tabValue === 0) {
-
       return (
         <div style={{ marginTop: "20px" }}>
           <LiveTab />
         </div>
       );
-
     }
     if (tabValue === 1) {
       return (
@@ -55,7 +51,7 @@ export default function FollowingPage() {
     if (tabValue === 2) {
       return (
         <div style={{ marginTop: "20px" }}>
-          <ChannelsTab currentUser = {currentUser}/>
+          <ChannelsTab currentUser={currentUser} />
         </div>
       );
     } else {
@@ -65,7 +61,6 @@ export default function FollowingPage() {
 
   return (
     <div className="content-wrapper">
-
       {currentUser != {} ? (
         <div>
           <FollowingPageTopBar
@@ -77,9 +72,8 @@ export default function FollowingPage() {
           {handleTabView(tabValue)}
         </div>
       ) : (
-          ""
-        )}
+        ""
+      )}
     </div>
   );
 }
-

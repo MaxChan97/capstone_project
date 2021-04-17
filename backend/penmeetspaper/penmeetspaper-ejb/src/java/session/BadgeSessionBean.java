@@ -110,7 +110,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         Badge b10 = new Badge();
         b10.setDisplayName("Level 10 Badge");
         b10.setBadgeType(BadgeTypeEnum.OVERALL);
-        b10.setValueRequired(7000);
+        b10.setValueRequired(10);
         b10.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FLevel%2010.png?alt=media&token=9d5c6b2f-a04e-4dc9-bbc5-807cec4ab835");
 
         em.persist(b10);
@@ -128,7 +128,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         Badge topStreamer = new Badge();
         topStreamer.setDisplayName("Top streamer");
         topStreamer.setBadgeType(BadgeTypeEnum.STREAM);
-        topStreamer.setValueRequired(1000);
+        topStreamer.setValueRequired(3);
         topStreamer.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FVideos%20Streamed%20Badge.png?alt=media&token=ca1e7fce-d946-423c-b599-5d75d7b6b97c");
 
         em.persist(topStreamer);
@@ -137,7 +137,7 @@ public class BadgeSessionBean implements BadgeSessionBeanLocal {
         Badge topFollower = new Badge();
         topFollower.setDisplayName("Top follower");
         topFollower.setBadgeType(BadgeTypeEnum.FOLLOWER);
-        topFollower.setValueRequired(1000);
+        topFollower.setValueRequired(3);
         topFollower.setImage("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/badges%2FFollowers%20Badge.png?alt=media&token=1ce14370-a4a7-4fa6-b6c8-1fd86eebf66d");
 
         em.persist(topFollower);

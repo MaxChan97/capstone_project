@@ -47,12 +47,13 @@ const useStyles = makeStyles((theme) => ({
         setFormatDate(changedDate);
     }
     const [data, setData] = useState(null);
-
+    const [adLink, setAdLink] = useState("");
     function loadData(advertId) {
         Api.getAdvertisementById(advertId)
             .done((r) => {
                 setData(r);
                 changeDateFormat(r);
+                setAdLink("https://" + r.linkTo);
             })
             .fail(() => {
                 //alert.show("Unable to load!");
@@ -89,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
                                     <dt class="col-sm-2"> Id:</dt>
                                     <dd class="col-sm-10">{data.id}</dd>
                                     <dt class="col-sm-2"> Website Link: </dt>
-                                    <dd class="col-sm-10"><Link to={data.linkTo} style={{ color: "#3B21CB", }}>{data.linkTo}</Link></dd>
+                                    <dd class="col-sm-10"><a href={adLink} target="_blank" rel="noopener noreferrer">{data.linkTo}</a></dd>
                                     <dt class="col-sm-2">Added on: </dt>
                                     <dd class="col-sm-10">{moment(formatDate).format("DD/MM/YYYY hh:mm:ss a")}</dd>
                                     <dt class="col-sm-2">Description: </dt>

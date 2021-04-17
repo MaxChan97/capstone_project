@@ -25,6 +25,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -59,92 +60,92 @@ public class VideoResource {
             String topicInterest = topicInterestsJsonArray.getString(i);
             if (null != topicInterest) {
                 switch (topicInterest) {
-                    case "INVESTMENTS":
-                        topicInterests.add(TopicEnum.INVESTMENTS);
-                        break;
+                case "INVESTMENTS":
+                    topicInterests.add(TopicEnum.INVESTMENTS);
+                    break;
 
-                    case "STOCKS":
-                        topicInterests.add(TopicEnum.STOCKS);
-                        break;
+                case "STOCKS":
+                    topicInterests.add(TopicEnum.STOCKS);
+                    break;
 
-                    case "SAVINGS":
-                        topicInterests.add(TopicEnum.SAVINGS);
-                        break;
+                case "SAVINGS":
+                    topicInterests.add(TopicEnum.SAVINGS);
+                    break;
 
-                    case "CAREER":
-                        topicInterests.add(TopicEnum.CAREER);
-                        break;
+                case "CAREER":
+                    topicInterests.add(TopicEnum.CAREER);
+                    break;
 
-                    case "ETF":
-                        topicInterests.add(TopicEnum.ETF);
-                        break;
+                case "ETF":
+                    topicInterests.add(TopicEnum.ETF);
+                    break;
 
-                    case "ROBOADVISORS":
-                        topicInterests.add(TopicEnum.ROBOADVISORS);
-                        break;
+                case "ROBOADVISORS":
+                    topicInterests.add(TopicEnum.ROBOADVISORS);
+                    break;
 
-                    case "TRADING":
-                        topicInterests.add(TopicEnum.TRADING);
-                        break;
+                case "TRADING":
+                    topicInterests.add(TopicEnum.TRADING);
+                    break;
 
-                    case "INSURANCE":
-                        topicInterests.add(TopicEnum.INSURANCE);
-                        break;
+                case "INSURANCE":
+                    topicInterests.add(TopicEnum.INSURANCE);
+                    break;
 
-                    case "BROKERAGES":
-                        topicInterests.add(TopicEnum.BROKERAGES);
-                        break;
+                case "BROKERAGES":
+                    topicInterests.add(TopicEnum.BROKERAGES);
+                    break;
 
-                    case "RETIREMENT":
-                        topicInterests.add(TopicEnum.RETIREMENT);
-                        break;
+                case "RETIREMENT":
+                    topicInterests.add(TopicEnum.RETIREMENT);
+                    break;
 
-                    case "SALARY":
-                        topicInterests.add(TopicEnum.SALARY);
-                        break;
+                case "SALARY":
+                    topicInterests.add(TopicEnum.SALARY);
+                    break;
 
-                    case "CPF":
-                        topicInterests.add(TopicEnum.CPF);
-                        break;
+                case "CPF":
+                    topicInterests.add(TopicEnum.CPF);
+                    break;
 
-                    case "BTO":
-                        topicInterests.add(TopicEnum.BTO);
-                        break;
+                case "BTO":
+                    topicInterests.add(TopicEnum.BTO);
+                    break;
 
-                    case "UTILITIES_BILL":
-                        topicInterests.add(TopicEnum.UTILITIES_BILL);
-                        break;
+                case "UTILITIES_BILL":
+                    topicInterests.add(TopicEnum.UTILITIES_BILL);
+                    break;
 
-                    case "REAL_ESTATE":
-                        topicInterests.add(TopicEnum.REAL_ESTATE);
-                        break;
+                case "REAL_ESTATE":
+                    topicInterests.add(TopicEnum.REAL_ESTATE);
+                    break;
 
-                    case "FUTURES":
-                        topicInterests.add(TopicEnum.FUTURES);
-                        break;
+                case "FUTURES":
+                    topicInterests.add(TopicEnum.FUTURES);
+                    break;
 
-                    case "CRYPTOCURRENCY":
-                        topicInterests.add(TopicEnum.CRYPTOCURRENCY);
-                        break;
+                case "CRYPTOCURRENCY":
+                    topicInterests.add(TopicEnum.CRYPTOCURRENCY);
+                    break;
 
-                    case "CREDITCARDS":
-                        topicInterests.add(TopicEnum.CREDITCARDS);
-                        break;
+                case "CREDITCARDS":
+                    topicInterests.add(TopicEnum.CREDITCARDS);
+                    break;
 
-                    case "BANKING":
-                        topicInterests.add(TopicEnum.BANKING);
-                        break;
+                case "BANKING":
+                    topicInterests.add(TopicEnum.BANKING);
+                    break;
 
-                    case "REITS":
-                        topicInterests.add(TopicEnum.REITS);
-                        break;
+                case "REITS":
+                    topicInterests.add(TopicEnum.REITS);
+                    break;
 
-                    case "BLOCKCHAIN":
-                        topicInterests.add(TopicEnum.BLOCKCHAIN);
-                        break;
+                case "BLOCKCHAIN":
+                    topicInterests.add(TopicEnum.BLOCKCHAIN);
+                    break;
 
-                    default:
-                        break;
+                default:
+                    break;
                 }
             }
         }
@@ -231,6 +232,45 @@ public class VideoResource {
             return buildError(e, 400);
         }
     } // end getAllVideos
+
+    @GET
+    @Path("/trend/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVideosByTrend(@QueryParam("hashtag") String hashtag) {
+        try {
+            hashtag = "#" + hashtag;
+            List<Video> results = videoSessionBean.getVideosByTrend(hashtag);
+            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    @GET
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchVideoByTitleAndDescription(@QueryParam("searchString") String searchString) {
+        try {
+            if (searchString != null) {
+                List<Video> results = videoSessionBean.searchVideoByTitleAndDescription(searchString);
+                GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+                };
+
+                return Response.status(200).entity(entity).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "No query conditions").build();
+
+                return Response.status(400).entity(exception).build();
+            }
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", e.getMessage()).build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 
     @PUT
     @Path("/view/{id}")

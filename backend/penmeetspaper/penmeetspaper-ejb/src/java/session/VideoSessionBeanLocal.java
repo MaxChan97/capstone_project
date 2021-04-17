@@ -30,7 +30,10 @@ public interface VideoSessionBeanLocal {
     public Video getVideo(Long videoId) throws NoResultException, NotValidException;
 
     public List<Video> getAllVideos() throws NoResultException, NotValidException;
+    
+    public List<Video> getVideosByTrend(String hashtag) throws NoResultException, NotValidException;
 
+    public List<Video> searchVideoByTitleAndDescription(String searchString) throws NoResultException, NotValidException;
     public void addView(Long videoId);
 
 }

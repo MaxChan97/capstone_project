@@ -51,7 +51,11 @@ export default function ViewStreamPage() {
   const classes = useStyles();
   const currentUser = useSelector((state) => state.currentUser);
   const history = useHistory();
-
+  const [adLink, setAdLink] = useState();
+  const [advertisements, setAdvertisements] = useState(null);
+  const [adToShow, setAdToShow] = useState([]);
+  const [shownAd, setShownAd] = useState();
+  const [currentPerson, setCurrentPerson] = useState(null);
   const [stream, setStream] = useState();
   const [numFollowers, setNumFollowers] = useState(0);
 
@@ -169,6 +173,38 @@ export default function ViewStreamPage() {
       });
   }
 
+  function targetAd(list, person) {
+    var found = false;
+    for (var i = list.length - 1; i >= 0; i--) {
+      if (
+        person.topicInterests.some((interest) =>
+          list[i].topics.includes(interest)
+        )
+      ) {
+        // got match in interest
+        // add to recommended ads
+        found = true;
+        adToShow.push(list[i]);
+      }
+    }
+    //default advert
+    if (found == false) {
+      adToShow.push(list[1]);
+    }
+
+    var randomAdId = Math.floor(getRandomArbitrary(0, adToShow.length));
+    console.log(randomAdId);
+    console.log(adToShow[randomAdId]);
+    setShownAd(adToShow[randomAdId]);
+    setAdLink("https://" + adToShow[randomAdId].linkTo);
+    console.log(shownAd)
+  }
+
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+
   useEffect(() => {
     if (stream != undefined) {
       Api.getFollowers(stream.streamer.id)
@@ -216,6 +252,18 @@ export default function ViewStreamPage() {
           alert.show(xhr.responseJSON.error);
         });
     }
+    Api.getAllAdvertisement()
+      .done((list) => {
+        setAdvertisements(list);
+        Api.getPersonById(currentUser)
+          .then((person) => {
+            setCurrentPerson(person);
+            targetAd(list, person);
+          })
+      })
+      .fail(() => {
+        //alert.show("Unable to load!");
+      });
   }, [stream, refresh]);
 
   function handleUnfollowDialogOpen() {
@@ -736,7 +784,7 @@ export default function ViewStreamPage() {
     );
   }
 
-  return stream ? (
+  return stream && advertisements ? (
     <div className="content-wrapper">
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div
@@ -792,6 +840,17 @@ export default function ViewStreamPage() {
           </p>
           <hr style={{ borderTop: "1px solid #D0D0D0", margin: 0 }} />
           <div style={{ marginTop: "16px" }}>{renderStreamInfo(stream)}</div>
+          <br>
+          </br>
+          {subscriptionStatus === "NotSubscribed" && advertisements.length > 0 && shownAd != undefined ? (
+            <a href={adLink} target="_blank" rel="noopener noreferrer">
+              <img
+                className="mx-auto d-block"
+                width="750px"
+                src={shownAd.image}
+              />
+            </a>
+          ) : ("")}
         </div>
         <div
           style={{
