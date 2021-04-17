@@ -2077,7 +2077,7 @@ export default {
         description,
         linkTo,
         image,
-        topicInterests
+        topicInterests,
       }),
     });
   },
@@ -2112,6 +2112,17 @@ export default {
         "Content-Type": "application/json",
       },
       type: "DELETE",
+    });
+  },
+
+  addView(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/view/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
     });
   },
 };

@@ -10,34 +10,27 @@ export default function MyCommunitiesRowForFeed({ community }) {
 
   return (
     <div className="container">
-        <Link to={"/community/" + community.id} >
-      <div className="row mt-3">
-        <div className="col-md-4">
-          <img
-            style={{
-              resizeMode: "repeat",
-              height: 50,
-              width: 50,
-              borderRadius: "50%",
-              display: "block",
-            }}
-            className="img-fluid"
-            src={community.communityProfilePicture}
-            alt="Community Picture"
-          />
+      <Link to={"/community/" + community.id}>
+        <div className="row">
+          <div className="col-4">
+            <img
+              className="img-fluid img-circle mx-auto d-block"
+              src={community.communityProfilePicture}
+              alt="Community Picture"
+            />
+          </div>
+          <div className="col-8">
+            <p className="text-left" style={{ color: "black" }}>
+              {community.name}
+              <br />
+              <small>
+                {community.members.length !== 1
+                  ? community.members.length + " Members"
+                  : community.members.length + " Member"}
+              </small>
+            </p>
+          </div>
         </div>
-        <div className="col-md-8">
-          <p className="text-left"
-          style={{color:"black", fontSize:"18px"}}>
-            {community.name}
-            <br />
-            {/* <small>{community.members.length} Members</small> */}
-            <small>{community.members.length !== 1
-              ? community.members.length + " Members"
-              : community.members.length + " Member"}</small>
-          </p>
-        </div>
-      </div>
       </Link>
     </div>
   );

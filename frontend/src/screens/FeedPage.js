@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import TopContributorCard from "../components/FeedPage/TopContributorCard";
 import TopStreamerCard from "../components/FeedPage/TopStreamerCard";
 import LiveHorizontalMenu from "../components/FeedPage/LiveHorizontalMenu";
-import CreatePostCard from "../components/CommunityPage/CreatePostCard";
-import ProfilePostCard from "../components/CommunityPage/ProfilePostCard";
-import PostList from "../components/CommunityPage/PostList";
 import PostListOfFollowing from "../components/FeedPage/PostListOfFollowing";
 import TrendsCard from "../components/FeedPage/TrendsCard";
 
 import Api from "../helpers/Api";
 import { useAlert } from "react-alert";
-import Modal from "react-bootstrap/Modal";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Select from "react-select";
 import moment from "moment";
 import {
-  InputBase,
-  IconButton,
-  Paper,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -203,7 +196,7 @@ export default function FeedPage() {
   const [OnboardingDialogueOpen, setOnboardingDialogueOpen] = useState(false);
 
   // Modal
-  useEffect(() => { }, [horizontalMenu]);
+  useEffect(() => {}, [horizontalMenu]);
   useEffect(() => {
     if (currentUser) {
       loadData();
@@ -434,28 +427,22 @@ export default function FeedPage() {
 
   return (
     <div className="content-wrapper">
-      <div className="container">
+      <div className="container pt-2">
         {initiateOnboardingDialogue()}
-        <div className="row">
-          <div className="col-md-12">
+        {/* <div className="row">
+          <div className="col-12">
             <LiveHorizontalMenu data={horizontalMenu}></LiveHorizontalMenu>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-md-8 mt-4">
+        </div> */}
+        <div className="row mt-4">
+          <div className="col-9">
             <PostListOfFollowing></PostListOfFollowing>
           </div>
 
-          <div className="col-md-4 mt-4" style={{ textAlign: "left" }}>
-            <div className="row">
-              <TopStreamerCard data={topTenStreamers} />
-            </div>
-            <div className="row">
-              <TopContributorCard data={topTenContributors} />
-            </div>
-            <div className="row">
-              <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
-            </div>
+          <div className="col-3">
+            <TopStreamerCard data={topTenStreamers} />
+            <TopContributorCard data={topTenContributors} />
+            <TrendsCard topTrends={topTrends} todaysTrends={todaysTrends} />
           </div>
         </div>
       </div>

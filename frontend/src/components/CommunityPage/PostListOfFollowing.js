@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     margin: "auto",
+    padding: "0",
   },
   inline: {
     display: "inline",
@@ -47,20 +48,18 @@ export default function PostListOfFollowing() {
     <List className={classes.root}>
       {dataList.map((data) => (
         <div>
-       
-            <CommunityPostCard
-              key={data.id}
-              data={data}
-              refresh={refresh}
-              setRefresh={setRefresh}
-              community={data.postCommunity}
-            />
-     
+          <CommunityPostCard
+            key={data.id}
+            data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            community={data.postCommunity}
+          />
         </div>
       ))}
     </List>
   ) : (
-    <div style={{marginTop: "30px"}}>
+    <div>
       <h3
         style={{
           color: "gray",
@@ -69,7 +68,6 @@ export default function PostListOfFollowing() {
         }}
       >
         No posts yet...
-        
       </h3>
       <p
         style={{
@@ -85,7 +83,8 @@ export default function PostListOfFollowing() {
         style={{
           textAlign: "center",
           margin: "auto",
-        }}>
+        }}
+      >
         <img src={Talk} />
       </div>
     </div>

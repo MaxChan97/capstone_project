@@ -55,7 +55,7 @@ export default function VideoCardItem({ video }) {
 
   return (
     <Card className={styles.root}>
-      <Link style={{ color: "inherit" }}>
+      <Link to={"/video/" + video.id} style={{ color: "inherit" }}>
         <CardContent style={{ padding: "0" }}>
           <Box
             display="flex"
@@ -67,12 +67,6 @@ export default function VideoCardItem({ video }) {
               justifyContent: "space-between",
             }}
           >
-            {/*<VideoThumbnail
-              videoUrl={video.fileUrl}
-              snapshotAtTime={0}
-              width={250}
-              height={188}
-            />*/}
             <video
               width="100%"
               height={158}

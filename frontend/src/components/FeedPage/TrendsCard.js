@@ -13,7 +13,7 @@ export default function TrendsCard({ topTrends, todaysTrends }) {
   return (
     topTrends &&
     topTrends.length > 0 && (
-      <div className="card card-primary" style={{width: "20rem",  marginLeft:"20px"}}>
+      <div className="card card-primary">
         <div className="card-body">
           <h5 className="card-title font-weight-bold">Trends</h5>
           <p className="card-text"></p>
