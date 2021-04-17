@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import liveLogo from "../assets/Live Logo.svg";
-import followingLogo from "../assets/Following Logo.svg";
+import videosLogo from "../assets/Videos Logo.svg";
 import likedLogo from "../assets/Liked Logo.svg";
 import libraryLogo from "../assets/Library Logo.svg";
 import communityLogo from "../assets/Community Logo.svg";
 import categoriesLogo from "../assets/Categories Logo.svg";
 import feedLogo from "../assets/Feed Logo.svg";
+import followingLogo from "../assets/Following Logo.svg";
 import subscribeLogo from "../assets/subscribeLogo.svg";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import BNBLogo from "../assets/BNB Logo.png";
@@ -39,6 +40,39 @@ function Sidebar() {
             data-accordion="false"
           >
             <li className="nav-item">
+              {location.pathname === "/feed" ? (
+                <Link
+                  to="/feed"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
+                    <p className="ml-2">Feed</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/feed" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
+                    <p className="ml-2">Feed</p>
+                  </div>
+                </Link>
+              )}
+            </li>
+            <li className="nav-item">
               {location.pathname === "/" ? (
                 <Link
                   to="/"
@@ -53,7 +87,7 @@ function Sidebar() {
                     }}
                   >
                     <img src={liveLogo} className="nav-icon" alt="liveLogo" />
-                    <p className="ml-2">Live</p>
+                    <p className="ml-2">Streams</p>
                   </div>
                 </Link>
               ) : (
@@ -66,12 +100,44 @@ function Sidebar() {
                     }}
                   >
                     <img src={liveLogo} className="nav-icon" alt="liveLogo" />
-                    <p className="ml-2">Live</p>
+                    <p className="ml-2">Streams</p>
                   </div>
                 </Link>
               )}
             </li>
-
+            <li className="nav-item">
+              {location.pathname === "/videos" ? (
+                <Link
+                  to="/videos"
+                  className="nav-link"
+                  style={{ backgroundColor: "#EAECEF" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={videosLogo} className="nav-icon" alt="liveLogo" />
+                    <p className="ml-2">Videos</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link to="/videos" className="nav-link">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={videosLogo} className="nav-icon" alt="liveLogo" />
+                    <p className="ml-2">Videos</p>
+                  </div>
+                </Link>
+              )}
+            </li>
             <li className="nav-item">
               {location.pathname === "/following" ? (
                 <Link
@@ -155,81 +221,6 @@ function Sidebar() {
                 </Link>
               )}
             </li>
-
-            <li className="nav-item">
-              {location.pathname === "/liked" ? (
-                <Link
-                  to="/liked"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={likedLogo} className="nav-icon" alt="likedLogo" />
-                    <p className="ml-2">Liked</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/liked" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={likedLogo} className="nav-icon" alt="likedLogo" />
-                    <p className="ml-2">Liked</p>
-                  </div>
-                </Link>
-              )}
-            </li>
-            <li className="nav-item">
-              {location.pathname === "/library" ? (
-                <Link
-                  to="/library"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={libraryLogo}
-                      className="nav-icon"
-                      alt="libraryLogo"
-                    />
-                    <p className="ml-2">Library</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/library" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={libraryLogo}
-                      className="nav-icon"
-                      alt="libraryLogo"
-                    />
-                    <p className="ml-2">Library</p>
-                  </div>
-                </Link>
-              )}
-            </li>
             <li className="nav-item">
               {location.pathname === "/community" ? (
                 <Link
@@ -271,113 +262,7 @@ function Sidebar() {
                 </Link>
               )}
             </li>
-            <li className="nav-item">
-              {location.pathname === "/categories" ? (
-                <Link
-                  to="/categories"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={categoriesLogo}
-                      className="nav-icon"
-                      alt="categoriesLogo"
-                    />
-                    <p className="ml-2">Categories</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/categories" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={categoriesLogo}
-                      className="nav-icon"
-                      alt="categoriesLogo"
-                    />
-                    <p className="ml-2">Categories</p>
-                  </div>
-                </Link>
-              )}
-            </li>
-            <li className="nav-item">
-              {location.pathname === "/feed" ? (
-                <Link
-                  to="/feed"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
-                    <p className="ml-2">Feed</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/feed" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={feedLogo} className="nav-icon" alt="feedLogo" />
-                    <p className="ml-2">Feed</p>
-                  </div>
-                </Link>
-              )}
-            </li>
-            <li className="nav-item">
-              {location.pathname === "/userAnalytics" ? (
-                <Link
-                  to="/userAnalytics"
-                  className="nav-link"
-                  style={{ backgroundColor: "#EAECEF" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <BarChartIcon fontSize="large"></BarChartIcon>
-                    <p className="ml-1">Analytics</p>
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/userAnalytics" className="nav-link">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <BarChartIcon fontSize="large"></BarChartIcon>
-                    <p className="ml-1">Analytics</p>
-                  </div>
-                </Link>
-              )}
-            </li>
+
             <li className="nav-item">
               <div
                 style={{
