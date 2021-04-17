@@ -2052,4 +2052,15 @@ export default {
       }),
     });
   },
+
+  getAllVideos() {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/all",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
 };

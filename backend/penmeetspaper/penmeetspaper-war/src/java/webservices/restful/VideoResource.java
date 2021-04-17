@@ -217,4 +217,18 @@ public class VideoResource {
         }
     } // end getVideo
 
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllVideos() {
+        try {
+            List<Video> results = videoSessionBean.getAllVideos();
+            GenericEntity<List<Video>> entity = new GenericEntity<List<Video>>(results) {
+            };
+            return Response.status(200).entity(entity).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getAllVideos
+
 }

@@ -19,6 +19,7 @@ import {
 import { streamRefreshListener } from "../helpers/FirebaseApi";
 import ReactHashtag from "react-hashtag";
 import ReactPlayer from "react-player";
+import RecommendedVideosCardList from "../components/VideosPage/RecommendedVideosCardList";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -49,6 +50,7 @@ export default function VideoPage() {
   const history = useHistory();
 
   const [video, setVideo] = useState();
+  const [videos, setVideos] = useState();
   const [numFollowers, setNumFollowers] = useState(0);
 
   const [following, setFollowing] = useState(false);
@@ -75,8 +77,14 @@ export default function VideoPage() {
   useEffect(() => {
     Api.getVideo(videoId)
       .done((video) => {
-        console.log(video);
         setVideo(video);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+    Api.getAllVideos()
+      .done((videos) => {
+        setVideos(videos);
       })
       .fail((xhr, status, error) => {
         alert.show(xhr.responseJSON.error);
@@ -665,7 +673,9 @@ export default function VideoPage() {
             paddingTop: "18px",
             paddingRight: "18px",
           }}
-        ></div>
+        >
+          <RecommendedVideosCardList videos={videos} />
+        </div>
       </div>
       {renderUnFollowDialog()}
       {renderSubscribeDialog()}
