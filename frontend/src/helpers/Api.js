@@ -2020,4 +2020,34 @@ export default {
       }),
     });
   },
+
+  createNotificationForFollowers(redirectTo, body, personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + personId + "/followers",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
+    });
+  },
+
+  createSystemWideNotification(redirectTo, body) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/systemWide",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        redirectTo: redirectTo,
+        body: body,
+      }),
+    });
+  },
 };
