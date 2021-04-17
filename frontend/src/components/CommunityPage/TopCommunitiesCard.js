@@ -6,41 +6,37 @@ export default function TopCommunitiesCard({ data }) {
   return (
     <div className="card card-primary">
       <div className="card-body">
-        <h5 className="font-weight-bold">Top Communities</h5>
-        <ul className="list-group list-group-flush">
-          {data.map((community, index) => {
-            return (
-              <li
-                key={index}
-                class="list-group-item list-group-item-action p-1"
-              >
-                <a href={"/community/" + community["id"]}>
-                  <div className="container-fluid" style={{ color: "black" }}>
-                    <div className="row m-3">
-                      <div className="col-md-4">
-                        <img
-                          className="img-fluid"
-                          src={
-                            community["communityProfilePicture"] || defaultDP
-                          }
-                        />
-                      </div>
-                      <div className="col-md-8">
-                        <p className="text-left mb-0">{community.name}</p>
-                        <p className="text-left">
-                          {community["members"].length}{" "}
-                          {community["members"].length == 1
-                            ? "member"
-                            : "members"}
-                        </p>
-                      </div>
+        <h5 className="font-weight-bold mb-3">Top Communities</h5>
+        {data.map((community, index) => {
+          return (
+            <div key={index}>
+              <a href={"/community/" + community["id"]}>
+                <div className="container" style={{ color: "black" }}>
+                  <div className="row">
+                    <div className="col-4">
+                      <img
+                        className="img-fluid img-circle mx-auto d-block"
+                        src={community["communityProfilePicture"] || defaultDP}
+                        alt="Community Picture"
+                      />
+                    </div>
+                    <div className="col-8">
+                      <p className="text-left" style={{ color: "black" }}>
+                        {community.name}
+                        <br />
+                        <small>
+                          {community.members.length !== 1
+                            ? community.members.length + " Members"
+                            : community.members.length + " Member"}
+                        </small>
+                      </p>
                     </div>
                   </div>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+                </div>
+              </a>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
