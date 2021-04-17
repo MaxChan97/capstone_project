@@ -427,13 +427,13 @@ export default function FeedPage() {
 
   return (
     <div className="content-wrapper">
-      <div className="container">
+      <div className="container pt-2">
         {initiateOnboardingDialogue()}
-        <div className="row">
+        {/* <div className="row">
           <div className="col-12">
             <LiveHorizontalMenu data={horizontalMenu}></LiveHorizontalMenu>
           </div>
-        </div>
+        </div> */}
         <div className="row mt-4">
           <div className="col-9">
             <PostListOfFollowing></PostListOfFollowing>
