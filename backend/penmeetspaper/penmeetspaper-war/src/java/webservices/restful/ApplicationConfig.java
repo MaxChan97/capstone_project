@@ -22,28 +22,30 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
     }
 
     /**
-     * Do not modify addRestResourceClasses() method. It is automatically populated
-     * with all resources defined in the project. If required, comment out calling
-     * this method in getClasses().
+     * Do not modify addRestResourceClasses() method. It is automatically
+     * populated with all resources defined in the project. If required, comment
+     * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(webservices.restful.AccountResource.class);
         resources.add(webservices.restful.AdminLogResource.class);
         resources.add(webservices.restful.AdministratorResource.class);
         resources.add(webservices.restful.AnalyticsResource.class);
+        resources.add(webservices.restful.BankAccountResource.class);
         resources.add(webservices.restful.CORSFilter.class);
         resources.add(webservices.restful.ChatResource.class);
         resources.add(webservices.restful.CommentResource.class);
         resources.add(webservices.restful.CommunityResource.class);
         resources.add(webservices.restful.FollowResource.class);
         resources.add(webservices.restful.MessageResource.class);
+        resources.add(webservices.restful.NotificationResource.class);
         resources.add(webservices.restful.PersonResource.class);
         resources.add(webservices.restful.PollResource.class);
         resources.add(webservices.restful.PostResource.class);
         resources.add(webservices.restful.ReplyResource.class);
         resources.add(webservices.restful.ReportResource.class);
         resources.add(webservices.restful.StreamResource.class);
-    resources.add(webservices.restful.SubscriptionResource.class);
+        resources.add(webservices.restful.SubscriptionResource.class);
         resources.add(webservices.restful.TrendResource.class);
         resources.add(webservices.restful.VideoResource.class);
     }
