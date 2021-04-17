@@ -477,6 +477,19 @@ public class DataInitSessionBean {
         return pollSB.createPoll(postPoll);
     }
 
+    private Poll createPoll(String question, String[] option) throws NotValidException, NoResultException {
+        Poll postPoll = new Poll();
+        postPoll.setQuestion(question);
+
+        for (int i = 0; i < option.length; i++) {
+            String pollOption = option[i];
+            PersonAnswer personAnswer1 = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer1 = paSB.createPersonAnswer(personAnswer1);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer1);
+        }
+        return pollSB.createPoll(postPoll);
+    }
+
     private void createPersonPost(Long personId) throws NotValidException, NoResultException {
         Post post1 = new Post();
         post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
@@ -491,6 +504,17 @@ public class DataInitSessionBean {
     private void createCommunityPost(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post1 = new Post();
         post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setFileName("");
+        post1.setFileUrl("");
+        post1.setFileType("");
+        post1.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post1, personId, communityId);
+    }
+
+    private void createCommunityPost(Long personId, Long communityId, String body) throws NotValidException, NoResultException {
+        Post post1 = new Post();
+        post1.setBody(body);
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -518,6 +542,18 @@ public class DataInitSessionBean {
         post2.setFileUrl("");
         post2.setFileType("");
         post2.setPoll(createPoll());
+        post2.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post2, personId, communityId);
+    }
+
+    private void createCommunityPostWithPoll(Long personId, Long communityId, String body, String question, String[] option) throws NotValidException, NoResultException {
+        Post post2 = new Post();
+        post2.setBody(body);
+        post2.setFileName("");
+        post2.setFileUrl("");
+        post2.setFileType("");
+        post2.setPoll(createPoll(question, option));
         post2.setDatePosted(new Date());
 
         postSB.createPostForCommunity(post2, personId, communityId);
@@ -622,6 +658,24 @@ public class DataInitSessionBean {
         badgeSB.createBadges();
     }
 
+    private void createAllCommunityPosts() throws NotValidException, NoResultException {
+        // posts for roboAdvisors
+        createCommunityPost(new Long(4), new Long(4), "After reading the answers in the forum, I am not sure to go for a robo-advisor or self pick the funds? What are some changes you would want to make, back when you just started investing?");
+        createCommunityPost(new Long(3), new Long(4), "Should I move my funds in StashAway over to Syfe with the Syfe Equity100 rebalancing? \n"
+                + "\n"
+                + "I currently have an equal amount of funds in both StashAway (36% risk portfolio) and Syfe (Equity100) and have DCA for about a year now.The main reason why I chose StashAway is because of its exposure to Chinese stocks. The main reason why I chose Syfe is because of it's 100% equity portfolio. Now that Syfe's Equity100 is rebalancing which adds 2 Chinese stocks ETFs, should I move my funds and focus on just one portfolio instead?");
+        createCommunityPost(new Long(4), new Long(4), " I noticed that my money in Syfe Cash+ has been decreasing and fluctuating, would it be more worth it if I store my money in Singlife/Dash instead?");
+        createCommunityPost(new Long(5), new Long(4), "I only trust banks so I’m using OCBC RoboInvest.");
+        String[] array = new String[]{
+            "StashAway", "AutoWealth", "Syfe", "EndowUs"};
+        createCommunityPostWithPoll(new Long(3), new Long(4),
+                "There has been an increase in the number of Robo Advisors in the market! Comment down below if there are other platforms you want to recommend! ",
+                "Which Robo Advisor are you using?",
+                array
+        );
+        createCommunityPost(new Long(4), new Long(4), "RoboAdvisors are dumb!! Ur all idiots leaving ur $$ to tech. the robots r taking over our brains n stealing our jobs.");
+    }
+
     private void initData() {
 
         try {
@@ -638,6 +692,7 @@ public class DataInitSessionBean {
 
             createCommunityPost(new Long(2), new Long(1));
             createCommunityPostWithPoll(new Long(2), new Long(1));
+            createAllCommunityPosts();
 
             createComments();
             createReplies();
