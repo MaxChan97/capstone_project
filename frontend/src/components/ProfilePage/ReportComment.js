@@ -80,7 +80,7 @@ export default function ReportComment({
 
     const [category, setCategory] = useState(null);
     const [type, setType] = useState("COMMENT_REPORT");
-    const [url, setUrl] = useState("/post/" + data.id);
+    const [url, setUrl] = useState("/comment/" + data.id);
     function handleReportPerson() {
         console.log(reason);
         console.log(currentUser);

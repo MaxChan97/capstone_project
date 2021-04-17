@@ -235,7 +235,7 @@ export default function AboutMe({ person, refresh, setRefresh }) {
           <div class="card card-primary">
             <div class="card-body">
               <div style={{ color: "#3B21CB" }}>
-              <Link to ="/MyCommunities" style={{ color: '#3B21CB' }}>
+              <Link to ="/PointsPage" style={{ color: '#3B21CB' }}>
                 <strong>
                   LEVEL{" "}
                   {getLevel(

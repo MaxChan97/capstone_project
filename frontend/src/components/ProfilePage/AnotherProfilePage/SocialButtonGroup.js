@@ -167,7 +167,7 @@ export default function SocialButtonGroup({
   }
 
   function handleResubscribe() {
-    paymentApi.resub(subId).done(() => {
+    paymentApi.resub(subId, id).done(() => {
     Api.subscribeToPerson(currentUser, id, subId)
       .done(() => {
         if (following === false) {
@@ -260,7 +260,7 @@ export default function SocialButtonGroup({
       );
     } else {
       // this case is ReSubscribe
-      if (subscription != undefined) {
+      if (subscription != undefined && pricingPlan != 0) {
         return (
           <div style={{ textAlign: "center" }}>
             <Button
@@ -279,6 +279,8 @@ export default function SocialButtonGroup({
             </div>
           </div>
         );
+      } else {
+        return;
       }
     }
   }

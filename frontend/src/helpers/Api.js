@@ -795,6 +795,20 @@ export default {
     });
   },
 
+  updateStripeProductId(personId, stripeProductId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/person/" + personId + "/stripeProductId",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        stripeProductId: stripeProductId,
+      }),
+    });
+  },
+
   voteOnPoll(personId, pollId, optionVoted) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/poll/" + pollId + "/person/" + personId,
@@ -1657,7 +1671,7 @@ export default {
     reportTypeEnum,
     reportedContentId,
     category,
-    reportedPersonId,
+    reportedPersonId
   ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/report",
@@ -1780,7 +1794,16 @@ export default {
     });
   },
 
-  uploadVideo(id, title, description, fileName, fileUrl, fileType) {
+  uploadVideo(
+    id,
+    title,
+    description,
+    fileName,
+    fileUrl,
+    fileType,
+    isSubscriberOnly,
+    videoTopics
+  ) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/video/upload",
       headers: {
@@ -1795,13 +1818,15 @@ export default {
         fileName: fileName,
         fileUrl: fileUrl,
         fileType: fileType,
+        isSubscriberOnly: isSubscriberOnly,
+        videoTopics: videoTopics,
       }),
     });
   },
 
   getPersonsVideos(id) {
     return jQuery.ajax({
-      url: this.SERVER_PREFIX + "/video/person" + id,
+      url: this.SERVER_PREFIX + "/video/person/" + id,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -1810,7 +1835,6 @@ export default {
     });
   },
 
-  
   adminDeletePost(adminId, postId, description, reportId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",
@@ -1894,6 +1918,60 @@ export default {
         "Content-Type": "application/json",
       },
       type: "GET",
+    });
+  },
+
+  createBankAccount(personId, accountNumber, displayName, bankEnum) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        accountNumber: accountNumber,
+        displayName: displayName,
+        bankEnum: bankEnum,
+      }),
+    });
+  },
+
+  updateBankAccount(bankAccountId, accountNumber, displayName, bankEnum) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + bankAccountId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        accountNumber: accountNumber,
+        displayName: displayName,
+        bankEnum: bankEnum,
+      }),
+    });
+  },
+
+  deleteBankAccountForPerson(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
+  readNotification(notificationId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/notification/" + notificationId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
     });
   },
 };

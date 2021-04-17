@@ -84,6 +84,7 @@ const topics = [
 ];
 
 const incomes = [
+  { value: "NOT_SPECIFIED", label: "Not specified" },
   { value: "NOT_EARNING", label: "No income" },
   { value: "LOW", label: "0-25K" },
   { value: "MIDDLE_LOW", label: "25-45K" },
@@ -91,6 +92,7 @@ const incomes = [
   { value: "MIDDLE_HIGH", label: "90-150K" },
   { value: "HIGH", label: "150-200K" },
   { value: "CRA", label: "200K and above" },
+
 ];
 
 export default function ProfileManagementButtonGroup({ refresh, setRefresh }) {

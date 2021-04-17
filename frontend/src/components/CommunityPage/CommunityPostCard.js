@@ -17,7 +17,7 @@ import CommentListForFeed from "../../components/ProfilePage/CommentListForFeed"
 import EditPost from "../../components/ProfilePage/EditPost";
 import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
-//import Poll from "react-polls";
+import Poll from "react-polls";
 import { useAlert } from "react-alert";
 import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 const ITEM_HEIGHT = 30;
@@ -39,9 +39,9 @@ export default function CommunityPostCard({
 
   const [pollAnswers, setPollAnswers] = useState([]);
   const [votedAnswer, setVotedAnswer] = useState();
+  const [pollRefresh, setPollRefresh] = useState(true);
   const [edit, setEdit] = useState(false);
-  {
-    /*}
+
   useEffect(() => {
     if (data.poll != undefined) {
       let hasVoted = false;
@@ -80,7 +80,11 @@ export default function CommunityPostCard({
         setPollAnswers(tempPollAnswer);
       }
     }
-  }, [data, refresh]);
+  }, [data]);
+
+  useEffect(() => {
+    setPollRefresh(!pollRefresh);
+  }, [pollAnswers]);
 
   function handleVote(voteAnswer) {
     Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
@@ -91,8 +95,8 @@ export default function CommunityPostCard({
         alert.show(xhr.responseJSON.error);
       });
   }
-*/
-  }
+  
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -330,7 +334,6 @@ export default function CommunityPostCard({
                 ></EditPost>
               )}
 
-              {/*}
               {data.poll != undefined && pollAnswers != [] ? (
                 votedAnswer == undefined ? (
                   <div>
@@ -368,7 +371,6 @@ export default function CommunityPostCard({
               ) : (
                 ""
               )}
-            */}
               <p>
                 {liked == true ? (
                   <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>

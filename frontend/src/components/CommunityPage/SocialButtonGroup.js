@@ -12,6 +12,7 @@ import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
 import Api from "../../helpers/Api";
 import ReportCommunity from "../../components/CommunityPage/ReportCommunity";
+import AdminDeleteComm from "../../components/CommunityPage/AdminDeleteComm";
 const ColorButton = withStyles((theme) => ({
   root: {
     color: theme.palette.getContrastText("#3B21CB"),
@@ -167,5 +168,14 @@ export default function SocialButtonGroup({ communityId, communityName, communit
         </DialogActions>
       </Dialog>
     </div>
-  ) : ("");
+  ) : (<div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "35%",
+      marginRight: "2.31%",
+    }}
+  ><AdminDeleteComm communityId={communityId}></AdminDeleteComm></div>);
 }

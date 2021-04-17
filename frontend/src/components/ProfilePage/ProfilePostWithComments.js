@@ -22,6 +22,8 @@ import { useHistory } from "react-router-dom";
 import ReportPost from "./ReportPost";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
+import AdminDeletePostModal from "./AdminDeletePostModal";
+import error from "../../assets/Error.png";
 
 const ITEM_HEIGHT = 30;
 
@@ -161,7 +163,23 @@ export default function ProfilePostWithComments() {
     setAnchorEl(null);
   }
 
-  const [liked, setLiked] = useState();
+  const [adminDeletePostModal, setAdminDeletePostModal] = React.useState(false);
+
+  function openAdminDeletePostModal() {
+    setAdminDeletePostModal(true);
+  }
+
+  function closeAdminDeletePostModal() {
+    setAdminDeletePostModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openAdminDeletePostModal();
+  };
+
+
+  const [liked, setLiked] = useState(false);
 
   function checkedLiked(post) {
     post.likes.forEach(function (arrayItem) {
@@ -204,6 +222,13 @@ export default function ProfilePostWithComments() {
         }}
       >
         <div class="col-md-9 mt-4" style={{ margin: "auto" }}>
+          <AdminDeletePostModal
+            show={adminDeletePostModal}
+            handleClose={closeAdminDeletePostModal}
+            data={data}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
           <DeletePostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -279,6 +304,15 @@ export default function ProfilePostWithComments() {
                   {isAdmin == false && data.author.id != currentUser ? (
                     <div style={{ textAlign: "right" }}>
                       <ReportPost data={data}></ReportPost>{" "}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {isAdmin == true ? (
+                    <div style={{ textAlign: "right" }}>
+                      <Link onClick={handleAdminDelete}>
+                        <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                      </Link>
                     </div>
                   ) : (
                     ""
@@ -369,15 +403,16 @@ export default function ProfilePostWithComments() {
                   ""
                 )}
                 <p>
-                  {liked == true ? (
+                  {isAdmin == false && liked == true ? (
                     <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  ) : (
+                  ) : isAdmin == false && liked == false ? (
                     <Link onClick={handleLike} style={{ color: "black" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  )}
+                  ) : isAdmin == true ? (<span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+                  ) : ("")}
                 </p>
               </div>
             </div>
@@ -410,6 +445,27 @@ export default function ProfilePostWithComments() {
       </div>
     </div>
   ) : (
-    <p>Post does not exist</p>
+    <div className="content-wrapper">
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "center",
+          margin: "auto",
+        }}
+      >
+        <div class="col-md-9 mt-4" style={{ margin: "auto" }}>
+          <h3>Post Deleted!</h3>
+          <img
+            style={{
+              resizeMode: "repeat",
+              height: 350,
+            }}
+            src={error}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

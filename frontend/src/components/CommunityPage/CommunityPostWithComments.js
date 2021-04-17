@@ -18,10 +18,13 @@ import ReactHashtag from "react-hashtag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import FileTypes from "../../components/FileTypes.js";
+import Poll from "react-polls";
 import ReportCommPost from "../../components/CommunityPage/ReportCommPost";
 import EditPost from "../../components/ProfilePage/EditPost";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
+import AdminDeletePostModal from "../../components/ProfilePage/AdminDeletePostModal";
+import error from "../../assets/Error.png";
 
 const ITEM_HEIGHT = 30;
 
@@ -33,8 +36,89 @@ export default function CommunityPostWithComments() {
   const { postId } = useParams();
   const alert = useAlert();
   const [refresh, setRefresh] = useState(true);
+
+  const [pollAnswers, setPollAnswers] = useState([]);
+  const [votedAnswer, setVotedAnswer] = useState();
+  const [pollRefresh, setPollRefresh] = useState(true);
+
   const [edit, setEdit] = useState(false);
   const isAdmin = useSelector((state) => state.isAdmin);
+
+  useEffect(() => {
+    if (postId) {
+      loadData(postId);
+    }
+  }, [postId, refresh]);
+
+  const [data, setData] = useState();
+
+  function loadData(postId) {
+    Api.getPost(postId, true)
+      .done((post) => {
+        setData(post);
+        checkedLiked(post);
+        changeDateFormat(post);
+      })
+      .fail(() => {
+        //alert.show("Unable to load post/Post deleted!");
+      });
+  }
+
+  useEffect(() => {
+    if (data != undefined) {
+      if (data.poll != undefined) {
+        let hasVoted = false;
+        for (var i = 0; i < data.poll.pollers.length; i++) {
+          if (currentUser === data.poll.pollers[i].id) {
+            hasVoted = true;
+          }
+        }
+
+        if (hasVoted === false) {
+          let tempPollAnswer = [];
+          for (const [key, value] of Object.entries(data.poll.options)) {
+            const pollAnswer = {
+              option: key,
+              votes: value.numAnswered,
+            };
+            tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+          }
+          setPollAnswers(tempPollAnswer);
+        } else {
+          // this user has voted alrdy
+          let tempPollAnswer = [];
+          for (const [key, value] of Object.entries(data.poll.options)) {
+            const pollAnswer = {
+              option: key,
+              votes: value.numAnswered,
+            };
+            tempPollAnswer = tempPollAnswer.concat([pollAnswer]);
+            for (var i = 0; i < value.answeredBy.length; i++) {
+              if (value.answeredBy[i].id === currentUser) {
+                setVotedAnswer(key);
+              }
+            }
+          }
+          setPollAnswers(tempPollAnswer);
+        }
+      }
+    }
+  }, [data]);
+
+  function handleVote(voteAnswer) {
+    Api.voteOnPoll(currentUser, data.poll.id, voteAnswer)
+      .done(() => {
+        setRefresh(!refresh);
+      })
+      .fail((xhr, status, error) => {
+        alert.show(xhr.responseJSON.error);
+      });
+  }
+
+  useEffect(() => {
+    setPollRefresh(!pollRefresh);
+  }, [pollAnswers]);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,31 +160,24 @@ export default function CommunityPostWithComments() {
     setAnchorEl(null);
   }
 
-  const [data, setData] = useState();
+  const [adminDeletePostModal, setAdminDeletePostModal] = React.useState(false);
+
+  function openAdminDeletePostModal() {
+    setAdminDeletePostModal(true);
+  }
+
+  function closeAdminDeletePostModal() {
+    setAdminDeletePostModal(false);
+    setRefresh(!refresh);
+  }
+
+  const handleAdminDelete = () => {
+    openAdminDeletePostModal();
+  };
+
+ 
   const [liked, setLiked] = useState();
 
-  useEffect(() => {
-    if (postId) {
-      loadData(postId);
-      /*
-      data.likes.includes(currentUser) ?(
-        setLiked(true)
-      ): (setLiked(false))
-      */
-    }
-  }, [postId, refresh]);
-
-  function loadData(postId) {
-    Api.getPost(postId, true)
-      .done((post) => {
-        setData(post);
-        checkedLiked(post);
-        changeDateFormat(post);
-      })
-      .fail(() => {
-        //alert.show("Unable to load post/Post deleted!");
-      });
-  }
 
   function checkedLiked(post) {
     post.likes.forEach(function (arrayItem) {
@@ -142,6 +219,14 @@ export default function CommunityPostWithComments() {
         }}
       >
         <div class="col-md-9" style={{ paddingTop: "20px", margin: "auto" }}>
+        <AdminDeletePostModal
+          show={adminDeletePostModal}
+          handleClose={closeAdminDeletePostModal}
+          data={data}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          community={data.postCommunity}
+        />
           <DeleteCommPostModal
             show={deletePostModal}
             handleClose={closeDeletePostModal}
@@ -235,6 +320,15 @@ export default function CommunityPostWithComments() {
                   ) : (
                     ""
                   )}
+                  {isAdmin == true ? (
+                  <div style={{ textAlign: "right", marginRight:25 }}>
+                    <Link onClick={handleAdminDelete}>
+                    <i class='fas fa-trash-alt' style={{ color: "#3B21CB" }}></i>
+                    </Link>
+                  </div>
+                ) : (
+                  ""
+                )}
                 </div>
                 {data.fileUrl &&
                   data.fileName &&
@@ -283,16 +377,52 @@ export default function CommunityPostWithComments() {
                     setEdit={setEdit}
                   ></EditPost>
                 )}
+                {data.poll != undefined && pollAnswers != [] ? (
+                  votedAnswer == undefined ? (
+                    <div>
+                      <Poll
+                        customStyles={{
+                          theme: "purple",
+                          questionSeparator: true,
+                          align: "center",
+                          questionColor: "#8f858e",
+                        }}
+                        question={data.poll.question}
+                        noStorage={true}
+                        answers={pollAnswers}
+                        onVote={handleVote}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <Poll
+                        customStyles={{
+                          theme: "purple",
+                          questionSeparator: true,
+                          align: "center",
+                          questionColor: "#8f858e",
+                        }}
+                        question={data.poll.question}
+                        answers={pollAnswers}
+                        noStorage={true}
+                        vote={votedAnswer}
+                      />
+                    </div>
+                  )
+                ) : (
+                  ""
+                )}
                 <p>
-                  {liked == true ? (
+                {isAdmin == false && liked == true ? (
                     <Link onClick={handleUnlike} style={{ color: "#3B21CB" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  ) : (
+                  ) : isAdmin == false && liked == false ? (
                     <Link onClick={handleLike} style={{ color: "black" }}>
                       <i class="fas fa-thumbs-up mr-1"></i> {data.likes.length}
                     </Link>
-                  )}
+                  ) : isAdmin == true ? (<span><i class="fas fa-thumbs-up mr-1" style={{ color: "black" }}></i> {data.likes.length}</span>
+                  ) : ("")}
                 </p>
               </div>
             </div>
@@ -326,14 +456,27 @@ export default function CommunityPostWithComments() {
       </div>
     </div>
   ) : (
-    <h3
-      style={{
-        color: "gray",
-        textAlign: "center",
-        margin: "auto",
-      }}
+    <div className="content-wrapper">
+
+    <div
+        style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            margin: "auto",
+        }}
     >
-      Post does not exist
-    </h3>
+        <div class="col-md-9 mt-4" style={{ margin: "auto" }}>
+            <h3>Post Deleted!</h3>
+            <img
+                style={{
+                    resizeMode: "repeat",
+                    height: 350,
+                }}
+                src={error}
+            />
+        </div>
+    </div>
+</div>
   );
 }

@@ -40,7 +40,9 @@ export default function ProfilePage() {
         setCurrentCommunity(currentCommunity);
       })
       .fail((xhr, status, error) => {
+        if (xhr.responseJSON.error === "You are banned from the community") {
         history.push("/community/" + communityId + "/banned");
+      }
       });
   }
   console.log(ownedCommunities);

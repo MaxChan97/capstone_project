@@ -92,6 +92,12 @@ public class Person implements Serializable {
     @Column
     private String stripeCustomerId;
 
+    @Column
+    private String stripeProductId;
+
+    @Column
+    private int unreadNotifications;
+
     // Entity Variables ------------------
     //
     @Enumerated(EnumType.STRING)
@@ -156,10 +162,7 @@ public class Person implements Serializable {
     @JoinColumn(name = "paymentCard_id")
     private List<PaymentCard> paymentCards = new ArrayList<>();
 
-    // unidirectional
-    @OneToMany
-    @JoinColumn(name = "bankAccount_id")
-    private List<BankAccount> bankAccounts = new ArrayList<>();
+    private BankAccount bankAccount;
 
     // unidirectional
     @ManyToMany
@@ -454,14 +457,6 @@ public class Person implements Serializable {
         this.paymentCards = paymentCards;
     }
 
-    public List<BankAccount> getBankAccounts() {
-        return bankAccounts;
-    }
-
-    public void setBankAccounts(List<BankAccount> bankAccounts) {
-        this.bankAccounts = bankAccounts;
-    }
-
     public List<Badge> getBadges() {
         return badges;
     }
@@ -585,6 +580,42 @@ public class Person implements Serializable {
 
     public void setStripeCustomerId(String stripeCustomerId) {
         this.stripeCustomerId = stripeCustomerId;
+    }
+
+    /**
+     * @return the stripeProductId
+     */
+    public String getStripeProductId() {
+        return stripeProductId;
+    }
+
+    /**
+     * @param stripeProductId the stripeProductId to set
+     */
+    public void setStripeProductId(String stripeProductId) {
+        this.stripeProductId = stripeProductId;
+    }
+
+    /**
+     * @return the bankAccount
+     */
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    /**
+     * @param bankAccount the bankAccount to set
+     */
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public int getUnreadNotifications() {
+        return unreadNotifications;
+    }
+
+    public void setUnreadNotifications(int unreadNotifications) {
+        this.unreadNotifications = unreadNotifications;
     }
 
 }

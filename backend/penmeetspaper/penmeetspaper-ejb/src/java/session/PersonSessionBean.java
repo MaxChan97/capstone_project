@@ -11,17 +11,20 @@ import entity.Community;
 import entity.EarningsAnalytics;
 import entity.Follow;
 import entity.FollowersAnalytics;
+import entity.Notification;
 import entity.Person;
 import entity.Post;
 import entity.SubscribersAnalytics;
 import entity.Subscription;
 import entity.ViewersAnalytics;
 import enumeration.BadgeTypeEnum;
+import enumeration.IncomeRangeEnum;
 import exception.NoResultException;
 import exception.NotValidException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -388,6 +391,14 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     }
 
     @Override
+    public void updateStripeProductId(Person person) throws NoResultException, NotValidException {
+        Person oldPerson = emGetPerson(person.getId());
+
+        oldPerson.setStripeProductId(person.getStripeProductId());
+        em.flush();
+    }
+
+    @Override
     public void onboarding(Person person) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(person.getId());
 
@@ -401,6 +412,7 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
     @Override
     public void skipOnboarding(Long personId) throws NoResultException, NotValidException {
         Person oldPerson = emGetPerson(personId);
+        oldPerson.setIncomeRange(IncomeRangeEnum.NOT_SPECIFIED);
         oldPerson.setCompletedOnboarding(true);
         em.flush();
     } // end skipOnboarding
@@ -781,4 +793,25 @@ public class PersonSessionBean implements PersonSessionBeanLocal {
 
         return person.isIsBannedFromLogin();
     } // end checkPersonBanFromLogin
+
+    @Override
+    public List<Notification> getPersonNotification(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        List<Notification> notif = person.getNotifications();
+
+        Collections.sort(notif, new Comparator<Notification>() {
+            public int compare(Notification n1, Notification n2) {
+
+                return n1.getDateCreated().compareTo(n2.getDateCreated());
+            }
+        });
+        return notif;
+    }
+
+    @Override
+    public void personOpenNotification(Long personId) throws NotValidException, NoResultException {
+        Person person = emGetPerson(personId);
+        person.setUnreadNotifications(0);
+        em.flush();
+    }
 }

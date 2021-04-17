@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory, Redirect, useParams } from "react-router";
 import { useSelector } from "react-redux";
@@ -10,9 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import Api from "../helpers/Api";
 import paymentApi from "../helpers/paymentApi";
 // stripe
-import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 // Util imports
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 // Custom Components
 import CardInput from '../components/CardInputs';
 import { useAlert } from "react-alert";
@@ -21,7 +21,9 @@ import { useAlert } from "react-alert";
 const useStyles = makeStyles({
   root: {
     maxWidth: 500,
-    margin: '35vh auto',
+    marginTop: "25vh",
+    marginLeft: "600px",
+    borderColor: "purple"
   },
   content: {
     display: 'flex',
@@ -36,6 +38,7 @@ const useStyles = makeStyles({
   },
   button: {
     margin: '2em auto 1em',
+    backgroundColor: "#3B21CB",
   },
 });
 
@@ -44,6 +47,7 @@ function PaymentPage() {
   const alert = useAlert();
   const history = useHistory();
   const [price, setPrice] = useState(0);
+  const [isProcessing, setProcessingTo] = useState(false);
   const [email, setEmail] = useState('');
   const [plan, setPlan] = useState('');
   const [customerId, setCustomerId] = useState();
@@ -53,7 +57,7 @@ function PaymentPage() {
     Api.getPersonById(currentUser)
       .done((data) => {
         setEmail(data.email);
-        const {stripeCustomerId} = data
+        const { stripeCustomerId } = data
         setCustomerId(stripeCustomerId);
         Api.getPersonById(anotherPersonId).done((data) => {
           // console.log(data);
@@ -114,24 +118,29 @@ function PaymentPage() {
     Api.subscribeToPerson(currentUser, anotherPersonId, subId)
       .done(() => {
         console.log('subscription done');
-          Api.followPerson(currentUser, anotherPersonId)
-            .done(() => {
-              history.push("/paymentSuccess");
-            })
-            .fail((xhr, status, error) => {
-              if (xhr.responseJSON.error != 'Follow Entity already exists') {
-                alert.show(xhr.responseJSON.error)
-              }
-            });
+        Api.followPerson(currentUser, anotherPersonId)
+          .done(() => {
+            setProcessingTo(false);
             history.push("/paymentSuccess");
+          })
+          .fail((xhr, status, error) => {
+            if (xhr.responseJSON.error !== 'Follow Entity already exists') {
+              setProcessingTo(false);
+              alert.show(xhr.responseJSON.error)
+            }
+          });
+        setProcessingTo(false);
+        history.push("/paymentSuccess");
       })
       .fail((xhr, status, error) => {
+        setProcessingTo(false);
         alert.show(xhr.responseJSON.error);
       });
   }
 
 
   const handleSubmitSub = async (event) => {
+    setProcessingTo(true);
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
@@ -153,18 +162,19 @@ function PaymentPage() {
       console.log(customerId);
       if (customerId == undefined) {
         const data = await paymentApi.createCustomer(result, email);
-          console.log(data)
-          setCustomerId(data.customerId);
-          await Api.updateStripeCustomerId(currentUser, data.customerId)
-          console.log("customerId persisted");
+        console.log(data)
+        setCustomerId(data.customerId);
+        await Api.updateStripeCustomerId(currentUser, data.customerId)
+        console.log("customerId persisted");
 
-          paymentApi.subscribe(data.customerId, plan)
+        paymentApi.subscribe(data.customerId, plan)
           .done((res) => {
-            const {client_secret, status, subId} = res;
-    
+            const { client_secret, status, subId } = res;
+
             if (status === 'requires_action') {
-              stripe.confirmCardPayment(client_secret).then(function(result) {
+              stripe.confirmCardPayment(client_secret).then(function (result) {
                 if (result.error) {
+                  setProcessingTo(false);
                   alert.show('There was an issue! Please try again later');
                   console.log(result.error);
                   // Display error message in your UI.
@@ -180,57 +190,77 @@ function PaymentPage() {
               // Show a success message to your customer
             }
           }).fail((res) => {
+            setProcessingTo(false);
             alert.show('There was an issue! Please try again later');
             console.log(result.error);
           })
-          
+
       } else {
 
         console.log(customerId);
         paymentApi.subscribe(customerId, plan)
-        .done((res) => {
-          const {client_secret, status, subId} = res;
+          .done((res) => {
+            const { client_secret, status, subId } = res;
 
-          if (status === 'requires_action') {
-            stripe.confirmCardPayment(client_secret).then(function(result) {
-              if (result.error) {
-                alert.show('There was an issue! Please try again later');
-                console.log(result.error);
-                // Display error message in your UI.
-                // The card was declined (i.e. insufficient funds, card has expired, etc)
-              } else {
-                handleSubscribe(subId);
-                // Show a success message to your customer
-              }
-            });
-          } else {
-            handleSubscribe(subId);
-            // No additional information was needed
-            // Show a success message to your customer
-          }
-        }).fail((res) => {
-          alert.show('There was an issue! Please try again later');
-          console.log(result.error);
-        })
+            if (status === 'requires_action') {
+              stripe.confirmCardPayment(client_secret).then(function (result) {
+                if (result.error) {
+                  setProcessingTo(false);
+                  alert.show('There was an issue! Please try again later');
+                  console.log(result.error);
+                  // Display error message in your UI.
+                  // The card was declined (i.e. insufficient funds, card has expired, etc)
+                } else {
+                  handleSubscribe(subId);
+                  // Show a success message to your customer
+                }
+              });
+            } else {
+              handleSubscribe(subId);
+              // No additional information was needed
+              // Show a success message to your customer
+            }
+          }).fail((res) => {
+            setProcessingTo(false);
+            alert.show('There was an issue! Please try again later');
+            console.log(result.error);
+          })
       }
-      
+
     }
   };
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        
+      <div>
+          <p
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: "22px",
+              paddingTop: "20px",
+              paddingBottom: "10px",
+            }}
+          >
+            PAYMENT DETAILS
+          </p>
+          <p
+            style={{
+              fontWeight: "400",
+              textAlign: "center",
+              fontSize: "20px",
+              paddingBottom: "20px",
+            }}
+          >
+            TOTAL: ${price} / month
+          </p>
+        </div>
+
         <CardInput />
         <div className={classes.div}>
-          {/* 
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitPay}>
-            Pay
-          </Button>
-          */}
-          
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            Subscribe for ${price}
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} disabled={isProcessing || !stripe} style={{width: "150px", fontWeight:"bold"}}>
+          {isProcessing ? "Processing..." : `Subscribe`}
           </Button>
         </div>
       </CardContent>

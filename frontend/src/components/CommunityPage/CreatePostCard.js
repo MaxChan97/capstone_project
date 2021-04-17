@@ -12,6 +12,7 @@ import chatPaperClip from "../../assets/chatPaperClip.png";
 import postPoll from "../../assets/postPoll.png";
 import { useSelector } from "react-redux";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel.js";
+import CreatePollCard from "../ProfilePage/OwnProfilePage/CreatePollCard";
 
 var uuid = require("uuid");
 
@@ -145,13 +146,13 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
       );
     }
   };
-  /*
+
   function handleClosePollInput() {
     setPollQuestion("");
     setPollOptions(["", ""]);
     setShowPollInput(false);
   }
-*/
+
   return isAdmin == false ? (
     <div
       style={{
@@ -225,7 +226,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                 )}
               </div>
             </div>
-            {/* 
+
             {showPollInput === true ? (
               <div className="row" style={{ marginBottom: "10px" }}>
                 
@@ -241,7 +242,7 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
             ) : (
                 ""
               )}
-              */}
+
             <div className="row">
               <div className="col-6">
                 <label style={{ paddingTop: "13px" }} for="pic" className="btn">
@@ -259,7 +260,6 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     onChange={changeFileHandler}
                   />
                 </label>
-                {/*
                 <button
                   type="button"
                   style={{
@@ -277,7 +277,6 @@ export default function CreatePostCard({ community, refresh, setRefresh }) {
                     alt="postPoll"
                   />
                 </button>
-                 */}
               </div>
               <div className="col-6">
                 <div style={{ textAlign: "right" }}>
