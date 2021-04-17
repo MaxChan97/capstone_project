@@ -387,8 +387,8 @@ public class DataInitSessionBean {
         user6.setDob(parseDate("15/09/1988"));
         user6.setIncomeRange(IncomeRangeEnum.HIGH);
 
-        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%205.jpeg?alt=media&token=e682da4f-e6b9-4b32-8dc0-9fb322ebd019");
-        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FInsuranceProfile.jpeg?alt=media&token=c5e521db-405c-4cb9-b4c9-09f1a2db032e");
+        user6.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%205.jpeg?alt=media&token=e682da4f-e6b9-4b32-8dc0-9fb322ebd019");
+        user6.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FInsuranceProfile.jpeg?alt=media&token=c5e521db-405c-4cb9-b4c9-09f1a2db032e");
 
         personSB.updatePersonDataInt(user6);
 
@@ -398,8 +398,8 @@ public class DataInitSessionBean {
         user7.setDob(parseDate("11/11/1997"));
         user7.setIncomeRange(IncomeRangeEnum.LOW);
 
-        user4.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%206.png?alt=media&token=e414206e-dfcf-450d-b4a1-aabb876ab253");
-        user4.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FapeProfile.jpeg?alt=media&token=9b4f20e5-7f38-46e9-ad45-be50cbea4946");
+        user7.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%206.png?alt=media&token=e414206e-dfcf-450d-b4a1-aabb876ab253");
+        user7.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FapeProfile.jpeg?alt=media&token=9b4f20e5-7f38-46e9-ad45-be50cbea4946");
 
         personSB.updatePersonDataInt(user7);
     }
@@ -623,7 +623,9 @@ public class DataInitSessionBean {
 
     private void createPersonPost(Long personId) throws NotValidException, NoResultException {
         Post post1 = new Post();
-        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setBody("Following breaking above the symmetrical triangle, bulls were able to drive the price of Bitcoin above prior resistance at the March 2021 high, which currently holds as support, allowing them to set another record above $63,000.\n"
+                + "\n"
+                + "With price action trading above both the 8 and 20-period EMA, both the Commodity Channel Index (CCI) and the Relative Strength Index (RSI) continue to test the upper bounds of their range, indicating that BTC/USD may soon enter into overbought territory. ");
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -634,7 +636,8 @@ public class DataInitSessionBean {
 
     private void createCommunityPost(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post1 = new Post();
-        post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setBody("Just reminding people (regardless of which crypto your planning to sell) to not put sell orders at round numbers $1, $10, $1000, etc, as this adds to the resistance for that crypto at those psychological price levels.\n"
+                + "Instead, put sell orders a few percent above or below those prices. This will reduce resistance at psychological price levels, which will do the rest of the crypto community a huge favour by making it easier for each crypto to break through specific price levels!");
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -656,7 +659,7 @@ public class DataInitSessionBean {
 
     private void createPersonPostWithPoll(Long personId) throws NotValidException, NoResultException {
         Post post2 = new Post();
-        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setBody("Although cryptocurrencies continue to face rigorous scrutiny by global regulators, crowd psychology and speculation remain the primary catalysts of crypto price action with numerous alt coins now beginning to outpace Bitcoin’s recent performance. Should this dynamic continue, bears may push the price of Bitcoin towards the psychological level of $60,000, which could act as support");
         post2.setFileName("");
         post2.setFileUrl("");
         post2.setFileType("");
@@ -668,7 +671,7 @@ public class DataInitSessionBean {
 
     private void createCommunityPostWithPoll(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post2 = new Post();
-        post2.setBody("Dolore chislic chuck sausage dolor duis porchetta tenderloin. Commodo incididunt cillum meatloaf chuck beef.");
+        post2.setBody("Today Bitcoin cleared a key resistance with ease, rallying the entire day on a big volume jump.");
         post2.setFileName("");
         post2.setFileUrl("");
         post2.setFileType("");
