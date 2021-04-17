@@ -1920,4 +1920,48 @@ export default {
       type: "GET",
     });
   },
+
+  createBankAccount(personId, accountNumber, displayName, bankEnum) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "POST",
+      data: JSON.stringify({
+        accountNumber: accountNumber,
+        displayName: displayName,
+        bankEnum: bankEnum,
+      }),
+    });
+  },
+
+  updateBankAccount(bankAccountId, accountNumber, displayName, bankEnum) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + bankAccountId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "PUT",
+      data: JSON.stringify({
+        accountNumber: accountNumber,
+        displayName: displayName,
+        bankEnum: bankEnum,
+      }),
+    });
+  },
+
+  deleteBankAccountForPerson(personId) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/bankAccount/" + personId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+    });
+  },
+
 };

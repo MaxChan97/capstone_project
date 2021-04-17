@@ -33,6 +33,8 @@ public class Notification implements Serializable {
     // Nullable
     private String redirectTo;
 
+    private boolean read;
+
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
@@ -92,6 +94,14 @@ public class Notification implements Serializable {
     @Override
     public String toString() {
         return "entity.Notification[ id=" + id + " ]";
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
 }
