@@ -1835,6 +1835,17 @@ export default {
     });
   },
 
+  getVideo(id) {
+    return jQuery.ajax({
+      url: this.SERVER_PREFIX + "/video/" + id,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      type: "GET",
+    });
+  },
+
   adminDeletePost(adminId, postId, description, reportId) {
     return jQuery.ajax({
       url: this.SERVER_PREFIX + "/admin/" + adminId + "/deletePost",

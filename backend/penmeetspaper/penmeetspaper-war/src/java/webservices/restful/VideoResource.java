@@ -205,4 +205,16 @@ public class VideoResource {
         }
     } // end getPersonsVideos
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVideo(@PathParam("id") Long videoId) {
+        try {
+            Video video = videoSessionBean.getVideo(videoId);
+            return Response.status(200).entity(video).build();
+        } catch (NoResultException | NotValidException e) {
+            return buildError(e, 400);
+        }
+    } // end getVideo
+
 }
