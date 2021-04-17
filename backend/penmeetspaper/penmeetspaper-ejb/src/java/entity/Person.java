@@ -92,6 +92,9 @@ public class Person implements Serializable {
     @Column
     private String stripeCustomerId;
 
+    @Column
+    private String stripeProductId;
+
     // Entity Variables ------------------
     //
     @Enumerated(EnumType.STRING)
@@ -585,6 +588,20 @@ public class Person implements Serializable {
 
     public void setStripeCustomerId(String stripeCustomerId) {
         this.stripeCustomerId = stripeCustomerId;
+    }
+
+    /**
+     * @return the stripeProductId
+     */
+    public String getStripeProductId() {
+        return stripeProductId;
+    }
+
+    /**
+     * @param stripeProductId the stripeProductId to set
+     */
+    public void setStripeProductId(String stripeProductId) {
+        this.stripeProductId = stripeProductId;
     }
 
 }

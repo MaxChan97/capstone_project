@@ -101,4 +101,6 @@ public interface PersonSessionBeanLocal {
 
     public void updateCustomerStripeId(Person person) throws NoResultException, NotValidException;
 
+    public void updateStripeProductId(Person person) throws NoResultException, NotValidException;
+
 }
