@@ -176,6 +176,7 @@ public class VideoResource {
         v.setFileUrl(fileUrl);
         v.setFileType(fileType);
         v.setIsPaid(isPaid);
+        v.setNoOfViews(new Long(0));
         v.setDatePosted(new Date());
         v.setRelatedTopics(relatedTopics);
 

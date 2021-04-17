@@ -52,6 +52,9 @@ public class Video implements Serializable {
 
     @Column(nullable = false)
     private boolean isPaid;
+    
+    @Column(nullable = false)
+    private Long noOfViews;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date datePosted;
@@ -129,6 +132,14 @@ public class Video implements Serializable {
         this.isPaid = isPaid;
     }
 
+    public Long getNoOfViews() {
+        return noOfViews;
+    }
+
+    public void setNoOfViews(Long noOfViews) {
+        this.noOfViews = noOfViews;
+    }
+
     public Date getDatePosted() {
         return datePosted;
     }
@@ -192,6 +203,10 @@ public class Video implements Serializable {
     @Override
     public String toString() {
         return "entity.Video[ id=" + id + " ]";
+    }
+
+    public void setNoOfViews(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
