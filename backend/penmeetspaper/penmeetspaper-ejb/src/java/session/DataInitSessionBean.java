@@ -6,6 +6,7 @@
 package session;
 
 import entity.Administrator;
+import entity.Badge;
 import entity.Comment;
 import entity.Community;
 import entity.Person;
@@ -17,6 +18,8 @@ import enumeration.IncomeRangeEnum;
 import enumeration.TopicEnum;
 import exception.NoResultException;
 import exception.NotValidException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,38 +110,38 @@ public class DataInitSessionBean {
 
     private void createPersons() throws NotValidException {
         Person user1 = new Person();
-        user1.setUsername("user1");
-        user1.setEmail("user1@email.com");
+        user1.setUsername("xiaoming_");
+        user1.setEmail("xiaoming@gmail.com");
         user1.setPassword("password");
 
         Person user2 = new Person();
-        user2.setUsername("user2");
-        user2.setEmail("user2@email.com");
+        user2.setUsername("jenny_hodl");
+        user2.setEmail("jennytan@yahoo.com.sg");
         user2.setPassword("password");
 
         Person user3 = new Person();
-        user3.setUsername("user3");
-        user3.setEmail("user3@email.com");
+        user3.setUsername("alanxalan");
+        user3.setEmail("alandsouza@hotmail.com");
         user3.setPassword("password");
 
         Person user4 = new Person();
-        user4.setUsername("user4");
-        user4.setEmail("user4@email.com");
+        user4.setUsername("iLoveCrypto");
+        user4.setEmail("ilovecrypto@gmail.com");
         user4.setPassword("password");
 
         Person user5 = new Person();
-        user5.setUsername("user5");
-        user5.setEmail("user5@email.com");
+        user5.setUsername("tothemoon");
+        user5.setEmail("tothemoon@gmail.com");
         user5.setPassword("password");
 
         Person user6 = new Person();
-        user6.setUsername("user6");
-        user6.setEmail("user6@email.com");
+        user6.setUsername("TheInsuranceGuru");
+        user6.setEmail("theinsuranceguru@yahoo.com.sg");
         user6.setPassword("password");
 
         Person user7 = new Person();
-        user7.setUsername("user7");
-        user7.setEmail("user7@email.com");
+        user7.setUsername("apeboi97");
+        user7.setEmail("apeboi97@gmail.com");
         user7.setPassword("password");
 
         Person user101 = new Person();
@@ -271,6 +274,72 @@ public class DataInitSessionBean {
             System.out.println("Error onboarding");
         }
 
+    }
+
+    private Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    private void editPersonDataInt() throws NoResultException, NotValidException {
+
+        List<TopicEnum> ti1 = new ArrayList<>();
+        List<TopicEnum> ti2 = new ArrayList<>();
+        List<TopicEnum> ti3 = new ArrayList<>();
+        List<TopicEnum> ti4 = new ArrayList<>();
+        List<TopicEnum> ti5 = new ArrayList<>();
+        List<TopicEnum> ti6 = new ArrayList<>();
+        List<TopicEnum> ti7 = new ArrayList<>();
+
+        ti1.add(TopicEnum.INVESTMENTS);
+        ti1.add(TopicEnum.ETF);
+        ti1.add(TopicEnum.CPF);
+        ti1.add(TopicEnum.SAVINGS);
+
+        ti2.add(TopicEnum.CRYPTOCURRENCY);
+        ti2.add(TopicEnum.STOCKS);
+        ti2.add(TopicEnum.INVESTMENTS);
+        ti2.add(TopicEnum.ETF);
+
+        ti3.add(TopicEnum.REAL_ESTATE);
+        ti3.add(TopicEnum.REITS);
+        ti3.add(TopicEnum.RETIREMENT);
+        ti3.add(TopicEnum.BTO);
+
+        ti4.add(TopicEnum.CRYPTOCURRENCY);
+        ti4.add(TopicEnum.INVESTMENTS);
+
+        ti5.add(TopicEnum.CRYPTOCURRENCY);
+        ti5.add(TopicEnum.STOCKS);
+        ti5.add(TopicEnum.TRADING);
+        ti5.add(TopicEnum.INVESTMENTS);
+        ti5.add(TopicEnum.BROKERAGES);
+
+        ti6.add(TopicEnum.INSURANCE);
+        ti6.add(TopicEnum.RETIREMENT);
+        ti6.add(TopicEnum.SALARY);
+
+        ti7.add(TopicEnum.CRYPTOCURRENCY);
+        ti7.add(TopicEnum.STOCKS);
+        ti7.add(TopicEnum.INVESTMENTS);
+
+        Person user1 = personSB.getPerson(new Long(1));
+        user1.setDescription("Hello I’m new! I would love to learn how to better manage my personal finance!");
+        user1.setTopicInterests(ti1);
+        user1.setDob(parseDate("12/03/1996"));
+        user1.setIncomeRange(IncomeRangeEnum.LOW);
+        user1.setContributorPoints(10);
+        user1.setContentCreatorPoints(0);
+        Badge b2 = badgeSB.getBadgeByDisplayName("Level 2 Badge");
+        user1.setBadgeDisplaying(b2);
+        user1.getBadges().add(b2);
+        user1.setProfileBanner("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FBanner%203.jpeg?alt=media&token=a47c9ed4-cbb4-4c9d-ba58-a1a24a9a67cb");
+        user1.setProfilePicture("https://firebasestorage.googleapis.com/v0/b/bullandbear-22fad.appspot.com/o/Data%20Init%2FXMProfile.jpeg?alt=media&token=8df25640-7f20-4e22-8a60-64061a553fa8 ");
+
+        personSB.updatePersonDataInt(user1);
     }
 
     private void updateProfilePictures() throws NotValidException, NoResultException {
@@ -477,6 +546,19 @@ public class DataInitSessionBean {
         return pollSB.createPoll(postPoll);
     }
 
+    private Poll createPoll(String question, String[] option) throws NotValidException, NoResultException {
+        Poll postPoll = new Poll();
+        postPoll.setQuestion(question);
+
+        for (int i = 0; i < option.length; i++) {
+            String pollOption = option[i];
+            PersonAnswer personAnswer1 = new PersonAnswer();
+            PersonAnswer persistedPersonAnswer1 = paSB.createPersonAnswer(personAnswer1);
+            postPoll.getOptions().put(pollOption, persistedPersonAnswer1);
+        }
+        return pollSB.createPoll(postPoll);
+    }
+
     private void createPersonPost(Long personId) throws NotValidException, NoResultException {
         Post post1 = new Post();
         post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
@@ -491,6 +573,17 @@ public class DataInitSessionBean {
     private void createCommunityPost(Long personId, Long communityId) throws NotValidException, NoResultException {
         Post post1 = new Post();
         post1.setBody("Bacon ipsum dolor amet fatback minim sirloin aliqua in eu, chicken eiusmod. ");
+        post1.setFileName("");
+        post1.setFileUrl("");
+        post1.setFileType("");
+        post1.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post1, personId, communityId);
+    }
+
+    private void createCommunityPost(Long personId, Long communityId, String body) throws NotValidException, NoResultException {
+        Post post1 = new Post();
+        post1.setBody(body);
         post1.setFileName("");
         post1.setFileUrl("");
         post1.setFileType("");
@@ -518,6 +611,18 @@ public class DataInitSessionBean {
         post2.setFileUrl("");
         post2.setFileType("");
         post2.setPoll(createPoll());
+        post2.setDatePosted(new Date());
+
+        postSB.createPostForCommunity(post2, personId, communityId);
+    }
+
+    private void createCommunityPostWithPoll(Long personId, Long communityId, String body, String question, String[] option) throws NotValidException, NoResultException {
+        Post post2 = new Post();
+        post2.setBody(body);
+        post2.setFileName("");
+        post2.setFileUrl("");
+        post2.setFileType("");
+        post2.setPoll(createPoll(question, option));
         post2.setDatePosted(new Date());
 
         postSB.createPostForCommunity(post2, personId, communityId);
@@ -622,6 +727,24 @@ public class DataInitSessionBean {
         badgeSB.createBadges();
     }
 
+    private void createAllCommunityPosts() throws NotValidException, NoResultException {
+        // posts for roboAdvisors
+        createCommunityPost(new Long(4), new Long(4), "After reading the answers in the forum, I am not sure to go for a robo-advisor or self pick the funds? What are some changes you would want to make, back when you just started investing?");
+        createCommunityPost(new Long(3), new Long(4), "Should I move my funds in StashAway over to Syfe with the Syfe Equity100 rebalancing? \n"
+                + "\n"
+                + "I currently have an equal amount of funds in both StashAway (36% risk portfolio) and Syfe (Equity100) and have DCA for about a year now.The main reason why I chose StashAway is because of its exposure to Chinese stocks. The main reason why I chose Syfe is because of it's 100% equity portfolio. Now that Syfe's Equity100 is rebalancing which adds 2 Chinese stocks ETFs, should I move my funds and focus on just one portfolio instead?");
+        createCommunityPost(new Long(4), new Long(4), " I noticed that my money in Syfe Cash+ has been decreasing and fluctuating, would it be more worth it if I store my money in Singlife/Dash instead?");
+        createCommunityPost(new Long(5), new Long(4), "I only trust banks so I’m using OCBC RoboInvest.");
+        String[] array = new String[]{
+            "StashAway", "AutoWealth", "Syfe", "EndowUs"};
+        createCommunityPostWithPoll(new Long(3), new Long(4),
+                "There has been an increase in the number of Robo Advisors in the market! Comment down below if there are other platforms you want to recommend! ",
+                "Which Robo Advisor are you using?",
+                array
+        );
+        createCommunityPost(new Long(4), new Long(4), "RoboAdvisors are dumb!! Ur all idiots leaving ur $$ to tech. the robots r taking over our brains n stealing our jobs.");
+    }
+
     private void initData() {
 
         try {
@@ -629,7 +752,8 @@ public class DataInitSessionBean {
             createBadges();
             createMasterAdmin();
             createPersons();
-            updateProfilePictures();
+            editPersonDataInt();
+            // updateProfilePictures();
             createCommunities();
             createFollows();
             createSubs();
@@ -638,6 +762,7 @@ public class DataInitSessionBean {
 
             createCommunityPost(new Long(2), new Long(1));
             createCommunityPostWithPoll(new Long(2), new Long(1));
+            createAllCommunityPosts();
 
             createComments();
             createReplies();
