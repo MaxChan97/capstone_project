@@ -116,7 +116,7 @@ public class DataInitSessionBean {
 
         Person user2 = new Person();
         user2.setUsername("jenny_hodl");
-        user2.setEmail("jennytan@yahoo.com.sg");
+        user2.setEmail("maxchanwf@gmail.com");
         user2.setPassword("password");
 
         Person user3 = new Person();
@@ -126,7 +126,7 @@ public class DataInitSessionBean {
 
         Person user4 = new Person();
         user4.setUsername("iLoveCrypto");
-        user4.setEmail("maxchanwf@gmail.com");
+        user4.setEmail("ilovecrypto@gmail.com");
         user4.setPassword("password");
 
         Person user5 = new Person();
